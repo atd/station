@@ -11,7 +11,7 @@ class CmsGenerator < Rails::Generator::Base
       #TODO: check for collisions
       
       m.directory 'app/controllers'
-      m.template  'controllers/posts_controller.rb', 'app/controllers/posts_controller.rb')
+      m.template  'controllers/posts_controller.rb', 'app/controllers/posts_controller.rb'
 
       m.template 'views/posts/new.erb',   'app/views/posts/new.erb'
       m.template 'views/posts/edit.erb',  'app/views/posts/edit.erb'
