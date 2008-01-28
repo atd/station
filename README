@@ -1,11 +1,18 @@
-CMS
-===
+CMS plugin
+==========
 
 Content Management System plugin.
 
 
-Example
-=======
+= Usage
+
+== Installation
+
+To install CMS plugin, run
+  script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
+
+
+== Example
 
 script/generate content Article body:string
 
