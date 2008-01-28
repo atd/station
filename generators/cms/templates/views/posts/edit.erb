@@ -1,0 +1,17 @@
+<h1>Edit <%= @post.content.class.to_s %></h1>
+
+<% unless error_messages_for(:post).blank? -%>
+<div class="errors">
+  <%= error_messages_for :post %>
+</div>
+<% end -%>
+
+<% #TODO: edit-media form 
+-%>
+<% form_for(:post, :url => post_url(@post), :html => { :method => :put, :multipart => @post.content.methods.include?("disposition") }) do |f| -%>
+
+  <%= render :partial => "posts/form", :locals => { :f => f } %>
+
+  <%= submit_tag "Update" %>
+
+<% end -%>
