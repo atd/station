@@ -4,6 +4,12 @@ Content Management System plugin.
 
 Follows the SIOC ontology, http://sioc-project.org
 
+== Features
+
+* Create, Read, Update and Delete Posts
+* Support for multiple Agents, Containers and Contents
+* Atom feeds
+* AtomPub protocol support
 
 = Usage
 
