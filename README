@@ -2,7 +2,7 @@
 
 Content Management System plugin.
 
-Follows the SIOC ontology, http://sioc-project.org
+Follows the SIOC ontology model, http://sioc-project.org
 
 == Features
 
@@ -29,6 +29,12 @@ class User
 end
 
 Users now can post their own Articles
+
+== TODO
+
+* Agents authentication support: Username/Password, OpenID, OAuth
+* OpenID server
+* RDF: FOAF + SIOC 
 
 
 Copyright (c) 2008 Antonio Tapiador, released under the LGPL license
