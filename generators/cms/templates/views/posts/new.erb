@@ -1,15 +1,15 @@
-<h1>New <%= @post.content.class.to_s %></h1>
+<h1>New <%%= @post.content.class.to_s %></h1>
 
-<% unless error_messages_for(:post).blank? -%>
+<%% unless error_messages_for(:post).blank? -%>
 <div class="errors">
-  <%= error_messages_for :post %>
+  <%%= error_messages_for :post %>
 </div>
-<% end -%>
+<%% end -%>
 
-<% form_for(:post, :url => @collection_path, :html => { :multipart => @post.content.methods.include?("disposition") }) do |f| -%>
+<%% form_for(:post, :url => @collection_path, :html => { :multipart => @post.content.methods.include?("disposition") }) do |f| -%>
 
-  <%= render :partial => "posts/form", :locals => { :f => f } %>
+  <%%= render :partial => "posts/form", :locals => { :f => f } %>
 
-  <%= submit_tag "Create" %>
+  <%%= submit_tag "Create" %>
 
-<% end -%>
+<%% end -%>
