@@ -14,8 +14,8 @@ class CmsGenerator < Rails::Generator::Base
       m.template  'controllers/posts_controller.rb', 'app/controllers/posts_controller.rb'
 
       m.directory 'app/views/posts'
-      m.template 'views/posts/new.erb',   'app/views/posts/new.erb'
-      m.template 'views/posts/edit.erb',  'app/views/posts/edit.erb'
+      m.template 'views/posts/new.html.erb',   'app/views/posts/new.html.erb'
+      m.template 'views/posts/edit.html.erb',  'app/views/posts/edit.html.erb'
       m.template 'views/posts/_form.erb', 'app/views/posts/_form.erb'
       m.template 'views/posts/index.atom.builder', 'app/views/posts/index.atom.builder'
       m.template 'views/posts/_entry.builder', 'app/views/posts/_entry.builder'
