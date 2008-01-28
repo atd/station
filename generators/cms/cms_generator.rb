@@ -18,7 +18,7 @@ class CmsGenerator < Rails::Generator::Base
       m.template 'views/posts/edit.erb',  'app/views/posts/edit.erb'
       m.template 'views/posts/_form.erb', 'app/views/posts/_form.erb'
       m.template 'views/posts/index.atom.builder', 'app/views/posts/index.atom.builder'
-      m.template 'views/posts/post_entry.builder', 'app/views/posts/_entry.builder'
+      m.template 'views/posts/_entry.builder', 'app/views/posts/_entry.builder'
       
       unless options[:skip_migration]
         m.migration_template 'migration.rb', 'db/migrate',
