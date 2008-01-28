@@ -1,14 +1,15 @@
-CMS plugin
-==========
+= CMS plugin
 
 Content Management System plugin.
+
+Follows the SIOC ontology, http://sioc-project.org
 
 
 = Usage
 
 == Installation
 
-To install CMS plugin, run
+To install CMS plugin, run:
   script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
 
 
