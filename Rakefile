@@ -20,3 +20,8 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+desc 'Publish documentation in RubyForge site'
+task :publish_rdoc => [ :rdoc ] do
+  `scp -r rdoc/* atd@rubyforge.org:/var/www/gforge-projects/cmsplugin`
+end
