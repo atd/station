@@ -4,14 +4,14 @@ Content Management System plugin.
 
 Follows the SIOC ontology model, http://sioc-project.org
 
+Project page: http://rubyforge.org/projects/cmsplugin
+
 == Features
 
 * Create, Read, Update and Delete Posts
 * Support for multiple Agents, Containers and Contents
 * Atom feeds
 * AtomPub protocol support
-
-= Usage
 
 == Requirements
 
@@ -24,6 +24,10 @@ Follows the SIOC ontology model, http://sioc-project.org
 To install CMS plugin, run:
   script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
 
+Generate the CMS infraestructure:
+  script/plugin generate cms
+
+Now you can generate Contents
 
 == Example
 
