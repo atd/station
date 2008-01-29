@@ -1,6 +1,6 @@
 # Post Controller
 
-class PostController < ApplicationController
+class PostsController < ApplicationController
   #TODO: authentication
 #  before_filter :agent_required,      :except => [ :index, :show ]
 
@@ -32,7 +32,9 @@ class PostController < ApplicationController
     # We search for specific contents if the container or the application supports them
     if (@container || CMS).contents.include?(controller_name.to_sym)
       conditions = [ "posts.content_type = ?", controller_name.classify ]
-      @content = controller_name.classify.constantize
+      content_class = controller_name.classify.constantize
+    else
+      content_class = CMS::Post
     end
 
     if @container
@@ -44,16 +46,16 @@ class PostController < ApplicationController
       }
 
       # Paginate them
-      @posts = @collection.paginate(:page => params[:page], :per_page => (@content || Post).per_page)
+      @posts = @collection.paginate(:page => params[:page], :per_page => content_class.per_page)
       @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
       @collection_path = "#{ polymorphic_url(@container, :only_path => false) }/#{ controller_name }"
     else
-      @title = "#{ controller_name.singularize.titleize.t(controller_name.titleize, 99)}"
-      conditions = CMS::Utils.merge_conditions("AND", conditions, [ "public_read = ?", true ]
-      @posts = Post.paginate :all,
-                             :conditions => conditions,
-                             :page =>  params[:page]
-                             :order => "updated_at DESC"
+      @title = content_class.collection.to_s.humanize
+      conditions = CMS::Utils.merge_conditions("AND", conditions, [ "public_read = ?", true ])
+      @posts = CMS::Post.paginate :all,
+                                  :conditions => conditions,
+                                  :page =>  params[:page],
+                                  :order => "updated_at DESC"
       @updated = @posts.blank? ? Time.now : @posts.first.updated_at
       @collection_path = url_for :controller => controller_name
     end
@@ -68,7 +70,7 @@ class PostController < ApplicationController
     end
   end
 
-  # GET /contents/:id
+  # GET /posts/:id
   def show
     # Versioned posts, &version=#num
 #    if @post.respond_to?("revert_to")
@@ -262,7 +264,7 @@ class PostController < ApplicationController
     end
   end
 
-  def need_container
+  def needs_container
     @container = get_container || current_agent
     render(:text => "Forbidden", :status => 403) unless @container.respond_to("has_owner?")
   end
