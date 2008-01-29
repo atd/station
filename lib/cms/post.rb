@@ -4,6 +4,11 @@ module CMS #nodoc#
   #
   # Contents are posted by Agents (the <tt>author</tt>) into Containers (<tt>container</tt>)
   class Post < ActiveRecord::Base
+    # Collection name
+    # See CMS::Content
+    cattr_reader :collection
+    @@collection = :posts
+
     belongs_to :content,   :polymorphic => true
     belongs_to :container, :polymorphic => true
     belongs_to :author,    :polymorphic => true
