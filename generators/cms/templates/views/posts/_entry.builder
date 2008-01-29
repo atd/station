@@ -13,8 +13,8 @@ xml.entry namespaces do
   end
 
   xml.author do
-    xml.name(post.author.name)
-    xml.uri(polymorphic_url(post.author, :only_path => false))
+    xml.name(post.agent.name)
+    xml.uri(polymorphic_url(post.agent, :only_path => false))
   end
 
   xml.id("tag:#{ controller.request.host_with_port },#{ post.updated_at.year }:#{ url_for(post) }")

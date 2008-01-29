@@ -2,7 +2,7 @@ module CMS #nodoc#
   # Posts are CRUDed Contents
   # (CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
   #
-  # Contents are posted by Agents (the <tt>author</tt>) into Containers (<tt>container</tt>)
+  # Contents are posted by Agents (the <tt>agent</tt>) into Containers (<tt>container</tt>)
   class Post < ActiveRecord::Base
     # Collection name
     # See CMS::Content
@@ -11,11 +11,11 @@ module CMS #nodoc#
 
     belongs_to :content,   :polymorphic => true
     belongs_to :container, :polymorphic => true
-    belongs_to :author,    :polymorphic => true
+    belongs_to :agent,     :polymorphic => true
 
     validates_presence_of :title, 
-                          :author_id,
-                          :author_type,
+                          :agent_id,
+                          :agent_type,
                           :content_id, 
                           :content_type,
                           :container_id, 

@@ -131,7 +131,7 @@ class PostsController < ApplicationController
     params[:category_ids] ||= @category ? [ @category.id.to_s ] : []
     @content = instance_variable_set "@#{controller_name.singularize}", controller_name.classify.constantize.new(params[:content])
     @content.owner = @space
-    @content.author = current_agent
+    @content.agent = current_agent
 
     respond_to do |format|
       format.html {
@@ -168,7 +168,7 @@ class PostsController < ApplicationController
     # call headers parameters, and thus can't get Slug from them
     complete_file_data if params[:format] == @content.mime_type.to_sym.to_s and params[:content][:uploaded_data]
     params[:content][:owner] = @content.owner
-    params[:content][:author] = current_user
+    params[:content][:agent] = current_agent
 
     respond_to do |format|
       format.html {

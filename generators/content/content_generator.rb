@@ -4,6 +4,47 @@ class ContentGenerator < ScaffoldGenerator
   end
 
   def scaffold_views
-    %w[ index show new edit ]
+    %w[ index show ]
+  end
+
+  def manifest
+    record do |m|
+      # Check for class naming collisions.
+      m.class_collisions(controller_class_path, "#{controller_class_name}Controller", "#{controller_class_name}Helper")
+      m.class_collisions(class_path, "#{class_name}")
+
+      # Controller, helper, views, and test directories.
+      m.directory(File.join('app/models', class_path))
+      m.directory(File.join('app/controllers', controller_class_path))
+      m.directory(File.join('app/helpers', controller_class_path))
+      m.directory(File.join('app/views', controller_class_path, controller_file_name))
+      m.directory(File.join('app/views/layouts', controller_class_path))
+      m.directory(File.join('test/functional', controller_class_path))
+      m.directory(File.join('test/unit', class_path))
+
+      for action in scaffold_views
+        m.template(
+          "view_#{action}.html.erb",
+          File.join('app/views', controller_class_path, controller_file_name, "#{action}.html.erb")
+        )
+      end
+
+      # Layout and stylesheet.
+      m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "#{controller_file_name}.html.erb"))
+      m.template('style.css', 'public/stylesheets/scaffold.css')
+
+      m.dependency 'model', [name] + @args, :collision => :skip
+      #FIXME: we should reopen the file and add acts_as_content method
+      m.template 'model.rb', File.join('app/models', class_path, "#{ file_name }.rb"), :collision => :force
+
+      m.template(
+        'controller.rb', File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
+      )
+
+      m.template('functional_test.rb', File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb"))
+      m.template('helper.rb',          File.join('app/helpers',     controller_class_path, "#{controller_file_name}_helper.rb"))
+
+      m.route_resources controller_file_name
+    end
   end
 end

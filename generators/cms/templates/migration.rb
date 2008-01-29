@@ -8,8 +8,8 @@ class CmsSetup < ActiveRecord::Migration
       t.timestamps
       t.integer  :container_id
       t.string   :container_type
-      t.integer  :author_id
-      t.string   :author_type
+      t.integer  :agent_id
+      t.string   :agent_type
       t.integer  :content_id
       t.string   :content_type
       t.integer  :parent_id
