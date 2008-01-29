@@ -13,6 +13,12 @@ Follows the SIOC ontology model, http://sioc-project.org
 
 = Usage
 
+== Requirements
+
+* Rails 2.0
+* Plugins:
+  * will_paginate: svn://errtheblog.com/svn/plugins/will_paginate
+
 == Installation
 
 To install CMS plugin, run:
