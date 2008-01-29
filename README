@@ -25,7 +25,7 @@ To install CMS plugin, run:
   script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
 
 Generate the CMS infraestructure:
-  script/plugin generate cms
+  script/generate cms
 
 Now you can generate Contents
 
