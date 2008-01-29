@@ -39,7 +39,7 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
 
   @@loaded = false
 
-  # Dispatcher callback to load polymorphic relationships from the top down.
+  # Dispatcher callback to identify CMS classes
   def self.autoload
     return if @@loaded
 

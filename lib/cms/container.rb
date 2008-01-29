@@ -1,6 +1,7 @@
-module CMS #nodoc#
+module CMS 
+  # Container(s) are models receiving Content(s) posted by Agent(s)
   module Container
-    def self.included(base) #nodoc#
+    def self.included(base) #:nodoc:
       base.extend ClassMethods
     end
 

@@ -1,8 +1,8 @@
-module CMS #nodoc#
+module CMS
   # Posts are CRUDed Contents
   # (CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
   #
-  # Contents are posted by Agents (the <tt>agent</tt>) into Containers (<tt>container</tt>)
+  # A Post is created when an Agent posts a Content to a Container
   class Post < ActiveRecord::Base
     # Collection name
     # See CMS::Content

@@ -1,6 +1,10 @@
-module CMS #nodoc#
+module CMS
+  # A Content is a unit of information suitable to be published online.
+  # Examples of contents are texts, images, events, URIs
+  #
+  # Content(s) are posted by Agent(s) to Container(s), resulting in Post(s)
   module Content
-    def self.included(base) #nodoc#
+    def self.included(base) # :nodoc:
       base.extend ClassMethods
     end
 
@@ -63,7 +67,7 @@ module CMS #nodoc#
 
       protected
 
-      def image_file_name #nodoc#
+      def image_file_name #:nodoc:
         mime_type_images && mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
       end
     end
