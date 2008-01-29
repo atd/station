@@ -23,6 +23,7 @@ module CMS #nodoc#
                      :disposition,
                      :per_page
 
+        options[:collection]       ||= self.to_s.tableize.to_sym
         #FIXME: should this be the default mime type??
         options[:mime_types]       ||= "application/atom+xml;type=entry"
         options[:mime_type_images] ||= false
@@ -37,11 +38,6 @@ module CMS #nodoc#
         has_many :posts, :as => :content, :class_name => "CMS::Post"
 
         include CMS::Content::InstanceMethods
-      end
-
-      # Collection symbol for this Content
-      def collection
-        @@collection || self.class.to_s.underscore.to_sym
       end
 
       # Icon image path
