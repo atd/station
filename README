@@ -2,13 +2,13 @@
 
 Content Management System plugin.
 
-Follows the SIOC ontology model, http://sioc-project.org
+Follows the SIOC ontology model, http://sioc-project.org/ontology
 
 Project page: http://rubyforge.org/projects/cmsplugin
 
 == Features
 
-* Create, Read, Update and Delete Posts
+* REST API for Posts
 * Support for multiple Agents, Containers and Contents
 * Atom feeds
 * AtomPub protocol support
@@ -31,7 +31,9 @@ Now you can generate Contents
 
 == Example
 
-script/generate content Article body:string
+  script/generate content Article body:string
+
+  script/generate agent User
 
 class User
   acts_as_agent
