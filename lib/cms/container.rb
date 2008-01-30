@@ -6,10 +6,12 @@ module CMS
     end
 
     module ClassMethods
-      # Enhances a Model with Container capabilities so Contents can be posted to this
+      # Provides an ActiveRecord model with Container capabilities
+      #
+      # Content(s) are posted by Agent(s) to Container(s), giving Post(s)
       #
       # Options:
-      # * <tt>contents</tt>: limit the contents this container supports. Defaults to all available contents
+      # * <tt>contents</tt>: an Array of Content that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content(s)
       #
       def acts_as_container(options = {})
         cattr_reader :contents

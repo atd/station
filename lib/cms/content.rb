@@ -11,14 +11,14 @@ module CMS
     module ClassMethods
       # Provides an ActiveRecord model with Content capabilities
       #
-      # Contents are posted by Agents to Containers resulting in Posts
+      # Content(s) are posted by Agent(s) to Container(s), creating Post(s)
       #
       # Options:
-      # * <tt>:collection</tt> - this content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
+      # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
       # * <tt>:mime_types</tt> - array of Mime Types supported by this content. Defaults to "application/atom+xml;type=entry"
-      # * <tt>:mime_type_images</tt> - specifies if this content has images per Mime Type or only a Class image. Defaults to false (Class image)
-      # * <tt>:disposition</tt> - specifies whether the content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
-      # * <tt>:per_page</tt> - number of contents shown per page. Defaults to 9
+      # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
+      # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
+      # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
       #
       def acts_as_content(options = {})
         cattr_reader :collection,
@@ -57,10 +57,12 @@ module CMS
       end
 
 
+      # Path to a logo image for this Content
       def logo_image
         "logos/#{ image_file_name }.png"
       end
 
+      # Path to an icon image for this Content
       def icon_image
         "icons/#{ image_file_name }.png"
       end

@@ -6,6 +6,9 @@ module CMS
     end
 
     module ClassMethods
+      # Provides an ActiveRecord model with Agent capabilities
+      #
+      # Agent(s) can post Content(s) to Container(s)
       def acts_as_agent(options = {})
         include CMS::Agent::InstanceMethods
       end
