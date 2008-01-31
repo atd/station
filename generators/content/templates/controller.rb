@@ -1,3 +1,3 @@
-class <%= controller_class_name %>Controller < PostsController
+class <%= controller_class_name %>Controller < CMS::PostsController
 
 end
