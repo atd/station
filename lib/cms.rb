@@ -23,6 +23,11 @@ module CMS
       ActiveRecord::Base.send :include, Content
       require 'cms/container'
       ActiveRecord::Base.send :include, Container
-      end
+    end
+
+    # Return an Array with the class constants that act as an Agent
+    def agent_classes
+      @@agents.map{ |a| a.to_s.classify.constantize }
+    end
   end
 end
