@@ -1,9 +1,0 @@
-<p>
-  <b>Title:</b>
-  <%%=h @post.title %>
-</p>
-
-<%%= render :partial => "#{ @post.content.class.to_s.tableize }/#{ @post.content.class.to_s.underscore }", :object => @post.content %>
-
-<%%= link_to 'Edit', edit_post_path(@post) %> |
-<%%= link_to 'Back', "#{ @post.content.class.to_s.tableize }_path %>

@@ -194,14 +194,6 @@ class AgentGenerator < Rails::Generator::NamedBase
           puts "    config.active_record.observers = :#{file_name}_observer"
           puts
         end
-        if options[:stateful]
-          puts "Also, don't forget to install the acts_as_state_machine plugin and set your resource:"
-          puts
-          puts "  svn co http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk vendor/plugins/acts_as_state_machine"
-          puts
-          puts %w(map.resources :#{model_controller_file_name}, :member => { :suspend => :put, :unsuspend => :put, :purge => :delete })
-          puts
-        end
         puts "Try these for some familiar login URLs if you like:"
         puts
         puts %(map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate', :activation_code => nil)

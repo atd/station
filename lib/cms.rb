@@ -1,8 +1,20 @@
 require 'cms/core_ext'
 require 'cms/autoload'
-require 'cms/utils'
 
 module CMS
+  ROUTES = <<-EORoutes
+  map.resources :posts, :member => { :get => :edit_media,
+                                     :put => :update_media }
+  map.resources :posts, :path_prefix => '/:container_type/:container_id',
+                        :name_prefix => 'container_'
+
+  CMS.contents.each do |content|
+      map.resources content
+      map.resources content, :path_prefix => '/:container_type/:container_id',
+                             :name_prefix => 'container_'
+  end
+  EORoutes
+
   class << self
     def enable
       enable_classes

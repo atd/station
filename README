@@ -8,8 +8,9 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 == Features
 
-* REST API for Posts
 * Support for multiple Agents, Containers and Contents
+* REST API for Posts
+* Agents authentication: Login/Password
 * Atom feeds
 * AtomPub protocol support
 
@@ -17,7 +18,8 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 * Rails 2.0
 * Plugins:
-  * will_paginate: svn://errtheblog.com/svn/plugins/will_paginate
+  * fckeditor     svn://rubyforge.org//var/svn/fckeditorp/trunk/fckeditor
+  * will_paginate svn://errtheblog.com/svn/plugins/will_paginate
 
 == Installation
 
@@ -27,24 +29,29 @@ To install CMS plugin, run:
 Generate the CMS infraestructure:
   script/generate cms
 
-Now you can generate Contents
+And run the migration. Now you can generate Agent(s) and Content(s)
+
+== Agent(s)
+
+  script/generate agent Model
+
+== Content(s)
+
+  script/generate content Model attributes
+
+== Container(s)
 
 == Example
 
-  script/generate content Article body:string
-
   script/generate agent User
-
-class User
-  acts_as_agent
-  acts_as_container
-end
+  script/generate content Article body:string
 
 Users now can post their own Articles
 
 == TODO
 
-* Agents authentication support: Username/Password, OpenID, OAuth
+* Agents authentication support: OpenID, OAuth
+* Categories, Tags
 * OpenID server
 * RDF: FOAF + SIOC 
 

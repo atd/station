@@ -17,6 +17,7 @@ module CMS
       # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
       # * <tt>:mime_types</tt> - array of Mime Types supported by this content. Defaults to "application/atom+xml;type=entry"
       # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
+      # * <tt>:has_attachment</tt> - this Content has attachment data
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
       #
@@ -24,6 +25,7 @@ module CMS
         cattr_reader :collection,
                      :mime_types,
                      :mime_type_images,
+                     :has_attachment,
                      :disposition,
                      :per_page
 
@@ -31,6 +33,7 @@ module CMS
         #FIXME: should this be the default mime type??
         options[:mime_types]       ||= "application/atom+xml;type=entry"
         options[:mime_type_images] ||= false
+        options[:has_attachment]   ||= false
         options[:disposition]      ||= :attachment
         options[:per_page]         ||= 9
 
@@ -56,6 +59,14 @@ module CMS
         respond_to?("content_type") ? Mime::Type.lookup(content_type) : nil
       end
 
+      # Can this <tt>agent</tt> read this Content?
+      # True if there exists a Post for this Content that can be read by <tt>agent</tt> 
+      def read_by?(agent = nil)
+        for p in posts
+          return true if p.read_by?(agent)
+        end
+        false
+      end
 
       # Path to a logo image for this Content
       def logo_image

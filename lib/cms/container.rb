@@ -12,14 +12,17 @@ module CMS
       #
       # Options:
       # * <tt>contents</tt>: an Array of Content that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content(s)
+      # * <tt>name</tt>: alias attribute for Content presentation
       #
       def acts_as_container(options = {})
         cattr_reader :contents
 
         options[:contents] ||= CMS.contents
 
+        send(:alias_attribute, :name, options.delete(:name)) if options[:name]
+
         options.each_pair do |var, value|
-          class_variable_set "@@var".to_sym, value
+          class_variable_set "@@#{ var }", value
         end
 
         has_many :posts, :as => :container,

@@ -4,7 +4,7 @@ class ContentGenerator < ScaffoldGenerator
   end
 
   def scaffold_views
-    %w[ index show ]
+    %w[ ]
   end
 
   def manifest
@@ -29,6 +29,11 @@ class ContentGenerator < ScaffoldGenerator
         )
       end
 
+      m.template 'index.html.erb', File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
+      m.template 'show.html.erb', File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
+      m.template 'show.erb', File.join('app/views', controller_class_path, controller_file_name, "_#{ singular_name }.erb")
+      m.template 'form.erb', File.join('app/views', controller_class_path, controller_file_name, "_form.erb")
+
       # Layout and stylesheet.
       m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "#{controller_file_name}.html.erb"))
       m.template('style.css', 'public/stylesheets/scaffold.css')
@@ -43,8 +48,6 @@ class ContentGenerator < ScaffoldGenerator
 
       m.template('functional_test.rb', File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb"))
       m.template('helper.rb',          File.join('app/helpers',     controller_class_path, "#{controller_file_name}_helper.rb"))
-
-      m.route_resources controller_file_name
     end
   end
 end
