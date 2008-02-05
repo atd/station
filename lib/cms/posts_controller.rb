@@ -43,7 +43,6 @@ class CMS::PostsController < ApplicationController
                                              :only_path => false)
     else
       @title ||= "Public Posts"
-      conditions = CMS::Utils.merge_conditions("AND", conditions, [ "public_read = ?", true ])
       @posts = CMS::Post.paginate :all,
                                   :conditions => [ "public_read = ?", true ],
                                   :page =>  params[:page],
