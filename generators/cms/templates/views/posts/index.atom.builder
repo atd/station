@@ -8,7 +8,7 @@ xml.feed "xmlns" => 'http://www.w3.org/2005/Atom', "xmlns:app" => 'http://www.w3
   xml.updated(@updated.xmlschema) 
   xml.author do 
     xml.name(@container ? @container.name : controller.request.host_with_port )
-    xml.uri( @container ? polymorphic_url(@container, :only_path => false) : default_url(:only_path => false) )
+    xml.uri( @container ? polymorphic_url(@container, :only_path => false) : url_for(:controller => "/", :only_path => false) )
   end
 
   @posts.each do |post|

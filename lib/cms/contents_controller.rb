@@ -62,7 +62,9 @@ class CMS::ContentsController < ApplicationController
       format.html
       format.js
       format.xml { render xml => @posts.to_xml }
-      format.atom { render :partial => "posts/feed", :layout => false }
+      format.atom { render :template => 'posts/index.atom.builder', :layout => false }
+
+    end
     end
   end
 

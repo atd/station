@@ -53,8 +53,8 @@ class CMS::PostsController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.atom
       format.xml { render xml => @posts.to_xml }
-      format.atom { render :partial => "posts/feed", :layout => false }
     end
   end
 
