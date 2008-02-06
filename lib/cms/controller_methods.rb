@@ -35,7 +35,7 @@ module CMS
       access_denied if @container && !@container.write_by?(current_agent)
     end
 
-    # Merge two conditions arrays using <tt>operator</tt>
+    # Merge two conditions arrays using <tt>operator</tt>. 
     # Example:
     #   merge_conditions("AND", [ "public_read = ?", true ], [ "content_type = ?", "Article" ])
     #   # => [ "( public_read = ? ) AND ( content_type = ? )", true, "Article" ]

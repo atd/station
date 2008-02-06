@@ -29,17 +29,20 @@ To install CMS plugin, run:
 Generate the CMS infraestructure:
   script/generate cms
 
-And run the migration. Now you can generate Agent(s) and Content(s)
+And run the migration. Now you can generate Agents and Contents
 
-== Agent(s)
+== Agents
+An Agent posts Contents to Containers
 
   script/generate agent Model
 
-== Content(s)
+== Contents
+A Content is a piece of information suitable to be posted to some Container by Agents
 
   script/generate content Model attributes
 
-== Container(s)
+== Containers
+A Container hold Posts
 
 == Example
 

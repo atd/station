@@ -1,4 +1,3 @@
-# Contents Controller
 # Controllers for every Content inherit this
 class CMS::ContentsController < ApplicationController
   include CMS::ControllerMethods
@@ -18,12 +17,12 @@ class CMS::ContentsController < ApplicationController
   before_filter :get_content,         :except => [ :index, :new, :create ]
   before_filter :can_read_content,    :only   => [ :show ]
 
-  # List posted Content(s) of this type
-  # A Content is tipically posted to one Container
-  # When there is no Container requested, deliver public Contents
+  # List Contents of this type posted to a Container
   #
-  # GET /:container_type/:container_id/contents
-  # GET /contents
+  # When there is no Container requested, just deliver public Contents
+  #
+  #   GET /:container_type/:container_id/contents
+  #   GET /contents
   def index
     # We search for specific contents if the container or the application supports them
     if (@container || CMS).contents.include?(controller_name.to_sym)
@@ -67,7 +66,8 @@ class CMS::ContentsController < ApplicationController
     end
   end
 
-  # GET /contents/:id
+  # Show this Content
+  #   GET /:content_type/:id
   # TODO
   def show
     respond_to do |format|
@@ -90,10 +90,11 @@ class CMS::ContentsController < ApplicationController
     end
   end
 
-  # Post new Content of this type
+  # Render form for posting new Content
+  #
   # When no container is specified, tries posting to Agent's
-  # GET /:container_type/:container_id/contents/new
-  # GET /contents/new
+  #   GET /:container_type/:container_id/contents/new
+  #   GET /contents/new
   def new
     @collection_path = container_contents_url
     @post = CMS::Post.new
@@ -103,8 +104,8 @@ class CMS::ContentsController < ApplicationController
 
   # Create a new Content
   #
-  # POST /:container_type/:container_id/contents
-  # POST /contents
+  #   POST /:container_type/:container_id/contents
+  #   POST /contents
   def create
     # FIXME: we should look for an existing content instead of creating a new one
     # every time a Content is posted.

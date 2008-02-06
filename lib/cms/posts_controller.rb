@@ -1,4 +1,4 @@
-# Post Controller
+# Controller for Post management
 class CMS::PostsController < ApplicationController
   include CMS::ControllerMethods
   include CMS::Authentication
@@ -20,12 +20,12 @@ class CMS::PostsController < ApplicationController
   # Post edition, deletion filters
   before_filter :can_write_post,   :only   => [ :edit, :edit_media, :update, :update_data, :delete ]
 
-  # A post collection tipically belongs to one container
-  # When there is no container, public contents posts are listed
+  # List Posts belonging to Container
   #
-  # GET /posts
-  # GET /:container_type/:container_id/posts
-  # GET /tags/1/posts
+  # List public posts when no Container is specified
+  #
+  #   GET /:container_type/:container_id/posts
+  #   GET /posts
   def index
     if @container
       @title ||= "#{ @container.name } - Posts"
@@ -58,7 +58,8 @@ class CMS::PostsController < ApplicationController
     end
   end
 
-  # GET /posts/:id
+  # Show this Post
+  #   GET /posts/:id
   def show
     @title ||= @post.title
 
@@ -83,17 +84,20 @@ class CMS::PostsController < ApplicationController
     end
   end
 
-  # GET /posts/:id/edit
+  # Renders form for editing this Post
+  #   GET /posts/:id/edit
   def edit
     render :template => "posts/edit"
   end
 
-  # GET /posts/:id/edit_media
+  # Renders form for editing this Post's media
+  #   GET /posts/:id/edit_media
   def edit_media
     render :template => "posts/edit_media"
   end
 
-  # PUT /posts/:id
+  # Update this Post
+  #   PUT /posts/:id
   def update
     # If the Content of this Post hasn't attachment, update it here
     # If it has, update via update_media
@@ -127,8 +131,8 @@ class CMS::PostsController < ApplicationController
     end
   end
 
-  # Update Media Data
-  # PUT /posts/:id/update_media
+  # Update Post Media Data
+  #   PUT /posts/:id/update_media
   def update_media
     return unless @post.content.has_attachment
 
@@ -157,7 +161,8 @@ class CMS::PostsController < ApplicationController
     end
   end
 
-  # DELETE /posts/1
+  # Delete this Post
+  #   DELETE /posts/:id
   def destroy
     @post.destroy
 
