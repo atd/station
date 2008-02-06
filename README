@@ -12,7 +12,6 @@ Project page: http://rubyforge.org/projects/cmsplugin
 * REST API for Posts
 * Agents authentication: Login/Password
 * Atom feeds
-* AtomPub protocol support
 
 == Requirements
 
@@ -54,6 +53,7 @@ Users now can post their own Articles
 == TODO
 
 * Agents authentication support: OpenID, OAuth
+* AtomPub protocol support
 * Categories, Tags
 * OpenID server
 * RDF: FOAF + SIOC 
