@@ -10,12 +10,14 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 * Support for multiple Agents, Containers and Contents
 * REST API for Posts
-* Agents authentication: Login/Password
+* Agents authentication: Login/Password, OpenID
 * Atom feeds
 
 == Requirements
 
 * Rails 2.0
+* RubyGems: 
+  * ruby-openid
 * Plugins:
   * fckeditor     svn://rubyforge.org//var/svn/fckeditorp/trunk/fckeditor
   * will_paginate svn://errtheblog.com/svn/plugins/will_paginate
@@ -52,7 +54,7 @@ Users now can post their own Articles
 
 == TODO
 
-* Agents authentication support: OpenID, OAuth
+* Agents authentication support: OAuth
 * AtomPub protocol support
 * Categories, Tags
 * OpenID server

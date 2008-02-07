@@ -6,11 +6,17 @@
 <p><label for="email">Email</label><br/>
 <%%= f.text_field :email %></p>
 
+<%% if @<%= file_name %>.needs_password? -%>
+
 <p><label for="password">Password</label><br/>
 <%%= f.password_field :password %></p>
 
 <p><label for="password_confirmation">Confirm Password</label><br/>
 <%%= f.password_field :password_confirmation %></p>
+
+<%% else -%>
+  Associating to <%%= session[:openid_identifier] %>
+<%% end -%>
 
 <p><%%= submit_tag 'Sign up' %></p>
 <%% end -%>

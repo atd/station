@@ -2,7 +2,7 @@
 
 class CmsSetup < ActiveRecord::Migration
   def self.up
-    create_table :posts do |t|
+    create_table :cms_posts do |t|
       t.string   :title
       t.text     :description
       t.timestamps
@@ -18,14 +18,37 @@ class CmsSetup < ActiveRecord::Migration
       t.boolean  :public_write
     end
 
-    create_table :uris do |t|
+    create_table :cms_uris do |t|
       t.string :uri
     end
-    add_index :uris, :uri
+    add_index :cms_uris, :uri
+
+    create_table :open_id_ownings do |t|
+      t.integer :agent_id
+      t.string  :agent_type
+      t.integer :uri_id
+    end
+
+    create_table :open_id_associations, :force => true do |t|
+      t.binary  :server_url
+      t.string  :handle
+      t.binary  :secret
+      t.integer :issued
+      t.integer :lifetime
+      t.string  :assoc_type
+    end
+
+    create_table :open_id_nonces, :force => true do |t|
+      t.string  :server_url, :null => false
+      t.integer :timestamp,  :null => false
+      t.string  :salt,       :null => false
+    end
   end
 
   def self.down
-    drop_table :posts
-    drop_table :uris
+    drop_table :cms_posts
+    drop_table :cms_uris
+    drop_table :open_id_associations
+    drop_table :open_id_nonces
   end
 end

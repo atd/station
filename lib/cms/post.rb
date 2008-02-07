@@ -4,6 +4,8 @@ module CMS
   #
   # A Post is created when an Agent posts a Content to a Container
   class Post < ActiveRecord::Base
+    set_table_name "cms_posts"
+
     # Collection name
     # See CMS::Content
     cattr_reader :collection

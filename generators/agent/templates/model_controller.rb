@@ -4,6 +4,7 @@ class <%= model_controller_class_name %>Controller < ApplicationController
 
   # render new.rhtml
   def new
+    @<%= file_name %> = <%= class_name %>.new
   end
 
   def create
@@ -13,7 +14,9 @@ class <%= model_controller_class_name %>Controller < ApplicationController
     # uncomment at your own risk
     # reset_session
     @<%= file_name %> = <%= class_name %>.new(params[:<%= file_name %>])
+    @<%= file_name %>.openid_identifier = session[:openid_identifier]
     @<%= file_name %>.save!
+    @<%= file_name %>.openid_ownings.create(:uri => CMS::URI.find_or_create_by_uri(session[:openid_identifier])) if session[:openid_identifier]
     self.current_agent = @<%= file_name %>
     redirect_back_or_default('/')
     flash[:notice] = "Thanks for signing up!"
