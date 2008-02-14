@@ -26,7 +26,7 @@ class CMS::ContentsController < ApplicationController
   def index
     # We search for specific contents if the container or the application supports them
     if (@container || CMS).contents.include?(controller_name.to_sym)
-      conditions = [ "posts.content_type = ?", controller_name.classify ]
+      conditions = [ "cms_posts.content_type = ?", controller_name.classify ]
       content_class = controller_name.classify.constantize
     else
       # This Container don't accept the Content type
