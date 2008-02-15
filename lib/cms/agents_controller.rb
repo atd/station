@@ -2,6 +2,21 @@ class CMS::AgentsController < ApplicationController
   include CMS::Authentication
 
   before_filter :set_agent_class
+  before_filter :get_agent, :only => :show
+
+  # Show this agent
+  def show
+    respond_to do |format|
+      format.atomsvc {
+        if @agent != current_agent
+          access_denied
+          return
+        else
+          render :layout => false
+        end
+      }
+    end
+  end
 
   # render new.rhtml
   def new
@@ -34,6 +49,12 @@ class CMS::AgentsController < ApplicationController
       flash[:notice] = "Signup complete!"
     end
     redirect_back_or_default('/')
+  end
+
+  protected
+
+  def get_agent
+    @agent = ( params[:id].match(/\d+/) ? @klass.find(params[:id]) : @klass.find_by_login(params[:id]) )
   end
 
   private

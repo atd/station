@@ -160,6 +160,7 @@ class AgentGenerator < Rails::Generator::NamedBase
       # Controller templates
       m.template 'login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template 'signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
+      m.template 'show.atomsvc.builder', File.join('app/views', model_controller_class_path, model_controller_file_name, "show.atomsvc.builder")
 
       if options[:include_activation]
         # Mailer templates

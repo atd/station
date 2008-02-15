@@ -3,9 +3,17 @@ module CMS
   module ControllerMethods
     protected
 
+    # Return the path to this Content collection in this Container 
+    def container_contents_path(options = {})
+      send "container_#{ controller_name }_path",
+        :container_type => @container.class.to_s.tableize,
+        :container_id   => @container.id,
+        *options
+    end
+
     # Return the url to this Content collection in this Container 
     def container_contents_url(options = {})
-      send "container_#{ controller_name }_path",
+      send "container_#{ controller_name }_url",
         :container_type => @container.class.to_s.tableize,
         :container_id   => @container.id,
         *options
