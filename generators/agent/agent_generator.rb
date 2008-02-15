@@ -179,7 +179,8 @@ class AgentGenerator < Rails::Generator::NamedBase
       m.route_named 'open_id_complete', controller_singular_name,
         :controller => controller_plural_name,
         :action => 'create',
-        :requirements => { :method => :get }
+        :requirements => { :method => :get },
+        :open_id_complete => true
       m.route_resources model_controller_plural_name
     end
 

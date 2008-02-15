@@ -19,9 +19,10 @@ module CMS
                  :as => :agent,
                  :class_name => "CMS::OpenID::Owning"
 
-        cattr_reader :authentication_methods
-        class_variable_set "@@authentication_methods", options[:authentication]
+        cattr_reader :agent_options
+        class_variable_set "@@agent_options", options
 
+        #TODO: clean this, split in Modules
         if options[:authentication].include? :login_and_password
           # Virtual attribute for the unencrypted password
           attr_accessor :password
@@ -79,6 +80,20 @@ module CMS
     end
 
     module InstanceMethods
+      # All Containers this Agent can post to
+      def post_containers
+        #TODO: Roles
+        post_containers = []
+        # Meanwhile, return self if Agent can post to self
+        post_containers.push(self) if self.respond_to?("contents")
+
+        post_containers
+      end
+
+      # TODO: clean this, split in Modules
+      
+      # Login/Password Instance Methods
+      
       # Encrypts the password with the user salt
       def encrypt(password)
         self.class.encrypt(password, salt)
@@ -93,9 +108,9 @@ module CMS
       # and it hasn't any OpenID Owning
       def needs_password?
         # False is Login/Password is not supported by this Agent
-        return false unless authentication_methods.include?(:login_and_password)
+        return false unless agent_options[:authentication].include?(:login_and_password)
         # False if OpenID is suported and there is already an OpenID Owning associated
-        ! (authentication_methods.include?(:openid) && !openid_identifier.blank?)
+        ! (agent_options[:authentication].include?(:openid) && !openid_identifier.blank?)
       end
 
       protected
@@ -109,6 +124,7 @@ module CMS
         def password_not_saved?
           crypted_password.blank? || !password.blank?
         end
+
       # Remember methods
 
       public

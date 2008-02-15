@@ -1,12 +1,12 @@
-<%%= error_messages_for :<%= file_name %> %>
-<%% form_for :<%= file_name %>, :url => <%= table_name %>_path do |f| -%>
+<%%= error_messages_for :agent %>
+<%% form_for :agent, :url => <%= table_name %>_path do |f| -%>
 <p><label for="login">Login</label><br/>
 <%%= f.text_field :login %></p>
 
 <p><label for="email">Email</label><br/>
 <%%= f.text_field :email %></p>
 
-<%% if @<%= file_name %>.needs_password? -%>
+<%% if @agent.needs_password? -%>
 
 <p><label for="password">Password</label><br/>
 <%%= f.password_field :password %></p>

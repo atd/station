@@ -110,7 +110,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # Try authentication in every Agent class
   def authenticate(method, *params)
     for klass in CMS.agent_classes
-      if klass.authentication_methods.include?(method)
+      if klass.agent_options[:authentication].include?(method)
         self.current_agent = klass.send "authenticate_with_#{ method }", *params
         return current_agent if authenticated?
       end
