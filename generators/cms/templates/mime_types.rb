@@ -3,6 +3,5 @@
 
 Mime::Type.register "application/atomsvc+xml", :atomsvc
 Mime::Type.register "application/atomcat+xml", :atomcat
-Mime::Type.register "application/atom+xml;type=entry", :atom_entry
 Mime::Type.register "application/xrds+xml", :xrds
 

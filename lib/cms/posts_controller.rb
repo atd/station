@@ -18,7 +18,7 @@ class CMS::PostsController < ApplicationController
   before_filter :can_read_post,    :only   => [ :show, :edit ]
   
   # Post edition, deletion filters
-  before_filter :can_write_post,   :only   => [ :edit, :edit_media, :update, :update_data, :delete ]
+  before_filter :can_write_post,   :only   => [ :edit, :edit_media, :update, :update_media, :delete ]
 
   # List Posts belonging to Container
   #
@@ -68,7 +68,7 @@ class CMS::PostsController < ApplicationController
       format.xml { render :xml => @post.to_xml }
       format.atom { 
         headers["Content-type"] = 'application/atom+xml'
-        render :partial => "post/entry",
+        render :partial => "posts/entry",
                            :locals => { :post => @post },
                            :layout => false
       }
@@ -101,6 +101,8 @@ class CMS::PostsController < ApplicationController
   def update
     # If the Content of this Post hasn't attachment, update it here
     # If it has, update via update_media
+    # 
+    # TODO: find old content when only post params are updated
     unless @post.content.has_attachment
       @content = @post.content.class.create params[:content]
     end
@@ -145,7 +147,7 @@ class CMS::PostsController < ApplicationController
           flash[:notice] = "#{ @content.class.to_s } updated"
           redirect_to post_url(@post)
         else
-          render :template => "posts/edit_data"
+          render :template => "posts/edit_media"
         end
       }
 

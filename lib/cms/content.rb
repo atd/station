@@ -17,7 +17,8 @@ module CMS
       # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
       # * <tt>:mime_types</tt> - array of Mime Types supported by this content. Defaults to "application/atom+xml;type=entry"
       # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
-      # * <tt>:has_attachment</tt> - this Content has attachment data
+      # * <tt>:has_attachment</tt> - this Content has attachment data (typically, using one attachment plugin like attachment_fu)
+      # * <tt>:atom_mapping</tt> - Hash mapping Content attributes with Atom Entry elements. Examples: { :body => :content }
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
       #
@@ -26,6 +27,7 @@ module CMS
                      :mime_types,
                      :mime_type_images,
                      :has_attachment,
+                     :atom_mapping,
                      :disposition,
                      :per_page
 
@@ -34,6 +36,7 @@ module CMS
         options[:mime_types]       ||= "application/atom+xml;type=entry"
         options[:mime_type_images] ||= false
         options[:has_attachment]   ||= false
+        options[:atom_mapping]     ||= {}
         options[:disposition]      ||= :attachment
         options[:per_page]         ||= 9
 
@@ -44,12 +47,33 @@ module CMS
 
         has_many :posts, :as => :content, :class_name => "CMS::Post"
 
+        # Filter "create" method for Atom Mapping
+        class << self
+          alias_method_chain :create, :atom_mapping
+        end unless atom_mapping.blank?
+
         include CMS::Content::InstanceMethods
       end
 
       # Icon image path
       def icon_image
         'icons/' + self.to_s.underscore.concat(".png")
+      end
+
+      protected
+
+      def create_with_atom_mapping(params) #:nodoc:
+        create_without_atom_mapping atom_mapping_filter(params)
+      end
+
+      def atom_mapping_filter(params) #:nodoc:
+        return params if params.blank? || params[:atom_entry].blank?
+
+        filtered_params = HashWithIndifferentAccess.new
+        atom_mapping.each_pair do |ar_attr, entry_attr|
+          filtered_params[ar_attr] = params[entry_attr]
+        end
+        filtered_params
       end
     end
 

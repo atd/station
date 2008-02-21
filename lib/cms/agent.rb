@@ -78,13 +78,13 @@ module CMS
 
     module InstanceMethods
       # All Containers this Agent can post to
-      def post_containers
+      def containers
         #TODO: Roles
-        post_containers = []
+        containers = []
         # Meanwhile, return self if Agent can post to self
-        post_containers.push(self) if self.respond_to?("contents")
+        containers.unshift(self) if self.respond_to?("contents")
 
-        post_containers
+        containers
       end
 
       # TODO: clean this, split in Modules

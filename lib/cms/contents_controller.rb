@@ -46,7 +46,7 @@ class CMS::ContentsController < ApplicationController
       # Paginate them
       @posts = @collection.paginate(:page => params[:page], :per_page => content_class.per_page)
       @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
-      @collection_path = container_contents_url(:only_path => false)
+      @collection_path = container_contents_url
     else
       @title ||= content_class.collection.to_s.humanize
       conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
@@ -74,7 +74,7 @@ class CMS::ContentsController < ApplicationController
       format.html # show.rhtml
       format.atom { 
         headers["Content-type"] = 'application/atom+xml'
-        render :partial => "post/entry",
+        render :partial => "posts/entry",
                            :locals => { :post => @post },
                            :layout => false
       }
@@ -131,11 +131,12 @@ class CMS::ContentsController < ApplicationController
 
       format.atom {
         if !@content.new_record? && @post.save
-	  headers["Location"] = post_url(@post, :only_path => false) + '.atom'
+	  headers["Location"] = formatted_post_url(@post, :atom)
 	  headers["Content-type"] = 'application/atom+xml'
           render :partial => "posts/entry",
                              :status => :created,
-                             :locals => { :content => @content },
+                             :locals => { :post => @post,
+                                          :content => @content },
                              :layout => false
         else
           @content.destroy unless @content.new_record?

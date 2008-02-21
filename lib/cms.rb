@@ -17,14 +17,9 @@ module CMS
 
   class << self
     def enable
-      enable_classes
       enable_active_record
+      enable_param_parsers
       self.autoload
-    end
-
-    def enable_classes
-      return if defined?(CMS::Post)
-      require 'cms/post'
     end
 
     def enable_active_record
@@ -35,6 +30,12 @@ module CMS
       ActiveRecord::Base.send :include, Content
       require 'cms/container'
       ActiveRecord::Base.send :include, Container
+    end
+
+    # Param Parsers allow data preprocessing in REST web services. 
+    # See ActionController::Base.param_parsers for more details
+    def enable_param_parsers
+      require 'cms/param_parsers'
     end
 
     # Return an Array with the class constants that act as an Agent
