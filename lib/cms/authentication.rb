@@ -78,7 +78,7 @@ module CMS
           end
 
           # FIXME: include all content's mime types
-          %w( xml atom atom_entry ).each do |mime|
+          %w( xml atom atomsvc ).each do |mime|
             format.send mime do
               request_http_basic_authentication 'Web Password'
             end
@@ -118,9 +118,9 @@ module CMS
       # Attempt to authenticate by basic authentication information.
       def login_from_basic_auth
         authenticate_with_http_basic do |username, password|
-          CMS.agent_classes.each do |agent_class|
-            if agent_classes.respond_to?(:authenticate)
-              agent = agent_class.authenticate(username, password)
+          CMS.agent_classes.each do |klass|
+            if klass.agent_options[:authentication].include?(:login_and_password)
+              agent = klass.authenticate_with_login_and_password(username, password)
               return (self.current_agent = agent) if agent
             end
           end
@@ -131,18 +131,16 @@ module CMS
       # Called from #current_agent. 
       # Attempt to authenticate by an expiring token in the cookie.
       def login_from_cookie
-        CMS.agent_classess.each do |agent_class|
-          if agent_class.respond_to?(:remember_token)
-            agent = agent_class.find_by_remember_token(cookies[:auth_token])
-            if agent && agent.remember_token?
-              agent.remember_me
-              cookies[:auth_token] = { :value =>   agent.remember_token, 
-                                       :expires => agent.remember_token_expires_at }
-              return self.current_agent = agent
-            end
+        CMS.agent_classes.each do |agent_class|
+          agent = agent_class.find_by_remember_token(cookies[:auth_token])
+          if agent && agent.remember_token?
+            agent.remember_me
+            cookies[:auth_token] = { :value =>   agent.remember_token, 
+                                     :expires => agent.remember_token_expires_at }
+            return self.current_agent = agent
           end
         end if cookies[:auth_token]
+        nil
       end
-
   end
 end

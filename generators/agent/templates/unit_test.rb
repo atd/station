@@ -12,18 +12,14 @@ class <%= class_name %>Test < Test::Unit::TestCase
       assert !<%= file_name %>.new_record?, "#{<%= file_name %>.errors.full_messages.to_sentence}"
     end
   end
-<% if options[:include_activation] %>
+
   def test_should_initialize_activation_code_upon_creation
+    return unless <%= class_name %>.agent_options[:activation]
+
     <%= file_name %> = create_<%= file_name %>
     assert_not_nil <%= file_name %>.activation_code
   end
-<% end %><% if options[:stateful] %>
-  def test_should_create_and_start_in_pending_state
-    <%= file_name %> = create_<%= file_name %>
-    assert <%= file_name %>.pending?
-  end
 
-<% end %>
   def test_should_require_login
     assert_no_difference '<%= class_name %>.count' do
       u = create_<%= file_name %>(:login => nil)

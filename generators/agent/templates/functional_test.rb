@@ -19,20 +19,23 @@ class <%= controller_class_name %>ControllerTest < Test::Unit::TestCase
 
   def test_should_login_and_redirect
     post :create, :login => 'quentin', :password => 'test'
-    assert session[:<%= file_name %>_id]
+    assert session[:agent_id]
+    assert session[:agent_type]
     assert_response :redirect
   end
 
   def test_should_fail_login_and_not_redirect
     post :create, :login => 'quentin', :password => 'bad password'
-    assert_nil session[:<%= file_name %>_id]
+    assert_nil session[:agent_id]
+    assert_nil session[:agent_type]
     assert_response :success
   end
 
   def test_should_logout
     login_as :quentin
     get :destroy
-    assert_nil session[:<%= file_name %>_id]
+    assert_nil session[:agent_id]
+    assert_nil session[:agent_type]
     assert_response :redirect
   end
 
@@ -56,7 +59,7 @@ class <%= controller_class_name %>ControllerTest < Test::Unit::TestCase
     <%= table_name %>(:quentin).remember_me
     @request.cookies["auth_token"] = cookie_for(:quentin)
     get :new
-    assert @controller.send(:logged_in?)
+    assert @controller.send(:authenticated?)
   end
 
   def test_should_fail_expired_cookie_login
@@ -64,14 +67,14 @@ class <%= controller_class_name %>ControllerTest < Test::Unit::TestCase
     <%= table_name %>(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
     @request.cookies["auth_token"] = cookie_for(:quentin)
     get :new
-    assert !@controller.send(:logged_in?)
+    assert !@controller.send(:authenticated?)
   end
 
   def test_should_fail_cookie_login
     <%= table_name %>(:quentin).remember_me
     @request.cookies["auth_token"] = auth_token('invalid_auth_token')
     get :new
-    assert !@controller.send(:logged_in?)
+    assert !@controller.send(:authenticated?)
   end
 
   protected

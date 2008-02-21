@@ -41,10 +41,13 @@ class CMS::AgentsController < ApplicationController
   end
 
   def activate
-    return unless @klass.agent_options[:include_activation]
+    unless @klass.agent_options[:activation]
+      redirect_back_or_default('/')
+      return 
+    end
 
     self.current_agent = params[:activation_code].blank? ? :false : @klass.find_by_activation_code(params[:activation_code])
-    if authenticated? && current_agent.respond_to("active?") && !current_agent.active?
+    if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
       current_agent.activate
       flash[:notice] = "Signup complete!"
     end

@@ -44,7 +44,7 @@ module CMS
           # Authenticates a user by their login name and unencrypted password. 
           # Returns the agent or nil.
           def self.authenticate_with_login_and_password(login, password)
-            u = include_activation ? 
+            u = agent_options[:activation] ? 
                   find(:first, :conditions => ['login = ? and activated_at IS NOT NULL', login]) :
                   find_by_login(login)
             u && u.password_authenticated?(password) ? u : nil
@@ -55,10 +55,7 @@ module CMS
             Digest::SHA1.hexdigest("--#{salt}--#{password}--")
           end
 
-          cattr_reader :include_activation
-          class_variable_set "@@include_activation", options[:include_activation]
-
-          if options[:include_activation]
+          if options[:activation]
             before_create :make_activation_code 
             include ActivationInstanceMethods
           end
