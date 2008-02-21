@@ -54,16 +54,16 @@ class <%= class_name %>Test < Test::Unit::TestCase
 
   def test_should_reset_password
     <%= table_name %>(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
-    assert_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate('quentin', 'new password')
+    assert_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate_with_login_and_password('quentin', 'new password')
   end
 
   def test_should_not_rehash_password
     <%= table_name %>(:quentin).update_attributes(:login => 'quentin2')
-    assert_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate('quentin2', 'test')
+    assert_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate_with_login_and_password('quentin2', 'test')
   end
 
   def test_should_authenticate_<%= file_name %>
-    assert_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate('quentin', 'test')
+    assert_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate_with_login_and_password('quentin', 'test')
   end
 
   def test_should_set_remember_token
@@ -120,7 +120,7 @@ class <%= class_name %>Test < Test::Unit::TestCase
 
   def test_suspended_<%= file_name %>_should_not_authenticate
     <%= table_name %>(:quentin).suspend!
-    assert_not_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate('quentin', 'test')
+    assert_not_equal <%= table_name %>(:quentin), <%= class_name %>.authenticate_with_login_and_password('quentin', 'test')
   end
 
   def test_should_unsuspend_<%= file_name %>_to_active_state
