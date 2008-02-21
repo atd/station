@@ -13,12 +13,12 @@ class <%= class_name %>Test < Test::Unit::TestCase
     end
   end
 
+  <% if options[:include_activation] %>
   def test_should_initialize_activation_code_upon_creation
-    return unless <%= class_name %>.agent_options[:activation]
-
     <%= file_name %> = create_<%= file_name %>
     assert_not_nil <%= file_name %>.activation_code
   end
+  <% end %>
 
   def test_should_require_login
     assert_no_difference '<%= class_name %>.count' do

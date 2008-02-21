@@ -55,9 +55,9 @@ class <%= model_controller_class_name %>ControllerTest < Test::Unit::TestCase
       assert_response :success
     end
   end
-  def test_should_activate_user
-    return unless <%= class_name %>.agent_options[:activation]
 
+  <% if options[:include_activation] %>
+  def test_should_activate_user
     assert_nil <%= class_name %>.authenticate_with_login_and_password('aaron', 'test')
     get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
     assert_redirected_to '/'
@@ -66,8 +66,6 @@ class <%= model_controller_class_name %>ControllerTest < Test::Unit::TestCase
   end
   
   def test_should_not_activate_user_without_key
-    return unless <%= class_name %>.agent_options[:activation]
-
     get :activate
     assert_nil flash[:notice]
   rescue ActionController::RoutingError
@@ -75,13 +73,12 @@ class <%= model_controller_class_name %>ControllerTest < Test::Unit::TestCase
   end
 
   def test_should_not_activate_user_with_blank_key
-    return unless <%= class_name %>.agent_options[:activation]
-
     get :activate, :activation_code => ''
     assert_nil flash[:notice]
   rescue ActionController::RoutingError
     # well played, sir
   end
+  <% end %>
 
   protected
     def create_<%= file_name %>(options = {})

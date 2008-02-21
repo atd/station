@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/rails_commands'
 class AgentGenerator < Rails::Generator::NamedBase
   default_options :skip_migration => false,
-                  :include_activation => true
+                  :include_activation => false
                   
   attr_reader   :controller_name,
                 :controller_class_path,
