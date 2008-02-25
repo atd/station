@@ -100,7 +100,7 @@ module CMS
         session[:return_to] = nil
       end
 
-      # Inclusion hook to make #current_agent and #authenticated?
+      # Inclusion hook to make #current_agent and #authenticated? methods
       # available as ActionView helper methods.
       def self.included(base)
         base.send :helper_method, :current_agent, :authenticated?

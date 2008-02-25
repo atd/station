@@ -1,4 +1,5 @@
 module CMS
+  # Athentication helper methods for tests
   module AuthenticationTestHelper
     # Sets the current agent in the session from the fixtures.
     def login_as(agent)

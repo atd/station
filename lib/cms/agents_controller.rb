@@ -1,10 +1,13 @@
+# Controller for Agents management
 class CMS::AgentsController < ApplicationController
   include CMS::Authentication
 
   before_filter :set_agent_class
   before_filter :get_agent, :only => :show
 
-  # Show this agent
+  # Show agent
+  #
+  # Responds to Atom Service format, returning the Containers this Agent can post to
   def show
     respond_to do |format|
       format.atomsvc {
@@ -18,11 +21,12 @@ class CMS::AgentsController < ApplicationController
     end
   end
 
-  # render new.rhtml
+  # Render a form for creating a new Agent
   def new
     @agent = @klass.new
   end
 
+  # Create new Agent instance
   def create
     cookies.delete :auth_token
     # protects against session fixation attacks, wreaks havoc with 
@@ -40,6 +44,7 @@ class CMS::AgentsController < ApplicationController
     render :action => 'new'
   end
 
+  # Activate Agent from email
   def activate
     unless @klass.agent_options[:activation]
       redirect_back_or_default('/')
@@ -56,12 +61,18 @@ class CMS::AgentsController < ApplicationController
 
   protected
 
+  # Get Agent filter
+  # Gets Agent instance by id or login
+  #
+  # Example GET /users/1 or GET /users/quentin
   def get_agent
     @agent = ( params[:id].match(/\d+/) ? @klass.find(params[:id]) : @klass.find_by_login(params[:id]) )
   end
 
   private
 
+  # Set @klass variable to Agent class for this controller
+  # Useful for controllers that inherit this class
   def set_agent_class # :nodoc:
     @klass = controller_name.classify.constantize
   end

@@ -1,6 +1,9 @@
 module CMS
   module Agent
-    # Verifies Agent email
+    # Agents Activation support
+    #
+    # Activation verifies the Agent has an accesible email
+    #
     # TODO: Currently, only affects LoginAndPassword authentication
     module Activation
       def self.included(base) #:nodoc:
@@ -17,6 +20,7 @@ module CMS
         save(false)
       end
 
+      # Is the Agent activated?
       def active?
         # the existence of an activation code means they have not activated yet
         activation_code.nil?
@@ -28,7 +32,7 @@ module CMS
       end
 
       protected
-        def make_activation_code
+        def make_activation_code #:nodoc:
           self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
         end
     end
