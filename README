@@ -2,17 +2,21 @@
 
 Content Management System plugin.
 
-Follows the SIOC ontology model, http://sioc-project.org/ontology
+CMS plugin provides your Rails application with a "Posting framework". You can define three types of Models:
+* Agents: entities that have posting capabilities. Users are the paradigm of an agent.
+* Contents: units of information that can be posted. Examples of contents are articles, images, events, links, audios, videos, files, etc...
+* Containers: spaces where agents posts contents
+
+CMS plugin follows the SIOC ontology model, http://sioc-project.org/ontology
 
 Project page: http://rubyforge.org/projects/cmsplugin
 
 == Features
 
-* Support for multiple Agents, Containers and Contents
-* REST API for Posts
 * Agents authentication: Login/Password, OpenID
 * Atom feeds
 * AtomPub protocol support
+* Support for multiple Agents, Containers and Contents
 
 == Requirements
 
@@ -35,17 +39,19 @@ Generate the CMS infraestructure:
 And run the migration. Now you can generate Agents and Contents
 
 == Agents
-An Agent posts Contents to Containers
+An Agent has the capability to post Contents to Containers. An User is the example of Agent
 
   script/generate agent Model
 
 == Contents
-A Content is a piece of information suitable to be posted to some Container by Agents
+A Content is a piece of information suitable to be posted to some Container by some Agent
 
   script/generate content Model attributes
 
 == Containers
 A Container hold Posts
+
+For example, a User could also be defined as a Container. In this way, every user would be able to post each own Contents.
 
 == Example
 
@@ -57,6 +63,7 @@ Users now can post their own Articles
 == TODO
 
 * Agents authentication support: OAuth
+* Microformats
 * Categories, Tags
 * OpenID server
 * RDF: FOAF + SIOC 
