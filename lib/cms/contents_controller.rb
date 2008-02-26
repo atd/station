@@ -48,7 +48,7 @@ class CMS::ContentsController < ApplicationController
       @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
       @collection_path = container_contents_url
     else
-      @title ||= content_class.collection.to_s.humanize
+      @title ||= content_class.content_options[:collection].to_s.humanize
       conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
       @posts = CMS::Post.paginate :all,
                                   :conditions => conditions,
