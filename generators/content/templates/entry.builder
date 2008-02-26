@@ -1,1 +1,1 @@
-xml.content(:src => polymorphic_url(content))
+xml.content(:src => content_url(content))

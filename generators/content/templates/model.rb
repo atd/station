@@ -1,3 +1,4 @@
 class <%= class_name %> < ActiveRecord::Base
-  acts_as_content
+  # Fill atom_mapping for AtomPub support
+  acts_as_content :atom_mapping => {}
 end

@@ -35,7 +35,7 @@ class CMS::ContentsController < ApplicationController
     end
 
     if @container
-      @title ||= "#{ content_class.collection.to_s.humanize } - #{ @container.name }"
+      @title ||= "#{ content_class.content_options[:collection].to_s.humanize } - #{ @container.name }"
       # All the Contents this Agent can read in this Container
       @collection = @container.posts.find(:all,
                                           :conditions => conditions,
@@ -44,7 +44,7 @@ class CMS::ContentsController < ApplicationController
       }
 
       # Paginate them
-      @posts = @collection.paginate(:page => params[:page], :per_page => content_class.per_page)
+      @posts = @collection.paginate(:page => params[:page], :per_page => content_class.content_options[:per_page])
       @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
       @collection_path = container_contents_url
     else
@@ -68,24 +68,17 @@ class CMS::ContentsController < ApplicationController
 
   # Show this Content
   #   GET /:content_type/:id
-  # TODO
   def show
     respond_to do |format|
       format.html # show.rhtml
-      format.atom { 
-        headers["Content-type"] = 'application/atom+xml'
-        render :partial => "posts/entry",
-                           :locals => { :post => @post },
-                           :layout => false
-      }
-      format.xml { render :xml => @post.to_xml }
+      format.xml { render :xml => @content.to_xml }
 
       # Add Content format Mime Type for content with Attachments
-      format.send(@post.content.mime_type.to_sym.to_s) {
-        send_data @post.content.current_data, :filename => @content.filename,
-                                              :type => @content.content_type,
-                                              :disposition => @content.class.disposition.to_s
-      } if @content.respond_to?("attachment_options")
+      format.send(@content.mime_type.to_sym.to_s) {
+        send_data @content.current_data, :filename => @content.filename,
+                                         :type => @content.content_type,
+                                         :disposition => @content.class.content_options[:disposition].to_s
+      } if @content.mime_type
       
     end
   end

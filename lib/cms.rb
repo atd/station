@@ -17,9 +17,15 @@ module CMS
 
   class << self
     def enable
+      enable_action_pack
       enable_active_record
       enable_param_parsers
       self.autoload
+    end
+
+    def enable_action_pack
+      require 'cms/helper_methods'
+      ActionView::Base.send :include, HelperMethods
     end
 
     def enable_active_record

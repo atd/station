@@ -22,8 +22,8 @@ xml.entry namespaces do
   xml.updated(post.updated_at.xmlschema)
   xml.tag!("app:edited", post.updated_at.xmlschema)
   xml.link(:rel => 'alternate', :type => 'text/html', :href => post_url(post))
-  xml.link(:rel => 'edit', :href => "#{ post_url(post) }.atom")
-  xml.link(:rel => 'edit-media', :href => "#{ update_data_post_url(post) }.atom") if post.content.has_attachment
+  xml.link(:rel => 'edit', :href => formatted_post_url(post, :atom))
+  xml.link(:rel => 'edit-media', :href => formatted_update_data_post_url(post, :atom)) if post.content.content_options[:has_attachment]
 
   xml.summary(:type => "xhtml") do
     xml.div(:xmlns => "http://www.w3.org/1999/xhtml") do

@@ -72,15 +72,6 @@ class CMS::PostsController < ApplicationController
                            :locals => { :post => @post },
                            :layout => false
       }
-
-      # Add Content format Mime Type for content with Attachments
-      # TODO ??
-#      format.send(@post.content.mime_type.to_sym.to_s) {
-#        send_data @post.content.current_data, :filename => @content.filename,
-#                                              :type => @content.content_type,
-#                                              :disposition => @content.class.disposition.to_s
-#      } if @content.respond_to?("attachment_options")
-      
     end
   end
 
@@ -103,7 +94,7 @@ class CMS::PostsController < ApplicationController
     # If it has, update via update_media
     # 
     # TODO: find old content when only post params are updated
-    unless @post.content.has_attachment
+    unless @post.content.content_options[:has_attachment]
       @content = @post.content.class.create params[:content]
     end
 
@@ -136,7 +127,18 @@ class CMS::PostsController < ApplicationController
   # Update Post Media Data
   #   PUT /posts/:id/update_media
   def update_media
-    return unless @post.content.has_attachment
+    # update_media only in contents that have attachment
+    unless @post.content.content_options[:has_attachment]
+      respond_to do |format|
+        format.html { 
+          render :text => "Content doesn't have attachment", :status => 400 
+        }
+        format.atom {
+          head :bad_request
+        }
+      end
+      return 
+    end
 
     @content = @post.content.class.create(params[:content])
 
