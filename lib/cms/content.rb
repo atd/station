@@ -18,7 +18,7 @@ module CMS
       # * <tt>:mime_types</tt> - array of Mime Types supported by this content. Defaults to "application/atom+xml;type=entry"
       # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
       # * <tt>:has_attachment</tt> - this Content has attachment data (typically, using one attachment plugin like attachment_fu)
-      # * <tt>:atom_mapping</tt> - Hash mapping Content attributes with Atom Entry elements. Examples: { :body => :content }
+      # * <tt>:atom_mapping</tt> - Hash mapping Content attributes to Atom Entry elements. Examples: { :body => :content }
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
       #
@@ -48,6 +48,12 @@ module CMS
         has_many :posts, :as => :content, :class_name => "CMS::Post"
 
         # Filter "create" method for Atom Mapping
+        # With this filter, a new content can be crated from a Hash of
+        # Atom Entry parameters
+        # The Atom Entry may include different attibutes than the Content
+        # (see atom_mapping option)
+        #
+        # This methods maps the appropriate attributes
         class << self
           alias_method_chain :create, :atom_mapping
         end unless atom_mapping.blank?
