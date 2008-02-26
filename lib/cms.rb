@@ -40,7 +40,13 @@ module CMS
 
     # Return an Array with the class constants that act as an Agent
     def agent_classes
-      @@agents.map{ |a| a.to_s.classify.constantize }
+      @@agents.map(&:to_class)
     end
+
+    # Return an Array with the class constants that act as a Content
+    def content_classes
+      @@contents.map(&:to_class)
+    end
+
   end
 end
