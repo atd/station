@@ -243,8 +243,6 @@ class AgentGenerator < Rails::Generator::NamedBase
              "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
       opt.on("--include-activation", 
              "Generate signup 'activation code' confirmation via email") { |v| options[:include_activation] = true }
-      opt.on("--stateful", 
-             "Use acts_as_state_machine.  Assumes --include-activation") { |v| options[:include_activation] = options[:stateful] = true }
       opt.on("--rspec",
              "Force rspec mode (checks for RAILS_ROOT/spec by default)") { |v| options[:rspec] = true }
     end
