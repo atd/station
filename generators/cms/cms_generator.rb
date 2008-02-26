@@ -2,11 +2,6 @@ require File.dirname(__FILE__) + '/rails_commands'
 class CmsGenerator < Rails::Generator::Base
   default_options :skip_migration => false
 
-  def initialize(runtime_args, runtime_options = {})
-    parse!(runtime_args, runtime_options)
-    super
-  end
-
   def manifest
     record do |m|
       #TODO: check for collisions
