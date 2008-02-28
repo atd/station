@@ -27,7 +27,7 @@ module CMS
         #FIXME: should this be the default mime type??
         options[:atompub_mime_types] ||= "application/atom+xml;type=entry"
         options[:mime_type_images]   ||= false
-        options[:has_media]          ||= nil
+        options[:has_media]          ||= false
         options[:atom_mapping]       ||= {}
         options[:disposition]        ||= :attachment
         options[:per_page]           ||= 9
