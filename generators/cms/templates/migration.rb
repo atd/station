@@ -48,6 +48,7 @@ class CmsSetup < ActiveRecord::Migration
   def self.down
     drop_table :cms_posts
     drop_table :cms_uris
+    drop_table :open_id_ownings
     drop_table :open_id_associations
     drop_table :open_id_nonces
   end
