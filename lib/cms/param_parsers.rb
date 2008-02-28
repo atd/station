@@ -46,7 +46,7 @@ end
 # params[:content][:uploaded_data] (for attachment_fu)
 # TODO: other attachment plugins like file_column
 
-CMS.content_classes.select{ |c| c.content_options[:has_attachment]}.each do |klass|
+CMS.content_classes.select{ |c| c.content_options[:has_media]}.each do |klass|
   for content_type in Mime::Type.parse(klass.content_options[:atompub_mime_types]).reject{ |c| c == MimeType::ATOM }
     ActionController::Base.param_parsers[content_type] = Proc.new do |data|
       original_filename = send("request").env["HTTP_SLUG"] || "#{ send('controller_name').singularize }.#{ content_type.to_sym.to_s }"

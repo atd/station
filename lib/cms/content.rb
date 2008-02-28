@@ -17,7 +17,7 @@ module CMS
       # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
       # * <tt>:atompub_mime_types</tt> - array of Mime Types accepted for this Content via AtomPub. Defaults to "application/atom+xml;type=entry"
       # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
-      # * <tt>:has_attachment</tt> - this Content has attachment data (typically, using one attachment plugin like attachment_fu)
+      # * <tt>:has_media</tt> - this Content has media data (typically, using one attachment plugin like attachment_fu)
       # * <tt>:atom_mapping</tt> - Hash mapping Content attributes to Atom Entry elements. Examples: { :body => :content }
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
@@ -27,7 +27,7 @@ module CMS
         #FIXME: should this be the default mime type??
         options[:atompub_mime_types] ||= "application/atom+xml;type=entry"
         options[:mime_type_images]   ||= false
-        options[:has_attachment]     ||= false
+        options[:has_media]          ||= nil
         options[:atom_mapping]       ||= {}
         options[:disposition]        ||= :attachment
         options[:per_page]           ||= 9

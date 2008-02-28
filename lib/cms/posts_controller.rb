@@ -94,7 +94,7 @@ class CMS::PostsController < ApplicationController
     # If it has, update via update_media
     # 
     # TODO: find old content when only post params are updated
-    unless @post.content.content_options[:has_attachment]
+    unless @post.content.content_options[:has_media]
       @content = @post.content.class.create params[:content]
     end
 
@@ -128,7 +128,7 @@ class CMS::PostsController < ApplicationController
   #   PUT /posts/:id/update_media
   def update_media
     # update_media only in contents that have attachment
-    unless @post.content.content_options[:has_attachment]
+    unless @post.content.content_options[:has_media]
       respond_to do |format|
         format.html { 
           render :text => "Content doesn't have attachment", :status => 400 
