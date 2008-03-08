@@ -3,6 +3,21 @@ module CMS
   module ControllerMethods
     protected
 
+    # Extract request parameters when posting raw data
+    def params_from_raw_post
+      return if request.raw_post.blank? || params[:content]
+
+      filename = request.env["HTTP_SLUG"] || controller_name.singularize
+
+      params[:post]                   ||= {}
+      params[:post][:title]           ||= filename
+      params[:post][:public_read]     ||= true
+      params[:content]                ||= {}
+      params[:content][:filename]     ||= filename
+      params[:content][:content_type] ||= request.content_type
+      params[:content][:raw_post]     ||= request.raw_post
+    end
+
     # Return the path to this Content collection in this Container 
     def container_contents_path(options = {})
       send "container_#{ controller_name }_path",

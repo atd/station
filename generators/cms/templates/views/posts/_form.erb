@@ -8,7 +8,10 @@
   <%%= fckeditor_textarea :post, :description, :width => '100%', :height => '300px' %>
 </p>
 
-<%%= render :partial => "#{ @content.class.to_s.tableize }/form" unless @content.content_options[:has_media] %>
+<%%= render :partial => "#{ @content.class.to_s.tableize }/form" %>
 
+<%% if action == :new && @content.class.content_options[:has_media] -%>
+  <%%= render :partial => "posts/file_form" %>
+<%% end -%>
 
 <%%= render :partial => "posts/permissions_form", :locals => { :f => f } -%>

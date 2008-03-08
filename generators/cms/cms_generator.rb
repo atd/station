@@ -6,9 +6,6 @@ class CmsGenerator < Rails::Generator::Base
     record do |m|
       #TODO: check for collisions
       
-      m.directory 'config/initializers'
-      m.template  'mime_types.rb', 'config/initializers/cms_mime_types.rb'
-
       m.directory 'app/controllers'
       m.template  'controllers/posts_controller.rb', 'app/controllers/posts_controller.rb'
 

@@ -24,6 +24,11 @@ module CMS
                           :container_type
     validates_associated  :content
 
+    # True if the associated Content of this Post has media
+    def has_media?
+      ! content.content_options[:has_media].nil?
+    end
+
     # Can the Post be read by <tt>agent</tt>?
     def read_by?(agent = nil)
       return true if public_read?

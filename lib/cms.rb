@@ -1,10 +1,12 @@
 require 'cms/core_ext'
+require 'cms/mime_types'
 require 'cms/autoload'
+require 'cms/param_parsers'
 
 module CMS
   ROUTES = <<-EORoutes
-  map.resources :posts, :member => { :get => :edit_media,
-                                     :put => :update_media }
+  map.resources :posts, :member => { :media   => :any,
+                                     :edit_media => :get }
   map.resources :posts, :path_prefix => '/:container_type/:container_id',
                         :name_prefix => 'container_'
 
@@ -16,19 +18,14 @@ module CMS
   EORoutes
 
   class << self
-    def enable
-      enable_action_pack
+    def enable #:nodoc:
+      self.enable_mime_types
       enable_active_record
-      enable_param_parsers
       self.autoload
+      self.enable_param_parsers
     end
 
-    def enable_action_pack
-      require 'cms/helper_methods'
-      ActionView::Base.send :include, HelperMethods
-    end
-
-    def enable_active_record
+    def enable_active_record #:nodoc:
       #FIXME: DRY
       require 'cms/agent'
       ActiveRecord::Base.send :include, Agent
@@ -36,12 +33,6 @@ module CMS
       ActiveRecord::Base.send :include, Content
       require 'cms/container'
       ActiveRecord::Base.send :include, Container
-    end
-
-    # Param Parsers allow data preprocessing in REST web services. 
-    # See ActionController::Base.param_parsers for more details
-    def enable_param_parsers
-      require 'cms/param_parsers'
     end
 
     # Return an Array with the class constants that act as an Agent
@@ -54,5 +45,19 @@ module CMS
       @@contents.map(&:to_class)
     end
 
+    # Return an Array with all the Mime::Types supported by AtomPub
+    def atompub_mime_types
+      types = []
+      for klass in content_classes do
+        types |= Mime::Type.parse klass.content_options[:atompub_mime_types]
+      end
+      # Only return registered symbols
+      types.select{ |t| t.instance_variable_get("@symbol") }
+    end
+
+    def mime_types
+      # TODO: DRY cms/mime_types
+      atompub_mime_types | [ Mime::ATOM, Mime::ATOMSVC, Mime::ATOMCAT, Mime::XRDS ]
+    end
   end
 end

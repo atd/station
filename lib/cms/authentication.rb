@@ -77,9 +77,8 @@ module CMS
             redirect_to new_session_path
           end
 
-          # FIXME: include all content's mime types
-          %w( xml atom atomsvc ).each do |mime|
-            format.send mime do
+          for mime in CMS.mime_types
+            format.send mime.to_sym do
               request_http_basic_authentication 'Web Password'
             end
           end

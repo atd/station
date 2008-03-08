@@ -3,7 +3,7 @@ class CMS::PostsController < ApplicationController
   include CMS::ControllerMethods
   include CMS::Authentication
 
-  before_filter :authentication_required, :except => [ :index, :show ]
+  before_filter :authentication_required, :except => [ :index, :show, :media ]
 
   # Posts list filters
   before_filter :get_container,       :only   => [ :index ]
@@ -14,11 +14,14 @@ class CMS::PostsController < ApplicationController
   before_filter :can_write_container, :only   => [ :create ]
 
   # Posts read filters
-  before_filter :get_post,         :except => [ :index, :create ]
-  before_filter :can_read_post,    :only   => [ :show, :edit ]
+  before_filter :get_post,       :except => [ :index, :create ]
+  before_filter :can_read_post,  :only   => [ :show, :edit, :media, :edit_media ]
   
   # Post edition, deletion filters
-  before_filter :can_write_post,   :only   => [ :edit, :edit_media, :update, :update_media, :delete ]
+  before_filter :can_write_post, :only   => [ :edit, :update, :edit_media, :delete ]
+
+  # Post media management
+  before_filter :post_has_media, :only => [ :media, :edit_media ]
 
   # List Posts belonging to Container
   #
@@ -75,39 +78,33 @@ class CMS::PostsController < ApplicationController
     end
   end
 
-  # Renders form for editing this Post
+  # Renders form for editing this Post metadata
   #   GET /posts/:id/edit
   def edit
     render :template => "posts/edit"
   end
 
-  # Renders form for editing this Post's media
-  #   GET /posts/:id/edit_media
-  def edit_media
-    render :template => "posts/edit_media"
-  end
-
-  # Update this Post
+  # Update this Post metadata
   #   PUT /posts/:id
   def update
     # If the Content of this Post hasn't attachment, update it here
-    # If it has, update via update_media
+    # If it has, update via media
     # 
     # TODO: find old content when only post params are updated
     unless @post.content.content_options[:has_media]
       @content = @post.content.class.create params[:content]
     end
 
-    # Avoid change container through params
+    # Avoid the user changes container through params
     params[:post][:container] = @post.container
-    params[:post][:agent] = current_agent
-    params[:post][:content] = @content
+    params[:post][:agent]     = current_agent
+    params[:post][:content]   = @content
 
     respond_to do |format|
       format.html {
         if !@content.new_record? && @post.update_attributes(params[:post])
           flash[:notice] = "#{ @content.class.to_s } updated"
-          redirect_to post_url @post
+          redirect_to post_url(@post)
         else
           render :template => "posts/edit" 
         end
@@ -124,45 +121,64 @@ class CMS::PostsController < ApplicationController
     end
   end
 
-  # Update Post Media Data
-  #   PUT /posts/:id/update_media
-  def update_media
-    # update_media only in contents that have attachment
-    unless @post.content.content_options[:has_media]
-      respond_to do |format|
-        format.html { 
-          render :text => "Content doesn't have attachment", :status => 400 
-        }
-        format.atom {
-          head :bad_request
-        }
+  # Manage Post media (if Post has media)
+  # Retreive media
+  #   GET /posts/:id/media 
+  # Update media
+  #   PUT /posts/:id/media 
+  def media
+    if request.get?
+      # Render media file
+      @content = @post.content
+
+      headers["Content-type"] = @content.mime_type.to_s
+      send_data @content.current_data, :filename => @content.filename,
+                                       :type => @content.content_type,
+                                       :disposition => @content.class.content_options[:disposition].to_s
+    elsif request.put?
+      # Have to set write post filter here
+      # because doesn't apply to GET
+      unless @post.write_by? current_agent
+        access_denied
+        return
       end
-      return 
+
+      # Set params when putting raw data
+      params_from_raw_post
+
+      # TODO: find content if it already exists
+      @content = @post.content.class.create(params[:content])
+
+      respond_to do |format|
+        format.html {
+          if !@content.new_record?
+            @post.update_attribute :content, @content
+            flash[:notice] = "#{ @content.class.to_s } updated"
+            redirect_to post_url(@post)
+          else
+            render :template => "posts/edit_media"
+          end
+        }
+
+        format.atom {
+          if !@content.new_record?
+            @post.update_attribute :content, @content
+            head :ok
+          else
+            render :xml => @content.errors.to_xml,
+                   :status => :not_acceptable
+          end
+        } 
+      end
+    else
+      bad_request
     end
+  end
 
-    @content = @post.content.class.create(params[:content])
-
-    respond_to do |format|
-      format.html {
-        if !@content.new_record?
-          @post.update_attribute :content, @content
-          flash[:notice] = "#{ @content.class.to_s } updated"
-          redirect_to post_url(@post)
-        else
-          render :template => "posts/edit_media"
-        end
-      }
-
-      format.atom {
-        if !@content.new_record?
-          @post.update_attribute :content, @content
-          head :ok
-        else
-          render :xml => @content.errors.to_xml,
-                 :status => :not_acceptable
-        end
-      } 
-    end
+  # Renders form for editing this Post's media
+  #   GET /posts/:id/edit_media
+  def edit_media
+    render :template => "posts/edit_media"
   end
 
   # Delete this Post
@@ -193,5 +209,20 @@ class CMS::PostsController < ApplicationController
 
     def can_write_post #:nodoc:
       access_denied unless @post.write_by?(current_agent)
+    end
+
+    def post_has_media
+      bad_request unless @post.content.content_options[:has_media]
+    end
+
+    def bad_request
+      respond_to do |format|
+        format.html { 
+          render :text => "Content doesn't have media", :status => 400 
+        }
+        format.atom {
+          head :bad_request
+        }
+      end
     end
 end

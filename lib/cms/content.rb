@@ -1,3 +1,5 @@
+require 'atom/entry'
+
 module CMS
   # A Content is a unit of information suitable to be published online.
   # Examples of contents are texts, images, events, URIs
@@ -17,8 +19,7 @@ module CMS
       # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
       # * <tt>:atompub_mime_types</tt> - array of Mime Types accepted for this Content via AtomPub. Defaults to "application/atom+xml;type=entry"
       # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
-      # * <tt>:has_media</tt> - this Content has media data (typically, using one attachment plugin like attachment_fu)
-      # * <tt>:atom_mapping</tt> - Hash mapping Content attributes to Atom Entry elements. Examples: { :body => :content }
+      # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: attachment_fu (<tt>:attachment_fu</tt>)
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
       #
@@ -27,8 +28,6 @@ module CMS
         #FIXME: should this be the default mime type??
         options[:atompub_mime_types] ||= "application/atom+xml;type=entry"
         options[:mime_type_images]   ||= false
-        options[:has_media]          ||= false
-        options[:atom_mapping]       ||= {}
         options[:disposition]        ||= :attachment
         options[:per_page]           ||= 9
 
@@ -45,8 +44,8 @@ module CMS
         #
         # This methods maps the appropriate attributes
         class << self
-          alias_method_chain :create, :atom_mapping
-        end unless options[:atom_mapping].blank?
+          alias_method_chain :create, :cms_params_filter
+        end
 
         include CMS::Content::InstanceMethods
       end
@@ -58,20 +57,44 @@ module CMS
 
       protected
 
-      # Introduce atom_mapping filter in create chain
-      def create_with_atom_mapping(params) #:nodoc:
-        create_without_atom_mapping atom_mapping_filter(params)
+      # Introduce filters for parameters in create chain
+      def create_with_cms_params_filter(params) #:nodoc:
+        create_without_cms_params_filter cms_params_filter(params)
       end
 
-      # Map Atom Entry attributes to Content attributes
-      def atom_mapping_filter(params) #:nodoc:
-        return params if params.blank? || params[:atom_entry].blank?
-
-        filtered_params = HashWithIndifferentAccess.new
-        content_options[:atom_mapping].each_pair do |ar_attr, entry_attr|
-          filtered_params[ar_attr] = params[entry_attr]
+      # Filter Content parameters:
+      # If there is Atom Entry data, extract information from the Entry to parameters
+      # If there is raw post data, convert it to suitable plugin
+      def cms_params_filter(params) #:nodoc:
+        if params[:atom_entry]
+          atom_entry_filter(Atom::Entry.parse(params[:atom_entry]))
+        elsif params[:raw_post]
+          if content_options[:has_media] == :attachment_fu 
+            media_attachment_fu_filter(params)
+          end
+        else
+          params
         end
-        filtered_params
+      end
+
+      # Atom Entry filter
+      # Extracts parameter information from an Atom Entry element
+      #
+      # Implement this in your class if you want AtomPub support in your Content
+      def atom_entry_filter(atom_entry)
+        {}
+      end
+
+      # Conversion from raw data to attachment_fu plugin
+      def media_attachment_fu_filter(params) #:nodoc:
+        file = Tempfile.new("file")
+        file.write params[:raw_post]
+        (class << file; self; end).class_eval do
+          alias local_path path
+          define_method(:content_type) { params[:content_type].dup.taint }
+          define_method(:original_filename) { params[:filename].dup.taint }
+        end
+        { "uploaded_data" => file }
       end
     end
 

@@ -53,13 +53,60 @@ A Container hold Posts
 
 For example, a User could also be defined as a Container. In this way, every user would be able to post each own Contents.
 
-== Example
+== Examples
+
+=== Blog
 Create personal blogs with a pair of commands:
 
   script/generate agent User
   script/generate content Article body:string
 
 Users now can post their own Articles
+
+You can add AtomPub support implementing atom_entry_filter method in Article model:
+
+  def self.atom_entry_filter(entry)
+    { :body => entry.content.xml.to_s }
+  end
+
+
+=== Gallery
+Install attachment_fu plugin
+
+Generate photo content:
+
+  script/generate content Photo size:integer content_type:string filename:string height:integer width:integer parent_id:integer thumbnail:string db_file_id:integer
+
+Modify the migration and include db_files table:
+
+  create_table :db_files do |t|
+    t.binary :data
+  end
+
+and
+
+  drop_table :db_files
+
+Add has_attachment information in the model:
+
+  class Photo < ActiveRecord::Base
+    has_attachment :content_type => :image,
+                   :thumbnails => { :thumb => [64,64] }
+
+    validates_as_attachment
+
+    acts_as_content :collection => :gallery,
+                    :has_media => :attachment_fu,
+                    :disposition => :inline,
+                    :atompub_mime_types => attachment_options[:content_type].join(", ")
+
+  end
+
+Add Mime Types to your config/initializers/mime_types.rb
+
+  Mime::Type.register "image/jpeg", :jpeg, [ "image/pjpeg" ]
+  Mime::Type.register "image/gif", :gif
+  Mime::Type.register "image/png", :png, [ "image/x-png" ]
 
 == TODO
 

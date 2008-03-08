@@ -17,6 +17,9 @@ class CMS::ContentsController < ApplicationController
   before_filter :get_content,         :except => [ :index, :new, :create ]
   before_filter :can_read_content,    :only   => [ :show ]
 
+  # Extract params when posting raw content
+  before_filter :params_from_raw_post, :only   => [ :create ]
+
   # List Contents of this type posted to a Container
   #
   # When there is no Container requested, just deliver public Contents
@@ -79,7 +82,14 @@ class CMS::ContentsController < ApplicationController
                                          :type => @content.content_type,
                                          :disposition => @content.class.content_options[:disposition].to_s
       } if @content.mime_type
-      
+
+      format.all {
+        headers["Content-type"] = @content.mime_type.to_s
+        send_data @content.current_data, :filename => @content.filename,
+                                         :type => @content.content_type,
+                                         :disposition => @content.class.content_options[:disposition].to_s
+      } if @content.mime_type
+     
     end
   end
 
@@ -91,7 +101,7 @@ class CMS::ContentsController < ApplicationController
   def new
     @collection_path = container_contents_url
     @post = CMS::Post.new
-    @content = instance_variable_set "@#{controller_name.singularize}", controller_name.classify.constantize.new
+    @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
     render :template => "posts/new"
   end
 
@@ -132,8 +142,12 @@ class CMS::ContentsController < ApplicationController
                                           :content => @content },
                              :layout => false
         else
-          @content.destroy unless @content.new_record?
-          render :xml => @post.errors.to_xml, :status => :bad_request
+          if @content.new_record?
+            render :xml => @content.errors.to_xml, :status => :bad_request
+          else
+            @content.destroy unless @content.new_record?
+            render :xml => @post.errors.to_xml, :status => :bad_request
+          end
         end
       }
     end
