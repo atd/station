@@ -20,8 +20,8 @@ class AgentGenerator < Rails::Generator::NamedBase
                 :model_controller_class_nesting_depth,
                 :model_controller_class_name,
                 :model_controller_singular_name,
-                :model_controller_plural_name
-  alias_method  :model_controller_file_name,  :model_controller_singular_name
+                :model_controller_plural_name,
+                :model_controller_file_name
   alias_method  :model_controller_table_name, :model_controller_plural_name
 
   def initialize(runtime_args, runtime_options = {})
@@ -45,7 +45,8 @@ class AgentGenerator < Rails::Generator::NamedBase
 
     # model controller
     base_name, @model_controller_class_path, @model_controller_file_path, @model_controller_class_nesting, @model_controller_class_nesting_depth = extract_modules(@model_controller_name)
-    @model_controller_class_name_without_nesting, @model_controller_singular_name, @model_controller_plural_name = inflect_names(base_name)
+    @model_controller_class_name_without_nesting, @model_controller_file_name, @model_controller_plural_name = inflect_names(base_name)
+    @model_controller_singular_name = @model_controller_file_name.singularize
     
     if @model_controller_class_nesting.empty?
       @model_controller_class_name = @model_controller_class_name_without_nesting
@@ -160,6 +161,7 @@ class AgentGenerator < Rails::Generator::NamedBase
       # Controller templates
       m.template 'login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template 'signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
+      m.template 'show.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "show.html.erb")
       m.template 'show.atomsvc.builder', File.join('app/views', model_controller_class_path, model_controller_file_name, "show.atomsvc.builder")
 
       if options[:include_activation]

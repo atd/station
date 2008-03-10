@@ -10,6 +10,7 @@ class CMS::AgentsController < ApplicationController
   # Responds to Atom Service format, returning the Containers this Agent can post to
   def show
     respond_to do |format|
+      format.html
       format.atomsvc {
         if @agent != current_agent
           access_denied
