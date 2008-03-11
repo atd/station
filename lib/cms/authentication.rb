@@ -1,6 +1,20 @@
 module CMS
   # Controller and Helper methods for Authentication support
   module Authentication
+    # Inclusion hook to make #current_agent and #authenticated? methods
+    # available as ActionView helper methods.
+    def self.included(base)
+      base.send :helper_method, :current_agent, :authenticated?, :logged_in?
+      # Add current_#{ agent_type}
+      for agent in CMS.agents.map{ |a| a.to_s.singularize }
+        base.send :helper_method, "current_#{ agent }".to_sym
+      end
+
+      base.class_eval do
+        alias_method_chain :method_missing, :current_polymorphic_agent
+      end
+    end
+
     protected
       # Returns true or false if an Agent is authenticated
       # Preloads @current_agent with the Agent's model if they're authenticated
@@ -8,10 +22,29 @@ module CMS
         current_agent != :false
       end
 
+      # Compativility with restful_authentication plugin
+      alias logged_in? authenticated?
+
+      # Hook for CMS.agents based current_#{ agent_class } methods
+      # This allows using current_#{ agent_class } in controllers and helpers
+      def method_missing_with_current_polymorphic_agent(method, *args, &block) #:nodoc:
+        if method.to_s =~ /^current_(.*)$/
+          agent = $1
+          if CMS.agents.include?(agent.pluralize.to_sym)
+            return current_polymorphic_agent(agent.classify.constantize)
+          end
+        end
+        method_missing_without_current_polymorphic_agent(method, *args, &block)
+      end
+
       # Accesses the current Agent from the session.  Set it to :false if authentication
       # fails so that future calls do not hit the database.
       def current_agent
         @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie || :false)
+      end
+
+      def current_polymorphic_agent(agent_klass) #:nodoc:
+        current_agent.is_a?(agent_klass) ? current_agent : :false
       end
 
       # Store the given agent id and agent_type in the session.
@@ -99,17 +132,12 @@ module CMS
         session[:return_to] = nil
       end
 
-      # Inclusion hook to make #current_agent and #authenticated? methods
-      # available as ActionView helper methods.
-      def self.included(base)
-        base.send :helper_method, :current_agent, :authenticated?
-      end
 
       # Called from #current_agent.  First attempt to login by the agent id and type
       # stored in the session.
       def login_from_session
         if session[:agent_id] && session[:agent_type] && CMS.agents.include?(session[:agent_type].tableize.to_sym)
-        self.current_agent = session[:agent_type].constantize.find(session[:agent_id])
+          self.current_agent = session[:agent_type].constantize.find(session[:agent_id])
         end
       end
 
@@ -117,7 +145,7 @@ module CMS
       # Attempt to authenticate by basic authentication information.
       def login_from_basic_auth
         authenticate_with_http_basic do |username, password|
-          CMS.agent_classes.each do |klass|
+          for klass in CMS.agent_classes
             if klass.agent_options[:authentication].include?(:login_and_password)
               agent = klass.authenticate_with_login_and_password(username, password)
               return (self.current_agent = agent) if agent
