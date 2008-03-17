@@ -16,6 +16,10 @@ module CMS
       @request.env["HTTP_AUTHORIZATION"] = agent_fixture ? ActionController::HttpAuthentication::Basic.encode_credentials(agent_fixture.login, 'test') : nil
     end
 
+    def logged_in_session?
+      session[:agent_id] && session[:agent_type]
+    end
+
     private
 
     # Finds agent fixture among agent classes
