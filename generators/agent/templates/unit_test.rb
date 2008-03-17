@@ -18,6 +18,18 @@ class <%= class_name %>Test < Test::Unit::TestCase
     <%= file_name %> = create_<%= file_name %>
     assert_not_nil <%= file_name %>.activation_code
   end
+
+  def test_should_initialize_reset_password_code
+    u = <%= table_name %>(:quentin)
+    u.forgot_password
+    assert_not_nil u.reset_password_code
+  end
+
+  def test_should_delete_reset_password_code
+    u = <%= table_name %>(:quentin)
+    u.reset_password
+    assert_nil u.reset_password_code
+  end
   <% end %>
 
   def test_should_require_login
