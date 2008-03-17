@@ -1,7 +1,8 @@
 require File.dirname(__FILE__) + '/rails_commands'
 class AgentGenerator < Rails::Generator::NamedBase
   default_options :skip_migration => false,
-                  :include_activation => false
+                  :include_activation => false,
+                  :allow_collissions => false
                   
   attr_reader   :controller_name,
                 :controller_class_path,
@@ -57,12 +58,14 @@ class AgentGenerator < Rails::Generator::NamedBase
 
   def manifest
     recorded_session = record do |m|
-      # Check for class naming collisions.
-      m.class_collisions controller_class_path,       "#{controller_class_name}Controller", # Sessions Controller
-                                                      "#{controller_class_name}Helper"
-      m.class_collisions model_controller_class_path, "#{model_controller_class_name}Controller", # Model Controller
-                                                      "#{model_controller_class_name}Helper"
-      m.class_collisions class_path,                  "#{class_name}", "#{class_name}Mailer", "#{class_name}MailerTest", "#{class_name}Observer"
+      unless options[:allow_collissions]
+        # Check for class naming collisions.
+        m.class_collisions controller_class_path,       "#{controller_class_name}Controller", # Sessions Controller
+                                                        "#{controller_class_name}Helper"
+        m.class_collisions model_controller_class_path, "#{model_controller_class_name}Controller", # Model Controller
+                                                        "#{model_controller_class_name}Helper"
+        m.class_collisions class_path,                  "#{class_name}", "#{class_name}Mailer", "#{class_name}MailerTest", "#{class_name}Observer"
+      end
 
       # Controller, helper, views, and test directories.
       m.directory File.join('app/models', class_path)
@@ -203,6 +206,8 @@ class AgentGenerator < Rails::Generator::NamedBase
         puts
         if options[:include_activation]
           puts "    map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate'"
+          puts "    map.forgot_password '/forgot_password', :controller => '#{model_controller_file_name}', :action => 'forgot_password'"
+          puts "    map.reset_password '/reset_password/:reset_password_code', :controller => '#{model_controller_file_name}', :action => 'reset_password'"
           puts
           puts "  - add an observer to config/environment.rb"
           puts "    config.active_record.observers = :#{file_name}_observer"
@@ -248,9 +253,11 @@ class AgentGenerator < Rails::Generator::NamedBase
       opt.separator ''
       opt.separator 'Options:'
       opt.on("--skip-migration", 
-             "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
+             "Don't generate a migration file for this model") { |v| options[:skip_migration] = true }
       opt.on("--include-activation", 
              "Generate signup 'activation code' confirmation via email") { |v| options[:include_activation] = true }
+      opt.on("--allow-collissions", 
+             "Don't check for class collissions") { |v| options[:allow_collissions] = true }
       opt.on("--rspec",
              "Force rspec mode (checks for RAILS_ROOT/spec by default)") { |v| options[:rspec] = true }
     end

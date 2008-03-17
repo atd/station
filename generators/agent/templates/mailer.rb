@@ -17,7 +17,7 @@ class <%= class_name %>Mailer < ActionMailer::Base
   def forgot_password(<%= file_name %>)
     setup_email(<%= file_name %>)
     @subject    += 'Request to change your password'
-    @body[:url]  = "http://YOURSITE/<%= table_name %>/reset_password/#{ <%= file_name %>.reset_password_code }"
+    @body[:url]  = "http://YOURSITE/reset_password/#{ <%= file_name %>.reset_password_code }"
   end
 
   def reset_password(<%= file_name %>)

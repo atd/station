@@ -23,3 +23,7 @@ or...
 
 <p><%%= submit_tag 'Log in' %></p>
 <%% end -%>
+
+<% if options[:include_activation] -%>
+<%%= link_to 'Forgotten password?', forgot_password_path %>
+<% end -%>

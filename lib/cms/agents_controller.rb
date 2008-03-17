@@ -75,7 +75,7 @@ class CMS::AgentsController < ApplicationController
 
   # Resets Agent password via email
   def reset_password
-    @agent = agent_class.find_by_reset_password_code(params[:id])
+    @agent = agent_class.find_by_reset_password_code(params[:reset_password_code])
     raise unless @agent
     return unless params[:password]
     
