@@ -68,7 +68,7 @@ class CMS::AgentsController < ApplicationController
       end
 
       @agent.forgot_password
-      flash[:notice] = "A password reset link has been sent to your email address"
+      flash[:notice] = "A password reset link has been sent to email address"
       redirect_to("/")
     end
   end
