@@ -161,13 +161,19 @@ class AgentGenerator < Rails::Generator::NamedBase
       # Controller templates
       m.template 'login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template 'signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
-      m.template 'show.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "show.html.erb")
-      m.template 'show.atomsvc.builder', File.join('app/views', model_controller_class_path, model_controller_file_name, "show.atomsvc.builder")
+
+      for action in %w( show.html.erb show.atomsvc.builder ) do
+        m.template action, File.join('app/views', model_controller_class_path, model_controller_file_name, action)
+      end
 
       if options[:include_activation]
+        for action in %w( forgot_password.html.erb reset_password.html.erb ) do
+          m.template action, File.join('app/views', model_controller_class_path, model_controller_file_name, action)
+        end
+
         # Mailer templates
-        %w( activation signup_notification ).each do |action|
-          m.template "#{action}.html.erb",
+        for action in %w( activation signup_notification forgot_password reset_password )
+          m.template "mailer_#{action}.html.erb",
                      File.join('app/views', "#{file_name}_mailer", "#{action}.html.erb")
         end
       end

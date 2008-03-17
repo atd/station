@@ -14,6 +14,7 @@ Project page: http://rubyforge.org/projects/cmsplugin
 == Features
 
 * Agents authentication: Login/Password, OpenID
+* Agents activation: Email validation, Password reset
 * Atom feeds
 * AtomPub protocol support
 * Support for multiple Agents, Containers and Contents
