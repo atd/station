@@ -11,8 +11,20 @@ module CMS
     def resource_class
       @resource_class ||= controller_name.classify.constantize
     end
+    
+    # Fills title and description fields from Post and Content.
+    #
+    # Useful when rendering forms
+    def set_params_title_and_description(content_class) #:nodoc:
+      params[:title] ||= CMS::Post.title
+      params[:title] ||= content_class.title if content_class.respond_to?("title")
+      params[:description] ||= CMS::Post.description
+      params[:description] ||= content_class.description if content_class.respond_to?("description=")
+    end
 
     # Fills title and description fields for Post and Content
+    #
+    # Useful when POSTing content
     def set_params_title_and_description(content_class) #:nodoc:
       params[:post][:title] ||= params[:title]
       params[:post][:description] ||= params[:description]

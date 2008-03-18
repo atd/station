@@ -17,8 +17,6 @@ class CMS::ContentsController < ApplicationController
   before_filter :get_content,         :except => [ :index, :new, :create ]
   before_filter :can_read_content,    :only   => [ :show ]
 
-  # Extract params when posting raw content
-
   # List Contents of this type posted to a Container
   #
   # When there is no Container requested, just deliver public Contents
@@ -97,6 +95,8 @@ class CMS::ContentsController < ApplicationController
   #   GET /:container_type/:container_id/contents/new
   #   GET /contents/new
   def new
+    get_params_title_and_description(self.resource_class)
+
     @collection_path = container_contents_url
     @post = CMS::Post.new
     @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)

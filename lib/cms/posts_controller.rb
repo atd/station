@@ -9,12 +9,8 @@ class CMS::PostsController < ApplicationController
   before_filter :get_container,       :only   => [ :index ]
   before_filter :can_read_container,  :only   => [ :index ]
   
-  # Posts creation filters
-  before_filter :needs_container,     :only   => [ :create ]
-  before_filter :can_write_container, :only   => [ :create ]
-
   # Posts read filters
-  before_filter :get_post,       :except => [ :index, :create ]
+  before_filter :get_post,       :except => [ :index ]
   before_filter :can_read_post,  :only   => [ :show, :edit, :media, :edit_media ]
   
   # Post edition, deletion filters
@@ -81,6 +77,7 @@ class CMS::PostsController < ApplicationController
   # Renders form for editing this Post metadata
   #   GET /posts/:id/edit
   def edit
+    get_params_title_and_description(@post.content)
     render :template => "posts/edit"
   end
 
