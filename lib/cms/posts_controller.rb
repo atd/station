@@ -87,6 +87,8 @@ class CMS::PostsController < ApplicationController
   # Update this Post metadata
   #   PUT /posts/:id
   def update
+    set_params_title_and_description(@post.content)
+
     # If the Content of this Post hasn't attachment, update it here
     # If it has, update via media
     # 
@@ -144,7 +146,7 @@ class CMS::PostsController < ApplicationController
       end
 
       # Set params when putting raw data
-      params_from_raw_post
+      set_params_from_raw_post
 
       # TODO: find content if it already exists
       @content = @post.content.class.create(params[:content])

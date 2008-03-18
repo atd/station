@@ -12,14 +12,22 @@ module CMS
       @resource_class ||= controller_name.classify.constantize
     end
 
+    # Fills title and description fields for Post and Content
+    def set_params_title_and_description(content_class) #:nodoc:
+      params[:post][:title] ||= params[:title]
+      params[:post][:description] ||= params[:description]
+      params[:content][:title] ||= params[:title] if content_class.respond_to?("title=")
+      params[:content][:description] ||= params[:description] if content_class.respond_to?("description=")
+    end
+
     # Extract request parameters when posting raw data
-    def params_from_raw_post
+    def set_params_from_raw_post
       return if request.raw_post.blank? || params[:content]
 
       filename = request.env["HTTP_SLUG"] || controller_name.singularize
 
+      params[:title]                  ||= filename
       params[:post]                   ||= {}
-      params[:post][:title]           ||= filename
       params[:post][:public_read]     ||= true
       params[:content]                ||= {}
       params[:content][:filename]     ||= filename

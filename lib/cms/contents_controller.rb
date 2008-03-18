@@ -18,7 +18,6 @@ class CMS::ContentsController < ApplicationController
   before_filter :can_read_content,    :only   => [ :show ]
 
   # Extract params when posting raw content
-  before_filter :params_from_raw_post, :only   => [ :create ]
 
   # List Contents of this type posted to a Container
   #
@@ -109,11 +108,16 @@ class CMS::ContentsController < ApplicationController
   #   POST /:container_type/:container_id/contents
   #   POST /contents
   def create
+    # Fill params when POSTing raw data
+    set_params_from_raw_post
+
+    set_params_title_and_description(self.resource_class)
+
     # FIXME: we should look for an existing content instead of creating a new one
     # every time a Content is posted.
     # Idea: Should use SHA1 on one or some relevant Content field(s) 
     # and find_or_create_by_sha1
-    @content = instance_variable_set "@#{controller_name.singularize}", controller_name.classify.constantize.create(params[:content])
+    @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.create(params[:content])
 
     @post = CMS::Post.new(params[:post].merge({ :agent => current_agent,
                                                 :container => @container,
