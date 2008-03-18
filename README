@@ -96,7 +96,7 @@ Add has_attachment information in the model:
 
     validates_as_attachment
 
-    acts_as_content :collection => :gallery,
+    acts_as_content :named_collection => "Gallery",
                     :has_media => :attachment_fu,
                     :disposition => :inline,
                     :atompub_mime_types => attachment_options[:content_type].join(", ")

@@ -28,9 +28,8 @@ class CMS::ContentsController < ApplicationController
   #   GET /contents
   def index
     # We search for specific contents if the container or the application supports them
-    if (@container || CMS).contents.include?(controller_name.to_sym)
-      conditions = [ "cms_posts.content_type = ?", controller_name.classify ]
-      content_class = controller_name.classify.constantize
+    if (@container || CMS).contents.include?(self.resource_class.collection)
+      conditions = [ "cms_posts.content_type = ?", self.resource_class.to_s ]
     else
       # This Container don't accept the Content type
       render :text => "Doesn't support this Content type", :status => 400
@@ -38,7 +37,7 @@ class CMS::ContentsController < ApplicationController
     end
 
     if @container
-      @title ||= "#{ content_class.content_options[:collection].to_s.humanize } - #{ @container.name }"
+      @title ||= "#{ self.resource_class.named_collection } - #{ @container.name }"
       # All the Contents this Agent can read in this Container
       @collection = @container.posts.find(:all,
                                           :conditions => conditions,
@@ -47,11 +46,11 @@ class CMS::ContentsController < ApplicationController
       }
 
       # Paginate them
-      @posts = @collection.paginate(:page => params[:page], :per_page => content_class.content_options[:per_page])
+      @posts = @collection.paginate(:page => params[:page], :per_page => self.resource_class.content_options[:per_page])
       @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
       @collection_path = container_contents_url
     else
-      @title ||= content_class.content_options[:collection].to_s.humanize
+      @title ||= self.resource_class.named_collection
       conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
       @posts = CMS::Post.paginate :all,
                                   :conditions => conditions,

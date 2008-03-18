@@ -3,6 +3,15 @@ module CMS
   module ControllerMethods
     protected
 
+    # Returns the Model Class related to this Controller 
+    #
+    # e.g. Article for ArticlesController
+    #
+    # Useful for Controller inheritance
+    def resource_class
+      @resource_class ||= controller_name.classify.constantize
+    end
+
     # Extract request parameters when posting raw data
     def params_from_raw_post
       return if request.raw_post.blank? || params[:content]

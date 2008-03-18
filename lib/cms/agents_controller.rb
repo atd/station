@@ -1,5 +1,6 @@
 # Controller for Agents management
 class CMS::AgentsController < ApplicationController
+  include CMS::ControllerMethods
   include CMS::Authentication
 
   before_filter :get_agent, :only => :show
@@ -28,7 +29,7 @@ class CMS::AgentsController < ApplicationController
 
   # Render a form for creating a new Agent
   def new
-    @agent = agent_class.new
+    @agent = self.resource_class.new
   end
 
   # Create new Agent instance
@@ -38,7 +39,7 @@ class CMS::AgentsController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    @agent = agent_class.new(params[:agent])
+    @agent = self.resource_class.new(params[:agent])
     @agent.openid_identifier = session[:openid_identifier]
     @agent.save!
     @agent.openid_ownings.create(:uri => CMS::URI.find_or_create_by_uri(session[:openid_identifier])) if session[:openid_identifier]
@@ -51,7 +52,7 @@ class CMS::AgentsController < ApplicationController
 
   # Activate Agent from email
   def activate
-    self.current_agent = params[:activation_code].blank? ? :false : agent_class.find_by_activation_code(params[:activation_code])
+    self.current_agent = params[:activation_code].blank? ? :false : self.resource_class.find_by_activation_code(params[:activation_code])
     if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
       current_agent.activate
       flash[:notice] = "Signup complete!"
@@ -61,7 +62,7 @@ class CMS::AgentsController < ApplicationController
 
   def forgot_password
     if params[:email]
-      @agent = agent_class.find_by_email(params[:email])
+      @agent = self.resource_class.find_by_email(params[:email])
       unless @agent
         flash[:error] = "Could not find anybody with that email address"
         return
@@ -75,7 +76,7 @@ class CMS::AgentsController < ApplicationController
 
   # Resets Agent password via email
   def reset_password
-    @agent = agent_class.find_by_reset_password_code(params[:reset_password_code])
+    @agent = self.resource_class.find_by_reset_password_code(params[:reset_password_code])
     raise unless @agent
     return unless params[:password]
     
@@ -100,24 +101,15 @@ class CMS::AgentsController < ApplicationController
   #
   # Example GET /users/1 or GET /users/quentin
   def get_agent
-    @agent = ( params[:id].match(/\d+/) ? agent_class.find(params[:id]) : agent_class.find_by_login(params[:id]) )
+    @agent = ( params[:id].match(/\d+/) ? self.resource_class.find(params[:id]) : self.resource_class.find_by_login(params[:id]) )
   end
 
   # Filter for 
   def activation_required
-    redirect_back_or_default('/') unless agent_class.agent_options[:activation]
+    redirect_back_or_default('/') unless self.resource_class.agent_options[:activation]
   end
 
   def login_and_pass_auth_required
-    redirect_back_or_default('/') unless agent_class.agent_options[:authentication].include?(:login_and_password)
-  end
-
-  private
-
-  # Returns the model class related with this controller
-  #
-  # Useful for controllers that inherit this class
-  def agent_class # :nodoc:
-    @agent_class ||= controller_name.classify.constantize
+    redirect_back_or_default('/') unless self.resource_class.agent_options[:authentication].include?(:login_and_password)
   end
 end
