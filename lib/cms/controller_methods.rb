@@ -15,11 +15,11 @@ module CMS
     # Fills title and description fields from Post and Content.
     #
     # Useful when rendering forms
-    def set_params_title_and_description(content_class) #:nodoc:
-      params[:title] ||= CMS::Post.title
-      params[:title] ||= content_class.title if content_class.respond_to?("title")
-      params[:description] ||= CMS::Post.description
-      params[:description] ||= content_class.description if content_class.respond_to?("description=")
+    def get_params_title_and_description(post) #:nodoc:
+      params[:title] ||= post.title
+      params[:title] ||= post.content.title if post.content.respond_to?("title")
+      params[:description] ||= post.description
+      params[:description] ||= post.content.description if post.content.respond_to?("description=")
     end
 
     # Fills title and description fields for Post and Content

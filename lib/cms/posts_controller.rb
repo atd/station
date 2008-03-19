@@ -77,7 +77,8 @@ class CMS::PostsController < ApplicationController
   # Renders form for editing this Post metadata
   #   GET /posts/:id/edit
   def edit
-    get_params_title_and_description(@post.content)
+    get_params_title_and_description(@post)
+
     render :template => "posts/edit"
   end
 

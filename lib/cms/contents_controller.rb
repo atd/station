@@ -95,8 +95,6 @@ class CMS::ContentsController < ApplicationController
   #   GET /:container_type/:container_id/contents/new
   #   GET /contents/new
   def new
-    get_params_title_and_description(self.resource_class)
-
     @collection_path = container_contents_url
     @post = CMS::Post.new
     @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
