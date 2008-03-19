@@ -1,11 +1,11 @@
 <p>
   <b>Title</b><br />
-  <%%= f.text_field :title, :size => 50 %>
+  <%%= text_field_tag :title, params[:title], :size => 50 %>
 </p>
 
 <p>
   <b>Description</b><br />
-  <%%= f.text_area :description, :width => '100%', :height => '300px' %>
+  <%%= text_area_tag :description, params[:description], :width => '100%', :height => '300px' %>
 </p>
 
 <%%= render :partial => "#{ @content.class.to_s.tableize }/form" %>
