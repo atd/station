@@ -49,6 +49,18 @@ module CMS
         include CMS::Content::InstanceMethods
       end
 
+      # Returns the symbol for a set of Contents of this item
+      # e.g. <tt>:articles</tt> for Article
+      def collection
+        self.to_s.tableize.to_sym
+      end
+
+      # Returns the word for a named collection of this item
+      # a.g. <tt>"Gallery"</tt> for Photo
+      def named_collection
+        content_options[:named_collection] || collection.to_s.humanize
+      end
+      
       # Icon image path
       def icon_image
         'icons/' + self.to_s.underscore.concat(".png")
@@ -98,18 +110,6 @@ module CMS
     end
 
     module InstanceMethods
-      # Returns the symbol for a set of Contents of this item
-      # e.g. <tt>:articles</tt> for Article
-      def collection
-        self.to_s.tableize.to_sym
-      end
-
-      # Returns the word for a named collection of this item
-      # a.g. <tt>"Gallery"</tt> for Photo
-      def named_collection
-        options[:named_collection] || collection.to_s.humanize
-      end
-
       # Returns the mime type for this Content instance. 
       # TODO: Works with attachment_fu
       def mime_type
