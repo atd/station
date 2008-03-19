@@ -26,8 +26,10 @@ module CMS
     #
     # Useful when POSTing content
     def set_params_title_and_description(content_class) #:nodoc:
+      params[:post] ||= {}
       params[:post][:title] ||= params[:title]
       params[:post][:description] ||= params[:description]
+      params[:content] ||= {}
       params[:content][:title] ||= params[:title] if content_class.respond_to?("title=")
       params[:content][:description] ||= params[:description] if content_class.respond_to?("description=")
     end
