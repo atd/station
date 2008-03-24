@@ -25,6 +25,7 @@ Project page: http://rubyforge.org/projects/cmsplugin
 * RubyGems: 
   * ruby-openid
   * atom-tools
+  * hpricot
 * Plugins:
   * will_paginate svn://errtheblog.com/svn/plugins/will_paginate
 
