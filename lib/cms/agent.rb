@@ -13,8 +13,12 @@ module CMS
       # Agent(s) can post Content(s) to Container(s)
       #
       # Options
-      # * <tt>authentication</tt>: Array with Authentication methods supported for this Agent. If not defined, Agent will never authenticate
+      # * <tt>authentication</tt>: Array with Authentication methods supported for this Agent. 
+      # Defaults to <tt>[ :login_and_password, :openid ]</tt>
+      # * <tt>activation</tt>: Agent must verify email
       def acts_as_agent(options = {})
+        options[:authentication] ||= [ :login_and_password, :openid ]
+        
         cattr_reader :agent_options
         class_variable_set "@@agent_options", options
 
