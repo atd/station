@@ -58,7 +58,7 @@ module CMS
       # Returns the word for a named collection of this item
       # a.g. <tt>"Gallery"</tt> for Photo
       def named_collection
-        content_options[:named_collection] || collection.to_s.humanize
+        content_options[:named_collection].to_s || collection.to_s.humanize
       end
       
       # Icon image path
