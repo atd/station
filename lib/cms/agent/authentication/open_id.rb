@@ -12,6 +12,9 @@ module CMS
             has_many :openid_ownings,
                      :as => :agent,
                      :class_name => "CMS::OpenID::Owning"
+            has_many :openid_uris,
+                     :through => :openid_ownings,
+                     :source => :uri
           end
         end
 
