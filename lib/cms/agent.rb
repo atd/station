@@ -44,6 +44,11 @@ module CMS
 
         include CMS::Agent::InstanceMethods
       end
+         
+      # Icon image path
+      def icon_image
+        'icons/' + self.to_s.underscore.concat(".png")
+      end
     end
 
     module InstanceMethods
