@@ -42,6 +42,11 @@ module CMS
         # Remember Agent in browser through cookies
         include CMS::Agent::Remember
 
+        has_many :performances, 
+                 :class_name => "CMS::Performance", 
+                 :dependent => :destroy,
+                 :as => :agent
+
         include CMS::Agent::InstanceMethods
       end
          

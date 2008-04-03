@@ -28,7 +28,10 @@ module CMS
         has_many :posts, :as => :container,
                          :class_name => "CMS::Post"
 
-        has_many :categories, :as => :owner
+        has_many :performances,
+                 :class_name => "CMS::Performance",
+                 :dependent => :destroy,
+                 :as => :container
 
         include CMS::Container::InstanceMethods
       end

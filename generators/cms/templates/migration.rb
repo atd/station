@@ -23,6 +23,26 @@ class CmsSetup < ActiveRecord::Migration
     end
     add_index :cms_uris, :uri
 
+    create_table :cms_roles do |t|
+      t.string :name
+      t.boolean :create_posts
+      t.boolean :read_posts
+      t.boolean :update_posts
+      t.boolean :delete_posts
+      t.boolean :create_performances
+      t.boolean :read_preformances
+      t.boolean :update_performances
+      t.boolean :delete_performances
+    end
+
+    create_table :cms_performances do |t|
+      t.integer :agent_id
+      t.string  :agent_type
+      t.integer :role_id
+      t.integer :container_id
+      t.string  :container_type
+    end
+
     create_table :open_id_ownings do |t|
       t.integer :agent_id
       t.string  :agent_type
@@ -48,6 +68,8 @@ class CmsSetup < ActiveRecord::Migration
   def self.down
     drop_table :cms_posts
     drop_table :cms_uris
+    drop_table :cms_roles
+    drop_table :cms_performances
     drop_table :open_id_ownings
     drop_table :open_id_associations
     drop_table :open_id_nonces
