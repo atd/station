@@ -1,4 +1,5 @@
 module CMS
+  # URI storage in the database
   class URI < ActiveRecord::Base
     set_table_name "cms_uris"
 

@@ -1,3 +1,7 @@
+# Agents using OpenID authentication verify their OpenID URLs when singing in
+#
+# CMS::OpenID::Owning class stores the relation between the agent and the verified
+# CMS::URI
 class CMS::OpenID::Owning < ActiveRecord::Base
   set_table_name "open_id_ownings"
 

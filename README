@@ -15,8 +15,8 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 * Agents authentication: Login/Password, OpenID
 * Agents activation: Email validation, Password reset
-* Atom feeds
-* AtomPub protocol support
+* Atom feeds support (RFC 4287)
+* AtomPub protocol support (RFC 5023)
 * Support for multiple Agents, Containers and Contents
 
 == Requirements
@@ -60,11 +60,11 @@ For example, a User could also be defined as a Container. In this way, every use
 Create personal blogs with a pair of commands:
 
   script/generate agent User
-  script/generate content Article body:string
+  script/generate content Article body:text
 
 Users now can post their own Articles
 
-You can add AtomPub support implementing atom_entry_filter method in Article model:
+You can add AtomPub support for Articles creation. You must implement atom_entry_filter method in Article model:
 
   def self.atom_entry_filter(entry)
     { :body => entry.content.xml.to_s }
