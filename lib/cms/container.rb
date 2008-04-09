@@ -15,15 +15,12 @@ module CMS
       # * <tt>name</tt>: alias attribute for Content presentation
       #
       def acts_as_container(options = {})
-        cattr_reader :contents
-
         options[:contents] ||= CMS.contents
 
         send(:alias_attribute, :name, options.delete(:name)) if options[:name]
 
-        options.each_pair do |var, value|
-          class_variable_set "@@#{ var }", value
-        end
+        cattr_reader :container_options
+        class_variable_set "@@container_options", options
 
         has_many :posts, :as => :container,
                          :class_name => "CMS::Post"

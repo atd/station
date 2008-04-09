@@ -72,11 +72,25 @@ module CMS
       @container = params[:container_type].to_sym.to_class.find params[:container_id]
     end
 
-    # Find a Container suitable for this Content. Return Forbidden if it isn't found
+    # Tries to find a Container suitable for this Content
+    # 
+    # Calls get_container to figure out from params. If unsuccesful, 
+    # it tries with current_agent
+    # 
+    # If a Container is found, and this type of content can be posted, 
+    # it sets <tt>@container</tt> to the container found,
+    # and <tt>@collection_path</tt> to <tt>/:container_type/:container_id/contents</tt>
+    # 
+    # Renders Forbidden if no Container is found
     def needs_container
       @container = get_container || current_agent
 
-      render(:text => "Forbidden", :status => 403) unless @container.respond_to?("has_owner?") && (@container.contents.clone << :posts).include?(controller_name.to_sym)
+      if @container.respond_to?("container_options") && 
+        (@container.container_options[:contents].clone << :posts).include?(controller_name.to_sym)
+        @collection_path = container_contents_path
+      else
+        render(:text => "Forbidden", :status => 403)
+      end
     end
 
     # Can the current Agent access this Container?

@@ -25,7 +25,7 @@ class CMS::ContentsController < ApplicationController
   #   GET /contents
   def index
     # We search for specific contents if the container or the application supports them
-    if (@container || CMS).contents.include?(self.resource_class.collection)
+    if (@container && @container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
       conditions = [ "cms_posts.content_type = ?", self.resource_class.to_s ]
     else
       # This Container don't accept the Content type
