@@ -40,6 +40,13 @@ module CMS
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
+      # Return all agents that play one role at least in this container
+      # 
+      # TODO: conditions (roles, etc...)
+      def agents
+        performances.map(&:agent).uniq
+      end
+      
       # Does this agent manage the container?
       def has_owner?(agent)
         self == agent
