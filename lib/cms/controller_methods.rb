@@ -68,7 +68,7 @@ module CMS
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def container_contents_path(options = {})
       container_content_options do |container, content, options|
-        send "container_#{ content }_path", options
+        send ( container ? "container_#{ content }_path" : "#{ content }_path" ), options
       end
     end
 
@@ -79,7 +79,7 @@ module CMS
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def new_container_content_path(options = {})      
       container_content_options do |container, content, options|
-        send "new_container_#{ content }_path", options
+        send ( container ? "new_container_#{ content }_path": "new_#{ content }_path" ), options
       end
     end
 
@@ -91,7 +91,7 @@ module CMS
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def container_contents_url(options = {})
       container_content_options do |container, content, options|
-        send "container_#{ content }_url", options
+        send ( container ? "container_#{ content }_url" : "#{ content }_url" ), options
       end
     end
 
@@ -102,14 +102,14 @@ module CMS
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def new_container_content_url(options = {})
       container_content_options do |container, content, options|
-        send "new_container_#{ content }_url", options
+        send ( container ? "new_container_#{ content }_url" : "new_#{ content }_url" ), options
       end
     end
 
     #TODO: DRY!!!
     ####################################################
 
-    def container_content_options(options = {})
+    def container_content_options(options = {}) # :nodoc:
       content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name
       container = options.delete(:container) || @container
       
