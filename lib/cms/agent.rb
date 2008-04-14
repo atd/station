@@ -62,7 +62,7 @@ module CMS
         #TODO: Roles
         containers = []
         # Meanwhile, return self if Agent can post to self
-        containers.unshift(self) if self.respond_to?("contents")
+        containers.unshift(self) if self.respond_to?('container_options')
 
         containers
       end
