@@ -115,6 +115,13 @@ module CMS
       def mime_type
         respond_to?("content_type") ? Mime::Type.lookup(content_type) : nil
       end
+      
+      # Has this Content been posted in this Container? Is there any Post linking both?
+      def posted_in?(container)
+        return false unless container
+        posts.select{ |p| p.container == container }.any?
+      end
+      
 
       # Can this <tt>agent</tt> read this Content?
       # True if there exists a Post for this Content that can be read by <tt>agent</tt> 
