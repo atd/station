@@ -6,8 +6,8 @@ module CMS
     def self.included(base)
       base.send :helper_method, :container_contents_path, 
                                 :container_contents_url, 
-                                :new_container_contents_path, 
-                                :new_container_contents_url
+                                :new_container_content_path, 
+                                :new_container_content_url
     end
     
     protected
