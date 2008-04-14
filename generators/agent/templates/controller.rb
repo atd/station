@@ -3,8 +3,8 @@ require 'openid/extensions/sreg'
 
 # This controller handles the login/logout function of the site.  
 class <%= controller_class_name %>Controller < ApplicationController
-  # Be sure to include CMS::Authentication in Application Controller instead
-  include CMS::Authentication
+  # Be sure to include CMS::Controller::Authentication in Application Controller instead
+  include CMS::Controller::Authentication
 
   # render new.rhtml
   def new
