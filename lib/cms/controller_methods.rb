@@ -113,8 +113,10 @@ module CMS
       content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name
       container = options.delete(:container) || @container
       
-      options[:container_type] = container.class.to_s.tableize
-      options[:container_id]   = container.id
+      if container
+        options[:container_type] = container.class.to_s.tableize
+        options[:container_id]   = container.id
+      end
       
       yield(container, content, options)
     end
