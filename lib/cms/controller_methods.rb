@@ -67,13 +67,9 @@ module CMS
     # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def container_contents_path(options = {})
-      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name
-      container = options.delete(:container) || @container
-      
-      send "container_#{ content }_path",
-        :container_type => container.class.to_s.tableize,
-        :container_id   => container.id,
-        *options
+      container_content_options do |container, content, options|
+        send "container_#{ content }_path", options
+      end
     end
 
     # Return the path to new Content in this Container 
@@ -81,14 +77,10 @@ module CMS
     # Options:
     # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
-    def new_container_content_path(options = {})
-      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self).controller_name.singularize
-      container = options.delete(:container) || @container
-      
-      send "new_container_#{ content }_path",
-        :container_type => container.class.to_s.tableize,
-        :container_id   => container.id,
-        *options
+    def new_container_content_path(options = {})      
+      container_content_options do |container, content, options|
+        send "new_container_#{ content }_path", options
+      end
     end
 
 
@@ -98,13 +90,9 @@ module CMS
     # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def container_contents_url(options = {})
-      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller_name : controller.controller_name )
-      container = options.delete(:container) || @container
-
-      send "container_#{ content }_url",
-        :container_type => container.class.to_s.tableize,
-        :container_id   => container.id,
-        *options
+      container_content_options do |container, content, options|
+        send "container_#{ content }_url", options
+      end
     end
 
     # Return the url to new Content in this Container 
@@ -113,17 +101,23 @@ module CMS
     # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
     # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def new_container_content_url(options = {})
-      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name.singularize
-      container = options.delete(:container) || @container
-
-      send "new_container_#{ content }_url",
-        :container_type => container.class.to_s.tableize,
-        :container_id   => container.id,
-        *options
+      container_content_options do |container, content, options|
+        send "new_container_#{ content }_url", options
+      end
     end
 
     #TODO: DRY!!!
     ####################################################
+
+    def container_content_options(options = {})
+      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name
+      container = options.delete(:container) || @container
+      
+      options[:container_type] = container.class.to_s.tableize
+      options[:container_id]   = container.id
+      
+      yield(container, content, options)
+    end
 
     # Find Container using path from the request
     def get_container
