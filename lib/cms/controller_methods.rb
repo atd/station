@@ -1,6 +1,15 @@
 module CMS
   # Common Methods for CMS Controllers
   module ControllerMethods
+    # Inclusion hook to make container_content methods
+    # available as ActionView helper methods.
+    def self.included(base)
+      base.send :helper_method, :container_contents_path, 
+                                :container_contents_url, 
+                                :new_container_contents_path, 
+                                :new_container_contents_url
+    end
+    
     protected
 
     # Returns the Model Class related to this Controller 
@@ -48,22 +57,73 @@ module CMS
       params[:content][:content_type] ||= request.content_type
       params[:content][:raw_post]     ||= request.raw_post
     end
-
+    
+    ##################################################################
+    # TODO: DRY!!!
+    
     # Return the path to this Content collection in this Container 
+    #
+    # Options:
+    # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
+    # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def container_contents_path(options = {})
-      send "container_#{ controller_name }_path",
-        :container_type => @container.class.to_s.tableize,
-        :container_id   => @container.id,
+      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name
+      container = options.delete(:container) || @container
+      
+      send "container_#{ content }_path",
+        :container_type => container.class.to_s.tableize,
+        :container_id   => container.id,
         *options
     end
+
+    # Return the path to new Content in this Container 
+    #
+    # Options:
+    # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
+    # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
+    def new_container_content_path(options = {})
+      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self).controller_name.singularize
+      container = options.delete(:container) || @container
+      
+      send "new_container_#{ content }_path",
+        :container_type => container.class.to_s.tableize,
+        :container_id   => container.id,
+        *options
+    end
+
 
     # Return the url to this Content collection in this Container 
+    #
+    # Options:
+    # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
+    # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
     def container_contents_url(options = {})
-      send "container_#{ controller_name }_url",
-        :container_type => @container.class.to_s.tableize,
-        :container_id   => @container.id,
+      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller_name : controller.controller_name )
+      container = options.delete(:container) || @container
+
+      send "container_#{ content }_url",
+        :container_type => container.class.to_s.tableize,
+        :container_id   => container.id,
         *options
     end
+
+    # Return the url to new Content in this Container 
+    #
+    # Options:
+    # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
+    # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
+    def new_container_content_url(options = {})
+      content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name.singularize
+      container = options.delete(:container) || @container
+
+      send "new_container_#{ content }_url",
+        :container_type => container.class.to_s.tableize,
+        :container_id   => container.id,
+        *options
+    end
+
+    #TODO: DRY!!!
+    ####################################################
 
     # Find Container using path from the request
     def get_container
