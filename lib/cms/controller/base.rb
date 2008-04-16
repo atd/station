@@ -80,7 +80,7 @@ module CMS
       # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
       def new_container_content_path(options = {})      
         container_content_options(options) do |container, content, cc_options|
-          send(( container ? "new_container_#{ content }_path": "new_#{ content }_path" ), cc_options)
+          send(( container ? "new_container_#{ content.singularize }_path": "new_#{ content }_path" ), cc_options)
         end
       end
   
@@ -103,7 +103,7 @@ module CMS
       # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
       def new_container_content_url(options = {})
         container_content_options(options) do |container, content, cc_options|
-          send(( container ? "new_container_#{ content }_url" : "new_#{ content }_url" ), cc_options)
+          send(( container ? "new_container_#{ content.singularize }_url" : "new_#{ content }_url" ), cc_options)
         end
       end
   
