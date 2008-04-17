@@ -65,8 +65,8 @@ module CMS
       # Return the path to this Content collection in this Container 
       #
       # Options:
-      # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
-      # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
+      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
+      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
       def container_contents_path(options = {})
         container_content_options(options) do |container, content, cc_options|
           send(( container ? "container_#{ content }_path" : "#{ content }_path" ), cc_options)
@@ -76,8 +76,8 @@ module CMS
       # Return the path to new Content in this Container 
       #
       # Options:
-      # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
-      # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
+      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
+      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
       def new_container_content_path(options = {})      
         container_content_options(options) do |container, content, cc_options|
           send(( container ? "new_container_#{ content.singularize }_path": "new_#{ content }_path" ), cc_options)
@@ -88,8 +88,8 @@ module CMS
       # Return the url to this Content collection in this Container 
       #
       # Options:
-      # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
-      # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
+      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
+      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
       def container_contents_url(options = {})
         container_content_options(options) do |container, content, cc_options|
           send(( container ? "container_#{ content }_url" : "#{ content }_url" ), cc_options)
@@ -99,8 +99,8 @@ module CMS
       # Return the url to new Content in this Container 
       #
       # Options:
-      # <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
-      # <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
+      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
+      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
       def new_container_content_url(options = {})
         container_content_options(options) do |container, content, cc_options|
           send(( container ? "new_container_#{ content.singularize }_url" : "new_#{ content }_url" ), cc_options)
