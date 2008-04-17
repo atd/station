@@ -57,14 +57,9 @@ module CMS
     end
 
     module InstanceMethods
-      # All Containers this Agent can post to
+      # All Containers in which this Agent has a Performance
       def containers
-        #TODO: Roles
-        containers = []
-        # Meanwhile, return self if Agent can post to self
-        containers.unshift(self) if self.respond_to?('container_options')
-
-        containers
+        performances.map(&:container).uniq
       end
     end
   end
