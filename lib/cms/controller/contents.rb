@@ -6,28 +6,46 @@ module CMS
       #
       # Filters can be overwritten in the Controller
       def self.included(base)
+        # CMS::Modules
         base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
-        base.send :include, CMS::Controller::Authentication unless base.instance_methods.include?('authenticated?')
+        base.send :include, CMS::Controller::Authorization unless base.instance_methods.include?('authenticated?')
         
+        # Authentication Filter
         base.send :before_filter, :authentication_required, :except => [ :index, :show ]
+
+        ########################
+        # Authorization Filters
+        #
+        # Create
+        base.send :before_filter, :can__create_posts__container, 
+                                  :only   => [ :new, :create ]
+        
+        # Read
+        base.send :before_filter, :can__read_posts__container,  
+                                  :only   => [ :index, :show, :edit ]
+
+        # Update
+        base.send :before_filter, :can__update_posts__container,
+                                  :only => [ :edit, :update ]
+
+        # Delete
+        base.send :before_filter, :can__delete_posts__container,
+                                  :only => [ :destroy ]
 
         # Content list filters
         base.send :before_filter, :get_container,
-                                  :only   => [ :index ]
-        base.send :before_filter, :can_read_container,  
                                   :only   => [ :index ]
         
         # Content creation filters
         base.send :before_filter, :needs_container,     
                                   :only   => [ :new, :create ]
-        base.send :before_filter, :can_write_container, 
-                                  :only   => [ :new, :create ]
       
         # Content show filters
         base.send :before_filter, :get_content,         
                                   :except => [ :index, :new, :create ]
-        base.send :before_filter, :can_read_content,    
-                                  :only   => [ :show ]
+
+
+
       end
 
       # List Contents of this type posted to a Container

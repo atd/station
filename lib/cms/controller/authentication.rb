@@ -1,10 +1,40 @@
 module CMS
   module Controller
-    # Controller and Helper methods for Authentication support
+    # Authentication module provides with Controller and Helper methods 
+    # for Agent identification support
+    #
+    # For permissions issues in your Controllers, see CMS::Controller::Authorization
+    #
+    # == Current Agent
+    # There are some methods available to access the Agent
+    # that is requesting some action
+    #  
+    # authenticated?:: Is there any Agent authenticated in this request?
+    # current_agent::  Agent currently authenticated. Defaults to <tt>:false</tt>
+    # current_agent=::  Set current_agent
+    #
+    # You can also use the name of a model that acts_as_agent
+    #   def User
+    #     acts_as_agent
+    #   end
+    #
+    #   current_user # => The authenticated user, or :false
+    #
+    # == Filters
+    # authentication_required:: The action requires to be performed by an 
+    # authenticated Agent. Calls access_denied if there is none
+    #
+    # == State Information
+    # Authentication state information can be obtained from these sources
+    #
+    # HTTP Basic auth:: HTTP headers
+    # Session:: Rails Session[http://api.rubyonrails.org/classes/ActionController/Integration/Session.html]
+    # Cookie::  CMS::Agent::Remember
+    #
     module Authentication
       # Inclusion hook to make #current_agent and #authenticated? methods
       # available as ActionView helper methods.
-      def self.included(base)
+      def self.included(base) # :nodoc:
         base.send :helper_method, :current_agent, :authenticated?, :logged_in?
         # Add current_#{ agent_type}
         for agent in CMS.agents.map{ |a| a.to_s.singularize }
@@ -59,23 +89,6 @@ module CMS
           @current_agent = new_agent || :false
         end
   
-        # Check if the Agent is authorized
-        #
-        # Override this method in your controllers if you want to restrict access
-        # to only a few actions or if you want to check if the Agent
-        # has the correct rights.
-        #
-        # Example:
-        #
-        #  # only allow nonbobs
-        #  def authorized?
-        #    current_agent.login != "bob"
-        #  end
-        # TODO: maybe we have to clean this
-        def authorized?
-          authenticated?
-        end
-  
         # Filter method to enforce an authentication requirement.
         #
         # To require authentication for all actions, use this in your controllers:
@@ -91,7 +104,7 @@ module CMS
         #   skip_before_filter :authentication_required
         #
         def authentication_required
-          authorized? || access_denied
+          authenticated? || access_denied
         end
   
         # Redirect as appropriate when an access request fails.
@@ -134,17 +147,15 @@ module CMS
         end
   
   
-        # Called from #current_agent.  First attempt to login by the agent id and type
-        # stored in the session.
-        def login_from_session
+	# Attempt to login by the agent id and type stored in the session.
+        def login_from_session #:nodoc:
           if session[:agent_id] && session[:agent_type] && CMS.agents.include?(session[:agent_type].tableize.to_sym)
             self.current_agent = session[:agent_type].constantize.find(session[:agent_id])
           end
         end
   
-        # Called from #current_agent.
         # Attempt to authenticate by basic authentication information.
-        def login_from_basic_auth
+        def login_from_basic_auth #:nodoc:
           authenticate_with_http_basic do |username, password|
             for klass in CMS.agent_classes
               if klass.agent_options[:authentication].include?(:login_and_password)
@@ -156,9 +167,8 @@ module CMS
           nil
         end
   
-        # Called from #current_agent. 
         # Attempt to authenticate by an expiring token in the cookie.
-        def login_from_cookie
+        def login_from_cookie #:nodoc:
           CMS.agent_classes.each do |agent_class|
             agent = agent_class.find_by_remember_token(cookies[:auth_token])
             if agent && agent.remember_token?

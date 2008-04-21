@@ -66,13 +66,15 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
   end  
 end
 
-class Rails::Initializer #:nodoc:
-  # Make sure it gets loaded in the console, tests, and migrations
-  def after_initialize_with_cms_autoload 
-    after_initialize_without_cms_autoload
-    CMS.autoload
+module Rails #:nodoc: all
+  class Initializer
+    # Make sure it gets loaded in the console, tests, and migrations
+    def after_initialize_with_cms_autoload 
+      after_initialize_without_cms_autoload
+      CMS.autoload
+    end
+    alias_method_chain :after_initialize, :cms_autoload 
   end
-  alias_method_chain :after_initialize, :cms_autoload 
 end
 
 Dispatcher.to_prepare(:cms_autoload) do
