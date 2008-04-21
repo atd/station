@@ -31,12 +31,29 @@ module CMS
                  :as => :container
 
         include CMS::Container::InstanceMethods
+        
+        # This methods maps the appropriate attributes
+        send :alias_method_chain, :method_missing, :roled_actions
       end
     end
 
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
+      # Catch all methods like "read_by?(agent)"
+      # If there is any performance for that agent that respond true to action
+      def method_missing_with_roled_actions(method, *args, &block) #:nodoc:
+        if method.to_s =~ /^(.*)_by\?$/
+          action = "#{ $1 }?".to_sym
+          agent = args.first
+          agent_roles = performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
+          agent_roles.select(&action).any?
+          # TODO rescue NoMethodError when a Role doesn't support "action" and raise useful message
+        else
+          method_missing_without_roled_actions(method, *args, &block)
+        end
+      end
+      
       # Return all agents that play one role at least in this container
       # 
       # TODO: conditions (roles, etc...)
@@ -46,17 +63,6 @@ module CMS
       
       # Does this agent manage the container?
       def has_owner?(agent)
-        self == agent
-      end
-
-      # Can agent get posts from this container?
-      # Note that each post defines it own permissions, thus overwrites this
-      def read_by?(agent)
-        true
-      end
-
-      # Can <tt>agent</tt> post to this container?
-      def write_by?(agent)
         self == agent
       end
     end
