@@ -8,9 +8,10 @@ module CMS
     # == Filters
     # Authorization filters can defined in the following way:
     #   before_filter :can__do_something__somewhere
-    # This sends @somewhere the method do_something_by?(current_agent)
+    # This calls @somewhere.do_something_by?(current_agent)
     #
-    # If false, it calls access_denied
+    # If true, the filter passes. If false, it calls 
+    # CMS::Controller::Authentication#access_denied
     #
     # Let's see an example:
     #
@@ -28,7 +29,7 @@ module CMS
     #   end
     #
     # == Containers and Roles
-    # This filters match with CMS::Container and CMS::Role
+    # These filters match with CMS::Container and CMS::Role
     #
     # To be documented
     # 

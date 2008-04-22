@@ -1,6 +1,6 @@
 module CMS
   module Agent
-    # Remember Agent in current browser through cookies
+    # Remember Agent in browser beyond Rails Session using +auth_token+ cookie
     module Remember
       def remember_token?
         remember_token_expires_at && Time.now.utc < remember_token_expires_at 

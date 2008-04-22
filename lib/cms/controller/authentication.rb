@@ -22,7 +22,8 @@ module CMS
     #
     # == Filters
     # authentication_required:: The action requires to be performed by an 
-    # authenticated Agent. Calls access_denied if there is none
+    #                           authenticated Agent. Calls access_denied 
+    #                           if there is none
     #
     # == State Information
     # Authentication state information can be obtained from these sources
