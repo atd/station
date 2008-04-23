@@ -8,7 +8,7 @@ module CMS
       def self.included(base)
         # CMS::Modules
         base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
-        base.send :include, CMS::Controller::Authorization unless base.instance_methods.include?('authenticated?')
+        base.send :include, CMS::Controller::Authorization unless base.instance_methods.include?('method_missing_with_authorization_filters')
         
         # Authentication Filter
         base.send :before_filter, :authentication_required, :except => [ :index, :show ]
