@@ -65,7 +65,7 @@ module CMS
             container_instance = options.delete(:container) || @container 
        
             if content =~ /^content/
-              content_instance = options.delete(:content) || ( respond_to?(:controller) ? controller : self ).controller_name
+              content_instance = options.delete(:content).to_s || ( respond_to?(:controller) ? controller : self ).controller_name
               content_instance = content_instance.singularize if action =~ /^new_/
             else
               return method_missing_without_cms_routes(method, *args, &block)
