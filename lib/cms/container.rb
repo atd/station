@@ -44,14 +44,29 @@ module CMS
       # If there is any performance for that agent that respond true to action
       def method_missing_with_roled_actions(method, *args, &block) #:nodoc:
         if method.to_s =~ /^(.*)_by\?$/
-          action = "#{ $1 }?".to_sym
+          action = "#{ $1 }?"
           agent = args.first
-          agent_roles = performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
-          agent_roles.select(&action).any?
-          # TODO rescue NoMethodError when a Role doesn't support "action" and raise useful message
+          has_role_for?(agent, action)
         else
           method_missing_without_roled_actions(method, *args, &block)
         end
+      end
+      
+      # All roles allowing an Agent to perform some action in this Container
+      def roles_for(agent, action)
+        action = action.to_sym
+        agent_roles = performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
+        agent_roles.select(&action)        
+        # TODO rescue NoMethodError when a Role doesn't support "action" and raise useful message
+      end
+      
+      # True if it exists at least one Performance for this Container that allows
+      # the Agent to perform the action.
+      #
+      #   space.has_role_for?(user, :admin) # => true or false
+      #
+      def has_role_for?(agent, action)
+        roles_for(agent, action).any?
       end
       
       # Return all agents that play one role at least in this container
