@@ -17,20 +17,20 @@ module CMS
         # Authorization Filters
         #
         # Create
-        base.send :before_filter, :can__create_posts__container, 
-                                  :only   => [ :new, :create ]
+#        base.send :before_filter, :can__create_posts__container, 
+#                                  :only   => [ :new, :create ]
         
         # Read
-        base.send :before_filter, :can__read_posts__container,  
-                                  :only   => [ :index, :show, :edit ]
+#        base.send :before_filter, :can__read_posts__container,  
+#                                  :only   => [ :index, :show, :edit ]
 
         # Update
-        base.send :before_filter, :can__update_posts__container,
-                                  :only => [ :edit, :update ]
+#        base.send :before_filter, :can__update_posts__container,
+#                                  :only => [ :edit, :update ]
 
         # Delete
-        base.send :before_filter, :can__delete_posts__container,
-                                  :only => [ :destroy ]
+#        base.send :before_filter, :can__delete_posts__container,
+#                                  :only => [ :destroy ]
 
         # Content list filters
         base.send :before_filter, :get_container,

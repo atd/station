@@ -6,27 +6,40 @@ module CMS
       #
       # Filters can be overwritten in the Controller
       def self.included(base)
+        # CMS::Modules
         base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
         base.send :include, CMS::Controller::Authentication unless base.instance_methods.include?('authenticated?')
 
+        # Authentication Filters
         base.send :before_filter, :authentication_required, 
                                   :except => [ :index, :show, :media ]
       
+        ###########################
+        # Authorization Filters
+        #
+        # Create
+
+        # Read
+#        base.send :before_filter, :can_read_container,
+#                                  :only   => [ :index ]
+
+        # Update
+
+        # Delete
+
         # Posts list filters
         base.send :before_filter, :get_container,  
-                                  :only   => [ :index ]
-        base.send :before_filter, :can_read_container,
                                   :only   => [ :index ]
         
         # Posts read filters
         base.send :before_filter, :get_post,
                                   :except => [ :index ]
-        base.send :before_filter, :can_read_post,
-                                  :only   => [ :show, :edit, :media, :edit_media ]
+#        base.send :before_filter, :can_read_post,
+#                                  :only   => [ :show, :edit, :media, :edit_media ]
         
         # Post edition, deletion filters
-        base.send :before_filter, :can_write_post,
-                                  :only   => [ :edit, :update, :edit_media, :delete ]
+#        base.send :before_filter, :can_write_post,
+#                                  :only   => [ :edit, :update, :edit_media, :delete ]
       
         # Post media management
         base.send :before_filter, :post_has_media,

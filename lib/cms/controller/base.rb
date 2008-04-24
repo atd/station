@@ -1,18 +1,111 @@
 module CMS
   module Controller
     # Common Methods for CMS Controllers and Helpers
+    # == CMS Routes
+    # Generate URLs and paths for Contents related to a Container
+    # 
+    # If you have:
+    #   def Space
+    #     acts_as_container
+    #   end
+    #
+    #   def Article
+    #     acts_as_content
+    #   end
+    #
+    # In your Controller or Views you can use:
+    #   @space = Space.find(1)
+    #
+    #   space_articles_path(@space) # => /spaces/1/articles
+    #   formatted_space_articles_path(@space, :format => 'atom') # => /spaces/1/articles.atom
+    #   new_space_articles_path(@space) # => /spaces/1/articles/new
+    # All methods also work with +_url+ at the end, so you get the complete URL with protocol, host and port
+    #   space_articles_url(@space) # => http://localhost:3000/spaces/1/articles
+    #
+    # You can also use the more generic +container_contents+ methods. 
+    # For the same example:
+    #   container_contents_path(:container => @space,
+    #                           :content => 'articles') # => /spaces/1/articles 
+    # If <tt>:container</tt> option is not specified, it defaults to <tt>@container</tt>.
+    # <tt>:content</tt> option defaults to <tt>controller_name</tt>
     module Base
       # Inclusion hook to make container_content methods
       # available as ActionView helper methods.
-      def self.included(base)
-        base.send :helper_method, :container_contents_path, 
-                                  :container_contents_url, 
-                                  :new_container_content_path, 
-                                  :new_container_content_url
+      def self.included(base) #:nodoc:
+        # Generic method
+        send_cms_route_to_helper(base, :container, :content)
+        
+        # Specific method
+        for container in CMS.containers
+          for content in container.to_class.container_options[:contents]
+            send_cms_route_to_helper(base, container, content)
+          end
+        end
+                       
+        base.class_eval do
+          alias_method_chain :method_missing, :cms_routes
+        end  
       end
       
       protected
-  
+      # Hook for CMS URLs
+      def method_missing_with_cms_routes(method, *args, &block) #:nodoc:         
+         if method.to_s =~ /(formatted_|new_|)(.*)_(.*)(_path|_url)/           
+          # Sure there is a more elegant way to do this
+          action = $1
+          container = $2
+          content = $3
+          type = $4
+          
+          # We support two types of Routes:
+          # classic routes: "container_content" and
+          # specific ones: "space_articles"
+          if container == "container"
+            options = args.shift || {}
+            container_instance = options.delete(:container) || @container 
+       
+            if content =~ /^content/
+              content_instance = options.delete(:content) || ( respond_to?(:controller) ? controller : self ).controller_name
+              content_instance = content_instance.singularize if action =~ /^new_/
+            else
+              return method_missing_without_cms_routes(method, *args, &block)
+            end
+          else
+            raise Exception.new("#{ container } is not a valid container") unless CMS.containers.include?(container.pluralize.to_sym)
+            container_instance = args.shift
+            #TODO filter content class type??
+            options = args.first || {}
+
+            content_instance = ( action =~ /^new_/ ? content.singularize : content)
+          end
+          
+          if container_instance
+            options[:container_type] = container_instance.class.to_s.tableize
+            options[:container_id]   = container_instance.id
+          
+            send("#{ action }container_#{ content_instance }#{ type }", options)
+          else
+            send("#{ action }#{ content_instance }#{ type }", options)
+          end
+        else
+          method_missing_without_cms_routes(method, *args, &block)
+        end
+      end
+      
+      private
+      def self.send_cms_route_to_helper(base, container, content)
+        container = container.to_s.singularize
+        content = content.to_s
+        
+        base.send :helper_method, "#{ container }_#{ content.pluralize }_path", 
+                                  "#{ container }_#{ content.pluralize }_url", 
+                                  "new_#{ container }_#{ content.singularize }_path", 
+                                  "new_#{ container }_#{ content.singularize }_url",
+                                  "formatted_#{ container }_#{ content.pluralize }_path",
+                                  "formatted_#{ container }_#{ content.pluralize }_url"
+      end
+      
+      protected
       # Returns the Model Class related to this Controller 
       #
       # e.g. Article for ArticlesController
@@ -58,70 +151,7 @@ module CMS
         params[:content][:content_type] ||= request.content_type
         params[:content][:raw_post]     ||= request.raw_post
       end
-      
-      ##################################################################
-      # TODO: DRY!!!
-      
-      # Return the path to this Content collection in this Container 
-      #
-      # Options:
-      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
-      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
-      def container_contents_path(options = {})
-        container_content_options(options) do |container, content, cc_options|
-          send(( container ? "container_#{ content }_path" : "#{ content }_path" ), cc_options)
-        end
-      end
-  
-      # Return the path to new Content in this Container 
-      #
-      # Options:
-      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
-      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
-      def new_container_content_path(options = {})      
-        container_content_options(options) do |container, content, cc_options|
-          send(( container ? "new_container_#{ content.singularize }_path": "new_#{ content }_path" ), cc_options)
-        end
-      end
-  
-  
-      # Return the url to this Content collection in this Container 
-      #
-      # Options:
-      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name
-      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
-      def container_contents_url(options = {})
-        container_content_options(options) do |container, content, cc_options|
-          send(( container ? "container_#{ content }_url" : "#{ content }_url" ), cc_options)
-        end
-      end
-  
-      # Return the url to new Content in this Container 
-      #
-      # Options:
-      # * <tt>:content</tt>: symbol describing the type of content. Defaults to controller.controller_name.singularize
-      # * <tt>:container </tt>: Container instance the Content will be posted to. Defaults to @container
-      def new_container_content_url(options = {})
-        container_content_options(options) do |container, content, cc_options|
-          send(( container ? "new_container_#{ content.singularize }_url" : "new_#{ content }_url" ), cc_options)
-        end
-      end
-  
-      #TODO: DRY!!!
-      ####################################################
-  
-      def container_content_options(options = {}) # :nodoc:
-        content   = options.delete(:content)   || ( respond_to?(:controller) ? controller : self ).controller_name
-        container = options.delete(:container) || @container
         
-        if container
-          options[:container_type] = container.class.to_s.tableize
-          options[:container_id]   = container.id
-        end
-        
-        yield(container, content, options)
-      end
-  
       # Find Container using path from the request
       def get_container
         return nil unless params[:container_type] && params[:container_id]
@@ -168,6 +198,8 @@ module CMS
         query = conditions.compact.map(&:shift).compact.map{ |c| " (#{ c }) "}.join(operator)
         Array(query) + conditions.flatten.compact
       end
+      
+
     end
   end
 end
