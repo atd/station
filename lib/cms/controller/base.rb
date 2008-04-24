@@ -5,11 +5,11 @@ module CMS
     # Generate URLs and paths for Contents related to a Container
     # 
     # If you have:
-    #   def Space
+    #   class Space
     #     acts_as_container
     #   end
     #
-    #   def Article
+    #   class Article
     #     acts_as_content
     #   end
     #
