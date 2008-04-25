@@ -25,6 +25,7 @@ class CmsSetup < ActiveRecord::Migration
 
     create_table :cms_roles do |t|
       t.string :name
+      t.boolean :admin
       t.boolean :create_posts
       t.boolean :read_posts
       t.boolean :update_posts
