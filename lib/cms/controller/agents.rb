@@ -51,7 +51,6 @@ module CMS
         @agent = self.resource_class.new(params[:agent])
         @agent.openid_identifier = session[:openid_identifier]
         @agent.save!
-        @agent.openid_ownings.create(:uri => CMS::URI.find_or_create_by_uri(session[:openid_identifier])) if session[:openid_identifier]
         self.current_agent = @agent
         redirect_back_or_default('/')
         flash[:notice] = "Thanks for signing up!"
