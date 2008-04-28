@@ -25,7 +25,7 @@ module CMS
         has_many :posts, :as => :container,
                          :class_name => "CMS::Post"
 
-        has_many :performances,
+        has_many :container_performances,
                  :class_name => "CMS::Performance",
                  :dependent => :destroy,
                  :as => :container
@@ -55,7 +55,7 @@ module CMS
       # All roles allowing an Agent to perform some action in this Container
       def roles_for(agent, action)
         action = action.to_sym
-        agent_roles = performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
+        agent_roles = container_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
         agent_roles.select(&action)
       rescue NoMethodError => e
         raise Exception.new("At least one role doesn't support \"#{ action }\" method")
@@ -73,13 +73,24 @@ module CMS
       # Return all agents that play one role at least in this container
       # 
       # TODO: conditions (roles, etc...)
+      def actors
+        container_performances.map(&:agent).uniq
+      end
+      
       def agents
-        performances.map(&:agent).uniq
+        logger.debug "DEPRECATED: agents is deprecated! Use actors instead"
+        container_performances        
       end
       
       # Does this agent manage the container?
       def has_owner?(agent)
-        self == agent
+        logger.debug "DEPRECATED: has_owner? is deprecated. Use has_role_for?(:admin) instead"
+        has_role_for(:admin)
+      end
+      
+      def performances
+        logger.debug "DEPRECATED: performances is deprecated! Use agent_performances or container_performances instead"
+        container_performances
       end
     end
   end

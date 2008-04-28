@@ -42,7 +42,7 @@ module CMS
         # Remember Agent in browser through cookies
         include CMS::Agent::Remember
 
-        has_many :performances, 
+        has_many :agent_performances, 
                  :class_name => "CMS::Performance", 
                  :dependent => :destroy,
                  :as => :agent
@@ -58,8 +58,18 @@ module CMS
 
     module InstanceMethods
       # All Containers in which this Agent has a Performance
-      def containers
-        performances.map(&:container).uniq
+      def stages
+        agent_performances.map(&:container).uniq
+      end
+      
+      def containers #:nodoc:
+        logger.debug "DEPRECATED: containers deprecated! Use stages instead"
+        stages
+      end
+      
+      def performances
+        logger.debug "DEPRECATED: performances is deprecated! Use agent_performances or container_performances instead"
+        agent_performances
       end
     end
   end
