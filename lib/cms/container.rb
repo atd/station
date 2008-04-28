@@ -56,8 +56,9 @@ module CMS
       def roles_for(agent, action)
         action = action.to_sym
         agent_roles = performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
-        agent_roles.select(&action)        
-        # TODO rescue NoMethodError when a Role doesn't support "action" and raise useful message
+        agent_roles.select(&action)
+      rescue NoMethodError => e
+        raise Exception.new("At least one role doesn't support \"#{ action }\" method")
       end
       
       # True if it exists at least one Performance for this Container that allows
