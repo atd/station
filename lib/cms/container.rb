@@ -85,7 +85,7 @@ module CMS
       # Does this agent manage the container?
       def has_owner?(agent)
         logger.debug "DEPRECATED: has_owner? is deprecated. Use has_role_for?(:admin) instead"
-        has_role_for(:admin)
+        has_role_for?(agent, :admin)
       end
       
       def performances
