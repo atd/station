@@ -30,17 +30,13 @@ module CMS
     end
 
     # Can the Post be read by <tt>agent</tt>?
-    def read_by?(agent = nil)
-      return true if public_read?
-      return false unless agent
-      return true if container.has_owner?(agent)
+    def read_by?(agent = :false)
+      public_read? || container.has_role_for?(agent, :admin) || container.has_role_for?(agent, :read_posts)
     end
 
     # Can the Post be modified by <tt>agent</tt>?
-    def write_by?(agent = nil)
-      return true if public_write?
-      return false unless agent
-      return true if container.has_owner?(agent)
+    def write_by?(agent = :false)
+      public_write? || container.has_role_for?(agent, :admin) || container.has_role_for?(agent, :write_posts)
     end
   end
 end
