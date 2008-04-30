@@ -77,18 +77,18 @@ module CMS
         container_performances.map(&:agent).uniq
       end
       
-      def agents
+      def agents #:nodoc:
         logger.debug "DEPRECATED: agents is deprecated! Use actors instead"
         actors        
       end
       
       # Does this agent manage the container?
-      def has_owner?(agent)
+      def has_owner?(agent) #:nodoc:
         logger.debug "DEPRECATED: has_owner? is deprecated. Use has_role_for?(:admin) instead"
         has_role_for?(agent, :admin)
       end
       
-      def performances
+      def performances #:nodoc:
         logger.debug "DEPRECATED: performances is deprecated! Use agent_performances or container_performances instead"
         container_performances
       end
