@@ -134,12 +134,12 @@ module CMS
 
       # Path to a logo image for this Content
       def logo_image
-        "logos/#{ image_file_name }.png"
+        "/images/logos/#{ image_file_name }.png"
       end
 
       # Path to an icon image for this Content
       def icon_image
-        "icons/#{ image_file_name }.png"
+        "/images/icons/#{ image_file_name }.png"
       end
 
       protected

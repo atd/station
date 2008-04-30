@@ -52,7 +52,7 @@ module CMS
          
       # Icon image path
       def icon_image
-        'icons/' + self.to_s.underscore.concat(".png")
+        '/images/icons/' + self.to_s.underscore.concat(".png")
       end
     end
 
