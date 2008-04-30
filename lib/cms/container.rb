@@ -79,7 +79,7 @@ module CMS
       
       def agents
         logger.debug "DEPRECATED: agents is deprecated! Use actors instead"
-        container_performances        
+        actors        
       end
       
       # Does this agent manage the container?
