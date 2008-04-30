@@ -54,6 +54,7 @@ module CMS
       
       # All roles allowing an Agent to perform some action in this Container
       def roles_for(agent, action)
+        return [] unless agent.respond_to?(:agent_options)
         action = action.to_sym
         agent_roles = container_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
         agent_roles.select(&action)
