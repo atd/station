@@ -1,6 +1,5 @@
 class PostsController < ApplicationController
   # Include some methods and filters. 
-  # See documentation: CMS::Controller::Posts#included
   include CMS::Controller::Posts
   
   # Actions different that reading need authentication
