@@ -2,21 +2,9 @@ module CMS
   module Controller
     # Controller methods and default filters for Agents Controllers
     module Agents
-      # Include some modules and set some filters by default
-      #
-      # Filters can be overwritten in the Controller
-      def self.included(base)
+      def self.included(base) #:nodoc:
         base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
         base.send :include, CMS::Controller::Authentication unless base.instance_methods.include?('authenticated?')
-        
-        base.send :before_filter, :get_agent, :only => :show
-        base.send :before_filter, :activation_required, 
-                                  :only => [ :activate, 
-                                             :forgot_password, 
-                                             :reset_password ]
-        base.send  :before_filter, :login_and_pass_auth_required, 
-                                   :only => [ :forgot_password,
-                                              :reset_password ]
       end
 
       # Show agent

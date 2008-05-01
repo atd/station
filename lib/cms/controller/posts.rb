@@ -2,8 +2,7 @@ module CMS
   module Controller
     # Controller methods and default filters for Posts Controllers
     module Posts
-      # Include some modules by default
-      def self.included(base)
+      def self.included(base) #:nodoc:
         base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
         base.send :include, CMS::Controller::Authorization unless base.instance_methods.include?('method_missing_with_authorization_filters')
       end
