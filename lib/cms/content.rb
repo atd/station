@@ -10,6 +10,16 @@ module CMS
       base.extend ClassMethods
     end
 
+    # Return the first Content class supporting this Content Type
+    def self.class_supporting(content_type)
+      mime_type = Mime::Type.lookup(content_type)
+      
+      for content_class in CMS::content_classes
+        return content_class if content_class.mime_types.include?(mime_type)
+      end
+      nil
+    end
+
     module ClassMethods
       # Provides an ActiveRecord model with Content capabilities
       #
@@ -48,6 +58,10 @@ module CMS
 
         include CMS::Content::InstanceMethods
       end
+      
+      def mime_types
+        Mime::Type.parse content_options[:atompub_mime_types]
+      end
 
       # Returns the symbol for a set of Contents of this item
       # e.g. <tt>:articles</tt> for Article
@@ -84,7 +98,10 @@ module CMS
             media_attachment_fu_filter(params)
           end
         else
-          params
+          attribute_list = self.new.attribute_names
+          params.each_key do |key|
+            params.delete(key) unless attribute_list.include?(key.to_s)
+          end
         end
       end
 
