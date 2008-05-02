@@ -126,7 +126,7 @@ module CMS
         elsif request.put?
           # Have to set write post filter here
           # because doesn't apply to GET
-          unless @post.write_by? current_agent
+          unless @post.update_by? current_agent
             access_denied
             return
           end

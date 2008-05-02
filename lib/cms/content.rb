@@ -79,7 +79,7 @@ module CMS
       def cms_params_filter(params) #:nodoc:
         if params[:atom_entry]
           atom_entry_filter(Atom::Entry.parse(params[:atom_entry]))
-        elsif params[:raw_post]
+        elsif params[:media]
           if content_options[:has_media] == :attachment_fu 
             media_attachment_fu_filter(params)
           end
@@ -98,14 +98,7 @@ module CMS
 
       # Conversion from raw data to attachment_fu plugin
       def media_attachment_fu_filter(params) #:nodoc:
-        file = Tempfile.new("file")
-        file.write params[:raw_post]
-        (class << file; self; end).class_eval do
-          alias local_path path
-          define_method(:content_type) { params[:content_type].dup.taint }
-          define_method(:original_filename) { params[:filename].dup.taint }
-        end
-        { "uploaded_data" => file }
+        { "uploaded_data" => params[:media] }
       end
     end
 

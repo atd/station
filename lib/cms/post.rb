@@ -35,8 +35,8 @@ module CMS
     end
 
     # Can the Post be modified by <tt>agent</tt>?
-    def write_by?(agent = :false)
-      public_write? || container.has_role_for?(agent, :admin) || container.has_role_for?(agent, :write_posts)
+    def update_by?(agent = :false)
+      public_write? || container.has_role_for?(agent, :admin) || container.has_role_for?(agent, :update_posts)
     end
   end
 end
