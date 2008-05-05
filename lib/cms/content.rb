@@ -91,9 +91,9 @@ module CMS
       # If there is Atom Entry data, extract information from the Entry to parameters
       # If there is raw post data, convert it to suitable plugin
       def cms_params_filter(params) #:nodoc:
-        if params[:atom_entry]
+        if !params[:atom_entry].blank?
           atom_entry_filter(Atom::Entry.parse(params[:atom_entry]))
-        elsif params[:media]
+        elsif !params[:media].blank?
           if content_options[:has_media] == :attachment_fu 
             media_attachment_fu_filter(params)
           end
