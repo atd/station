@@ -28,7 +28,6 @@ module CMS
       # Options:
       # * <tt>:named_collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
       # * <tt>:atompub_mime_types</tt> - array of Mime Types accepted for this Content via AtomPub. Defaults to "application/atom+xml;type=entry"
-      # * <tt>:mime_type_images</tt> - specifies if this content has images (icons and logos) per Mime Type or only a Class image. Defaults to false (Class image)
       # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: attachment_fu (<tt>:attachment_fu</tt>)
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
@@ -36,7 +35,6 @@ module CMS
       def acts_as_content(options = {})
         #FIXME: should this be the default mime type??
         options[:atompub_mime_types] ||= "application/atom+xml;type=entry"
-        options[:mime_type_images]   ||= false
         options[:disposition]        ||= :attachment
         options[:per_page]           ||= 9
 
@@ -73,11 +71,6 @@ module CMS
       # a.g. <tt>"Gallery"</tt> for Photo
       def named_collection
         content_options[:named_collection] ? content_options[:named_collection].to_s : collection.to_s.humanize
-      end
-      
-      # Icon image path
-      def icon_image
-        '/images/icons/' + self.to_s.underscore.concat(".png")
       end
 
       protected
@@ -142,20 +135,14 @@ module CMS
         false
       end
 
-      # Path to a logo image for this Content
-      def logo_image
-        "/images/logos/#{ image_file_name }.png"
-      end
-
-      # Path to an icon image for this Content
-      def icon_image
-        "/images/icons/#{ image_file_name }.png"
-      end
-
-      protected
-
-      def image_file_name #:nodoc:
-        content_options[:mime_type_images] && mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
+      # Method useful for icon files
+      #
+      # If the Content has a Mime Type, return it scaped with '-' 
+      #   application/jpg => application-jpg
+      # else, return the underscored class name:
+      #   photo
+      def mime_type_or_class_name
+        mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
       end
     end
   end

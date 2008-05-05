@@ -49,11 +49,6 @@ module CMS
 
         include CMS::Agent::InstanceMethods
       end
-         
-      # Icon image path
-      def icon_image
-        '/images/icons/' + self.to_s.underscore.concat(".png")
-      end
     end
 
     module InstanceMethods
@@ -67,7 +62,7 @@ module CMS
         stages
       end
       
-      def performances
+      def performances #:nodoc:
         logger.debug "DEPRECATED: performances is deprecated! Use agent_performances or container_performances instead"
         agent_performances
       end

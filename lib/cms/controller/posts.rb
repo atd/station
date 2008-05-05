@@ -118,6 +118,10 @@ module CMS
         if request.get?
           # Render media file
           @content = @post.content
+          
+          # Get thumbnail if content supports it and asking for it
+          @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if 
+            params[:thumbnail] && @content.respond_to?(:thumbnails)
     
           headers["Content-type"] = @content.mime_type.to_s
           send_data @content.current_data, :filename => @content.filename,
