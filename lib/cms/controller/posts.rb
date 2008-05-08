@@ -59,6 +59,7 @@ module CMS
                                :locals => { :post => @post },
                                :layout => false
           }
+          format.json { render :json => @post.to_json(:include => :content) }
         end
       end
     
