@@ -22,8 +22,11 @@ module CMS
         cattr_reader :container_options
         class_variable_set "@@container_options", options
 
-        has_many :posts, :as => :container,
-                         :class_name => "CMS::Post"
+        has_many :container_posts, 
+                 :class_name => "CMS::Post",
+                 :dependent => :destroy,
+                 :as => :container
+
 
         has_many :container_performances,
                  :class_name => "CMS::Performance",
@@ -76,22 +79,6 @@ module CMS
       # TODO: conditions (roles, etc...)
       def actors
         container_performances.map(&:agent).uniq
-      end
-      
-      def agents #:nodoc:
-        logger.debug "DEPRECATED: agents is deprecated! Use actors instead"
-        actors        
-      end
-      
-      # Does this agent manage the container?
-      def has_owner?(agent) #:nodoc:
-        logger.debug "DEPRECATED: has_owner? is deprecated. Use has_role_for?(:admin) instead"
-        has_role_for?(agent, :admin)
-      end
-      
-      def performances #:nodoc:
-        logger.debug "DEPRECATED: performances is deprecated! Use agent_performances or container_performances instead"
-        container_performances
       end
     end
   end

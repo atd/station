@@ -41,7 +41,10 @@ module CMS
         cattr_reader :content_options
         class_variable_set "@@content_options", options
 
-        has_many :posts, :as => :content, :class_name => "CMS::Post"
+        has_many :content_posts, 
+                 :class_name => "CMS::Post",
+                 :dependent => :destroy,
+                 :as => :content
 
         # Filter "create" method for Atom Mapping
         # With this filter, a new content can be crated from a Hash of
@@ -122,17 +125,14 @@ module CMS
       # Has this Content been posted in this Container? Is there any Post linking both?
       def posted_in?(container)
         return false unless container
-        posts.select{ |p| p.container == container }.any?
+        content_posts.select{ |p| p.container == container }.any?
       end
       
 
       # Can this <tt>agent</tt> read this Content?
       # True if there exists a Post for this Content that can be read by <tt>agent</tt> 
       def read_by?(agent = nil)
-        for p in posts
-          return true if p.read_by?(agent)
-        end
-        false
+        content_posts.select{ |p| p.read_by?(agent) }.any?
       end
 
       # Method useful for icon files
