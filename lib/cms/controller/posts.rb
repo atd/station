@@ -209,14 +209,14 @@ module CMS
     
         # Filter for actions that require the Post has a Content with attached media options
         def post_has_media
-          bad_request unless @post.content.content_options[:has_media]
+          bad_request("Content doesn't have media") unless @post.content.content_options[:has_media]
         end
     
         # Set Bad Request response    
-        def bad_request
+        def bad_request(message = "Bad Request")
           respond_to do |format|
             format.html { 
-              render :text => "Content doesn't have media", :status => 400 
+              render :text => message, :status => 400 
             }
             format.atom {
               head :bad_request
