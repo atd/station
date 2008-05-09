@@ -17,8 +17,8 @@ module CMS
         if @container
           @title ||= "#{ @container.name } - Posts"
           # All the Posts this Agent can read in this Container
-          @collection = @container.posts.find(:all,
-                                              :order => "updated_at DESC").select{ |p|
+          @collection = @container.container_posts.find(:all,
+                                                        :order => "updated_at DESC").select{ |p|
             p.read_by?(current_agent)
           }
     
