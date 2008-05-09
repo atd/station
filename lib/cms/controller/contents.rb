@@ -26,9 +26,9 @@ module CMS
         if @container
           @title ||= "#{ self.resource_class.named_collection } - #{ @container.name }"
           # All the Contents this Agent can read in this Container
-          @collection = @container.container_posts.find(:all,
-                                                        :conditions => conditions,
-                                                        :order => "updated_at DESC").select{ |p|
+          @collection = @container.posts.find(:all,
+                                              :conditions => conditions,
+                                              :order => "updated_at DESC").select{ |p|
             p.read_by?(current_agent)
           }
     
@@ -37,7 +37,7 @@ module CMS
           @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
           @collection_path = container_contents_url
         else
-          @title ||= self.resource_class.named_collection
+          @title ||= "Public #{ self.resource_class.named_collection }"
           conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
           @posts = CMS::Post.paginate :all,
                                       :conditions => conditions,
