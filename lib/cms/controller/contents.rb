@@ -13,7 +13,7 @@ module CMS
       #
       #   GET /:container_type/:container_id/contents
       #   GET /contents
-      def index
+      def index(&block)
         # We search for specific contents if the container or the application supports them
         if (@container && @container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
           conditions = [ "cms_posts.content_type = ?", self.resource_class.to_s ]
@@ -47,11 +47,15 @@ module CMS
           @collection_path = url_for :controller => controller_name
         end
     
-        respond_to do |format|
-          format.html
-          format.js
-          format.xml { render xml => @posts.to_xml }
-          format.atom { render :template => 'posts/index.atom.builder', :layout => false }
+        if block
+          yield
+        else
+          respond_to do |format|
+            format.html
+            format.js
+            format.xml { render xml => @posts.to_xml }
+            format.atom { render :template => 'posts/index.atom.builder', :layout => false }
+          end
         end
       end
     
