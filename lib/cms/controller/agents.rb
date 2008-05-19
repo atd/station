@@ -43,7 +43,7 @@ module CMS
         redirect_back_or_default('/')
         flash[:info] = "Thanks for signing up!".t
 	if self.resource_class.agent_options[:activation]
-	  flash[:info] << <br />
+	  flash[:info] << '<br />'
           flash[:info] << "You should check your email to activate your account".t
 	end
       rescue ActiveRecord::RecordInvalid
