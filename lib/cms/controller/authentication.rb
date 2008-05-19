@@ -37,14 +37,18 @@ module CMS
       # available as ActionView helper methods.
       def self.included(base) # :nodoc:
         base.send :helper_method, :current_agent, :authenticated?, :logged_in?
-        # Add current_#{ agent_type}
-        for agent in CMS.agents.map{ |a| a.to_s.singularize }
-          base.send :helper_method, "current_#{ agent }".to_sym
-        end
-  
-        base.class_eval do
+
+        # Add "current_#{ agent_type}" methods..
+        current_polymorphic_agent_proc = lambda do
           alias_method_chain :method_missing, :current_polymorphic_agent
         end
+
+        # ..in the Controller
+        base.class_eval &current_polymorphic_agent_proc
+
+        # ..in the Helper
+        base.helper_method :method_missing_with_current_polymorphic_agent
+        base.master_helper_module.module_eval &current_polymorphic_agent_proc
       end
   
       protected
