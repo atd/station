@@ -1,17 +1,18 @@
 module CMS
   module Controller
-    # Authorization module provides your Controller with filters to control
-    # the actions of Agents
+    # Authorization module provides your Controllers and Views with methods and filters
+    # to control the actions of Agents
     #
     # This module uses Agent identification support from CMS::Controller::Authentication
     #
-    # == Filters
-    # Authorization filters can defined in the following way:
-    #   before_filter :can__do_something__somewhere
-    # This calls @somewhere.do_something_by?(current_agent)
+    # == Authorization Methods
+    # You can use authorization methods in your Controllers and Views.
     #
-    # If true, the filter passes. If false, it calls 
-    # CMS::Controller::Authentication#access_denied
+    # Authorization methods has the following structure:
+    #   can__do_something__somewhere? # note the two underscores
+    #
+    # This method will call 
+    #   @somewhere.do_something_by?(current_agent)
     #
     # Let's see an example:
     #
@@ -21,11 +22,24 @@ module CMS
     #     end
     #   end
     #
+    #   @foo = Foo.new
+    #   can__read__foo? # => true or false
+    #
+    # == Authorization Filters
+    # Authorization filters are similar to authorization methods, but they will call
+    # not_authorized if the action can't be performed
+    #
+    #   before_filter :can__do_something__somewhere__filter
+    #
+    # If true, the filter passes. If false, it renders HTTP Forbidden error
+    #
+    # Following the example from above:
+    #
     #   class FooController < ApplicationController
     #     include CMS::Controller::Authorization
     #
-    #     before_filter :get_foo
-    #     before_filter :can__read__foo, :only => [ :show ]
+    #     before_filter :get_foo # sets @foo
+    #     before_filter :can__read__foo__filter, :only => [ :show ]
     #   end
     #
     # == Containers and Roles
@@ -75,7 +89,7 @@ module CMS
 
       # Hook for CMS Authorization Filters
       def method_missing_with_authorization_methods(method, *args, &block) #:nodoc:
-        if method.to_s =~ /^can__(.*)__(.*)$/
+        if method.to_s =~ /^can__(.*)__(.*)\?$/
           action = "#{ $1 }_by?"
           object = instance_variable_get("@#{ $2 }")          
           raise Exception.new("Filter #{ method }: can't find variable: @#{ $2 }") unless object
@@ -89,12 +103,11 @@ module CMS
 
       def method_missing_with_authorization_filters(method, *args, &block) #:nodoc:
         if method.to_s =~ /^(can__.*)__filter$/
-          not_authorized unless send($1)       
+          not_authorized unless send("#{ $1 }?")       
         else
           method_missing_without_authorization_filters(method, *args, &block)
         end
       end
-      
     end
   end
 end
