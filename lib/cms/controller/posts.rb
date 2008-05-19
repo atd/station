@@ -15,7 +15,7 @@ module CMS
       #   GET /posts
       def index
         if @container
-          @title ||= "#{ @container.name } - Posts"
+          @title ||= "#{ @container.name } - #{ 'Posts'.t }"
           # All the Posts this Agent can read in this Container
           @collection = @container.container_posts.find(:all,
                                                         :order => "updated_at DESC").select{ |p|
@@ -29,7 +29,7 @@ module CMS
                                                  :container_id => @container.id,
                                                  :only_path => false)
         else
-          @title ||= "Public Posts"
+          @title ||= "Public Posts".t
           @posts = CMS::Post.paginate :all,
                                       :conditions => [ "public_read = ?", true ],
                                       :page =>  params[:page],
@@ -92,7 +92,7 @@ module CMS
         respond_to do |format|
           format.html {
             if !@content.new_record? && @post.update_attributes(params[:post])
-              flash[:notice] = "#{ @content.class.to_s } updated"
+              flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
               redirect_to post_url(@post)
             else
               render :template => "posts/edit" 
@@ -146,7 +146,7 @@ module CMS
             format.html {
               if !@content.new_record?
                 @post.update_attribute :content, @content
-                flash[:notice] = "#{ @content.class.to_s } updated"
+                flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
                 redirect_to post_url(@post)
               else
                 render :template => "posts/edit_media"
@@ -197,14 +197,6 @@ module CMS
           @post = CMS::Post.find(params[:id])
           @content = @post.content
           @container = @post.container
-        end
-    
-        def can_read_post #:nodoc:
-          access_denied unless @post.read_by?(current_agent)
-        end
-    
-        def can_write_post #:nodoc:
-          access_denied unless @post.write_by?(current_agent)
         end
     
         # Filter for actions that require the Post has a Content with attached media options

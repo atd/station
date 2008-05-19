@@ -41,7 +41,11 @@ module CMS
         @agent.save!
         self.current_agent = @agent
         redirect_back_or_default('/')
-        flash[:notice] = "Thanks for signing up!"
+        flash[:info] = "Thanks for signing up!".t
+	if self.resource_class.agent_options[:activation]
+	  flash[:info] << <br />
+          flash[:info] << "You should check your email to activate your account".t
+	end
       rescue ActiveRecord::RecordInvalid
         render :action => 'new'
       end
@@ -51,7 +55,7 @@ module CMS
         self.current_agent = params[:activation_code].blank? ? :false : self.resource_class.find_by_activation_code(params[:activation_code])
         if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
           current_agent.activate
-          flash[:notice] = "Signup complete!"
+          flash[:info] = "Signup complete!".t
         end
         redirect_back_or_default('/')
       end
@@ -60,12 +64,12 @@ module CMS
         if params[:email]
           @agent = self.resource_class.find_by_email(params[:email])
           unless @agent
-            flash[:error] = "Could not find anybody with that email address"
+            flash[:error] = "Could not find anybody with that email address".t
             return
           end
     
           @agent.forgot_password
-          flash[:notice] = "A password reset link has been sent to email address"
+          flash[:info] = "A password reset link has been sent to email address".t
           redirect_to("/")
         end
       end
@@ -81,12 +85,12 @@ module CMS
         if @agent.valid?
           @agent.reset_password
           current_agent = @agent
-          flash[:notice] = "Password reset"
+          flash[:info] = "Password reset".t
           redirect_to("/")
         end
     
         rescue
-          flash[:notice] = "Invalid reset code. Please, check the link and try again. (Tip: Did your email client break the link?)"
+          flash[:error] = "Invalid reset code. Please, check the link and try again. (Tip: Did your email client break the link?)".t
           redirect_to("/")
       end
     

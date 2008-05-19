@@ -24,7 +24,7 @@ module CMS
         end
     
         if @container
-          @title ||= "#{ self.resource_class.named_collection } - #{ @container.name }"
+          @title ||= "#{ self.resource_class.named_collection.t } - #{ @container.name }"
           # All the Contents this Agent can read in this Container
           @collection = @container.container_posts.find(:all,
                                                         :conditions => conditions,
@@ -37,7 +37,7 @@ module CMS
           @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
           @collection_path = container_contents_url
         else
-          @title ||= "Public #{ self.resource_class.named_collection }"
+          @title ||= "Public #{ self.resource_class.named_collection }".t
           conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
           @posts = CMS::Post.paginate :all,
                                       :conditions => conditions,
@@ -118,7 +118,7 @@ module CMS
         respond_to do |format| 
           format.html {
             if !@content.new_record? && @post.save
-              flash[:message] = "#{ @content.class.to_s } created"
+              flash[:valid] = "#{ @content.class.to_s.humanize } created".t
               redirect_to post_url(@post)
             else
               @content.destroy unless @content.new_record?
@@ -152,10 +152,6 @@ module CMS
     
         def get_content # :nodoc:
           @content = resource_class.find params[:id]
-        end
-    
-        def can_read_content # :nodoc:
-          access_denied unless @content.read_by?(current_agent)
         end
     end
   end
