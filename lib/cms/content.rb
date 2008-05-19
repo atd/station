@@ -69,11 +69,17 @@ module CMS
       def collection
         self.to_s.tableize.to_sym
       end
-
+      
       # Returns the word for a named collection of this item
       # a.g. <tt>"Gallery"</tt> for Photo
       def named_collection
-        content_options[:named_collection] ? content_options[:named_collection].to_s : collection.to_s.humanize
+        content_options[:named_collection] ? content_options[:named_collection].to_s : self.to_s.humanize.pluralize
+      end
+
+      # Returns the translated named collection for this item
+      # a.g. <tt>"Galería"</tt> for Photo
+      def translated_named_collection
+        content_options[:named_collection] ? content_options[:named_collection].to_s.t : self.to_s.humanize.t(self.to_s.humanize.pluralize, 99)
       end
 
       protected

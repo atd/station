@@ -15,7 +15,7 @@ module CMS
       #   GET /posts
       def index
         if @container
-          @title ||= "#{ @container.name } - #{ 'Posts'.t }"
+          @title ||= "#{ 'Posts'.t } - #{ @container.name }"
           # All the Posts this Agent can read in this Container
           @collection = @container.container_posts.find(:all,
                                                         :order => "updated_at DESC").select{ |p|
@@ -29,7 +29,7 @@ module CMS
                                                  :container_id => @container.id,
                                                  :only_path => false)
         else
-          @title ||= "Public Posts".t
+          @title ||= "Posts".t
           @posts = CMS::Post.paginate :all,
                                       :conditions => [ "public_read = ?", true ],
                                       :page =>  params[:page],

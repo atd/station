@@ -24,7 +24,7 @@ module CMS
         end
     
         if @container
-          @title ||= "#{ self.resource_class.named_collection.t } - #{ @container.name }"
+          @title ||= "#{ self.resource_class.translated_named_collection } - #{ @container.name }"
           # All the Contents this Agent can read in this Container
           @collection = @container.container_posts.find(:all,
                                                         :conditions => conditions,
@@ -37,7 +37,7 @@ module CMS
           @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
           @collection_path = container_contents_url
         else
-          @title ||= "Public #{ self.resource_class.named_collection }".t
+          @title ||= self.resource_class.translated_named_collection
           conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
           @posts = CMS::Post.paginate :all,
                                       :conditions => conditions,
