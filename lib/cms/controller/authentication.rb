@@ -38,6 +38,22 @@ module CMS
       def self.included(base) # :nodoc:
         base.send :helper_method, :current_agent, :authenticated?, :logged_in?
 
+        # Fix method_missing handling in ActionController::Base#perform_action
+        # 
+        # method_missing is not defined in ActionController::Base. 
+        # When adding alias_method_chains on method_missing
+        # we have to define first method_missing 
+        # so it is called at the end of the chain
+        base.class_eval do
+          def method_missing(method, *args, &block)
+            if template_exists? && template_public?
+              default_render
+            else
+              raise ActionController::UnknownAction, "No action responded to #{method}", caller
+            end
+          end
+        end unless base.respond_to?(:method_missing)
+
         # Add "current_#{ agent_type}" methods..
         current_polymorphic_agent_proc = lambda do
           alias_method_chain :method_missing, :current_polymorphic_agent

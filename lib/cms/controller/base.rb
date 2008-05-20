@@ -32,6 +32,22 @@ module CMS
       # Inclusion hook to make container_content methods
       # available as ActionView helper methods.
       def self.included(base) #:nodoc:
+        # Fix method_missing handling in ActionController::Base#perform_action
+        # 
+        # method_missing is not defined in ActionController::Base. 
+        # When adding alias_method_chains on method_missing
+        # we have to define first method_missing 
+        # so it is called at the end of the chain
+        base.class_eval do
+          def method_missing(method, *args, &block)
+            if template_exists? && template_public?
+              default_render
+            else
+              raise ActionController::UnknownAction, "No action responded to #{method}", caller
+            end
+          end
+        end unless base.respond_to?(:method_missing)
+        
         # Generic method
         send_cms_route_to_helper(base, :container, :content)
         
@@ -187,17 +203,7 @@ module CMS
           render(:text => "Forbidden", :status => 403)
         end
       end
-  
-      # Can the current Agent access this Container?
-      def can_read_container
-        access_denied if @container && !@container.read_by?(current_agent)
-      end
-  
-      # Can the current Agent post to this Container?
-      def can_write_container
-        access_denied if @container && !@container.write_by?(current_agent)
-      end
-  
+   
       # Merge two conditions arrays using <tt>operator</tt>. 
       # Example:
       #   merge_conditions("AND", [ "public_read = ?", true ], [ "content_type = ?", "Article" ])
@@ -206,8 +212,6 @@ module CMS
         query = conditions.compact.map(&:shift).compact.map{ |c| " (#{ c }) "}.join(operator)
         Array(query) + conditions.flatten.compact
       end
-      
-
     end
   end
 end
