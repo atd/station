@@ -52,7 +52,7 @@ module CMS
               raise ActionController::UnknownAction, "No action responded to #{method}", caller
             end
           end
-        end unless base.respond_to?(:method_missing)
+        end unless base.instance_methods.include?('method_missing')
 
         # Add "current_#{ agent_type}" methods..
         current_polymorphic_agent_proc = lambda do
