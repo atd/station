@@ -78,7 +78,7 @@ module CMS
       def reset_password
         @agent = self.resource_class.find_by_reset_password_code(params[:reset_password_code])
         raise unless @agent
-        return unless params[:password]
+        return if params[:password].blank?
         
         @agent.update_attributes(:password => params[:password], 
                                  :password_confirmation => params[:password_confirmation])
