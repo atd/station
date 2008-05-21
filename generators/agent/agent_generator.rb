@@ -170,13 +170,13 @@ class AgentGenerator < Rails::Generator::NamedBase
       end
 
       if options[:include_activation]
-        for action in %w( forgot_password.html.erb reset_password.html.erb ) do
+        for action in %w( forgot_password.text.plain.erb reset_password.text.plain.erb ) do
           m.template action, File.join('app/views', model_controller_class_path, model_controller_file_name, action)
         end
 
         # Mailer templates
         for action in %w( activation signup_notification forgot_password reset_password )
-          m.template "mailer_#{action}.html.erb",
+          m.template "mailer_#{action}.text.plain.erb",
                      File.join('app/views', "#{file_name}_mailer", "#{action}.html.erb")
         end
       end
