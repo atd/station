@@ -52,7 +52,7 @@ module CMS
     
         respond_to do |format|
           format.html
-          format.xml { render :xml => @post.to_xml(:include => [ :content ] }
+          format.xml { render :xml => @post.to_xml(:include => [ :content ]) }
           format.atom { 
             headers["Content-type"] = 'application/atom+xml'
             render :partial => "posts/entry",
