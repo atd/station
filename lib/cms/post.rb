@@ -45,8 +45,8 @@ module CMS
     end
 
     # Converts "<cms/post>" to "<post>"
-    def to_xml_with_remove_cms_prefix #:nodoc:
-      to_xml_without_remove_cms_prefix.gsub(/cms\/post>/, "post>")
+    def to_xml_with_remove_cms_prefix(options = {}, &block) #:nodoc:
+      to_xml_without_remove_cms_prefix(options, &block).gsub(/cms\/post>/, "post>")
     end
 
     alias_method_chain :to_xml, :remove_cms_prefix
