@@ -28,6 +28,7 @@ module CMS
                           :container_type
     validates_associated  :content
 
+
     # True if the associated Content of this Post has media
     def has_media?
       ! content.content_options[:has_media].nil?
@@ -42,5 +43,12 @@ module CMS
     def update_by?(agent = :false)
       public_write? || container.has_role_for?(agent, :admin) || container.has_role_for?(agent, :update_posts)
     end
+
+    # Converts "<cms/post>" to "<post>"
+    def to_xml_with_remove_cms_prefix #:nodoc:
+      to_xml_without_remove_cms_prefix.gsub(/cms\/post>/, "post>")
+    end
+
+    alias_method_chain :to_xml, :remove_cms_prefix
   end
 end
