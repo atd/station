@@ -38,6 +38,11 @@ module CMS
         # When adding alias_method_chains on method_missing
         # we have to define first method_missing 
         # so it is called at the end of the chain
+	# FIXME:
+	# there is a bug when the method is called from the Helper,
+	# it renders the template over and over again
+	# so this is now disabled
+	#
 #        base.class_eval do
 #          def method_missing(method, *args, &block)
 #            if template_exists? && template_public?
