@@ -38,15 +38,15 @@ module CMS
         # When adding alias_method_chains on method_missing
         # we have to define first method_missing 
         # so it is called at the end of the chain
-        base.class_eval do
-          def method_missing(method, *args, &block)
-            if template_exists? && template_public?
-              default_render
-            else
-              raise ActionController::UnknownAction, "No action responded to #{method}", caller
-            end
-          end
-        end unless base.instance_methods.include?('method_missing')
+#        base.class_eval do
+#          def method_missing(method, *args, &block)
+#            if template_exists? && template_public?
+#              default_render
+#            else
+#              raise ActionController::UnknownAction, "No action responded to #{method}", caller
+#            end
+#          end
+#        end unless base.instance_methods.include?('method_missing')
         
         # Generic method
         send_cms_route_to_helper(base, :container, :content)
