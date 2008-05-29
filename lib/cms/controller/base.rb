@@ -58,7 +58,7 @@ module CMS
         
         # Specific method
         for container in CMS.containers
-          for content in container.to_class.container_options[:contents]
+          for content in container.to_class.container_options[:contents] + [ :posts ]
             send_cms_route_to_helper(base, container, content)
           end
         end
