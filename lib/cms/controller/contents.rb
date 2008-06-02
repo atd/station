@@ -92,6 +92,7 @@ module CMS
         @collection_path = container_contents_url
         @post = CMS::Post.new
         @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
+        @title ||= "New #{ controller_name.singularize.humanize }".t
         render :template => "posts/new"
       end
     
@@ -123,6 +124,7 @@ module CMS
             else
               @content.destroy unless @content.new_record?
               @collection_path = container_contents_url
+              @title ||= "New #{ controller_name.singularize.humanize }".t
               render :template => "posts/new"
             end
           }
