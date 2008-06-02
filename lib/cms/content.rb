@@ -93,18 +93,8 @@ module CMS
       # If there is Atom Entry data, extract information from the Entry to parameters
       # If there is raw post data, convert it to suitable plugin
       def cms_params_filter(params) #:nodoc:
-        if !params[:atom_entry].blank?
+        params[:atom_entry].blank? ? params : 
           atom_entry_filter(Atom::Entry.parse(params[:atom_entry]))
-        elsif !params[:media].blank?
-          if content_options[:has_media] == :attachment_fu 
-            media_attachment_fu_filter(params)
-          end
-        else
-          attribute_list = self.new.attribute_names
-          params.each_key do |key|
-            params.delete(key) unless attribute_list.include?(key.to_s)
-          end
-        end
       end
 
       # Atom Entry filter
@@ -113,11 +103,6 @@ module CMS
       # Implement this in your class if you want AtomPub support in your Content
       def atom_entry_filter(atom_entry)
         {}
-      end
-
-      # Conversion from raw data to attachment_fu plugin
-      def media_attachment_fu_filter(params) #:nodoc:
-        { "uploaded_data" => params[:media] }
       end
     end
 
