@@ -3,8 +3,6 @@ module CMS
     set_table_name "cms_attachment_fus"
 
     has_attachment 
-    # Fix attachment_fu constant problem
-    belongs_to  :db_file, :class_name => 'DbFile', :foreign_key => 'db_file_id'
     
     validates_as_attachment
 
