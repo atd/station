@@ -3,7 +3,8 @@ module CMS
     set_table_name "cms_attachment_fus"
 
     has_attachment 
-    
+    belongs_to  :db_file, :class_name => 'CMS::DbFile', :foreign_key => 'db_file_id'
+
     validates_as_attachment
 
     alias_attribute :media, :uploaded_data
