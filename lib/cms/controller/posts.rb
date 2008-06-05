@@ -41,7 +41,7 @@ module CMS
         respond_to do |format|
           format.html
           format.atom
-          format.xml { render xml => @posts.to_xml }
+          format.xml { render :xml => @posts.to_xml.gsub(/cms\/post/, "post") }
         end
       end
     

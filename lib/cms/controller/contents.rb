@@ -62,7 +62,7 @@ module CMS
           respond_to do |format|
             format.html
             format.js
-            format.xml { render xml => @posts.to_xml }
+            format.xml { render :xml => @posts.to_xml.gsub(/cms\/posts/, "#{ self.resource_class.to_s.tableize }").gsub(/cms\/post/, "#{ self.resource_class.to_s.underscore }") }
             format.atom { render :template => 'posts/index.atom.builder', :layout => false }
           end
         end
