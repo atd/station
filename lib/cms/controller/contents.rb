@@ -14,19 +14,27 @@ module CMS
       #   GET /:container_type/:container_id/contents
       #   GET /contents
       def index(&block)
-        # We search for specific contents if the container or the application supports them
-        if (@container && @container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
-          conditions = [ "cms_posts.content_type = ?", self.resource_class.to_s ]
-        else
-          # This Container don't accept the Content type
+        # The container must support this Content
+        unless (@container && @container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
           render :text => "Doesn't support this Content type", :status => 400
           return
+        end
+
+        # When the Content class has STI (Single Table Inheritance), 
+        # we have to filter the content type in the "type" attribute from the 
+        # Content's table. 
+        # Otherwise, we can just filter Content type in cms_posts.content_type field
+        if self.resource_class.column_names.include?("type")
+          conditions = [ "#{ self.resource_class.table_name }.type = ?", self.resource_class.to_s ]
+        else
+          conditions = [ "cms_posts.content_type = ?", self.resource_class.to_s ]
         end
     
         if @container
           @title ||= "#{ self.resource_class.translated_named_collection } - #{ @container.name }"
           # All the Contents this Agent can read in this Container
           @collection = @container.container_posts.find(:all,
+                                                        :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
                                                         :conditions => conditions,
                                                         :order => "updated_at DESC").select{ |p|
             p.read_by?(current_agent)
@@ -40,6 +48,7 @@ module CMS
           @title ||= self.resource_class.translated_named_collection
           conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
           @posts = CMS::Post.paginate :all,
+                                      :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
                                       :conditions => conditions,
                                       :page =>  params[:page],
                                       :order => "updated_at DESC"
