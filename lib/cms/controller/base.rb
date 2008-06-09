@@ -202,7 +202,7 @@ module CMS
         @container = get_container || current_agent
   
         if @container.respond_to?("container_options") && 
-          (@container.container_options[:contents].clone << :posts).include?(controller_name.to_sym)
+          (@container.container_options[:contents].clone + [ :posts, :categories ]).include?(controller_name.to_sym)
           @collection_path = container_contents_path
         else
           render(:text => "Forbidden", :status => 403)

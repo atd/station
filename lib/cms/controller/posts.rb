@@ -67,6 +67,7 @@ module CMS
       #   GET /posts/:id/edit
       def edit
         get_params_title_and_description(@post)
+        params[:category_ids] = @post.category_ids
     
         render :template => "posts/edit"
       end
@@ -92,6 +93,7 @@ module CMS
         respond_to do |format|
           format.html {
             if !@content.new_record? && @post.update_attributes(params[:post])
+              @post.category_ids = params[:category_ids]
               flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
               redirect_to post_url(@post)
             else

@@ -2,6 +2,21 @@
 
 class CmsSetup < ActiveRecord::Migration
   def self.up
+    create_table :cms_categories, :force => true do |t|
+      t.string   :name
+      t.text     :description
+      t.integer  :container_id
+      t.string   :container_type
+      t.integer  :parent_id
+      t.datetime :created_at
+      t.datetime :updated_at
+    end
+
+    create_table :cms_categorizations, :force => true do |t|
+      t.integer :category_id
+      t.integer :post_id
+    end
+
     create_table :cms_posts do |t|
       t.string   :title
       t.text     :description

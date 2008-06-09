@@ -19,6 +19,13 @@ module CMS
     belongs_to :container, :polymorphic => true
     belongs_to :agent,     :polymorphic => true
 
+    has_many :categorizations,
+             :class_name => "CMS::Categorization",
+             :dependent => :destroy
+    has_many :categories,
+             :through => :categorizations
+
+
     validates_presence_of :title, 
                           :agent_id,
                           :agent_type,
@@ -42,6 +49,16 @@ module CMS
     # Can the Post be modified by <tt>agent</tt>?
     def update_by?(agent = :false)
       public_write? || container.has_role_for?(agent, :admin) || container.has_role_for?(agent, :update_posts)
+    end
+
+    # Set Post Categories by it id
+    def category_ids=(cids)
+      cids ||= []
+      #FIXME: optimize
+      categorizations.map(&:destroy)
+      for cid in cids
+        categories << CMS::Category.find(cid)
+      end
     end
 
     # Converts "<cms/post>" to "<post>"

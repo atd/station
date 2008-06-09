@@ -105,7 +105,7 @@ module CMS
         render :template => "posts/new"
       end
     
-      # Create a new Content
+      # Create new Content
       #
       #   POST /:container_type/:container_id/contents
       #   POST /contents
@@ -128,6 +128,7 @@ module CMS
         respond_to do |format| 
           format.html {
             if !@content.new_record? && @post.save
+              @post.category_ids = params[:category_ids]
               flash[:valid] = "#{ @content.class.to_s.humanize } created".t
               redirect_to post_url(@post)
             else

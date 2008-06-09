@@ -33,6 +33,11 @@ module CMS
                  :dependent => :destroy,
                  :as => :container
 
+        has_many :container_categories,
+                 :class_name => "CMS::Category",
+                 :dependent => :destroy,
+                 :as => :container
+
         include CMS::Container::InstanceMethods
         
         # This methods maps the appropriate attributes
