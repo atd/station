@@ -96,6 +96,8 @@ class CmsSetup < ActiveRecord::Migration
   end
 
   def self.down
+    drop_table :cms_categories
+    drop_table :cms_categorizations
     drop_table :cms_posts
     drop_table :cms_attachment_fus
     drop_table :cms_uris
