@@ -93,7 +93,7 @@ module CMS
               return method_missing_without_cms_routes(method, *args, &block)
             end
           else
-            raise Exception.new("#{ container } is not a valid container") unless CMS.containers.include?(container.pluralize.to_sym)
+            raise Exception.new("#{ container } is not a valid container") unless ( CMS.containers + [ :posts ]).include?(container.pluralize.to_sym)
             container_instance = args.shift
             #TODO filter content class type??
             options = args.first || {}
@@ -102,7 +102,7 @@ module CMS
           end
           
           if container_instance
-            options[:container_type] = container_instance.class.to_s.tableize
+            options[:container_type] = container_instance.is_a?(CMS::Post) ? "posts" : container_instance.class.to_s.tableize
             options[:container_id]   = container_instance.id
           
             send("#{ action }container_#{ content_instance }#{ type }", options)
@@ -184,8 +184,9 @@ module CMS
       # Find Container using path from the request
       def get_container
         return nil unless params[:container_type] && params[:container_id]
-  
-        @container = params[:container_type].to_sym.to_class.find params[:container_id]
+
+        container_class = params[:container_type] == "posts" ? CMS::Post : params[:container_type].to_sym.to_class 
+        @container = container_class.find params[:container_id]
       end
   
       # Tries to find a Container suitable for this Content

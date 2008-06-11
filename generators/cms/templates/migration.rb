@@ -47,6 +47,12 @@ class CmsSetup < ActiveRecord::Migration
       t.datetime :updated_at
     end
 
+    create_table :cms_texts do |t|
+      t.string :type
+      t.text :text
+      t.timestamps
+    end
+
     create_table :cms_uris do |t|
       t.string :uri
     end
@@ -100,6 +106,7 @@ class CmsSetup < ActiveRecord::Migration
     drop_table :cms_categorizations
     drop_table :cms_posts
     drop_table :cms_attachment_fus
+    drop_table :cms_texts    
     drop_table :cms_uris
     drop_table :cms_roles
     drop_table :cms_performances

@@ -6,6 +6,8 @@ module CMS
   class Post < ActiveRecord::Base
     set_table_name "cms_posts"
 
+    acts_as_container :name => :title
+
     # Pagination (will_paginate gem)
     cattr_reader :per_page
     @@per_page = 15
