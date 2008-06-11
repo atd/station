@@ -36,9 +36,7 @@ module CMS
           @collection = @container.container_posts.find(:all,
                                                         :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
                                                         :conditions => conditions,
-                                                        :order => "updated_at DESC").select{ |p|
-            p.read_by?(current_agent)
-          }
+                                                        :order => "updated_at DESC")
     
           # Paginate them
           @posts = @collection.paginate(:page => params[:page], :per_page => self.resource_class.content_options[:per_page])

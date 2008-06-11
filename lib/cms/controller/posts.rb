@@ -18,9 +18,7 @@ module CMS
           @title ||= "#{ 'Post'.t('Posts', 99) } - #{ @container.name }"
           # All the Posts this Agent can read in this Container
           @collection = @container.container_posts.find(:all,
-                                                        :order => "updated_at DESC").select{ |p|
-            p.read_by?(current_agent)
-          }
+                                                        :order => "updated_at DESC")
     
           # Paginate them
           @posts = @collection.paginate(:page => params[:page], :per_page => CMS::Post.per_page)
