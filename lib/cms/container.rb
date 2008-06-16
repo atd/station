@@ -60,22 +60,30 @@ module CMS
         end
       end
       
-      # All roles allowing an Agent to perform some action in this Container
-      def roles_for(agent, action)
-        return [] unless agent.respond_to?(:agent_options)
+      # All roles performed by some Agent in this Container.
+      #
+      # If action is specified, return all roles allowing the Agent to perform the action in this Container
+      def roles_for(agent, action = nil)
+        return Array.new unless agent.respond_to?(:agent_options)
+
+        agent_roles = container_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role).uniq
+
+        return agent_roles unless action
+
         action = action.to_sym
-        agent_roles = container_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role)
         agent_roles.select(&action)
       rescue NoMethodError => e
         raise Exception.new("At least one role doesn't support \"#{ action }\" method")
       end
       
-      # True if it exists at least one Performance for this Container that allows
+      # True if it exists at least one Performance for this Container.
+      #
+      # If some action is specified, return true if there is at least one role that allows
       # the Agent to perform the action.
       #
       #   space.has_role_for?(user, :admin) # => true or false
       #
-      def has_role_for?(agent, action)
+      def has_role_for?(agent, action = nil)
         roles_for(agent, action).any?
       end
       
