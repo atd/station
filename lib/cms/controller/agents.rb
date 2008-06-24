@@ -13,14 +13,7 @@ module CMS
       def show
         respond_to do |format|
           format.html
-          format.atomsvc {
-            if @agent != current_agent
-              access_denied
-              return
-            else
-              render :layout => false
-            end
-          }
+          format.atomsvc
         end
       end
     
