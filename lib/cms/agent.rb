@@ -61,7 +61,15 @@ module CMS
       def stages
         agent_performances.map(&:container).uniq
       end
-      
+
+      def service_documents
+        if self.agent_options[:authentication].include?(:openid)
+          openid_uris.map(&:atompub_service_document)
+        else
+          Array.new
+        end
+      end
+ 
       def containers #:nodoc:
         logger.debug "DEPRECATED: containers deprecated! Use stages instead"
         stages
