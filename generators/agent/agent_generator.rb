@@ -170,7 +170,7 @@ class AgentGenerator < Rails::Generator::NamedBase
       end
 
       if options[:include_activation]
-        for action in %w( forgot_password.text.plain.erb reset_password.text.plain.erb ) do
+        for action in %w( forgot_password.html.erb reset_password.html.erb ) do
           m.template action, File.join('app/views', model_controller_class_path, model_controller_file_name, action)
         end
 
