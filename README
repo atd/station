@@ -32,10 +32,10 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 == Installation
 
-Run rake gems:install to install the required gems
-
 To install CMS plugin, run:
   script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
+
+Run rake gems:install to install the required gems
 
 Generate the CMS infraestructure:
   script/generate cms
