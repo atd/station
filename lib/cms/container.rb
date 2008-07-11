@@ -39,25 +39,18 @@ module CMS
                  :as => :container
 
         include CMS::Container::InstanceMethods
-        
-        # This methods maps the appropriate attributes
-        send :alias_method_chain, :method_missing, :roled_actions
       end
     end
 
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
-      # Catch all methods like "read_by?(agent)"
-      # If there is any performance for that agent that respond true to action
-      def method_missing_with_roled_actions(method, *args, &block) #:nodoc:
-        if method.to_s =~ /^(.*)_by\?$/
-          action = "#{ $1 }?"
-          agent = args.first
-          has_role_for?(agent, action)
-        else
-          method_missing_without_roled_actions(method, *args, &block)
+      # Agent must have at least one performance for every action
+      def authorizes?(agent, actions)
+        for action in Array(actions)
+          return false unless self.has_role_for?(agent, action)
         end
+        true
       end
       
       # All roles performed by some Agent in this Container.
