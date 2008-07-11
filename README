@@ -21,7 +21,7 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 == Requirements
 
-* Rails 2.0
+* Rails 2.1
 * RubyGems: 
   * ruby-openid
   * atom-tools
@@ -31,6 +31,8 @@ Project page: http://rubyforge.org/projects/cmsplugin
   * globalize
 
 == Installation
+
+Run rake gems:install to install the required gems
 
 To install CMS plugin, run:
   script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
