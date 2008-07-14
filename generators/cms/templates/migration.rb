@@ -17,7 +17,7 @@ class CmsSetup < ActiveRecord::Migration
       t.integer :post_id
     end
 
-    create_table :sites do |t|
+    create_table :cms_sites do |t|
       t.string :name, :default => 'CMSplugin powered Rails site'
       t.text   :description
       t.string :domain, :default => 'cms.example.org'
