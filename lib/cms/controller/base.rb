@@ -71,7 +71,7 @@ module CMS
       end
 
       def current_site
-        @current_site ||= CMS::Site.find(:first) || CMS::Site.new
+        @current_site ||= CMS::Site.current
       end
       
       protected
