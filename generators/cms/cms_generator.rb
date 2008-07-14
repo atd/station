@@ -8,6 +8,7 @@ class CmsGenerator < Rails::Generator::Base
       
       m.directory 'app/controllers'
       m.template  'controllers/posts_controller.rb', 'app/controllers/posts_controller.rb'
+      m.template  'controllers/sites_controller.rb', 'app/controllers/sites_controller.rb'
 
       m.directory 'app/views/posts'
       m.template 'views/posts/index.html.erb',  'app/views/posts/index.html.erb'

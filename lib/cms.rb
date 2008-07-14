@@ -5,6 +5,8 @@ require 'cms/param_parsers'
 
 module CMS
   ROUTES = <<-EORoutes
+  map.resource  :site
+
   map.resources :posts, :member => { :media   => :any,
                                      :edit_media => :get }
   map.resources :posts, :path_prefix => '/:container_type/:container_id',

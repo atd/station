@@ -66,6 +66,12 @@ module CMS
         base.class_eval do
           alias_method_chain :method_missing, :cms_routes
         end  
+
+        base.helper_method :current_site
+      end
+
+      def current_site
+        @current_site ||= CMS::Site.find(:first) || CMS::Site.new
       end
       
       protected
