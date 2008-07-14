@@ -20,6 +20,9 @@ class CmsGenerator < Rails::Generator::Base
       m.template 'views/posts/_permissions_form.erb', 'app/views/posts/_permissions_form.erb'
       m.template 'views/posts/index.atom.builder', 'app/views/posts/index.atom.builder'
       m.template 'views/posts/_entry.builder',  'app/views/posts/_entry.builder'
+
+      m.directory 'app/views/sites'
+      m.template 'views/sites/edit.html.erb',   'app/views/sites/edit.html.erb'
       
       m.directory 'app/views/layouts'
       m.template  'views/layout.html.erb', 'app/views/layouts/posts.html.erb'
