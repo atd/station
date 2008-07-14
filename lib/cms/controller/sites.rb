@@ -1,6 +1,10 @@
 module CMS
   module Controller
     module Sites
+      def self.included(base) #:nodoc:
+        base.send :include, CMS::Controller::Base unless base.ancestors.include?(CMS::Controller::Base)
+      end
+
       # GET /site
       # GET /site.xml
       def show
