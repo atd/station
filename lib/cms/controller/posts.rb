@@ -79,9 +79,10 @@ module CMS
         # If it has, update via media
         # 
         # TODO: find old content when only post params are updated
-        unless @post.content.content_options[:has_media]
+        # TODO: Update in AtomPub?
+#        unless request.format == :atom
           @content = @post.content.class.create params[:content]
-        end
+#        end
     
         # Avoid the user changes container through params
         params[:post][:container] = @post.container
