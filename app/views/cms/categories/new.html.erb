@@ -1,0 +1,10 @@
+<h2><%= 'New category'.t %></h2>
+
+<%= error_messages_for :category %>
+
+<% form_for([@container, @category]) do |f| %>
+  <%= render :partial => 'form', :object => f %>
+  <p>
+    <%= f.submit "Create".t %>
+  </p>
+<% end %>

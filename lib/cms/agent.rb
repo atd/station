@@ -3,6 +3,7 @@ require 'digest/sha1'
 module CMS
   # Agent(s) can CRUD Content(s) in Container(s), generating Post(s)
   module Agent
+
     def self.included(base) #:nodoc:
       base.extend ClassMethods
     end
@@ -17,6 +18,8 @@ module CMS
       # Defaults to <tt>[ :login_and_password, :openid ]</tt>
       # * <tt>activation</tt>: Agent must verify email
       def acts_as_agent(options = {})
+        CMS.register_model(self, :agent)
+
         options[:authentication] ||= [ :login_and_password, :openid ]
         
         cattr_reader :agent_options
@@ -68,16 +71,6 @@ module CMS
         else
           Array.new
         end
-      end
- 
-      def containers #:nodoc:
-        logger.debug "DEPRECATED: containers deprecated! Use stages instead"
-        stages
-      end
-      
-      def performances #:nodoc:
-        logger.debug "DEPRECATED: performances is deprecated! Use agent_performances or container_performances instead"
-        agent_performances
       end
     end
   end

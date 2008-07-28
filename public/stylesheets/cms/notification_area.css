@@ -1,0 +1,11 @@
+.valid_action {
+    background: #adf69e url('/images/cms/notification_area/valid.png') no-repeat top left;
+    padding: 5px 10px 5px 24px;
+    border: 1px solid #5bf43c;
+}
+
+.error_action .errorExplanation {
+    background: #f69e9e url('/images/cms/notification_area/error.png') no-repeat top left;
+    padding: 5px 10px 5px 24px;
+    border: 1px solid #f43c3c;
+}

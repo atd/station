@@ -1,0 +1,43 @@
+<% form_tag cms_session_path do -%>
+<div id="login_by_user">
+  <p>
+    <label for="login"><%= "Login".t %></label>
+    <%= text_field_tag 'login', params[:login] %>
+  </p>
+  <p>
+    <label for="password"><%= "Password".t %></label>
+    <%= password_field_tag 'password' %>
+  </p>
+  
+</div>
+<!-- Uncomment this if you want this functionality
+<p><label for="remember_me">Remember me:</label>
+<%= check_box_tag 'remember_me' %></p>
+-->
+
+<div id="login_by_openid" style="display: none;">
+  <p>
+    <label for="openid_identifier">OpenID:</label>
+    <%= text_field_tag "openid_identifier", params[:openid_identifier], :size => 30 %>
+  </p>
+</div>
+
+<div id="new" style="display: none;">
+  <p>
+   <%= link_to "Join in %s" / current_site.name, new_user_path, :class => "action add" %>
+  </p>
+</div>
+
+
+
+<div id="help"  style="display: none;">
+  <%= link_to 'Forgotten password?'.t, forgot_password_path, :class => "action info" %>
+</div>
+
+<div id="go">
+  <p><%= submit_tag '» ' + 'Log in'.t, { :class => "button" } %></p>
+</div>
+
+<% end -%>
+
+

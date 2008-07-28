@@ -1,0 +1,17 @@
+<h2><%= title("Edit #{ @post.content.class.to_s }".t) %></h2>
+
+<% unless error_messages_for(:post).blank? && error_messages_for(:content).blank? -%>
+<div class="errors">
+  <%= error_messages_for :post %>
+  <%= error_messages_for :content %>
+</div>
+<% end -%>
+
+<% form_for(:post, 
+            :url => @post, 
+            :html => { :method => :put,
+                       :multipart => true }) do |f| -%>
+  <%= render :partial => "cms/posts/form", :object => f %>
+
+  <%= submit_tag "Update" %>
+<% end -%>

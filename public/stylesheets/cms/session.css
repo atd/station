@@ -1,0 +1,25 @@
+#session {
+  background-color: transparent;
+  max-width: 136px; width: 136px; min-width: 136px;
+  min-height: 120px; height: 120px; max-height: 120px;
+  position: absolute;
+  top: 35px;
+  left: 865px;
+}
+
+#session_top {
+  max-width: 136px; width: 136px; min-width: 136px;
+  min-height: 48px; height: 48px; max-height: 48px;
+  background: transparent url('/images/cms/move_css/background_session_top.png') no-repeat top left;
+}
+
+#session_center {
+  background-color: #272727;
+  max-width: 136px; width: 136px; min-width: 136px;
+  min-height: 72px; height: 72px; max-height: 72px;
+  color: white;
+}
+
+#session_center a {
+  color: white;
+}

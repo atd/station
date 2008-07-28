@@ -2,6 +2,23 @@
 
 class CmsSetup < ActiveRecord::Migration
   def self.up
+    create_table :cms_anonymous_agents do |t|
+    end
+
+    create_table :cms_attachment_fus do |t|
+      t.string   :type
+      t.integer  :size
+      t.string   :content_type
+      t.string   :filename
+      t.integer  :height
+      t.integer  :width
+      t.integer  :parent_id
+      t.string   :thumbnail
+      t.integer  :db_file_id
+      t.datetime :created_at
+      t.datetime :updated_at
+    end
+
     create_table :cms_categories, :force => true do |t|
       t.string   :name
       t.text     :description
@@ -17,13 +34,12 @@ class CmsSetup < ActiveRecord::Migration
       t.integer :post_id
     end
 
-    create_table :cms_sites do |t|
-      t.string :name, :default => 'CMSplugin powered Rails site'
-      t.text   :description
-      t.string :domain, :default => 'cms.example.org'
-      t.string :email, :default => 'admin@example.org'
-      t.string :locale
-      t.timestamps
+    create_table :cms_performances do |t|
+      t.integer :agent_id
+      t.string  :agent_type
+      t.integer :role_id
+      t.integer :container_id
+      t.string  :container_type
     end
 
     create_table :cms_posts do |t|
@@ -42,31 +58,6 @@ class CmsSetup < ActiveRecord::Migration
       t.boolean  :public_write
     end
 
-    create_table :cms_attachment_fus do |t|
-      t.string   :type
-      t.integer  :size
-      t.string   :content_type
-      t.string   :filename
-      t.integer  :height
-      t.integer  :width
-      t.integer  :parent_id
-      t.string   :thumbnail
-      t.integer  :db_file_id
-      t.datetime :created_at
-      t.datetime :updated_at
-    end
-
-    create_table :cms_texts do |t|
-      t.string :type
-      t.text :text
-      t.timestamps
-    end
-
-    create_table :cms_uris do |t|
-      t.string :uri
-    end
-    add_index :cms_uris, :uri
-
     create_table :cms_roles do |t|
       t.string :name
       t.boolean :admin
@@ -80,13 +71,25 @@ class CmsSetup < ActiveRecord::Migration
       t.boolean :delete_performances
     end
 
-    create_table :cms_performances do |t|
-      t.integer :agent_id
-      t.string  :agent_type
-      t.integer :role_id
-      t.integer :container_id
-      t.string  :container_type
+    create_table :cms_sites do |t|
+      t.string :name, :default => 'CMSplugin powered Rails site'
+      t.text   :description
+      t.string :domain, :default => 'cms.example.org'
+      t.string :email, :default => 'admin@example.org'
+      t.string :locale
+      t.timestamps
     end
+
+    create_table :cms_texts do |t|
+      t.string :type
+      t.text :text
+      t.timestamps
+    end
+
+    create_table :cms_uris do |t|
+      t.string :uri
+    end
+    add_index :cms_uris, :uri
 
     create_table :open_id_ownings do |t|
       t.integer :agent_id
@@ -111,14 +114,15 @@ class CmsSetup < ActiveRecord::Migration
   end
 
   def self.down
+    drop_table :cms_anonymous
+    drop_table :cms_attachment_fus
     drop_table :cms_categories
     drop_table :cms_categorizations
+    drop_table :cms_performances
     drop_table :cms_posts
-    drop_table :cms_attachment_fus
+    drop_table :cms_roles
     drop_table :cms_texts    
     drop_table :cms_uris
-    drop_table :cms_roles
-    drop_table :cms_performances
     drop_table :open_id_ownings
     drop_table :open_id_associations
     drop_table :open_id_nonces

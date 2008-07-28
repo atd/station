@@ -33,6 +33,8 @@ module CMS
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
       #
       def acts_as_content(options = {})
+        CMS.register_model(self, :content)
+
         #FIXME: should this be the default mime type??
         options[:atompub_mime_types] ||= "application/atom+xml;type=entry"
         options[:disposition]        ||= :attachment

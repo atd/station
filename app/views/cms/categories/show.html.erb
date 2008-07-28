@@ -1,0 +1,7 @@
+<h2><%= sanitize @category.name %></h2>
+<p>
+<%= sanitize @category.description %>
+</p>
+
+<%= link_to 'Edit'.t, edit_polymorphic_path(@category) %> |
+<%= link_to 'Back'.t, polymorphic_path([ @container, CMS::Category.new ]) %>

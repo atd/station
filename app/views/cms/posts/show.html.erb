@@ -1,0 +1,18 @@
+<% content_for :contents_menu do -%>
+  <%= new_content_button %>
+  <%= contents_menu_separator %>
+  <%= content_info(@post) %>
+<% end -%>
+
+<h2><%= title %></h2>
+
+<% unless @post.description.blank? %>
+<p>
+  <b>Description:</b>
+  <%=sanitize @post.description %>
+</p>
+<% end %>
+
+<div id="post-content">
+<%= render :partial => "#{ @content.class.to_s.tableize }/post", :object => @post %>
+</div>

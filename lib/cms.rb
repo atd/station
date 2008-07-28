@@ -4,27 +4,44 @@ require 'cms/autoload'
 require 'cms/param_parsers'
 
 module CMS
-  ROUTES = <<-EORoutes
-  map.resource  :site
-
-  map.resources :posts, :member => { :media   => :any,
-                                     :edit_media => :get }
-  map.resources :posts, :path_prefix => '/:container_type/:container_id',
-                        :name_prefix => 'container_'
-
-  CMS.contents.each do |content|
-      map.resources content
-      map.resources content, :path_prefix => '/:container_type/:container_id',
-                             :name_prefix => 'container_'
-  end
-  EORoutes
-
   class << self
     def enable #:nodoc:
       self.enable_mime_types
+      enable_routes
       enable_active_record
       self.autoload
       self.enable_param_parsers
+    end
+
+    def enable_routes
+      ActionController::Routing::RouteSet::Mapper.class_eval do
+        def cms
+          resource :"cms/site"
+
+          open_id_complete 'cms/session', 
+            { :controller => 'cms/sessions', 
+              :action     => 'create',
+              :conditions => { :method => :get },
+              :open_id_complete => true }
+
+          resource :"cms/session"
+
+          login 'login',   :controller => 'cms/sessions', :action => 'new'
+          logout 'logout', :controller => 'cms/sessions', :action => 'destroy'
+
+          resources :"cms/anonymous_agents"
+
+          resources :"cms/posts", :member => { :media => :any,
+                                                   :edit_media => :get,
+                                                   :details => :any }
+          resources :"cms/categories"
+
+          resources(*(CMS.containers - Array(:"cms/sites"))) do |container|
+            container.resources(*CMS.contents)
+            container.resources :"cms/posts", :"cms/categories"
+          end
+        end
+      end
     end
 
     def enable_active_record #:nodoc:
@@ -35,6 +52,13 @@ module CMS
       ActiveRecord::Base.send :include, Content
       require 'cms/container'
       ActiveRecord::Base.send :include, Container
+      require 'cms/sortable'
+      ActiveRecord::Base.send :include, Sortable
+    end
+
+    # Return an Array with the class constants that act as a Container
+    def container_classes
+      @@containers.map(&:to_class)
     end
 
     # Return an Array with the class constants that act as an Agent
@@ -63,3 +87,5 @@ module CMS
     end
   end
 end
+
+Cms = CMS

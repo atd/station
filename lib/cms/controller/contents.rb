@@ -3,8 +3,8 @@ module CMS
     # Controller methods and default filters for Agents Controllers
     module Contents
       def self.included(base) #:nodoc:
-        base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
-        base.send :include, CMS::Controller::Authorization unless base.instance_methods.include?('method_missing_with_authorization_filters')
+        base.send :include, CMS::Controller::Base unless base.ancestors.include?(CMS::Controller::Base)
+        base.send :include, CMS::Controller::Authorization unless base.ancestors.include?(CMS::Controller::Authorization)
       end
 
       # List Contents of this type posted to a Container
@@ -41,17 +41,14 @@ module CMS
           # Paginate them
           @posts = @collection.paginate(:page => params[:page], :per_page => self.resource_class.content_options[:per_page])
           @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
-          @collection_path = container_contents_url
         else
           @title ||= self.resource_class.translated_named_collection
-          conditions = merge_conditions("AND", conditions, [ "public_read = ?", true ])
           @posts = CMS::Post.paginate :all,
                                       :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
                                       :conditions => conditions,
                                       :page =>  params[:page],
                                       :order => "updated_at DESC"
           @updated = @posts.blank? ? Time.now : @posts.first.updated_at
-          @collection_path = url_for :controller => controller_name
         end
     
         if block
@@ -61,7 +58,7 @@ module CMS
             format.html
             format.js
             format.xml { render :xml => @posts.to_xml.gsub(/cms\/posts/, "#{ self.resource_class.to_s.tableize }").gsub(/cms\/post/, "#{ self.resource_class.to_s.underscore }") }
-            format.atom { render :template => 'posts/index.atom.builder', :layout => false }
+            format.atom
           end
         end
       end
@@ -96,11 +93,10 @@ module CMS
       #   GET /:container_type/:container_id/contents/new
       #   GET /contents/new
       def new
-        @collection_path = container_contents_url
         @post = CMS::Post.new
         @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
         @title ||= "New #{ controller_name.singularize.humanize }".t
-        render :template => "posts/new"
+        render :template => "cms/posts/new"
       end
     
       # Create new Content
@@ -128,18 +124,17 @@ module CMS
             if !@content.new_record? && @post.save
               @post.category_ids = params[:category_ids]
               flash[:valid] = "#{ @content.class.to_s.humanize } created".t
-              redirect_to post_url(@post)
+              redirect_to @post
             else
               @content.destroy unless @content.new_record?
-              @collection_path = container_contents_url
               @title ||= "New #{ controller_name.singularize.humanize }".t
-              render :template => "posts/new"
+              render :template => "cms/posts/new"
             end
           }
     
           format.atom {
             if !@content.new_record? && @post.save
-    	  headers["Location"] = formatted_post_url(@post, :atom)
+    	  headers["Location"] = formatted_cms_post_url(@post, :atom)
     	  headers["Content-type"] = 'application/atom+xml'
               render :partial => "posts/entry",
                                  :status => :created,

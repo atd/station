@@ -10,7 +10,7 @@ module CMS
     # that is requesting some action
     #  
     # authenticated?:: Is there any Agent authenticated in this request?
-    # current_agent::  Agent currently authenticated. Defaults to <tt>:false</tt>
+    # current_agent::  Agent currently authenticated. Defaults to <tt>CMS::AnonymousAgent#current</tt>
     # current_agent=::  Set current_agent
     #
     # You can also use the name of a model that acts_as_agent
@@ -18,7 +18,7 @@ module CMS
     #     acts_as_agent
     #   end
     #
-    #   current_user # => The authenticated user, or :false
+    #   current_user # => The authenticated user, or CMS::AnonymousAgent#current
     #
     # == Filters
     # authentication_required:: The action requires to be performed by an 
@@ -76,7 +76,7 @@ module CMS
         # Returns true or false if an Agent is authenticated
         # Preloads @current_agent with the Agent's model if they're authenticated
         def authenticated?
-          current_agent != :false
+          current_agent != CMS::AnonymousAgent.current
         end
   
         # Compativility with restful_authentication plugin
@@ -94,14 +94,15 @@ module CMS
           method_missing_without_current_polymorphic_agent(method, *args, &block)
         end
   
-        # Accesses the current Agent from the session.  Set it to :false if authentication
-        # fails so that future calls do not hit the database.
+        # Accesses the current Agent from the session.  
+        # Set it to CMS::AnonymousAgent#current if authentication fails so 
+        # that future calls do not hit the database.
         def current_agent
-          @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie || :false)
+          @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie || CMS::AnonymousAgent.current)
         end
   
         def current_polymorphic_agent(agent_klass) #:nodoc:
-          current_agent.is_a?(agent_klass) ? current_agent : :false
+          current_agent.is_a?(agent_klass) ? current_agent : CMS::AnonymousAgent.current
         end
   
         # Store the given agent id and agent_type in the session.
@@ -112,7 +113,7 @@ module CMS
             session[:agent_id]   = new_agent.id
             session[:agent_type] = new_agent.class.to_s
           end
-          @current_agent = new_agent || :false
+          @current_agent = new_agent || CMS::AnonymousAgent.current
         end
   
         # Filter method to enforce an authentication requirement.
@@ -147,7 +148,7 @@ module CMS
           respond_to do |format|
             format.html do
               store_location
-              redirect_to new_session_path
+              redirect_to new_cms_session_path
             end
   
             for mime in CMS.mime_types

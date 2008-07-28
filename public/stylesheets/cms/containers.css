@@ -1,0 +1,18 @@
+#containers {
+  position: absolute;
+  top: 35px;
+  left: 140px;
+  max-width: 365px; width: 365px; min-width: 365px;
+  min-height: 120px; height: 120px; max-height: 120px;
+  background-color: #272727;
+}
+
+#containers #containers_top {
+  max-width: 365px; width: 365px; min-width: 365px;
+  min-height: 10px; height: 10px; max-height: 10px;
+  background-color: #272727;
+}
+
+#containers #containers_top {
+  max-width: 355px; width: 355px; min-width: 355px;
+}

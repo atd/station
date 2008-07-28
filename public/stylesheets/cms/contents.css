@@ -1,0 +1,182 @@
+
+/* Menu conent... funcionality overall */
+#contents {
+  position: absolute;
+  left: 15px;
+  top: 155px;
+  max-width: 209px; width: 209px; min-width: 209px;
+  min-height: 556px; height: 556px; max-height: 556px;
+}
+
+#contents #contents_top {
+          top: 0px;
+          max-width: 209px; width: 209px; min-width: 209px;
+          min-height: 22px; height: 22px; max-height: 22px;
+          background: transparent url('/images/cms/move_css/background_menu_content_top.png') no-repeat top center;
+}
+
+#contents #contents_bottom {
+          top: 0px;
+          max-width: 209px; width: 209px; min-width: 209px;
+          min-height: 22px; height: 22px; max-height: 22px;
+          background: transparent url('/images/cms/move_css/background_menu_content_bottom.png') no-repeat top center;
+}
+
+#contents #contents_center {
+          max-width: 209px; width: 209px; min-width: 209px;
+          min-height: 512px;
+          background-color: #7e7e7e;
+}
+
+#contents #contents_center #contents_center_inside {
+                            padding-left: 16px;
+                            max-width: 193px; width: 193px; min-width: 193px;
+                            min-height: 494px; 
+                            text-align: left;
+}
+
+
+
+
+
+#contents #contents_center #contents_center_inside a.button {
+                                                  display: block;
+                                                  max-width: 170px; width: 170px; min-width: 170px;
+                                                  min-height: 30px; height: 30px; max-height: 30px;
+                                                  margin-bottom: 8px;
+                                                  padding-top: 7px;
+                                                  padding-left: 7px;
+                                                  font-family: 'Monospace';
+                                                  font-size: 16px;
+                                                  font-weight: bold;
+                                                  text-decoration: none;
+}
+
+#contents #contents_center #contents_center_inside a.content_link {
+  color: white;
+}
+
+#contents #contents_center #contents_center_inside a.content_link:hover {
+  color: #92d585;
+}
+
+#contents #contents_center #contents_center_inside a.new_link {
+  color: black;
+}
+
+
+#contents #contents_center #contents_center_inside a.active {
+  background: transparent url('/images/cms/move_css/background_content_link_active.png') no-repeat top center;
+}
+
+#contents #contents_center #contents_center_inside a.inactive {
+  background: transparent url('/images/cms/move_css/background_content_link_inactive.png') no-repeat top center;
+}
+
+#contents #contents_center #contents_center_inside a.inactive:hover {
+  background: transparent url('/images/cms/move_css/background_content_link_inactive_hover.png') no-repeat top center;
+}
+
+#contents #contents_center #contents_center_inside a.alternative {
+  background: transparent url('/images/cms/move_css/background_content_link_alternative.png') no-repeat top center;
+} 
+
+#contents #contents_center #contents_center_inside a span {
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  max-width: 162px; width: 162px; min-width: 162px;
+  min-height: 30px; height: 30px; max-height: 30px;
+  display: block;
+}
+
+/* Specials icons for the buttons */
+#content_link_articles    { 
+  background-image: url('/images/cms/move_css/article_icon_small.png'); }
+#content_link_photos      { 
+  background-image: url('/images/cms/move_css/photo_icon_small.png'); }
+#content_link_bookmarks   { 
+  background-image: url('/images/cms/move_css/bookmark_icon_small.png'); }
+#content_link_maps        {
+  background-image: url('/images/cms/move_css/map_icon_small.png'); }
+#content_link_audios      {
+  background-image: url('/images/cms/move_css/audios_icon_small.png'); }
+#content_link_documents   {
+  background-image: url('/images/cms/move_css/document_icon_small.png'); }
+#content_link_new         { 
+  background-image: url('/images/cms/move_css/add.png'); }
+
+
+#contents #contents_center #contents_center_inside hr.separator {
+  text-align: center;
+  background: transparent url('/images/cms/move_css/contents_separator.png');
+  color: transparent;
+  max-width: 170px; width: 170px; min-width: 170px;
+  min-height: 2px; height: 2px; max-height: 2px;
+  border: 0px;
+  margin: 0px 2px 10px 2px;
+  padding: 0px;
+}
+
+/* DIV decorations */
+/* Block white decoration */
+#contents #contents_center #contents_center_inside .block_white_top {
+  display: block;
+  max-width: 170px; width: 170px; min-width: 170px;
+  min-height: 28px; height: 28px; max-height: 28px;
+  padding-top: 7px;
+  padding-left: 7px;
+  font-family: 'Monospace';
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  background: transparent url('/images/cms/move_css/background_content_info_top.png') no-repeat top center;
+  color: black;
+  margin: 0px;
+}
+
+
+#contents #contents_center #contents_center_inside .block_white_center {
+  background-color: white;
+  max-width: 161px; width: 161px; min-width: 161px;
+  padding-left: 7px;
+  padding-right: 7px;
+  margin-left: 1px;
+  color: #565656;
+  font-size: 11px;
+  line-height: 18px;
+}
+
+#contents #contents_center #contents_center_inside .block_white_bottom {
+  background: transparent url('/images/cms/move_css/background_content_info_bottom.png') no-repeat top center;
+  max-width: 170px; width: 170px; min-width: 170px;
+  min-height: 5px; height: 5px; max-height: 5px;
+  padding-left: 7px;
+  margin: 0px;
+
+}
+
+#contents #contents_center #contents_center_inside #content_info_center b.info {
+  color: #565656;
+  font-weight: bolder;
+  font-size: 11px;
+}
+
+#contents #contents_center #contents_center_inside #content_info_center a.action {
+  color: #55127b;
+  text-decoration: none;
+  font-size: 13px;
+  display: block;
+  padding-left: 25px;
+  line-height: 22px;
+}
+
+
+/* FIXME over decoration */
+#contents #contents_center #contents_center_inside #content_info_center a.action:hover {
+  text-decoration: none;
+  background-color: #c9eabd;
+}
+
+
+

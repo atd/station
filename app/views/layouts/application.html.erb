@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title><%= title %></title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<% if @xrds_url -%>
+  <meta http-equiv="X-XRDS-Location" content="<%= @xrds_url -%>" />
+<% end -%>
+<meta name="description" content="<%= @description %>" />
+<meta name="keywords" content="red,social" />
+<meta name="author" content="atd, nogates / Design: Gnoyxs - http://www.gnoxys.net/" />
+<%= stylesheet_link_tag "cms/move", :media => 'all' %>
+
+<%= javascript_include_tag :defaults %>
+<%= javascript_include_tag "cms/move" %>
+<%= javascript_include_tag :fckeditor if @uses_fckeditor %>
+
+<% if @collection_path -%>
+<link href="<%= @collection_path + '.atom' %>" rel="alternate" title="<%= @title %>" type="application/atom+xml" />
+<% end -%>
+
+<% if @openid_server -%>
+<link rel="openid.server" href="<%= @openid_server -%>" />
+<% end -%>
+
+<% if false # @space %>
+<link rel="icon" href="<%= @space.logo.public_filename('icon') %>" type="image/x-icon">
+<% end -%>
+
+<% if logged_in? -%>
+<link rel="service" type="application/atomsvc+xml" href="<%= url_for :controller => :users, :action => :show, :id => current_user.id, :format => "atomsvc", :only_path => false %>" />
+<% end -%>
+</head>
+
+<body onload="onLoadPage();">
+  <!-- open wrap -->
+  <div id="wrap">
+    <!-- logo -->
+    <div id="logo">
+      <div id="logo_top"></div>
+      <div id="logo_center">
+        <img src="/images/cms/move_static.png" alt="[move static logo]" id="move_logo" onclick="this.src='/images/cms/move_dynamic.png';" />
+      </div>
+      <div id="logo_bottom">
+        <%= link_to("Public".t, root_path, {:id => "logo_public_content"}) %>
+      </div>
+    </div>
+
+    <!-- containers -->
+    <%= menu_box(:containers) %>
+    <!-- agents -->
+    <%= menu_box(:agents) %>
+
+    <!-- session -->
+    <div id="session">
+      <div id="session_top"></div>
+      <div id="session_center">
+        <div id="session_center_inside">
+         <% if authenticated? -%>
+         <%= link_to("Site configuration".t, edit_cms_site_path) %><br />
+         <%= link_to("Log out".t, logout_path) %>
+         <% else -%>
+         <%= "%s or %s" / [ link_to("Sign in".t, login_path), link_to("Join".t, new_user_path) ] %>
+          <% end -%>
+        </div>
+      </div>
+      <div id="session_bottom"></div>
+    </div>
+
+
+    <!-- open menu content div -->
+    <div id="contents">
+       <!-- top menu content decoration, close it -->
+      <div id="contents_top"></div>
+      <!-- menu content center -->
+      <div id="contents_center">
+        <!-- menu content inside wrapper -->
+        <div id="contents_center_inside">
+	  <%= yield :contents_menu %>
+        <!-- close menu content inside -->
+        </div>
+      <!-- cloose menu content center -->
+      </div>
+      <!-- bottom menu content decoration, close it -->
+      <div id="contents_bottom"></div>
+    <!-- close menu content -->
+    </div>
+    <!-- open the interaction_screen -->
+    <div id="interaction_screen">
+       <!-- top interaction screen decoration, close it -->
+      <div id="interaction_screen_top"></div>
+        <!-- interaction screen center -->
+        <div id="interaction_screen_center">
+          <!-- interaction screen wrapper -->
+          <div id="interaction_screen_center_inside">
+          <%= notification_area %>
+          <%= yield %>
+          <!-- close interaction screen wrapper -->
+          </div>
+        <!-- cloose interaction screen center -->
+        </div>
+        <!-- bottom interaction screen decoration, close it -->
+        <div id="interaction_screen_bottom"></div>
+    <!-- cloose interaction screen -->
+    </div>
+    <!-- open footer -->
+     <div id="footer">
+        © 2008 <%= link_to 'Gnoxys', 'http://www.gnoxys.net/' %>
+     <!-- cloose footer -->
+    </div>
+  <!-- close wrap -->
+  </div>
+</body>
+</html>

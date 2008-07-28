@@ -15,7 +15,11 @@ module CMS
       # * <tt>name</tt>: alias attribute for Content presentation
       #
       def acts_as_container(options = {})
-        options[:contents] ||= CMS.contents
+        CMS.register_model(self, :container)
+        def self.inherited(subclass)
+          super
+          CMS.register_model(subclass, :container)
+        end
 
         send(:alias_attribute, :name, options.delete(:name)) if options[:name]
 
@@ -45,6 +49,10 @@ module CMS
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
+      def accepted_content_types
+        self.class.container_options[:content_types] || CMS.contents
+      end
+
       # Agent must have at least one performance for every action
       def authorizes?(agent, actions)
         for action in Array(actions)

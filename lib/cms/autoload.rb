@@ -19,18 +19,16 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
   end
   
 =end
-
-  # Ontology Terms
   # They are mapped to acts_as#{ term } methods 
-  TERMS = %w( agent content container )
+  MODEL_ACTS_AS = [ :container, :agent, :content ]
 
-  TERMS.map(&:pluralize).each do |t|
+  MODEL_ACTS_AS.map(&:to_s).map(&:pluralize).each do |t|
     mattr_accessor t
     class_variable_set "@@#{ t }", []
   end
 
   DEFAULT_OPTIONS = {
-    :file_pattern => "#{RAILS_ROOT}/app/models/**/*.rb",
+    :file_patterns => [ RAILS_ROOT, File.dirname(__FILE__).gsub("/lib/cms", '') ].map{ |f| f + '/app/models/**/*.rb' },
     :file_exclusions => ['svn', 'CVS', 'bzr'],
     :requirements => []}
   
@@ -50,20 +48,24 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
       require requirement
     end
   
-    Dir[options[:file_pattern]].each do |filename|
-      next if filename =~ /#{options[:file_exclusions].join("|")}/
-      TERMS.each do |term|
+    for file_pattern in options[:file_patterns]
+      Dir[file_pattern].each do |filename|
+        next if filename =~ /#{options[:file_exclusions].join("|")}/
         open filename do |file|
-          if file.grep(/acts_as_#{ term }/).any?
-            model = File.basename(filename)[0..-4].pluralize.to_sym
-#            _logger_warn "adding #{model} to #{ term }"
-            class_variable_set "@@#{ term.pluralize }", class_variable_get("@@#{ term.pluralize }") << model
-          end
+          require filename if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/)
         end
       end
     end
     @@loaded = true
   end  
+
+  # Include Model in CMS "acts_as" list
+  # TODO: documentation
+  def self.register_model(klass, acts_as)
+    return unless MODEL_ACTS_AS.include?(acts_as)
+#            _logger_warn "adding #{klass} to #{ acts_as }"
+    class_variable_set "@@#{ acts_as.to_s.pluralize }", class_variable_get("@@#{ acts_as.to_s.pluralize }") | Array(klass.to_s.tableize.to_sym)
+  end
 end
 
 module Rails #:nodoc: all
