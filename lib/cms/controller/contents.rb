@@ -66,6 +66,9 @@ module CMS
       # Show this Content
       #   GET /:content_type/:id
       def show
+        # Image thumbnails. &thumbnail=thumb
+        @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if params[:thumbnail] && @content.respond_to?(:thumbnails)
+
         respond_to do |format|
           format.html # show.rhtml
           format.xml { render :xml => @content.to_xml }

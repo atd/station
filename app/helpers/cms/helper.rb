@@ -31,8 +31,10 @@ module CMS
     def icon_image(object)
       if object.is_a?(CMS::Post)
         icon_image object.content
-      elsif object.is_a?(Photo) && !object.new_record?
-        media_post_path(post, :thumbnail => 'icon')
+      elsif object.respond_to?(:thumbnails) && 
+            object.respond_to?(:mime_type) && 
+            ! object.new_record?
+        "#{ formatted_polymorphic_path(object, object.mime_type.to_sym) }?thumbnail=icon"
       else
         file = object.respond_to?(:mime_type) && object.mime_type ?
           object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
