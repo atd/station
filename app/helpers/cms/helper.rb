@@ -34,7 +34,7 @@ module CMS
       elsif object.respond_to?(:thumbnails) && 
             object.respond_to?(:mime_type) && 
             ! object.new_record?
-        "#{ formatted_polymorphic_path(object, object.mime_type.to_sym) }?thumbnail=icon"
+        "#{ formatted_polymorphic_path([object, object.mime_type.to_sym]) }?thumbnail=icon"
       else
         file = object.respond_to?(:mime_type) && object.mime_type ?
           object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
