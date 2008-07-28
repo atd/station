@@ -5,7 +5,7 @@ Rails::Generator::Commands::Create.class_eval do
     logger.route "CMS"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-        "#{ match }\nmap.cms\n"
+        "#{ match }\n  map.cms\n"
       end
     end
   end
@@ -13,7 +13,7 @@ end
 
 Rails::Generator::Commands::Destroy.class_eval do
   def route_cms
-    look_for = "\nmap.cms\n"
+    look_for = "\n  map.cms\n"
 
     logger.route "CMS"
     unless options[:pretend]

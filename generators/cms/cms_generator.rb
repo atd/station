@@ -9,6 +9,10 @@ class CmsGenerator < Rails::Generator::Base
       m.directory 'public/javascripts/cms'
       m.directory 'public/stylesheets/cms'
       m.directory 'public/images/cms'
+
+      m.file 'public/403.html', 'public/403.html'
+
+      m.route_cms
       
       unless options[:skip_migration]
         m.migration_template 'migration.rb', 'db/migrate',
