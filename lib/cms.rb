@@ -32,14 +32,15 @@ module CMS
           if CMS::Agent.activation_class
             activate 'activate/:activation_code', 
                      :controller => CMS::Agent.activation_class.to_s.tableize, 
-                     :method => 'activate', 
+                     :action => 'activate', 
                      :activation_code => nil
             forgot_password 'forgot_password', 
                      :controller => CMS::Agent.activation_class.to_s.tableize,
-                     :method => 'forgot_password'
-            reset_password 'reset_password', 
+                     :action => 'forgot_password'
+            reset_password 'reset_password/:reset_password_code', 
                            :controller => CMS::Agent.activation_class.to_s.tableize,
-                           :method => 'reset_password'
+                           :action => 'reset_password',
+                           :reset_password_code => nil
           end
 
           resources :"cms/posts", :member => { :media => :any,
