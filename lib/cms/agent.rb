@@ -8,6 +8,12 @@ module CMS
       base.extend ClassMethods
     end
 
+    # Returns the first model that acts as Agent, has activation enabled and 
+    # login and password
+    def self.activation_class
+      CMS.agents.map(&:to_class).select{ |a| a.agent_options[:activation] && a.agent_options[:authentication].include?(:login_and_password) }.first
+    end
+
     module ClassMethods
       # Provides an ActiveRecord model with Agent capabilities
       #

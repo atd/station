@@ -29,12 +29,25 @@ module CMS
           login 'login',   :controller => 'cms/sessions', :action => 'new'
           logout 'logout', :controller => 'cms/sessions', :action => 'destroy'
 
-          resources :"cms/anonymous_agents"
+          if CMS::Agent.activation_class
+            activate 'activate/:activation_code', 
+                     :controller => CMS::Agent.activation_class.to_s.tableize, 
+                     :method => 'activate', 
+                     :activation_code => nil
+            forgot_password 'forgot_password', 
+                     :controller => CMS::Agent.activation_class.to_s.tableize,
+                     :method => 'forgot_password'
+            reset_password 'reset_password', 
+                           :controller => CMS::Agent.activation_class.to_s.tableize,
+                           :method => 'reset_password'
+          end
 
           resources :"cms/posts", :member => { :media => :any,
                                                    :edit_media => :get,
                                                    :details => :any }
           resources :"cms/categories"
+
+          resources *((CMS.contents | CMS.agents) - CMS.containers)
 
           resources(*(CMS.containers - Array(:"cms/sites"))) do |container|
             container.resources(*CMS.contents)
