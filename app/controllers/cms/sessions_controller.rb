@@ -6,8 +6,6 @@ module CMS
   class SessionsController < ApplicationController
     include CMS::Controller::Authentication unless self.ancestors.include? CMS::Controller::Authentication
 
-    layout 'login'
-
     # render new.rhtml
     def new
     end
