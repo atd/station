@@ -1,7 +1,8 @@
 module CMS
   module SortableHelper
-    def sortable_list(object_list, object_path)
-      object_class = Array(object_path).last.class
+    # Renders Sortable List table
+    def sortable_list(object_list, object_class, options => {})
+      object_path = (Array(options[:path]) + Array(object_class.new)).compact
 
       returning "" do |html|
         html << '<table>'
@@ -9,8 +10,8 @@ module CMS
         for column in object_class.sortable_columns
           html << '<th>'
           unless column.no_sort?
-            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column.order }&direction=desc", :class => "sortable desc" )
-            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column.order }&direction=asc", { :class => "sortable asc" })
+            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column.order }&direction=desc#{ options[:append] }", :class => "sortable desc" )
+            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column.order }&direction=asc#{ options[:append] }", { :class => "sortable asc" })
           end
           html << "<label>#{ column.name.t }</label>"
           html << "</th>"
