@@ -6,13 +6,13 @@ module CMS
       returning "" do |html|
         html << '<table>'
         html << '<tr>'
-        for column in object_class.sortable_options[:columns]
+        for column in object_class.sortable_columns
           html << '<th>'
-          unless column[:no_sort]
-            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column[:content] }&direction=desc", :class => "sortable desc" )
-            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column[:content] }&direction=asc", { :class => "sortable asc" })
+          unless column.no_sort?
+            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column.order }&direction=desc", :class => "sortable desc" )
+            html << link_to("", "#{ polymorphic_path(object_path) }?order=#{ column.order }&direction=asc", { :class => "sortable asc" })
           end
-          html << "<label>#{ column[:name] }</label>"
+          html << "<label>#{ column.name.t }</label>"
           html << "</th>"
         end
         html << '<th class="list_actions">'
@@ -20,8 +20,8 @@ module CMS
         html << '</tr>'
         for object in object_list
           html << "<tr class=\"style_#{ cycle('0', '1') }\">"
-          for column in object_class.sortable_options[:columns]
-            html << "<td>#{ sanitize column_data(object, column).to_s }</td>"
+          for column in object_class.sortable_columns
+            html << "<td>#{ sanitize column.data(self, object) }</td>"
           end
           html << '<td class="list_actions">'
           html << link_to(image_tag( "/images/cms/actions/show.png", {:alt => "Show".t} ), polymorphic_path(object))
@@ -31,17 +31,6 @@ module CMS
           html << '</tr>'
         end
         html << '</table>'
-      end
-    end
-
-    private
-
-    def column_data(object, column) #:nodoc:
-      case column[:content]
-      when Symbol
-        object.send(column[:content])
-      when Proc
-        column[:content].call(self, object)
       end
     end
   end
