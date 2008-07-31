@@ -1,6 +1,13 @@
 module CMS
   module SortableHelper
     # Renders Sortable List table
+    #
+    # object_list:: an Array of objects to be listed
+    # object_class:: the class that acts_as_sortable and defines sortable Columns
+    #
+    # Available options are:
+    # * path: Array of objects that will be appended to polymorphic_path to build the collection path. Useful for nested resources.
+    # * append: Append string to sortable requests. Example: <tt>"&q=#{ params[:q] }"</tt>
     def sortable_list(object_list, object_class, options = {})
       object_path = (Array(options[:path]) + Array(object_class.new)).compact
 
