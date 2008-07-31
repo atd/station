@@ -1,7 +1,7 @@
 module CMS
   module SortableHelper
     # Renders Sortable List table
-    def sortable_list(object_list, object_class, options => {})
+    def sortable_list(object_list, object_class, options = {})
       object_path = (Array(options[:path]) + Array(object_class.new)).compact
 
       returning "" do |html|
