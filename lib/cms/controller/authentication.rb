@@ -194,7 +194,7 @@ module CMS
   
         # Attempt to authenticate by an expiring token in the cookie.
         def login_from_cookie #:nodoc:
-          ( CMS.agent_classes - CMS::AnonymousAgent ).each do |agent_class|
+          ( CMS.agent_classes - Array(CMS::AnonymousAgent) ).each do |agent_class|
             agent = agent_class.find_by_remember_token(cookies[:auth_token])
             if agent && agent.remember_token?
               agent.remember_me
