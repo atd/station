@@ -22,7 +22,7 @@ module CMS
         for object in object_list
           html << "<tr class=\"style_#{ cycle('0', '1') }\">"
           for column in object_class.sortable_columns
-            html << "<td>#{ sanitize column.data(self, object) }</td>"
+            html << "<td>#{ sanitize column.data(self, object).to_s }</td>"
           end
           html << '<td class="list_actions">'
           html << link_to(image_tag( "/images/cms/actions/show.png", {:alt => "Show".t} ), polymorphic_path(object))
