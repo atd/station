@@ -67,8 +67,16 @@ module CMS
 
     module InstanceMethods
       # All Containers in which this Agent has a Performance
-      def stages
-        agent_performances.map(&:container).uniq
+      #
+      # Can pass options to the list:
+      # type:: the class of the Containers requested
+      def stages(options = {})
+        returning agent_performances.map(&:container).uniq do |stages|
+          if options[:type]
+            type = options[:type].to_s.classify.constantize
+            stages = stages.select{ |s| s.is_a?(type) }
+          end
+        end
       end
 
       def service_documents
