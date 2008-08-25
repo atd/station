@@ -10,10 +10,10 @@
 <meta name="description" content="<%= @description %>" />
 <meta name="keywords" content="red,social" />
 <meta name="author" content="atd, nogates / Design: Gnoyxs - http://www.gnoxys.net/" />
-<%= stylesheet_link_tag "cms/move", :media => 'all' %>
+<%= stylesheet_link_tag "move", :media => 'all', :plugin => 'cmsplugin' %>
 
 <%= javascript_include_tag :defaults %>
-<%= javascript_include_tag "cms/move" %>
+<%= javascript_include_tag "move", :plugin => 'cmsplugin' %>
 <%= javascript_include_tag :fckeditor if @uses_fckeditor %>
 
 <% if @collection_path -%>
@@ -40,7 +40,7 @@
     <div id="logo">
       <div id="logo_top"></div>
       <div id="logo_center">
-        <img src="/images/cms/move_static.png" alt="[move static logo]" id="move_logo" onclick="this.src='/images/cms/move_dynamic.png';" />
+        <%= image_tag 'move_static.png', :plugin => 'cmsplugin', :alt => "[move static logo]", :id => "move_logo", :onclick => "this.src='#{ image_path('move_dynamic.png', :plugin => 'cmsplugin') }';" %>
       </div>
       <div id="logo_bottom">
         <%= link_to("Public".t, root_path, {:id => "logo_public_content"}) %>
@@ -58,7 +58,7 @@
       <div id="session_center">
         <div id="session_center_inside">
          <% if authenticated? -%>
-         <%= link_to("Site configuration".t, edit_cms_site_path) %><br />
+         <%= link_to("Site configuration".t, edit_site_path) %><br />
          <%= link_to("Log out".t, logout_path) %>
          <% else -%>
          <%= "%s or %s" / [ link_to("Sign in".t, login_path), link_to("Join".t, new_user_path) ] %>

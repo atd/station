@@ -25,7 +25,9 @@ module CMS
       # * no_sort: The column is not sortable
       # Symbol:: Takes defaults for each column attribute
       def acts_as_sortable(options = {})
-        options[:columns] ||= self.columns.map{ |c| c.name.to_sym }
+        options[:columns] ||= self.table_exists? ? 
+          self.columns.map{ |c| c.name.to_sym } :
+          Array.new
 
         cattr_reader :sortable_options
         class_variable_set "@@sortable_options", options

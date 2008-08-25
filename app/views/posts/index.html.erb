@@ -1,0 +1,24 @@
+<% content_for :contents_menu do -%>
+  <% if current_container -%>
+    <%= new_content_button %>
+    <%= contents_menu_separator %>
+  <% end -%>
+  <%= contents_menu %>
+  <%= contents_menu_separator %>
+  <%= content_info %>
+<% end -%>
+
+<h2><%= title %></h2>
+<div class="paginator"><%= will_paginate(@posts, {:prev_label => "«", :next_label => "»"}) %></div>
+<div id="interaction_view">
+
+  <div id="list_view">
+  <% for post in @posts %>
+    <div id="post_<%= post.id %>" class="post <%= post.content.class.to_s.tableize %>">
+      <%= link_to_remote "<img src=\"#{icon_image(post)}\"/>#{sanitize(post.title)} #{params[:kk]}", :url => details_post_path(post), :complete => "$('move_logo').src='#{ image_path 'move_static.png', :plugin => 'move' }';changeActiveContent('#{post.id}');", :loading => "$('move_logo').src='#{ image_path('move_dynamic.gif', :plugin => 'move') }';" %>
+      <%= draggable_element("post_"+post.id.to_s, :revert => true) %>
+    </div>
+  <% end %>
+  </div>
+</div>
+

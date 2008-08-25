@@ -23,11 +23,11 @@ module CMS
         # When the Content class has STI (Single Table Inheritance), 
         # we have to filter the content type in the "type" attribute from the 
         # Content's table. 
-        # Otherwise, we can just filter Content type in cms_posts.content_type field
+        # Otherwise, we can just filter Content type in posts.content_type field
         if self.resource_class.column_names.include?("type")
           conditions = [ "#{ self.resource_class.table_name }.type = ?", self.resource_class.to_s ]
         else
-          conditions = [ "cms_posts.content_type = ?", self.resource_class.to_s ]
+          conditions = [ "posts.content_type = ?", self.resource_class.to_s ]
         end
     
         if @container
@@ -43,11 +43,11 @@ module CMS
           @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
         else
           @title ||= self.resource_class.translated_named_collection
-          @posts = CMS::Post.paginate :all,
-                                      :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
-                                      :conditions => conditions,
-                                      :page =>  params[:page],
-                                      :order => "updated_at DESC"
+          @posts = Post.paginate :all,
+                                 :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
+                                 :conditions => conditions,
+                                 :page =>  params[:page],
+                                 :order => "updated_at DESC"
           @updated = @posts.blank? ? Time.now : @posts.first.updated_at
         end
     
@@ -57,7 +57,7 @@ module CMS
           respond_to do |format|
             format.html
             format.js
-            format.xml { render :xml => @posts.to_xml.gsub(/cms\/posts/, "#{ self.resource_class.to_s.tableize }").gsub(/cms\/post/, "#{ self.resource_class.to_s.underscore }") }
+            format.xml { render :xml => @posts.to_xml }
             format.atom
           end
         end
@@ -96,10 +96,10 @@ module CMS
       #   GET /:container_type/:container_id/contents/new
       #   GET /contents/new
       def new
-        @post = CMS::Post.new
+        @post = Post.new
         @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
         @title ||= "New #{ controller_name.singularize.humanize }".t
-        render :template => "cms/posts/new"
+        render :template => "posts/new"
       end
     
       # Create new Content
@@ -118,7 +118,7 @@ module CMS
         # and find_or_create_by_sha1
         @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.create(params[:content])
     
-        @post = CMS::Post.new(params[:post].merge({ :agent => current_agent,
+        @post = Post.new(params[:post].merge({ :agent => current_agent,
                                                     :container => @container,
                                                     :content => @content }))
     
@@ -131,13 +131,13 @@ module CMS
             else
               @content.destroy unless @content.new_record?
               @title ||= "New #{ controller_name.singularize.humanize }".t
-              render :template => "cms/posts/new"
+              render :template => "posts/new"
             end
           }
     
           format.atom {
             if !@content.new_record? && @post.save
-    	  headers["Location"] = formatted_cms_post_url(@post, :atom)
+    	  headers["Location"] = formatted_post_url(@post, :atom)
     	  headers["Content-type"] = 'application/atom+xml'
               render :partial => "posts/entry",
                                  :status => :created,

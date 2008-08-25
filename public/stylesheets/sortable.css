@@ -1,0 +1,53 @@
+#interaction_screen table {
+      clear:            both;
+      width:            100%;
+      margin:           auto;
+}
+
+#interaction_screen table th {
+        background-color: #E7E7E7;
+        font-size:        1.1em;
+        color:            #080808;
+        padding:          5px 3px 5px 3px;
+        border:           2px solid #E7E7E7;
+}
+
+#interaction_screen table th a.sortable {
+          min-height:           20px;
+          height:               20px;
+          max-height:           20px;
+          width:                13px;
+          min-width:            13px;
+          max-width:            13px;
+          background-position:  top left;
+          background-color:     transparent;
+          background-repeat:    no-repeat;
+          display:              block;
+          float:                right;
+}
+
+#interaction_screen table th a.asc {
+          background-image:     url('../images/sortable/asc.png');
+}
+
+#interaction_screen table th a.desc {
+          background-image:     url('../images/sortable/desc.png');
+}
+
+#interaction_screen table tr.style_0 {
+          background-color: white;
+}
+
+#interaction_screen table tr.style_1 {
+          background-color: #F8DDDD;
+}
+
+#interaction_screen table td {
+          padding-top: 2px;
+          padding-bottom: 2px;
+          padding-left: 10px;
+          font-size: 1em;
+          color: #424242;
+}
+
+

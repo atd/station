@@ -27,18 +27,18 @@ module CMS
         class_variable_set "@@container_options", options
 
         has_many :container_posts, 
-                 :class_name => "CMS::Post",
+                 :class_name => "Post",
                  :dependent => :destroy,
                  :as => :container
 
 
         has_many :container_performances,
-                 :class_name => "CMS::Performance",
+                 :class_name => "Performance",
                  :dependent => :destroy,
                  :as => :container
 
         has_many :container_categories,
-                 :class_name => "CMS::Category",
+                 :class_name => "Category",
                  :dependent => :destroy,
                  :as => :container
 

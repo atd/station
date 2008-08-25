@@ -44,7 +44,7 @@ module CMS
         class_variable_set "@@content_options", options
 
         has_many :content_posts, 
-                 :class_name => "CMS::Post",
+                 :class_name => "Post",
                  :dependent => :destroy,
                  :as => :content
 

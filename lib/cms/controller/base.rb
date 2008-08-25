@@ -10,7 +10,7 @@ module CMS
       end
 
       def current_site
-        @current_site ||= CMS::Site.current
+        @current_site ||= Site.current
       end
       
       protected

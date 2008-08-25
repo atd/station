@@ -1,4 +1,0 @@
-page.replace_html :content_info_center, :partial => "cms/posts/post_details"
-#page.visual_effect :highlight, :menu_post_articles_container
-
-#

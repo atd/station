@@ -1,0 +1,20 @@
+<p>
+  <b><%= "Title".t %>: </b>
+  <%= text_field_tag :title, params[:title], :size => 50 %>
+</p>
+
+<p>
+  <b><%= "Description".t %>:</b>
+  <%= text_area_tag :description, params[:description], :width => '100%', :height => '300px' %>
+</p>
+
+<% if params[:form_type] %>
+  <%= render :partial => "#{ params[:form_type] }_form" %>
+  <%= hidden_field_tag :form_type, params[:form_type] %>
+<% else %>
+  <%= render :partial => "#{ @content.class.to_s.tableize }/form" %>
+<% end %>
+
+<%= render :partial => "categories_form" %>
+
+<%= render :partial => "permissions_form", :object => form %>

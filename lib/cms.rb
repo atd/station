@@ -7,55 +7,9 @@ module CMS
   class << self
     def enable #:nodoc:
       self.enable_mime_types
-      enable_routes
       enable_active_record
       self.autoload
       self.enable_param_parsers
-    end
-
-    def enable_routes
-      ActionController::Routing::RouteSet::Mapper.class_eval do
-        def cms
-          resource :"cms/site"
-
-          open_id_complete 'cms/session', 
-            { :controller => 'cms/sessions', 
-              :action     => 'create',
-              :conditions => { :method => :get },
-              :open_id_complete => true }
-
-          resource :"cms/session"
-
-          login 'login',   :controller => 'cms/sessions', :action => 'new'
-          logout 'logout', :controller => 'cms/sessions', :action => 'destroy'
-
-          if CMS::Agent.activation_class
-            activate 'activate/:activation_code', 
-                     :controller => CMS::Agent.activation_class.to_s.tableize, 
-                     :action => 'activate', 
-                     :activation_code => nil
-            forgot_password 'forgot_password', 
-                     :controller => CMS::Agent.activation_class.to_s.tableize,
-                     :action => 'forgot_password'
-            reset_password 'reset_password/:reset_password_code', 
-                           :controller => CMS::Agent.activation_class.to_s.tableize,
-                           :action => 'reset_password',
-                           :reset_password_code => nil
-          end
-
-          resources :"cms/posts", :member => { :media => :any,
-                                                   :edit_media => :get,
-                                                   :details => :any }
-          resources :"cms/categories"
-
-          resources *((CMS.contents | CMS.agents) - CMS.containers)
-
-          resources(*(CMS.containers - Array(:"cms/sites"))) do |container|
-            container.resources(*CMS.contents)
-            container.resources :"cms/posts", :"cms/categories"
-          end
-        end
-      end
     end
 
     def enable_active_record #:nodoc:

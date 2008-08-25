@@ -9,12 +9,6 @@ config.after_initialize do
   # Controllers
   ActionController::Base.send(:include, CMS::Controller::Base)
   ActionController::Base.send(:include, CMS::Controller::Authentication)
-
-  # Helpers
-  ActionView::Base.send(:include, CMS::Helper)
-
-  # Views
-  ActionController::Base.append_view_path(File.dirname(__FILE__) + '/app/views/')
 end
 
 unless defined? CMS

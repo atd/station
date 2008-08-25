@@ -1,0 +1,18 @@
+<h2><%= title("New Post".t) %></h2>
+
+<% unless error_messages_for(:post).blank? && error_messages_for(:content).blank? -%>
+<div class="errors">
+  <%= error_messages_for :post %>
+  <%= error_messages_for :content %>
+</div>
+<% end -%>
+
+<% form_for(:post, 
+            :url => polymorphic_path([current_container, @content.class.new].compact), 
+            :html => { :multipart => true }) do |f| -%>
+
+  <%= render :partial => "form", :object => f %>
+
+  <%= submit_tag "Create".t %>
+
+<% end -%>
