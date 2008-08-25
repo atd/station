@@ -71,12 +71,12 @@ module CMS
       # Can pass options to the list:
       # type:: the class of the Containers requested
       def stages(options = {})
-        returning agent_performances.map(&:container).uniq do |stages|
-          if options[:type]
-            type = options[:type].to_s.classify.constantize
-            stages = stages.select{ |s| s.is_a?(type) }
-          end
+        #FIXME: with_scope
+        if options[:type]
+          conditions = [ "container_type = ?", options[:type].to_s.classify ]
         end
+
+        agent_performances.find(:all, :conditions => conditions).map(&:container).uniq
       end
 
       def service_documents
