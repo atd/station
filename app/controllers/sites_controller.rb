@@ -4,13 +4,13 @@ class SitesController < ApplicationController
   # GET /site
   # GET /site.xml
   def show
-    redirect_to edit_cms_site_path
+    redirect_to edit_site_path
   end
 
   # GET /site/new
   # GET /site/new.xml
   def new
-    redirect_to edit_cms_site_path
+    redirect_to edit_site_path
   end
 
   # GET /site/edit
