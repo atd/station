@@ -53,7 +53,7 @@ module CMS
           @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
 
-        @containers = current_user.containers
+        @containers = current_user.stages
     
         if block
           yield
