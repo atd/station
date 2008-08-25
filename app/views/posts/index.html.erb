@@ -15,7 +15,7 @@
   <div id="list_view">
   <% for post in @posts %>
     <div id="post_<%= post.id %>" class="post <%= post.content.class.to_s.tableize %>">
-      <%= link_to_remote "<img src=\"#{icon_image(post)}\"/>#{sanitize(post.title)} #{params[:kk]}", :url => details_post_path(post), :complete => "$('move_logo').src='#{ image_path 'move_static.png', :plugin => 'move' }';changeActiveContent('#{post.id}');", :loading => "$('move_logo').src='#{ image_path('move_dynamic.gif', :plugin => 'move') }';" %>
+      <%= link_to_remote "<img src=\"#{icon_image(post)}\"/>#{sanitize(post.title)} #{params[:kk]}", :url => details_post_path(post), :complete => "$('move_logo').src='#{ image_path 'move_static.png', :plugin => 'cmsplugin' }';changeActiveContent('#{post.id}');", :loading => "$('move_logo').src='#{ image_path('move_dynamic.gif', :plugin => 'cmsplugin') }';" %>
       <%= draggable_element("post_"+post.id.to_s, :revert => true) %>
     </div>
   <% end %>
