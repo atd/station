@@ -1,4 +1,6 @@
-resource :site
+resource :site do |site|
+  site.resources :categories
+end
 
 open_id_complete 'session', 
   { :controller => 'sessions', 
