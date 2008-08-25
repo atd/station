@@ -15,7 +15,7 @@ module CMS
       #   GET /contents
       def index(&block)
         # The container must support this Content
-        unless (@container && @container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
+        unless (current_container && current_container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
           render :text => "Doesn't support this Content type", :status => 400
           return
         end
@@ -30,17 +30,18 @@ module CMS
           conditions = [ "posts.content_type = ?", self.resource_class.to_s ]
         end
     
-        if @container
-          @title ||= "#{ self.resource_class.translated_named_collection } - #{ @container.name }"
+        if current_container
+          @title ||= "#{ self.resource_class.translated_named_collection } - #{ current_container.name }"
           # All the Contents this Agent can read in this Container
-          @collection = @container.container_posts.find(:all,
-                                                        :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
-                                                        :conditions => conditions,
-                                                        :order => "updated_at DESC")
+          @collection = current_container.container_posts.find(:all,
+                          :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
+                          :conditions => conditions,
+                          :order => "updated_at DESC")
     
           # Paginate them
           @posts = @collection.paginate(:page => params[:page], :per_page => self.resource_class.content_options[:per_page])
-          @updated = @collection.blank? ? @container.updated_at : @collection.first.updated_at
+          @updated = @collection.blank? ? current_container.updated_at : @collection.first.updated_at
+          @agents = current_container.actors
         else
           @title ||= self.resource_class.translated_named_collection
           @posts = Post.paginate :all,
@@ -49,7 +50,10 @@ module CMS
                                  :page =>  params[:page],
                                  :order => "updated_at DESC"
           @updated = @posts.blank? ? Time.now : @posts.first.updated_at
+          @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
+
+        @containers = current_user.containers
     
         if block
           yield
