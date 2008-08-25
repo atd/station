@@ -31,9 +31,9 @@ module SortableHelper
           html << "<td>#{ sanitize column.data(self, object).to_s }</td>"
         end
         html << '<td class="list_actions">'
-        html << link_to(image_tag("/images/actions/show.png", :alt => "Show".t, :plugin => 'cmsplugin'), polymorphic_path(object))
-        html << link_to(image_tag("/images/actions/edit.png", :alt => "Edit".t, :plugin => 'cmsplugin'), edit_polymorphic_path(object))
-        html << link_to(image_tag("/images/actions/delete.png", :alt => "Delete".t, :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => 'Are you sure?'.t, :method => :delete)
+        html << link_to(image_tag("actions/show.png", :alt => "Show".t, :plugin => 'cmsplugin'), polymorphic_path(object))
+        html << link_to(image_tag("actions/edit.png", :alt => "Edit".t, :plugin => 'cmsplugin'), edit_polymorphic_path(object))
+        html << link_to(image_tag("actions/delete.png", :alt => "Delete".t, :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => 'Are you sure?'.t, :method => :delete)
         html << '</td>'
         html << '</tr>'
       end
