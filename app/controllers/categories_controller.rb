@@ -57,7 +57,7 @@ class CategoriesController < ApplicationController
   # POST /:container_type/:container_id/categories
   # POST /:container_type/:container_id/categories.xml
   def create
-    @category = @container.container_categories.new(params[:cms_category])
+    @category = @container.container_categories.new(params[:category])
 
     respond_to do |format|
       if @category.save
@@ -77,7 +77,7 @@ class CategoriesController < ApplicationController
   # PUT /categories/1.xml
   def update
     respond_to do |format|
-      if @category.update_attributes(params[:cms_category])
+      if @category.update_attributes(params[:category])
         flash[:valid] = 'Category updated'.t
         format.html { redirect_to(@category) }
         format.xml  { head :ok }
