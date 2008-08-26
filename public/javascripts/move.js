@@ -1,166 +1,6 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-// From OpenID server
-
-var CategoryForm = {
-  options: { duration: 0.6, activeClass: 'profile-enabled', inactiveClass: 'profile-disabled' },
-
-  set_ids: function(id) {
-    this.id = id;
-    this.category_id = 'category_content_' + id;
-    this.toggle_id = 'toggle_' + id;
-  },
-  
-  check_states: function() {
-    this.expanded =  Element.Methods.visible(this.category_id);
-    this.active =    $(this.category_id).hasClassName(this.options.activeClass);
-  },
-  
-  expand: function() {
-    $(this.category_id).visualEffect('blind_down', this.options);
-    $(this.toggle_id).src = '/images/buttons/contract_off.gif';
-  },
-  
-  collapse: function() {
-    $(this.category_id).visualEffect('blind_up', this.options);
-    $(this.toggle_id).src = '/images/buttons/expand_off.gif';
-  },
-  
-  update: function(id) {
-    this.set_ids(id);
-    this.check_states();
-    
-    this.deactivate(this.id);
-    $(this.category_id).visualEffect('highlight', { duration: 0.4, queue: 'front' });
-  },
-  
-  deactivate: function(id) {
-    this.set_ids(id);
-    this.check_states();
-
-    Element.getElementsByClassName(this.category_id,'edit-element').each(function(tr) {
-      $(tr).visualEffect('fade');      
-    });
-
-    $('edit_icon_'+this.id).visualEffect('fade');
-
-    if($('category_title_'+this.id)) {
-      $('category_title_'+this.id).removeClassName(this.options.activeClass);
-      $('delete_icon_'+this.id).visualEffect('fade');
-    }
-    $('category_save_'+this.id).hide();
-    $(this.category_id).removeClassName(this.options.activeClass);
-  },
-  
-  activate: function(id) {
-    this.set_ids(id);
-    this.check_states();
-    //alert('activate: '+ this.id);
-    Element.getElementsByClassName(this.category_id,'edit-element').each(function(tr) {
-      $(tr).visualEffect('appear');
-    });
-    $('edit_icon_'+this.id).visualEffect('appear');
-    // if the category is editable
-    if($('category_title_'+this.id)) {
-      $('category_title_'+this.id).addClassName(this.options.activeClass);
-      $('delete_icon_'+this.id).visualEffect('appear');
-    }
-    $('category_save_'+this.id).show();
-    $(this.category_id).removeClassName(this.options.inactiveClass);
-    $(this.category_id).addClassName(this.options.activeClass);
-  },
-  
-  toggle_collapse: function(id) {
-    this.set_ids(id);
-    this.check_states();
-    
-    if(this.expanded) {
-      this.collapse();
-    } else {
-      this.expand();
-      $(this.category_id).removeClassName('killjoy');
-    }
-  },
-  
-  toggle_collapse_and_activation: function(id) {
-    this.set_ids(id);
-    this.check_states();
-    
-    // collapsed or expanded?
-    if(this.expanded) {
-      if(this.active) {
-        // if(expanded and active), collapse and deactivate
-        this.deactivate(this.id);
-      }
-      this.collapse();
-      $(this.category_id).addClassName('killjoy');
-    } else {
-      if(!this.active) {
-        // if(collapsed and active), expand and activate
-        this.activate(this.id);
-      }
-      this.expand();
-    }
-  },
-  
-  toggle_activation: function(id) {
-    this.set_ids(id);
-    this.check_states();
-
-    if(!this.expanded) {
-      this.expand();
-    }
-
-    if(this.active) {
-      this.deactivate(this.id);
-    } else {
-      this.activate(this.id);
-    }
-  },
-  
-  activate_section: function(id) {
-    this.set_ids(id);
-    this.check_states();
-
-    if(this.expanded && !this.active && !$(this.category_id).hasClassName('killjoy')) {
-      this.activate(this.id);
-    }
-
-  },
-  
-  observe_fields: function(id) {
-    this.set_ids(id);
-    this.check_states();
-    var i = 0;
-    Element.getElementsByClassName(this.category_id,'profile-field').each(function(el) {
-      Event.observe(el, 'click', function(event) { CategoryForm.toggle_activation(id); } );
-    });
-  }
-};
-
-var DataTable = {
-  colorizeRow: function(id) {
-    var profile  = $(id);
-    var previous = profile.getPreviousSibling('tr');
-    if((previous) && (previous.className == 'even')) {
-      profile.removeClassName('even');
-      profile.addClassName('odd');
-    }
-  },
-
-  colorizeRows: function(table_id) {
-    var i = 0;
-    $$('#' + table_id + ' tbody tr').each(function(tr) {
-      if(Element.Methods.visible(tr)) {
-        tr.className = (i % 2 == 0) ? 'even' : 'odd';
-        i++;
-      }
-    });
-  }
-};
-
-
 //Function for over the content information
 
 function showContentInfo(evnt,layer) {
@@ -221,7 +61,7 @@ setTimeout(moveCommand, 50);
 //always change the image
 if (stateMove==0) {
 $(what+'_botton_'+direction).setStyle({
-    backgroundImage: "url('../images/move_css/box_arrow_"+direction+".png')"
+    backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+".png')"
     });
 }
 
@@ -251,7 +91,7 @@ function makeScroll(direction,what) {
     //the botton can move 
     //change image
     $(what+'_botton_'+direction).setStyle({
-      backgroundImage: "url('../images/move_css/box_arrow_"+direction+"_in_move.png')"
+      backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+"_in_move.png')"
     });
     //make move 
     resultedMargin=marginLeftWrapperArea+10;
@@ -261,7 +101,7 @@ function makeScroll(direction,what) {
     } else {
     //not more move, change the image 
     $(what+'_botton_'+direction).setStyle({
-      backgroundImage: "url('../images/move_css/box_arrow_"+direction+".png')"
+      backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+".png')"
     });
     }
   }
