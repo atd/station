@@ -221,7 +221,7 @@ setTimeout(moveCommand, 50);
 //always change the image
 if (stateMove==0) {
 $(what+'_botton_'+direction).setStyle({
-    backgroundImage: "url('/images/cms/move_css/box_arrow_"+direction+".png')"
+    backgroundImage: "url('../images/move_css/box_arrow_"+direction+".png')"
     });
 }
 
@@ -251,7 +251,7 @@ function makeScroll(direction,what) {
     //the botton can move 
     //change image
     $(what+'_botton_'+direction).setStyle({
-      backgroundImage: "url('/images/cms/move_css/box_arrow_"+direction+"_in_move.png')"
+      backgroundImage: "url('../images/move_css/box_arrow_"+direction+"_in_move.png')"
     });
     //make move 
     resultedMargin=marginLeftWrapperArea+10;
@@ -261,7 +261,7 @@ function makeScroll(direction,what) {
     } else {
     //not more move, change the image 
     $(what+'_botton_'+direction).setStyle({
-      backgroundImage: "url('/images/cms/move_css/box_arrow_"+direction+".png')"
+      backgroundImage: "url('../images/move_css/box_arrow_"+direction+".png')"
     });
     }
   }
