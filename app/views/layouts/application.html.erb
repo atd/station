@@ -14,7 +14,7 @@
 
 <%= javascript_include_tag :defaults %>
 <%= javascript_include_tag "move", :plugin => 'cmsplugin' %>
-<%= javascript_include_tag :fckeditor if @uses_fckeditor %>
+<%= javascript_include_tag "fckeditor" if @uses_fckeditor %>
 
 <% if @collection_path -%>
 <link href="<%= @collection_path + '.atom' %>" rel="alternate" title="<%= @title %>" type="application/atom+xml" />
