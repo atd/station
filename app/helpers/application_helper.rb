@@ -27,6 +27,16 @@ module ApplicationHelper
     post.agent.login
   end
 
+  # The path to the icon image for this object.
+  #
+  # If the object is a Post, returns the path for the icon of its content. 
+  # If it is an image, to the icon thumbnail. 
+  #
+  # Otherwise, it looks for a file based on mime type or, if the object 
+  # hasn't mime type, the class name tableized.
+  #
+  # Finally, it first looks for the icon file in /public/images/icons, and at last 
+  # in /public_assets/cmsplugin/images/icons
   def icon_image(object)
     if object.is_a?(Post)
       icon_image object.content
@@ -38,7 +48,11 @@ module ApplicationHelper
       file = object.respond_to?(:mime_type) && object.mime_type ?
         object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
         object.class.to_s.underscore
-      image_path "icons/#{ file }.png", :plugin => 'cmsplugin'
+      file = "icons/#{ file }.png"
+
+      File.exists?("#{ RAILS_ROOT }/public/images/#{ file }") ?
+        image_path(file) :
+        image_path(file, :plugin => 'cmsplugin')
     end
   end
 
