@@ -26,7 +26,7 @@ class PostsController < ApplicationController
 
     @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
     container_classes = CMS.container_classes - ( CMS.agent_classes + [ Site, Post ] )
-    @containers = container_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
+    @containers = container_classes.map(&:all).flatten.uniq.sort{ |a, b| a.name <=> b.name }
 
     respond_to do |format|
       format.html
