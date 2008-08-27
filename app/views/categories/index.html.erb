@@ -1,7 +1,7 @@
 <h2><%= title %></h2>
 
-<%= sortable_list(@categories, Category, :path => current_container.to_ppat) %>
+<%= sortable_list(@categories, Category, :path => current_container.to_ppath) %>
 
 <br />
 
-<%= link_to 'New category'.t, new_polymorphic_path([ @container, Category.new ]) %>
+<%= link_to 'New category'.t, new_polymorphic_path([ @container.to_ppath, Category.new ]) %>
