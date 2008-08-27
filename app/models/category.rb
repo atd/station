@@ -1,7 +1,13 @@
 class Category < ActiveRecord::Base
-  acts_as_sortable :columns => [ { :name => "Name", :content => :name },
-                                 { :name => "Description", :content => :description },
-                                 { :name => "Container", :content => proc { |helper, category| helper.link_to(category.container.name, helper.polymorphic_path(category.container)) }, :no_sort => true } ]
+  acts_as_sortable :columns => [ :name,
+                                 :description,
+                                 { :name => "Container", 
+                                   :content => proc { |helper, category| 
+    container_path = category.container.to_ppath.is_a? Symbol ?
+      helper.send "#{ category.container.to_ppath }_path" :
+      helper.polymorphic_path(category.container.to_ppath)
+    helper.link_to(category.container.name, container_path) },
+                                   :no_sort => true } ]
 
   belongs_to :container, 
              :polymorphic => true
