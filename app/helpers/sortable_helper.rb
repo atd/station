@@ -5,13 +5,18 @@ module SortableHelper
   # object_class:: the class that acts_as_sortable and defines sortable Columns
   #
   # Available options are:
-  # * path: Array of objects that will be appended to polymorphic_path to build the collection path. Useful for nested resources.
-  # * append: Append string to sortable requests. Example: <tt>"&q=#{ params[:q] }"</tt>
+  # path:: Array of objects that will be appended to polymorphic_path to build the collection path. Useful for nested resources.
+  # append:: Append string to sortable requests. Example: <tt>"&q=#{ params[:q] }"</tt>
+  # table_class:: Class of the html +table+
+  # table_id:: ID of the html +table+
+  # icon_path:: Path to action icons (not implemented)
   def sortable_list(object_list, object_class, options = {})
     object_path = (Array(options[:path]) + Array(object_class.new)).compact
+    options[:table_class] ||= "#{ object_class.to_s.tableize }_list"
+    options[:table_id] ||= "#{ object_class.to_s.tableize }_list"
 
     returning "" do |html|
-      html << '<table>'
+      html << "<table class=\"#{ options[:table_class].to_s }\" id=\"#{ options[:table_id].to_s }\">"
       html << '<tr>'
       for column in object_class.sortable_columns
         html << '<th>'

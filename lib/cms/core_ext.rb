@@ -8,6 +8,15 @@ unless Symbol.instance_methods.include? 'to_class'
   end
 end
 
+# See Site#to_ppath
+unless NilClass.instance_methods.include? 'to_ppath'
+  NilClass.class_eval do
+    def to_ppath
+      nil
+    end
+  end
+end
+
 class ActionController::Resources::Resource
   attr_reader :module_namespace
 
