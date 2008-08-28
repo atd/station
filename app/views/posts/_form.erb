@@ -15,6 +15,6 @@
   <%= render :partial => "#{ @content.class.to_s.tableize }/form" %>
 <% end %>
 
-<%= render :partial => "categories_form" %>
+<%= render :partial => "posts/categories_form" %>
 
-<%= render :partial => "permissions_form", :object => form %>
+<%= render :partial => "posts/permissions_form", :object => form %>

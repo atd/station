@@ -32,6 +32,7 @@ class ContentGenerator < ScaffoldGenerator
       m.template 'index.html.erb', File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
       m.template 'show.html.erb', File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
       m.template 'show.erb', File.join('app/views', controller_class_path, controller_file_name, "_#{ singular_name }.erb")
+      m.template 'new.html.erb', File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template 'form.erb', File.join('app/views', controller_class_path, controller_file_name, "_form.erb")
       m.template 'entry.builder', File.join('app/views', controller_class_path, controller_file_name, "_entry.builder")
 

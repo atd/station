@@ -103,7 +103,6 @@ module CMS
         @post = Post.new
         @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
         @title ||= "New #{ controller_name.singularize.humanize }".t
-        render :template => "posts/new"
       end
     
       # Create new Content
@@ -134,8 +133,9 @@ module CMS
               redirect_to @post
             else
               @content.destroy unless @content.new_record?
+              @post.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
               @title ||= "New #{ controller_name.singularize.humanize }".t
-              render :template => "posts/new"
+              render :action => 'new'
             end
           }
     
