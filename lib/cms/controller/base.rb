@@ -75,6 +75,8 @@ module CMS
         @container || get_container_from_path || get_container_from_session 
       end
 
+      alias_method :get_container, :current_container
+
       # Store the given container_id and container_type in the session.
       def current_container=(new_container)
         if new_container.nil?
