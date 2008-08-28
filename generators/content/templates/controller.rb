@@ -9,5 +9,5 @@ class <%= controller_class_name %>Controller < ApplicationController
   before_filter :needs_container, :only => [ :new, :create ]
       
   # Get <%= controller_class_name.singularize %> in member actions
-  before_filter :get_content, :except => [ :index, :new, :create ]
+  before_filter :get_content, :only => [ :show ]
 end
