@@ -40,9 +40,10 @@ module ApplicationHelper
   def icon_image(object)
     if object.is_a?(Post)
       icon_image object.content
-    elsif object.respond_to?(:thumbnails) && 
+    elsif ! object.new_record? &&
           object.respond_to?(:mime_type) && 
-          ! object.new_record?
+          object.respond_to?(:thumbnails) && 
+          object.thumbnails.find_by_thumbnail('icon')
       "#{ formatted_polymorphic_path([object, object.mime_type.to_sym]) }?thumbnail=icon"
     else
       file = object.respond_to?(:mime_type) && object.mime_type ?
@@ -63,7 +64,7 @@ module ApplicationHelper
       html << "<div id=\"content_new_top\" class=\"block_white_top\">» #{ "New Post".t } </div>"
       html << "<div id=\"content_new_center\" class=\"block_white_center\">"
       for content_type in current_container.accepted_content_types.sort{ |x, y| x.to_s <=> y.to_s }
-        html << link_to("New #{ content_type.to_s.humanize.singularize }".t, polymorphic_path([ current_container.to_ppath, content_type.to_class.new ]), {:class => "action add" })
+        html << link_to("New #{ content_type.to_s.humanize.singularize }".t, new_polymorphic_path([ current_container.to_ppath, content_type.to_class.new ]), {:class => "action add" })
       end
       html << "</div>"
       html << "<div id=\"content_new_bottom\" class=\"block_white_bottom\"></div><br />"
