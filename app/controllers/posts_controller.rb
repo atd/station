@@ -36,7 +36,7 @@ class PostsController < ApplicationController
   end
 
   # Show this Post
-  #   GET /cms/posts/:id
+  #   GET /posts/:id
   def show
     @title ||= @post.title
 
@@ -48,7 +48,7 @@ class PostsController < ApplicationController
       format.xml { render :xml => @post.to_xml(:include => [ :content ]) }
       format.atom { 
         headers["Content-type"] = 'application/atom+xml'
-        render :partial => "cms/posts/entry",
+        render :partial => "posts/entry",
                            :locals => { :post => @post },
                            :layout => false
       }
@@ -62,7 +62,7 @@ class PostsController < ApplicationController
     get_params_title_and_description(@post)
     params[:category_ids] = @post.category_ids
 
-    render :template => "cms/posts/edit"
+    render :template => "posts/edit"
   end
 
   # Update this Post metadata
@@ -91,7 +91,7 @@ class PostsController < ApplicationController
           flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
           redirect_to @post
         else
-          render :template => "cms/posts/edit" 
+          render :template => "posts/edit" 
         end
       }
 
@@ -141,7 +141,7 @@ class PostsController < ApplicationController
             flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
             redirect_to @post
           else
-            render :template => "cms/posts/edit_media"
+            render :template => "posts/edit_media"
           end
         }
 
@@ -162,7 +162,7 @@ class PostsController < ApplicationController
   # Renders form for editing this Post's media
   #   GET /posts/:id/edit_media
   def edit_media
-    render :template => "cms/posts/edit_media"
+    render :template => "posts/edit_media"
   end
 
   # Delete this Post
