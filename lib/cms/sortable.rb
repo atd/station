@@ -16,7 +16,9 @@ module CMS
       #                                    :no_sort => true } ]
       #
       # Options:
-      # * columns:: Array of columns that will be displayed. 
+      # default_order:: Sort by this order by default.
+      # default_direction:: Sort by this direction default
+      # columns:: Array of columns that will be displayed. 
       # Columns can be defined in two ways: 
       # Hash:: Describe each column attributes. These are:
       # * name: Title of the column
@@ -44,8 +46,10 @@ module CMS
 
       # Sanitize user send params
       def sanitize_order_and_direction(order, direction)
-        order ||= "updated_at"
-        direction = direction ? direction.upcase : "DESC"
+        order ||= sortable_options[:default_order] || "updated_at"
+        direction = direction ? 
+          direction.upcase : 
+          sortable_options[:default_direction] || "DESC"
 
         default_order = sortable_options[:default_order] || columns.first.name
         default_direction = sortable_options[:default_direction] || "DESC"
