@@ -162,7 +162,15 @@ module CMS
     
       protected
     
-        def get_content # :nodoc:
+      # Get current content based in the controller name.
+      #
+      # Example:
+      #   class ArticlesController < ActiveRecord::Base
+      #     include CMS::Controller::Contents
+      #
+      #     before_filter :get_content #=> @content = Article.find(params[:id])
+      #   end
+        def get_content
           @content = resource_class.find params[:id]
         end
     end
