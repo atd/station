@@ -89,7 +89,7 @@ module CMS
       end
 
       def get_container_from_path #:nodoc:
-        candidates = params.each_key.select{ |k| k.size > 3 }.select{ |k| k[-3..-1] == '_id' }
+        candidates = params.each_key.select{ |k| k[-3..-1] == '_id' }
 
         for candidate_key in candidates
           begin
