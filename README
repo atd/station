@@ -18,6 +18,8 @@ Project page: http://rubyforge.org/projects/cmsplugin
 * Atom feeds support (RFC 4287)
 * AtomPub protocol support (RFC 5023)
 * Support for multiple Agents, Containers and Contents
+* Categories
+* Sortable lists for models (acts_as_sortable)
 
 == Requirements
 
@@ -28,19 +30,43 @@ Project page: http://rubyforge.org/projects/cmsplugin
   * hpricot
   * will_paginate
 * Rails Plugins:
+  * engines
   * globalize
+  * attachment_fu
 
 == Installation
 
+=== Plugins
+
+You first need Rails Engines:
+  script/plugin install git://github.com/lazyatom/engines.git
+see vendor/plugins/engines/README to finish the instalation
+
+Other plugins you need;
+
+AttachmentFu:
+  script/plugin install git://github.com/technoweenie/attachment_fu.git
+
+Globalize (CMSplugin version; works with Rails 2.1 and fixes some bugs.
+This requirement will disapear when Rails supports globalize):
+  script/plugin install http://cmsplugin.rubyforge.org/svn/globalize
+
 To install CMS plugin, run:
-  script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
+  script/plugin install http://cmsplugin.rubyforge.org/svn/trunk
+
+=== Gems
 
 Run rake gems:install to install the required gems
+
+=== CMS
 
 Generate the CMS infraestructure:
   script/generate cms
 
-And run the migration. Now you can generate Agents and Contents
+And generate and run the migration:
+  script/generate plugin_migration
+
+Now you can generate Agents and Contents
 
 == Agents
 An Agent has the capability to post Contents to Containers. An User is the example of Agent
@@ -116,7 +142,7 @@ Add Mime Types to your config/initializers/mime_types.rb
 
 * Agents authentication support: OAuth
 * Microformats
-* Categories, Tags
+* Tags
 * OpenID server
 * RDF: FOAF + SIOC 
 
