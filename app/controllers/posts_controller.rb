@@ -184,14 +184,15 @@ class PostsController < ApplicationController
     # Find Post using params[:id]
     # 
     # Sets @post, @content and @container variables
-    def get_post #:nodoc:
-      @post = Post.find(params[:id])
-      @content = @post.content
-      @container = @post.container
+    def get_post
+      @post ||= Post.find(params[:id])
+      @content ||= @post.content
+      @container ||= @post.container
     end
 
     # Filter for actions that require the Post has a Content with attached media options
     def post_has_media
+      get_post
       bad_request("Content doesn't have media") unless @post.content.content_options[:has_media]
     end
 
