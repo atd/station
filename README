@@ -52,7 +52,7 @@ This requirement will disapear when Rails supports globalize):
   script/plugin install http://cmsplugin.rubyforge.org/svn/globalize
 
 To install CMS plugin, run:
-  script/plugin install http://cmsplugin.rubyforge.org/svn/trunk
+  script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
 
 === Gems
 
