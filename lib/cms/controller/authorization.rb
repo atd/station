@@ -13,19 +13,19 @@ module CMS
       def self.included(base) #:nodoc:
         base.send :include, CMS::Controller::Authentication unless base.instance_methods.include?('authenticated?')
 
-        base.helper_method :authorization?
+        base.helper_method :authorized?
         class << base
           # Calls not_authorized unless container allows current_agent to perform actions
           def authorization_filter(container, actions, options)
             before_filter options do |controller|
-              controller.not_authorized unless controller.authorization?(container, actions)
+              controller.not_authorized unless controller.authorized?(container, actions)
             end
           end
         end
       end
 
       # Is current_agent authorized to perform all actions in container variable?
-      def authorization?(container, actions)
+      def authorized?(container, actions)
         container = self.instance_variable_get("@#{ container }")
         container.authorizes?(current_agent, actions)
       end
