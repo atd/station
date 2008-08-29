@@ -89,11 +89,10 @@ module CMS
       end
 
       def get_container_from_path #:nodoc:
-        candidates = params.each_key.select{ |k| k[-3..-1] == '_id' }
+        candidates = params.keys.select{ |k| k[-3..-1] == '_id' }
 
         for candidate_key in candidates
           begin
-            logger.debug candidate_key[0..-4]
             candidate_class = candidate_key[0..-4].to_sym.to_class
           rescue NameError
             next
