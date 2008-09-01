@@ -15,7 +15,7 @@ class Post < ActiveRecord::Base
   cattr_reader :collection
   @@collection = :posts
 
-  belongs_to :content,   :polymorphic => true
+  belongs_to :content,   :polymorphic => true, :dependent => :destroy
   belongs_to :container, :polymorphic => true
   belongs_to :agent,     :polymorphic => true
 
