@@ -40,7 +40,7 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 You first need Rails Engines:
   script/plugin install git://github.com/lazyatom/engines.git
-see vendor/plugins/engines/README to finish the instalation
+see vendor/plugins/engines/README to finish the instalation (you have to modify config/environment.rb)
 
 Other plugins you need;
 
