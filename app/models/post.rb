@@ -2,6 +2,10 @@
 # (CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
 #
 # A Post is created when an Agent posts a Content to a Container
+#
+# == Named Scopes
+# content_type:: Select Posts which content_type is the param. Example:
+#   Post.content_type(:articles) #=> posts which content is an Article
 class Post < ActiveRecord::Base
   acts_as_sortable
   acts_as_container :name => :title
