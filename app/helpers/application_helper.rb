@@ -4,11 +4,11 @@ module ApplicationHelper
   include SortableHelper
 
   # Get title in this order:
-  # 1. class variable +@title+, typically assigned in the Controller
-  # 2. string argument 
+  # 1. string argument 
+  # 2. class variable +@title+, typically assigned in the Controller
   # 3. +current_site[:name]+
-  def title(title = "" )
-    @title || (title.any? ? title : current_site[:name])
+  def title(new_title = "" )
+    new_title.any? ? new_title : ( @title || current_site[:name] )
   end
 
   # Renders @notification_area@ div if there is a flash entry for types: 
