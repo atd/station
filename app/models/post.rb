@@ -34,6 +34,25 @@ class Post < ActiveRecord::Base
                         :container_type
   validates_associated  :content
 
+  # ContentType named scope
+  named_scope :content_type, lambda { |content_type|
+    return Hash.new if content_type.blank?
+
+    content_sym = content_type.to_s.tableize.to_sym
+    return Hash.new unless CMS.contents.include?(content_sym)
+    content_class = content_sym.to_class
+    
+    from, conditions = if content_class.column_names.include?("type")
+                         # Content has STI
+                         [ "#{ content_class.table_name }, posts", 
+                           [ "posts.content_id = #{ content_class.table_name }.id AND posts.content_type = ? AND #{ content_class.table_name }.type = ?", content_class.table_name.classify, content_class.to_s ] ]
+                       else
+                         [ "posts", 
+                           [ "posts.content_type = ?", content_class.to_s ] ]
+                       end
+
+    { :select => "posts.*", :from => from, :conditions => conditions }
+  }
 
   # True if the associated Content of this Post has media
   def has_media?

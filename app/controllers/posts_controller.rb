@@ -15,12 +15,12 @@ class PostsController < ApplicationController
     if current_container
       @title ||= "#{ current_container.name } - #{ 'Post'.t('Posts', 99) }"
       
-      @posts = current_container.container_posts.column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :per_page => Post.per_page)
+      @posts = current_container.container_posts.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :per_page => Post.per_page)
 
       @updated = @posts.blank? ? current_container.updated_at : @posts.first.updated_at
     else
       @title ||= 'Post'.t('Posts', 99)
-      @posts = Post.column_sort(params[:order], params[:direction]).paginate(:page =>  params[:page])
+      @posts = Post.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page =>  params[:page])
       @updated = @posts.blank? ? Site.current.created_at : @posts.first.updated_at
     end
 
