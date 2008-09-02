@@ -36,7 +36,7 @@ module CMS
           @collection = current_container.container_posts.find(:all,
                           :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
                           :conditions => conditions,
-                          :order => "updated_at DESC")
+                          :order => "posts.updated_at DESC")
     
           # Paginate them
           @posts = @collection.paginate(:page => params[:page], :per_page => self.resource_class.content_options[:per_page])
@@ -48,7 +48,7 @@ module CMS
                                  :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
                                  :conditions => conditions,
                                  :page =>  params[:page],
-                                 :order => "updated_at DESC"
+                                 :order => "posts.updated_at DESC"
           @updated = @posts.blank? ? Time.now : @posts.first.updated_at
           @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
