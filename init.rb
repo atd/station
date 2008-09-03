@@ -7,8 +7,9 @@ config.gem "mislav-will_paginate", :lib => 'will_paginate',
 
 config.after_initialize do
   # Controllers
-  ActionController::Base.send(:include, CMS::Controller::Base)
-  ActionController::Base.send(:include, CMS::Controller::Authentication)
+  for mod in [ CMS::Controller::Base, CMS::Controller::Authentication, CMS::Controller::Authorization ]
+    ActionController::Base.send(:include, mod) unless ActionController::Base.ancestors.include?(mod)
+  end
 end
 
 unless defined? CMS
