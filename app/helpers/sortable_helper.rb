@@ -39,14 +39,15 @@ module SortableHelper
         end
 
         html << '<td class="list_actions">'
+        actions = options[:actions].clone
         # Show
-        html << link_to(image_tag("actions/show.png", :alt => "Show".t, :plugin => 'cmsplugin'), polymorphic_path(object)) if options[:actions].delete(:show)
+        html << link_to(image_tag("actions/show.png", :alt => "Show".t, :plugin => 'cmsplugin'), polymorphic_path(object)) if actions.delete(:show)
 
         # Delete
-        delete_html = link_to(image_tag("actions/delete.png", :alt => "Delete".t, :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => 'Are you sure?'.t, :method => :delete) if options[:actions].delete(:delete)
+        delete_html = link_to(image_tag("actions/delete.png", :alt => "Delete".t, :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => 'Are you sure?'.t, :method => :delete) if actions.delete(:delete)
 
         # Rest of actions
-        options[:actions].each do |a|
+        actions.each do |a|
           html << link_to(image_tag("actions/#{ a }.png", :alt => a.to_s.humanize.t, :plugin => 'cmsplugin'), send("#{ a }_polymorphic_path", object))
         end
 
