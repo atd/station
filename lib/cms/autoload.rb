@@ -52,7 +52,12 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
       Dir[file_pattern].each do |filename|
         next if filename =~ /#{options[:file_exclusions].join("|")}/
         open filename do |file|
-          require filename if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/)
+          begin
+            require filename if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/)
+          rescue Exception => e
+            #FIXME: logger ?
+            puts "Couldn't load file #{ filename }: #{ e }"
+          end
         end
       end
     end
