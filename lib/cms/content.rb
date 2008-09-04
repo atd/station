@@ -67,9 +67,13 @@ module CMS
 
         # Named scope in_container returns all Contents in some container
         named_scope :in_container, lambda { |container|
+          if container && container.respond_to?("container_options")
+            container_conditions = " AND posts.container_id = '#{ container.id }' AND posts.container_type = '#{ container.class.base_class.to_s }'"
+          end
+
           post_columns = Post.column_names.map{|n| "posts.#{ n } AS post_#{ n }" }.join(', ')
           { :select => "#{ self.table_name }.*, #{ post_columns }",
-            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }' AND posts.container_id = '#{ container.id }' AND posts.container_type = '#{ container.class.base_class.to_s }'"
+            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }'" + container_conditions
           }
         }
 
