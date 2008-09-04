@@ -5,6 +5,12 @@ module CMS
   # Examples of contents are texts, images, events, URIs
   #
   # Content(s) are posted by Agent(s) to Container(s), resulting in Post(s)
+  #
+  # == Contents in some container
+  # You can use the named_scope +in_container+ to get all Contents in some container.
+  #   Content.in_container(some_container) #=> Array of contents in the container
+  #
+  # Contents instances have posts columns in post_*
   module Content
     def self.included(base) # :nodoc:
       base.extend ClassMethods
@@ -58,6 +64,14 @@ module CMS
         class << self
           alias_method_chain :create, :cms_params_filter
         end
+
+        # Named scope in_container returns all Contents in some container
+        named_scope :in_container, lambda { |container|
+          post_columns = Post.column_names.map{|n| "posts.#{ n } AS post_#{ n }" }.join(', ')
+          { :select => "#{ self.table_name }.*, #{ post_columns }",
+            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }'"
+          }
+        }
 
         include CMS::Content::InstanceMethods
       end
