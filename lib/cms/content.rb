@@ -69,7 +69,7 @@ module CMS
         named_scope :in_container, lambda { |container|
           post_columns = Post.column_names.map{|n| "posts.#{ n } AS post_#{ n }" }.join(', ')
           { :select => "#{ self.table_name }.*, #{ post_columns }",
-            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }'"
+            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }' AND posts.container_id = '#{ container.id }' AND posts.container_type = '#{ container.class.base_class.to_s }'"
           }
         }
 
