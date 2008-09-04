@@ -184,7 +184,7 @@ module CMS
         # Attempt to authenticate by basic authentication information.
         def login_from_basic_auth #:nodoc:
           authenticate_with_http_basic do |username, password|
-            for klass in CMS.agent_classes.map{ |klass| klass.agent_options[:authentication].include?(:login_and_password) }
+            for klass in CMS.agent_classes.select{ |klass| klass.agent_options[:authentication].include?(:login_and_password) }
               agent = klass.authenticate_with_login_and_password(username, password)
               return (self.current_agent = agent) if agent
             end
