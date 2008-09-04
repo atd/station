@@ -73,7 +73,7 @@ module CMS
 
           post_columns = Post.column_names.map{|n| "posts.#{ n } AS post_#{ n }" }.join(', ')
           { :select => "#{ self.table_name }.*, #{ post_columns }",
-            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }'" + container_conditions
+            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }'" + container_conditions.to_s
           }
         }
 
