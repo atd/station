@@ -1,11 +1,11 @@
-<b class="info"><%= "Title".t %></b>: <%= @post.title %><br />
-<b class="info"><%= "Author".t %></b>: <%= link_to @post.agent.name, @post.agent %><br />
-<b class="info"><%= @post.container.class.to_s.humanize.t %></b>: <%= link_to @post.container.name, @post.container %><br />
-<b class="info"><%= "Created at".t %></b>: <%= @post.created_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
-<b class="info"><%= "Updated at".t %></b>: <%= @post.updated_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
-<% if @post.categories.any? -%>
-<b class="info"><%= "Category".t("Categories", 99) %></b>: <%= @post.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
+<b class="info"><%= "Title".t %></b>: <%= @entry.title %><br />
+<b class="info"><%= "Author".t %></b>: <%= link_to @entry.agent.name, @entry.agent %><br />
+<b class="info"><%= @entry.container.class.to_s.humanize.t %></b>: <%= link_to @entry.container.name, @entry.container %><br />
+<b class="info"><%= "Created at".t %></b>: <%= @entry.created_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
+<b class="info"><%= "Updated at".t %></b>: <%= @entry.updated_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
+<% if @entry.categories.any? -%>
+<b class="info"><%= "Category".t("Categories", 99) %></b>: <%= @entry.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
 <% end -%>
-<%= link_to("View #{@post.content.class.to_s.humanize}".t, @post, {:class => "view action"}) %>
-<%= link_to("Edit #{@post.content.class.to_s.humanize}".t, edit_polymorphic_path(@post),{:class => "edit action"}) %>
-<%= link_to("Delete #{@post.content.class.to_s.humanize}".t, @post, {:class => "delete action", :confirm => 'Delete the post: "%s"?' / sanitize(@post.title), :method => :delete}) %>
+<%= link_to("View #{@entry.content.class.to_s.humanize}".t, @entry, {:class => "view action"}) %>
+<%= link_to("Edit #{@entry.content.class.to_s.humanize}".t, edit_polymorphic_path(@entry),{:class => "edit action"}) %>
+<%= link_to("Delete #{@entry.content.class.to_s.humanize}".t, @entry, {:class => "delete action", :confirm => 'Delete the entry: "%s"?' / sanitize(@entry.title), :method => :delete}) %>

@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 module CMS
-  # Agent(s) can CRUD Content(s) in Container(s), generating Post(s)
+  # Agent(s) can CRUD Content(s) in Container(s), generating Entry(s)
   module Agent
 
     def self.included(base) #:nodoc:
@@ -17,7 +17,7 @@ module CMS
     module ClassMethods
       # Provides an ActiveRecord model with Agent capabilities
       #
-      # Agent(s) can post Content(s) to Container(s)
+      # Agent(s) can entry Content(s) to Container(s)
       #
       # Options
       # * <tt>authentication</tt>: Array with Authentication methods supported for this Agent. 
@@ -51,8 +51,8 @@ module CMS
         # Remember Agent in browser through cookies
         include CMS::Agent::Remember
 
-        has_many :agent_posts,
-                 :class_name => "Post",
+        has_many :agent_entries,
+                 :class_name => "Entry",
                  :dependent => :destroy,
                  :as => :agent
 

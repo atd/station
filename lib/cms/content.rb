@@ -4,13 +4,13 @@ module CMS
   # A Content is a unit of information suitable to be published online.
   # Examples of contents are texts, images, events, URIs
   #
-  # Content(s) are posted by Agent(s) to Container(s), resulting in Post(s)
+  # Content(s) are posted by Agent(s) to Container(s), resulting in Entry(s)
   #
   # == Contents in some container
   # You can use the named_scope +in_container+ to get all Contents in some container.
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
-  # Contents instances have posts columns in post_*
+  # Contents instances have entries columns in entry_*
   module Content
     def self.included(base) # :nodoc:
       base.extend ClassMethods
@@ -29,7 +29,7 @@ module CMS
     module ClassMethods
       # Provides an ActiveRecord model with Content capabilities
       #
-      # Content(s) are posted by Agent(s) to Container(s), creating Post(s)
+      # Content(s) are posted by Agent(s) to Container(s), creating Entry(s)
       #
       # Options:
       # * <tt>:named_collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
@@ -49,8 +49,8 @@ module CMS
         cattr_reader :content_options
         class_variable_set "@@content_options", options
 
-        has_many :content_posts, 
-                 :class_name => "Post",
+        has_many :content_entries, 
+                 :class_name => "Entry",
                  :dependent => :destroy,
                  :as => :content
 
@@ -68,12 +68,12 @@ module CMS
         # Named scope in_container returns all Contents in some container
         named_scope :in_container, lambda { |container|
           if container && container.respond_to?("container_options")
-            container_conditions = " AND posts.container_id = '#{ container.id }' AND posts.container_type = '#{ container.class.base_class.to_s }'"
+            container_conditions = " AND entries.container_id = '#{ container.id }' AND entries.container_type = '#{ container.class.base_class.to_s }'"
           end
 
-          post_columns = Post.column_names.map{|n| "posts.#{ n } AS post_#{ n }" }.join(', ')
-          { :select => "#{ self.table_name }.*, #{ post_columns }",
-            :joins => "INNER JOIN posts ON posts.content_id = #{ self.table_name }.id AND posts.content_type = '#{ self.to_s }'" + container_conditions.to_s
+          entry_columns = Entry.column_names.map{|n| "entries.#{ n } AS entry_#{ n }" }.join(', ')
+          { :select => "#{ self.table_name }.*, #{ entry_columns }",
+            :joins => "INNER JOIN entries ON entries.content_id = #{ self.table_name }.id AND entries.content_type = '#{ self.to_s }'" + container_conditions.to_s
           }
         }
 
@@ -111,7 +111,7 @@ module CMS
 
       # Filter Content parameters:
       # If there is Atom Entry data, extract information from the Entry to parameters
-      # If there is raw post data, convert it to suitable plugin
+      # If there is raw entry data, convert it to suitable plugin
       def cms_params_filter(params) #:nodoc:
         params[:atom_entry].blank? ? params : 
           atom_entry_filter(Atom::Entry.parse(params[:atom_entry]))
@@ -133,17 +133,17 @@ module CMS
         respond_to?("content_type") ? Mime::Type.lookup(content_type) : nil
       end
       
-      # Has this Content been posted in this Container? Is there any Post linking both?
+      # Has this Content been posted in this Container? Is there any Entry linking both?
       def posted_in?(container)
         return false unless container
-        content_posts.select{ |p| p.container == container }.any?
+        content_entries.select{ |p| p.container == container }.any?
       end
       
 
       # Can this <tt>agent</tt> read this Content?
-      # True if there exists a Post for this Content that can be read by <tt>agent</tt> 
+      # True if there exists a Entry for this Content that can be read by <tt>agent</tt> 
       def read_by?(agent = nil)
-        content_posts.select{ |p| p.read_by?(agent) }.any?
+        content_entries.select{ |p| p.read_by?(agent) }.any?
       end
 
       # Method useful for icon files

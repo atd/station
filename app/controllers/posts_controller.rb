@@ -1,120 +1,120 @@
-# Controller methods and default filters for Posts Controllers
-class PostsController < ApplicationController
+# Controller methods and default filters for Entries Controllers
+class EntriesController < ApplicationController
   include CMS::Controller::Base unless self.ancestors.include? CMS::Controller::Base
   include CMS::Controller::Authorization unless self.ancestors.include? CMS::Controller::Authorization
 
-  before_filter :get_post, :only => [ :show, :edit, :update, :destroy, :details ]
+  before_filter :get_entry, :only => [ :show, :edit, :update, :destroy, :details ]
 
-  # List Posts belonging to Container
+  # List Entries belonging to Container
   #
-  # List all posts when no Container is specified
+  # List all entries when no Container is specified
   #
-  #   GET /:container_type/:container_id/posts
-  #   GET /posts
+  #   GET /:container_type/:container_id/entries
+  #   GET /entries
   def index
     if current_container
-      @title ||= "#{ current_container.name } - #{ 'Post'.t('Posts', 99) }"
+      @title ||= "#{ current_container.name } - #{ 'Entry'.t('Entries', 99) }"
       
-      @posts = current_container.container_posts.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :per_page => Post.per_page)
+      @entries = current_container.container_entries.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :per_page => Entry.per_page)
 
-      @updated = @posts.blank? ? current_container.updated_at : @posts.first.updated_at
+      @updated = @entries.blank? ? current_container.updated_at : @entries.first.updated_at
     else
-      @title ||= 'Post'.t('Posts', 99)
-      @posts = Post.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page =>  params[:page])
-      @updated = @posts.blank? ? Site.current.created_at : @posts.first.updated_at
+      @title ||= 'Entry'.t('Entries', 99)
+      @entries = Entry.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page =>  params[:page])
+      @updated = @entries.blank? ? Site.current.created_at : @entries.first.updated_at
     end
 
     @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
-    container_classes = CMS.container_classes - ( CMS.agent_classes + [ Site, Post ] )
+    container_classes = CMS.container_classes - ( CMS.agent_classes + [ Site, Entry ] )
     @containers = container_classes.map(&:all).flatten.uniq.sort{ |a, b| a.name <=> b.name }
 
     respond_to do |format|
       format.html
       format.atom
-      format.xml { render :xml => @posts.to_xml }
+      format.xml { render :xml => @entries.to_xml }
     end
   end
 
-  # Show this Post
-  #   GET /posts/:id
+  # Show this Entry
+  #   GET /entries/:id
   def show
-    @title ||= @post.title
+    @title ||= @entry.title
 
-    @containers = Array(@post.container)
-    @agents = @post.container.actors
+    @containers = Array(@entry.container)
+    @agents = @entry.container.actors
 
     respond_to do |format|
       format.html
-      format.xml { render :xml => @post.to_xml(:include => [ :content ]) }
+      format.xml { render :xml => @entry.to_xml(:include => [ :content ]) }
       format.atom { 
         headers["Content-type"] = 'application/atom+xml'
-        render :partial => "posts/entry",
-                           :locals => { :post => @post },
+        render :partial => "entries/entry",
+                           :locals => { :entry => @entry },
                            :layout => false
       }
-      format.json { render :json => @post.to_json(:include => :content) }
+      format.json { render :json => @entry.to_json(:include => :content) }
     end
   end
 
-  # Renders form for editing this Post metadata
-  #   GET /posts/:id/edit
+  # Renders form for editing this Entry metadata
+  #   GET /entries/:id/edit
   def edit
-    get_params_title_and_description(@post)
-    params[:category_ids] = @post.category_ids
+    get_params_title_and_description(@entry)
+    params[:category_ids] = @entry.category_ids
 
-    render :template => "posts/edit"
+    render :template => "entries/edit"
   end
 
-  # Update this Post metadata
-  #   PUT /posts/:id
+  # Update this Entry metadata
+  #   PUT /entries/:id
   def update
-    set_params_title_and_description(@post.content)
+    set_params_title_and_description(@entry.content)
 
-    # If the Content of this Post hasn't attachment, update it here
+    # If the Content of this Entry hasn't attachment, update it here
     # If it has, update via media
     # 
-    # TODO: find old content when only post params are updated
+    # TODO: find old content when only entry params are updated
     # TODO: Update in AtomPub?
 #        unless request.format == :atom
-#        @content = @post.content.class.create params[:content]
+#        @content = @entry.content.class.create params[:content]
 #        end
 
     # Avoid the user changes container through params
-    params[:post][:container] = @post.container
-    params[:post][:agent]     = current_agent
+    params[:entry][:container] = @entry.container
+    params[:entry][:agent]     = current_agent
 
     respond_to do |format|
       format.html {
-        if @post.content.update_attributes(params[:content]) && 
-          @post.update_attributes(params[:post])
-          @post.category_ids = params[:category_ids]
+        if @entry.content.update_attributes(params[:content]) && 
+          @entry.update_attributes(params[:entry])
+          @entry.category_ids = params[:category_ids]
           flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
-          redirect_to @post
+          redirect_to @entry
         else
-          render :template => "posts/edit" 
+          render :template => "entries/edit" 
         end
       }
 
       format.atom {
-        if @post.content.update_attributes(params[:content]) && @post.update_attributes(params[:post])
+        if @entry.content.update_attributes(params[:content]) && @entry.update_attributes(params[:entry])
           head :ok
         else
-          render :xml => [ @content.errors + @post.errors ].to_xml,
+          render :xml => [ @content.errors + @entry.errors ].to_xml,
                  :status => :not_acceptable
         end
       }
     end
   end
 
-  # Manage Post media (if Post has media)
+  # Manage Entry media (if Entry has media)
   # Retreive media
-  #   GET /posts/:id/media 
+  #   GET /entries/:id/media 
   # Update media
-  #   PUT /posts/:id/media 
+  #   PUT /entries/:id/media 
   def media
     if request.get?
       # Render media file
-      @content = @post.content
+      @content = @entry.content
       
       # Get thumbnail if content supports it and asking for it
       @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if 
@@ -125,9 +125,9 @@ class PostsController < ApplicationController
                                        :type => @content.content_type,
                                        :disposition => @content.class.content_options[:disposition].to_s
     elsif request.put?
-      # Have to set write post filter here
+      # Have to set write entry filter here
       # because doesn't apply to GET
-      unless @post.update_by? current_agent
+      unless @entry.update_by? current_agent
         access_denied
         return
       end
@@ -137,19 +137,19 @@ class PostsController < ApplicationController
 
       respond_to do |format|
         format.html {
-          if @post.content.update_attributes(params[:content])
+          if @entry.content.update_attributes(params[:content])
             flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
-            redirect_to @post
+            redirect_to @entry
           else
-            render :template => "posts/edit_media"
+            render :template => "entries/edit_media"
           end
         }
 
         format.atom {
-          if @post.content.update_attributes(params[:content])
+          if @entry.content.update_attributes(params[:content])
             head :ok
           else
-            render :xml => @post.content.errors.to_xml,
+            render :xml => @entry.content.errors.to_xml,
                    :status => :not_acceptable
           end
         } 
@@ -159,16 +159,16 @@ class PostsController < ApplicationController
     end
   end
 
-  # Renders form for editing this Post's media
-  #   GET /posts/:id/edit_media
+  # Renders form for editing this Entry's media
+  #   GET /entries/:id/edit_media
   def edit_media
-    render :template => "posts/edit_media"
+    render :template => "entries/edit_media"
   end
 
-  # Delete this Post
-  #   DELETE /posts/:id
+  # Delete this Entry
+  #   DELETE /entries/:id
   def destroy
-    @post.destroy
+    @entry.destroy
 
     respond_to do |format|
       format.html { redirect_to polymorphic_path(@container) }
@@ -181,19 +181,19 @@ class PostsController < ApplicationController
 
   protected
 
-    # Find Post using params[:id]
+    # Find Entry using params[:id]
     # 
-    # Sets @post, @content and @container variables
-    def get_post
-      @post ||= Post.find(params[:id])
-      @content ||= @post.content
-      @container ||= @post.container
+    # Sets @entry, @content and @container variables
+    def get_entry
+      @entry ||= Entry.find(params[:id])
+      @content ||= @entry.content
+      @container ||= @entry.container
     end
 
-    # Filter for actions that require the Post has a Content with attached media options
-    def post_has_media
-      get_post
-      bad_request("Content doesn't have media") unless @post.content.content_options[:has_media]
+    # Filter for actions that require the Entry has a Content with attached media options
+    def entry_has_media
+      get_entry
+      bad_request("Content doesn't have media") unless @entry.content.content_options[:has_media]
     end
 
     # Set Bad Request response    

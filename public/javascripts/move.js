@@ -153,24 +153,24 @@ function loginSelector(which_div) {
 
 var last_active_content;
 
-function changeActiveContent(id_post){
+function changeActiveContent(id_entry){
   if (last_active_content) {
-    $(last_active_content).removeClassName("active_post");
+    $(last_active_content).removeClassName("active_entry");
   } 
-  last_active_content="post_"+id_post;
-  $(last_active_content).addClassName("active_post");
+  last_active_content="entry_"+id_entry;
+  $(last_active_content).addClassName("active_entry");
 }
 
 /* DEPRECATED */
 function changeDetail(num_content) {
-  if(detail_active!='post_detail_'+num_content) {
+  if(detail_active!='entry_detail_'+num_content) {
     Effect.toggle(detail_active,"slide");
     detail_active_div=$(detail_active).remove();
     $('detail_view').insert(detail_active_div);
-    //Effect.toggle('post_detail_'+num_content,"slide");
-    //detail_active='post_detail_'+num_content;
-    detail_to_active_div=$('post_detail_'+num_content).remove();
-    $('menu_post_articles_container').update(detail_to_active_div);
+    //Effect.toggle('entry_detail_'+num_content,"slide");
+    //detail_active='entry_detail_'+num_content;
+    detail_to_active_div=$('entry_detail_'+num_content).remove();
+    $('menu_entry_articles_container').update(detail_to_active_div);
     Effect.toggle(detail_active,"slide");
   }
 }

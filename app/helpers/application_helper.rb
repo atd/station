@@ -24,13 +24,13 @@ module ApplicationHelper
     end 
   end
 
-  def link_icon_and_name_with_author(post)
-    post.agent.login
+  def link_icon_and_name_with_author(entry)
+    entry.agent.login
   end
 
   # The path to the icon image for this object.
   #
-  # If the object is a Post, returns the path for the icon of its content. 
+  # If the object is a Entry, returns the path for the icon of its content. 
   # If it is an image, to the icon thumbnail. 
   #
   # Otherwise, it looks for a file based on mime type or, if the object 
@@ -39,7 +39,7 @@ module ApplicationHelper
   # Finally, it first looks for the icon file in /public/images/icons, and at last 
   # in /public_assets/cmsplugin/images/icons
   def icon_image(object)
-    if object.is_a?(Post)
+    if object.is_a?(Entry)
       icon_image object.content
     elsif ! object.new_record? &&
           object.respond_to?(:mime_type) && 

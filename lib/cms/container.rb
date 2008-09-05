@@ -8,7 +8,7 @@ module CMS
     module ClassMethods
       # Provides an ActiveRecord model with Container capabilities
       #
-      # Content(s) are posted by Agent(s) to Container(s), giving Post(s)
+      # Content(s) are posted by Agent(s) to Container(s), giving Entry(s)
       #
       # Options:
       # * <tt>contents</tt>: an Array of Content that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content(s)
@@ -26,8 +26,8 @@ module CMS
         cattr_reader :container_options
         class_variable_set "@@container_options", options
 
-        has_many :container_posts, 
-                 :class_name => "Post",
+        has_many :container_entries, 
+                 :class_name => "Entry",
                  :dependent => :destroy,
                  :as => :container
 

@@ -31,7 +31,7 @@ class Init < ActiveRecord::Migration
 
     create_table :categorizations, :force => true do |t|
       t.integer :category_id
-      t.integer :post_id
+      t.integer :entry_id
     end
 
     create_table :performances do |t|
@@ -42,7 +42,7 @@ class Init < ActiveRecord::Migration
       t.string  :container_type
     end
 
-    create_table :posts do |t|
+    create_table :entries do |t|
       t.string   :title
       t.text     :description
       t.timestamps
@@ -61,10 +61,10 @@ class Init < ActiveRecord::Migration
     create_table :roles do |t|
       t.string :name
       t.boolean :admin
-      t.boolean :create_posts
-      t.boolean :read_posts
-      t.boolean :update_posts
-      t.boolean :delete_posts
+      t.boolean :create_entries
+      t.boolean :read_entries
+      t.boolean :update_entries
+      t.boolean :delete_entries
       t.boolean :create_performances
       t.boolean :read_performances
       t.boolean :update_performances
@@ -119,7 +119,7 @@ class Init < ActiveRecord::Migration
     drop_table :categories
     drop_table :categorizations
     drop_table :performances
-    drop_table :posts
+    drop_table :entries
     drop_table :roles
     drop_table :xhtml_texts    
     drop_table :uris

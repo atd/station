@@ -1,1 +1,1 @@
-xml.content(:src => formatted_media_post_url(post, :atom))
+xml.content(:src => formatted_media_entry_url(entry, :atom))

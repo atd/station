@@ -1,7 +1,7 @@
 xml.instruct!
 xml.service "xmlns" => "http://www.w3.org/2007/app", "xmlns:atom" => 'http://www.w3.org/2005/Atom' do
   # Workspaces are Containers current_agent can post to:
-  for container in @agent.containers.select{ |c| c.create_posts_by?(current_agent) }
+  for container in @agent.containers.select{ |c| c.create_entries_by?(current_agent) }
     xml.workspace do
       xml.tag!( "atom:title", container.name )
       # Collections are different type of Contents

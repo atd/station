@@ -27,7 +27,7 @@ if CMS::Agent.activation_class
                  :reset_password_code => nil
 end
 
-resources :posts, :member => { :media => :any,
+resources :entries, :member => { :media => :any,
                                :edit_media => :get,
                                :details => :any }
 resources :categories
@@ -36,6 +36,6 @@ resources *((CMS.contents | CMS.agents) - CMS.containers)
 
 resources(*(CMS.containers) - Array(:sites)) do |container|
   container.resources(*CMS.contents)
-  container.resources :posts, :categories
+  container.resources :entries, :categories
 end
 

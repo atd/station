@@ -9,14 +9,14 @@
 <% end -%>
 
 <h2><%= title %></h2>
-<div class="paginator"><%= will_paginate(@posts, {:prev_label => "«", :next_label => "»"}) %></div>
+<div class="paginator"><%= will_paginate(@entries, {:prev_label => "«", :next_label => "»"}) %></div>
 <div id="interaction_view">
 
   <div id="list_view">
-  <% for post in @posts %>
-    <div id="post_<%= post.id %>" class="post <%= post.content.class.to_s.tableize %>">
-      <%= link_to_remote "<img src=\"#{icon_image(post)}\"/>#{sanitize(post.title)} #{params[:kk]}", :url => details_post_path(post), :complete => "$('move_logo').src='#{ image_path 'move_static.png', :plugin => 'cmsplugin' }';changeActiveContent('#{post.id}');", :loading => "$('move_logo').src='#{ image_path('move_dynamic.gif', :plugin => 'cmsplugin') }';" %>
-      <%= draggable_element("post_"+post.id.to_s, :revert => true) %>
+  <% for entry in @entries %>
+    <div id="entry_<%= entry.id %>" class="entry <%= entry.content.class.to_s.tableize %>">
+      <%= link_to_remote "<img src=\"#{icon_image(entry)}\"/>#{sanitize(entry.title)} #{params[:kk]}", :url => details_entry_path(entry), :complete => "$('move_logo').src='#{ image_path 'move_static.png', :plugin => 'cmsplugin' }';changeActiveContent('#{entry.id}');", :loading => "$('move_logo').src='#{ image_path('move_dynamic.gif', :plugin => 'cmsplugin') }';" %>
+      <%= draggable_element("entry_"+entry.id.to_s, :revert => true) %>
     </div>
   <% end %>
   </div>

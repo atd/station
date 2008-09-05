@@ -1,12 +1,12 @@
-# Posts are CRUDed Contents
+# Entries are CRUDed Contents
 # (CRUD: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
 #
-# A Post is created when an Agent posts a Content to a Container
+# A Entry is created when an Agent entries a Content to a Container
 #
 # == Named Scopes
-# content_type:: Select Posts which content_type is the param. Example:
-#   Post.content_type(:articles) #=> posts which content is an Article
-class Post < ActiveRecord::Base
+# content_type:: Select Entries which content_type is the param. Example:
+#   Entry.content_type(:articles) #=> entries which content is an Article
+class Entry < ActiveRecord::Base
   acts_as_sortable
   acts_as_container :name => :title
 
@@ -17,7 +17,7 @@ class Post < ActiveRecord::Base
   # Collection name
   # See Content
   cattr_reader :collection
-  @@collection = :posts
+  @@collection = :entries
 
   belongs_to :content,   :polymorphic => true
   belongs_to :container, :polymorphic => true
@@ -48,32 +48,32 @@ class Post < ActiveRecord::Base
     
     from, conditions = if content_class.column_names.include?("type")
                          # Content has STI
-                         [ "#{ content_class.table_name }, posts", 
-                           [ "posts.content_id = #{ content_class.table_name }.id AND posts.content_type = ? AND #{ content_class.table_name }.type = ?", content_class.table_name.classify, content_class.to_s ] ]
+                         [ "#{ content_class.table_name }, entries", 
+                           [ "entries.content_id = #{ content_class.table_name }.id AND entries.content_type = ? AND #{ content_class.table_name }.type = ?", content_class.table_name.classify, content_class.to_s ] ]
                        else
-                         [ "posts", 
-                           [ "posts.content_type = ?", content_class.to_s ] ]
+                         [ "entries", 
+                           [ "entries.content_type = ?", content_class.to_s ] ]
                        end
 
-    { :select => "posts.*", :from => from, :conditions => conditions }
+    { :select => "entries.*", :from => from, :conditions => conditions }
   }
 
-  # True if the associated Content of this Post has media
+  # True if the associated Content of this Entry has media
   def has_media?
     ! content.content_options[:has_media].nil?
   end
 
-  # Can the Post be read by <tt>agent</tt>?
+  # Can the Entry be read by <tt>agent</tt>?
   def read_by?(agent = :false)
-    public_read? || container.has_role_for?(agent, :read_posts)
+    public_read? || container.has_role_for?(agent, :read_entries)
   end
 
-  # Can the Post be modified by <tt>agent</tt>?
+  # Can the Entry be modified by <tt>agent</tt>?
   def update_by?(agent = :false)
-    public_write? || container.has_role_for?(agent, :update_posts)
+    public_write? || container.has_role_for?(agent, :update_entries)
   end
 
-  # Set Post Categories by it id
+  # Set Entry Categories by it id
   def category_ids=(cids)
     cids ||= []
     #FIXME: optimize

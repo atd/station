@@ -344,7 +344,7 @@ overflow: hidden;
 background: #e1d9ff url('../images/move_css/background_detail_view.png') no-repeat bottom center;
 }
 
-#detail_view div.post_detail {
+#detail_view div.entry_detail {
 /*display: none;*/
 }
 
@@ -394,7 +394,7 @@ font-style: italic;
 }
 
 
-#interaction_view div.post {
+#interaction_view div.entry {
   position: relative;
   float: left;
   background-color: green;
@@ -411,11 +411,11 @@ font-style: italic;
   text-align: left;
 }
 
-#interaction_view div.post:hover {
+#interaction_view div.entry:hover {
   background: transparent url('../images/move_css/background_box_content_unit_hover.png') no-repeat top center;
 }
 
-#interaction_view div.active_post {
+#interaction_view div.active_entry {
   background: transparent url('../images/move_css/background_box_content_unit_active.png') no-repeat top center;
 }
 

@@ -23,23 +23,23 @@ module CMS
         @resource_class ||= controller_name.classify.constantize
       end
       
-      # Fills title and description fields from Post and Content.
+      # Fills title and description fields from Entry and Content.
       #
       # Useful when rendering forms
-      def get_params_title_and_description(post) #:nodoc:
-        params[:title] ||= post.title
-        params[:title] ||= post.content.title if post.content.respond_to?("title")
-        params[:description] ||= post.description
-        params[:description] ||= post.content.description if post.content.respond_to?("description=")
+      def get_params_title_and_description(entry) #:nodoc:
+        params[:title] ||= entry.title
+        params[:title] ||= entry.content.title if entry.content.respond_to?("title")
+        params[:description] ||= entry.description
+        params[:description] ||= entry.content.description if entry.content.respond_to?("description=")
       end
   
-      # Fills title and description fields for Post and Content
+      # Fills title and description fields for Entry and Content
       #
       # Useful when POSTing content
       def set_params_title_and_description(content_class) #:nodoc:
-        params[:post] ||= {}
-        params[:post][:title] ||= params[:title]
-        params[:post][:description] ||= params[:description]
+        params[:entry] ||= {}
+        params[:entry][:title] ||= params[:title]
+        params[:entry][:description] ||= params[:description]
         params[:content] ||= {}
         params[:content][:title] ||= params[:title] if content_class.respond_to?("title=")
         params[:content][:description] ||= params[:description] if content_class.respond_to?("description=")
@@ -61,8 +61,8 @@ module CMS
         end
   
         params[:title]                  ||= filename
-        params[:post]                   ||= {}
-        params[:post][:public_read]     ||= true
+        params[:entry]                   ||= {}
+        params[:entry][:public_read]     ||= true
         params[:content]                ||= {}
         params[:content][:media]        ||= file
       end
@@ -121,7 +121,7 @@ module CMS
       # Calls get_container to figure out from params. If unsuccesful, 
       # it tries with current_agent
       # 
-      # If a Container is found, and this type of content can be posted, 
+      # If a Container is found, and this type of content can be entryed, 
       # it sets <tt>@container</tt> to the container found,
       # and <tt>@collection_path</tt> to <tt>/:container_type/:container_id/contents</tt>
       # 

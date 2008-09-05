@@ -9,17 +9,17 @@ module CMS
   def self.enable_param_parsers
     # Atom Entry ParamParser
     ActionController::Base.param_parsers[Mime::ATOM] = Proc.new do |data|
-      entry = Atom::Entry.parse(data)
+      atom_entry = Atom::Entry.parse(data)
 
-      post = HashWithIndifferentAccess.new
-      post["title"]       = entry.title.xml.to_s
-      post["description"] = entry.summary.xml.to_s if entry.summary
-      post["public_read"] = "1" unless entry.draft
+      entry = HashWithIndifferentAccess.new
+      entry["title"]       = atom_entry.title.xml.to_s
+      entry["description"] = atom_entry.summary.xml.to_s if atom_entry.summary
+      entry["public_read"] = "1" unless atom_entry.draft
 
       content = HashWithIndifferentAccess.new
       content["atom_entry"] = data
 
-      { "post" => post, "content" => content }
+      { "entry" => entry, "content" => content }
     end
   end
 end

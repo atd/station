@@ -14,7 +14,7 @@ class Category < ActiveRecord::Base
 
   has_many :categorizations,
            :dependent => :destroy
-  has_many :posts,
+  has_many :entries,
            :through => :categorizations
 
   validates_presence_of :name, :container_id, :container_type

@@ -2,10 +2,10 @@
 
 Content Management System plugin.
 
-CMS plugin provides your Rails application with a "Posting framework". You can define three types of behaviours in your ActiveRecord models:
+CMS plugin provides your Rails application with a "Entrying framework". You can define three types of behaviours in your ActiveRecord models:
 * Agents (acts_as_agent): entities that have posting capabilities. Users are the paradigm of Agents.
 * Contents (acts_as_content): units of information that can be posted. Examples of contents are articles, images, events, links, audios, videos, files, etc...
-* Containers (acts_as_container): spaces where agents posts contents
+* Containers (acts_as_container): spaces where agents entries contents
 
 CMS plugin follows the SIOC ontology model, http://sioc-project.org/ontology
 
@@ -69,7 +69,7 @@ And generate and run the migration:
 Now you can generate Agents and Contents
 
 == Agents
-An Agent has the capability to post Contents to Containers. An User is the example of Agent
+An Agent has the capability to entry Contents to Containers. An User is the example of Agent
 
   script/generate agent Model
 
@@ -79,9 +79,9 @@ A Content is a piece of information suitable to be posted to some Container by s
   script/generate content Model attributes
 
 == Containers
-A Container hold Posts
+A Container hold Entries
 
-For example, a User could also be defined as a Container. In this way, every user would be able to post each own Contents.
+For example, a User could also be defined as a Container. In this way, every user would be able to entry each own Contents.
 
 == Examples
 
@@ -91,7 +91,7 @@ Create personal blogs with a pair of commands:
   script/generate agent User
   script/generate content Article body:text
 
-Users now can post their own Articles
+Users now can entry their own Articles
 
 You can add AtomPub support for Articles creation. You must implement atom_entry_filter method in Article model:
 
