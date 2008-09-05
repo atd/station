@@ -116,7 +116,7 @@ module CMS
         set_params_title_and_description(self.resource_class)
     
         # FIXME: we should look for an existing content instead of creating a new one
-        # every time a Content is entryed.
+        # every time a Content is posted.
         # Idea: Should use SHA1 on one or some relevant Content field(s) 
         # and find_or_create_by_sha1
         @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.create(params[:content])

@@ -121,7 +121,7 @@ module CMS
       # Calls get_container to figure out from params. If unsuccesful, 
       # it tries with current_agent
       # 
-      # If a Container is found, and this type of content can be entryed, 
+      # If a Container is found, and this type of content can be posted, 
       # it sets <tt>@container</tt> to the container found,
       # and <tt>@collection_path</tt> to <tt>/:container_type/:container_id/contents</tt>
       # 
