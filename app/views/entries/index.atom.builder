@@ -12,7 +12,7 @@ xml.feed "xmlns" => 'http://www.w3.org/2005/Atom', "xmlns:app" => 'http://www.w3
   end
 
   @entries.each do |entry|
-    xml << render(:partial => "entries/entry", 
+    xml << render(:partial => "entries/atom_entry", 
                   :locals => { :entry => entry, :defined_namespaces => true })
   end
 end
