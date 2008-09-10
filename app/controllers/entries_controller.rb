@@ -3,7 +3,7 @@ class EntriesController < ApplicationController
   include CMS::Controller::Base unless self.ancestors.include? CMS::Controller::Base
   include CMS::Controller::Authorization unless self.ancestors.include? CMS::Controller::Authorization
 
-  before_filter :get_entry, :only => [ :show, :edit, :update, :destroy, :details ]
+  before_filter :get_entry, :only => [ :show, :edit, :update, :destroy, :details, :media ]
 
   # List Entries belonging to Container
   #
