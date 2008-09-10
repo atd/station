@@ -145,17 +145,12 @@ module CMS
         # to access the requested action.  For example, a popup window might
         # simply close itself.
         def access_denied
-          respond_to do |format|
-            format.html do
-              store_location
-              redirect_to new_session_path
-            end
-  
-            for mime in CMS.mime_types
-              format.send mime.to_sym do
-                request_http_basic_authentication 'Web Password'
-              end
-            end
+          case request.format 
+          when Mime::HTML, Mime::ALL
+            store_location
+            redirect_to new_session_path
+          else
+            request_http_basic_authentication 'Web Password'
           end
         end
   
