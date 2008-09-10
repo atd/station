@@ -137,8 +137,8 @@ module CMS
         # Redirect as appropriate when an access request fails.
         #
         # The default action is to redirect to the login screen if responding to HTML
-        # For other types of contents, send 401 Unauthorized
-        # TODO? send 401 in HTML also
+        # For other types of contents, use HTTP Basic Authentication
+        # TODO: send 401 in HTML also
         #
         # Override this method in your controllers if you want to have special
         # behavior in case the Agent is not authorized
