@@ -16,7 +16,7 @@ module CMS
       protected
       # Returns the Model Class related to this Controller 
       #
-      # e.g. Article for ArticlesController
+      # e.g. Attachment for AttachmentsController
       #
       # Useful for Controller inheritance
       def resource_class

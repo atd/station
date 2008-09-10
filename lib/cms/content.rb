@@ -49,6 +49,11 @@ module CMS
         cattr_reader :content_options
         class_variable_set "@@content_options", options
 
+        cattr_reader :per_page
+        class_variable_set "@@per_page", options[:per_page]
+
+        acts_as_sortable
+
         has_many :content_entries, 
                  :class_name => "Entry",
                  :dependent => :destroy,
@@ -73,7 +78,7 @@ module CMS
 
           entry_columns = Entry.column_names.map{|n| "entries.#{ n } AS entry_#{ n }" }.join(', ')
           { :select => "#{ self.table_name }.*, #{ entry_columns }",
-            :joins => "INNER JOIN entries ON entries.content_id = #{ self.table_name }.id AND entries.content_type = '#{ self.to_s }'" + container_conditions.to_s
+            :joins => "INNER JOIN entries ON entries.content_id = #{ self.table_name }.id AND entries.content_type = '#{ self.base_class.to_s }'" + container_conditions.to_s
           }
         }
 

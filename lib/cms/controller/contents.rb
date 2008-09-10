@@ -14,44 +14,18 @@ module CMS
       #   GET /:container_type/:container_id/contents
       #   GET /contents
       def index(&block)
-        # The container must support this Content
-        unless (current_container && current_container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
-          render :text => "Doesn't support this Content type", :status => 400
-          return
-        end
-
-        # When the Content class has STI (Single Table Inheritance), 
-        # we have to filter the content type in the "type" attribute from the 
-        # Content's table. 
-        # Otherwise, we can just filter Content type in entries.content_type field
-        if self.resource_class.column_names.include?("type")
-          conditions = [ "#{ self.resource_class.table_name }.type = ?", self.resource_class.to_s ]
-        else
-          conditions = [ "entries.content_type = ?", self.resource_class.to_s ]
-        end
-    
         if current_container
           @title ||= "#{ self.resource_class.translated_named_collection } - #{ current_container.name }"
-          # All the Contents this Agent can read in this Container
-          @collection = current_container.container_entries.find(:all,
-                          :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
-                          :conditions => conditions,
-                          :order => "entries.updated_at DESC")
-    
-          # Paginate them
-          @entries = @collection.paginate(:page => params[:page], :per_page => self.resource_class.content_options[:per_page])
-          @updated = @collection.blank? ? current_container.updated_at : @collection.first.updated_at
           @agents = current_container.actors
         else
           @title ||= self.resource_class.translated_named_collection
-          @entries = Entry.paginate :all,
-                                 :joins => "LEFT JOIN #{ self.resource_class.table_name } ON #{ self.resource_class.table_name }.id = content_id",
-                                 :conditions => conditions,
-                                 :page =>  params[:page],
-                                 :order => "entries.updated_at DESC"
-          @updated = @entries.blank? ? Time.now : @entries.first.updated_at
           @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
+
+        @contents = self.resource_class.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+        instance_variable_set "@#{ self.resource_class.to_s.tableize }", @contents
+
+        @updated = @contents.any? ? @contents.first.entry_updated_at : Time.now.utc
 
         @containers = current_user.stages
     
@@ -61,7 +35,7 @@ module CMS
           respond_to do |format|
             format.html
             format.js
-            format.xml { render :xml => @entries.to_xml }
+            format.xml { render :xml => @contents.to_xml }
             format.atom
           end
         end
@@ -72,9 +46,10 @@ module CMS
       def show
         # Image thumbnails. &thumbnail=thumb
         @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if params[:thumbnail] && @content.respond_to?(:thumbnails)
+        instance_variable_set "@#{ self.resource_class.to_s.underscore }", @content
 
         respond_to do |format|
-          format.html # show.rhtml
+          format.html
           format.xml { render :xml => @content.to_xml }
     
           # Add Content format Mime Type for content with Attachments
@@ -90,7 +65,6 @@ module CMS
                                              :type => @content.content_type,
                                              :disposition => @content.class.content_options[:disposition].to_s
           } if @content.mime_type
-         
         end
       end
     
@@ -101,8 +75,9 @@ module CMS
       #   GET /contents/new
       def new
         @entry = Entry.new
-        @entry.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
-        @title ||= "New #{ controller_name.singularize.humanize }".t
+        @entry.content = @content = self.resource_class.new
+        instance_variable_set("@#{ self.resource_class.to_s.underscore }", @content)
+        @title ||= "New #{ self.resource_class.to_s.humanize }".t
       end
     
       # Create new Content
@@ -122,8 +97,8 @@ module CMS
         @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.create(params[:content])
     
         @entry = Entry.new(params[:entry].merge({ :agent => current_agent,
-                                                    :container => @container,
-                                                    :content => @content }))
+                                                  :container => @container,
+                                                  :content => @content }))
     
         respond_to do |format| 
           format.html {
@@ -161,17 +136,32 @@ module CMS
       end
     
       protected
-    
-      # Get current content based in the controller name.
+
+      # Render Bad Request unless the controller name relates to a class that acts_as_content. 
+      # If current_container exists, check its valid contents
+      def controller_name_is_valid_content
+        unless (current_container && current_container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
+          render :text => "Doesn't support this Content type", :status => 400
+        end
+      end
+     
+      # Get current content based in the controller name. 
+      #
+      # Sets +@content+ and an content name specific instance variable
       #
       # Example:
       #   class ArticlesController < ActiveRecord::Base
       #     include CMS::Controller::Contents
       #
-      #     before_filter :get_content #=> @content = Article.find(params[:id])
+      #     before_filter :get_content #=> @article = @content = Article.find(params[:id])
       #   end
+      #
+      # If current_container exists, +@content+ has its entry defined. 
+      # This funcion uses CMS::Content#in_container named scope
+      #
         def get_content
-          @content = resource_class.find params[:id]
+          @content = self.resource_class.in_container(current_container).find params[:id]
+          instance_variable_set "@#{ self.resource_class.to_s.underscore }", @content
         end
     end
   end
