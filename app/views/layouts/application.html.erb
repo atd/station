@@ -48,9 +48,9 @@
     </div>
 
     <!-- containers -->
-    <%= menu_box(:containers) %>
+    <%= menu_box(:containers) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
     <!-- agents -->
-    <%= menu_box(:agents) %>
+    <%= menu_box(:agents) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
 
     <!-- session -->
     <div id="session">
