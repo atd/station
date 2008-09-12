@@ -9,7 +9,6 @@ module CMS
       self.enable_mime_types
       enable_active_record
       self.autoload
-      self.enable_param_parsers
     end
 
     def enable_active_record #:nodoc:

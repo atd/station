@@ -7,6 +7,34 @@ module CMS
       def self.included(base) #:nodoc:
         base.helper_method :current_site
         base.helper_method :current_container
+
+        class << base
+
+          def log_params
+            before_filter do |controller|
+              logger.debug controller.params.inspect
+            end
+          end
+          # Set params from AtomPub raw post
+          def set_params_from_atom(atom_parser, options)
+            parser = case atom_parser
+                     when Proc
+                       atom_parser
+                     when Class
+                       atom_parser.method(:atom_parser).to_proc
+                     when Symbol
+                       atom_parser.to_class.method(:atom_parser).to_proc
+                     else
+                       raise "Invalid AtomParser: #{ atom_parser.inspect }"
+                     end
+
+            before_filter options do |controller|
+              if controller.request.format == Mime::ATOM
+                controller.params = controller.params.merge(parser.call(controller.request.raw_post))
+              end
+            end
+          end
+        end
       end
 
       def current_site
