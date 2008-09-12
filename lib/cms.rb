@@ -1,7 +1,6 @@
 require 'cms/core_ext'
 require 'cms/mime_types'
 require 'cms/autoload'
-require 'cms/param_parsers'
 
 module CMS
   class << self
