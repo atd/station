@@ -132,6 +132,24 @@ module CMS
     end
 
     module InstanceMethods
+      # Returns the entry associated with this Content.
+      #
+      # It only works if the request have some Container:
+      #   GET /container/1/content/ #=> @content.entry != nil
+      # but
+      #   GET /content/1 #=> @content.entry == nil
+      #
+      def entry
+        @entry ||= if entry_attributes.any? 
+                     e = Entry.new(entry_attributes)
+                     e.id = entry_attributes[:id]
+                     e
+                  else 
+                    nil
+                  end
+      end
+
+
       # Returns the mime type for this Content instance. 
       # TODO: Works with attachment_fu
       def mime_type
@@ -159,6 +177,16 @@ module CMS
       #   photo
       def mime_type_or_class_name
         mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
+      end
+
+      private
+
+      def entry_attributes #:nodoc:
+        returning HashWithIndifferentAccess.new do |entry_attrs|
+          attributes.each do |content_attr|
+            entry_attrs[$1] = content_attr.last if content_attr.first =~ /^entry_(.*)$/
+          end
+        end
       end
     end
   end
