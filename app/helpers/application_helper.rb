@@ -9,7 +9,7 @@ module ApplicationHelper
   # 2. class variable +@title+, typically assigned in the Controller
   # 3. +current_site[:name]+
   def title(new_title = "" )
-    new_title.any? ? new_title : ( @title || current_site[:name] )
+    sanitize(new_title.any? ? new_title : ( @title || current_site[:name] ))
   end
 
   # Renders @notification_area@ div if there is a flash entry for types: 
