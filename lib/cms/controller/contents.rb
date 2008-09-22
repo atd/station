@@ -9,10 +9,13 @@ module CMS
 
       # List Contents of this type posted to a Container
       #
-      # When there is no Container requested, just deliver public Contents
+      # When there is no Container requested, just deliver all Contents
       #
-      #   GET /:container_type/:container_id/contents
+      # If a Container is requested, each Content has an Entry associated with it.
+      # See Content#entry
+      #
       #   GET /contents
+      #   GET /:container_type/:container_id/contents
       def index(&block)
         if current_container
           @title ||= "#{ self.resource_class.translated_named_collection } - #{ current_container.name }"
@@ -22,10 +25,15 @@ module CMS
           @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
 
+        # AtomPub feeds are ordered by Entry#updated_at
+        if request.format == Mime::ATOM
+          params[:order], params[:direction] = "entries.updated_at", "DESC"
+        end
+
         @contents = self.resource_class.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
         instance_variable_set "@#{ self.resource_class.to_s.tableize }", @contents
 
-        @updated = @contents.any? ? @contents.first.entry_updated_at : Time.now.utc
+        @updated = @contents.any? ? @contents.first.entry.updated_at : Time.now.utc
 
         @containers = current_user.stages
     
@@ -42,15 +50,27 @@ module CMS
       end
     
       # Show this Content
-      #   GET /:content_type/:id
+      #
+      #   GET /contents/:id
+      #   GET /:container_type/:container_id/contents/:id
+      #
+      # In the last case, +@content.entry+ is entry relative to the Container. See Content#entry
       def show
         # Image thumbnails. &thumbnail=thumb
         @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if params[:thumbnail] && @content.respond_to?(:thumbnails)
         instance_variable_set "@#{ self.resource_class.to_s.underscore }", @content
 
+        @title ||= @content.entry.title if @content.entry
+
+        @containers ||= current_container ? 
+                        Array(current_container) : 
+                        @content.content_entries.map(&:container).uniq
+        @agents ||= @content.content_entries.map(&:agent).uniq
+
         respond_to do |format|
           format.html
           format.xml { render :xml => @content.to_xml }
+          format.atom
     
           # Add Content format Mime Type for content with Attachments
           format.send(@content.mime_type.to_sym.to_s) {
@@ -70,16 +90,23 @@ module CMS
     
       # Render form for posting new Content
       #
-      # When no container is specified, tries posting to Agent's
       #   GET /:container_type/:container_id/contents/new
       #   GET /contents/new
       def new
-        @entry = Entry.new
-        @entry.content = @content = self.resource_class.new
+        @content = self.resource_class.new
+        @content.entry = Entry.new(:content => @content)
         instance_variable_set("@#{ self.resource_class.to_s.underscore }", @content)
         @title ||= "New #{ self.resource_class.to_s.humanize }".t
       end
-    
+
+      # Render form for updating Content
+      #
+      #   GET /contents/:id/edit
+      #   GET /:container_type/:container_id/contents/:id/edit
+      def edit
+        @title ||= "Editing #{ self.resource_class.to_s.humanize }".t
+      end
+   
       # Create new Content
       #
       #   POST /:container_type/:container_id/contents
@@ -88,53 +115,105 @@ module CMS
         # Fill params when POSTing raw data
         set_params_from_raw_post
     
-        set_params_title_and_description(self.resource_class)
-    
-        # FIXME: we should look for an existing content instead of creating a new one
+        # TODO: we should look for an existing content instead of creating a new one
         # every time a Content is posted.
         # Idea: Should use SHA1 on one or some relevant Content field(s) 
         # and find_or_create_by_sha1
-        @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.create(params[:content])
+        @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.new(params[self.resource_class.to_s.underscore.to_sym])
     
-        @entry = Entry.new(params[:entry].merge({ :agent => current_agent,
-                                                  :container => @container,
-                                                  :content => @content }))
-    
+        @content.entry = Entry.new(params[:entry].merge({ :agent => current_agent,
+                                                          :container => current_container,
+                                                          :content => @content }))
         respond_to do |format| 
           format.html {
-            if !@content.new_record? && @entry.save
-              @entry.category_ids = params[:category_ids]
+            if @content.save
+              @content.entry.category_ids = params[:category_ids]
               flash[:valid] = "#{ @content.class.to_s.humanize } created".t
-              redirect_to @entry
+              redirect_to [ current_container.to_ppath, @content ]
             else
-              @content.destroy unless @content.new_record?
-              @entry.content = @content = instance_variable_set("@#{controller_name.singularize}", controller_name.classify.constantize.new)
               @title ||= "New #{ controller_name.singularize.humanize }".t
               render :action => 'new'
             end
           }
     
           format.atom {
-            if !@content.new_record? && @entry.save
-    	  headers["Location"] = formatted_entry_url(@entry, :atom)
-    	  headers["Content-type"] = 'application/atom+xml'
-              render :partial => "entries/entry",
-                                 :status => :created,
-                                 :locals => { :entry => @entry,
-                                              :content => @content },
-                                 :layout => false
+            if @content.save
+              headers["Location"] = formatted_polymorphic_url([ current_container.to_ppath, @content, :atom ])
+              render :action => 'show',
+                     :status => :created
+
             else
-              if @content.new_record?
-                render :xml => @content.errors.to_xml, :status => :bad_request
-              else
-                @content.destroy unless @content.new_record?
-                render :xml => @entry.errors.to_xml, :status => :bad_request
-              end
+              render :xml => @content.errors.to_xml, :status => :bad_request
             end
           }
         end
       end
+
+      # Update Content
+      #
+      #   PUT /:container_type/:container_id/contents/:id
+      #   PUT /contents/:id
+      def update
+        # Fill params when POSTing raw data
+        set_params_from_raw_post
     
+        # TODO?: we should look for an existing content instead of creating a new one
+        # every time a Content is posted.
+        # Idea: Should use SHA1 on one or some relevant Content field(s) 
+        # and find_or_create_by_sha1
+        if @content.entry
+          @content.entry.attributes = params[:entry].merge({ :agent => current_agent,
+                                                             :container => current_container,
+                                                             :content => @content })
+        end
+
+        respond_to do |format| 
+          format.html {
+            if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
+              @content.entry.category_ids = params[:category_ids] if @content.entry
+              flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
+              redirect_to [ current_container.to_ppath, @content ]
+            else
+              @title ||= "Editing #{ controller_name.singularize.humanize }".t
+              render :action => 'new'
+            end
+          }
+    
+          format.atom {
+            if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
+              head :ok
+            else
+              render :xml => @content.errors.to_xml, :status => :not_acceptable
+            end
+          }
+
+          format.send(@content.format) {
+            if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
+              head :ok
+            else
+              render :xml => @content.errors.to_xml, :status => :not_acceptable
+            end
+          }
+        end
+      end
+
+      # Delete this Content
+      #
+      #   DELETE /contents/:id
+      #   DELETE /:container_type/:container_id/contents/:id
+      def destroy
+        @content.destroy
+
+        respond_to do |format|
+          format.html { redirect_to polymorphic_path([ current_container.to_ppath, self.resource_class.new ]) }
+          format.atom { head :ok }
+          # FIXME: Check AtomPub, RFC 5023
+    #      format.send(mime_type) { head :ok }
+          format.xml { head :ok }
+        end
+      end
+
+  
       protected
 
       # Render Bad Request unless the controller name relates to a class that acts_as_content. 

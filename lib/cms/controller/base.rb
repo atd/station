@@ -74,8 +74,8 @@ module CMS
       end
   
       # Extract request parameters when posting raw data
-      def set_params_from_raw_post
-        return if request.raw_post.blank? || params[:content]
+      def set_params_from_raw_post(content = controller_name.singularize.to_sym)
+        return if request.raw_post.blank? || params[content]
   
         filename = request.env["HTTP_SLUG"] || controller_name.singularize
         content_type = request.content_type
@@ -88,11 +88,11 @@ module CMS
           define_method(:original_filename) { filename.dup.taint }
         end
   
-        params[:title]                  ||= filename
         params[:entry]                   ||= {}
+        params[:entry][:title]           ||= filename
         params[:entry][:public_read]     ||= true
-        params[:content]                ||= {}
-        params[:content][:media]        ||= file
+        params[content]                  ||= {}
+        params[content][:media]          ||= file
       end
 
       # Find current Container using:

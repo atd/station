@@ -29,14 +29,10 @@ class Entry < ActiveRecord::Base
            :through => :categorizations
 
 
-  validates_presence_of :title, 
-                        :agent_id,
+  validates_presence_of :agent_id,
                         :agent_type,
-                        :content_id, 
-                        :content_type,
                         :container_id, 
                         :container_type
-  validates_associated  :content
 
   # ContentType named scope
   named_scope :content_type, lambda { |content_type|
@@ -81,5 +77,30 @@ class Entry < ActiveRecord::Base
     for cid in cids
       categories << Category.find(cid)
     end
+  end
+
+  # Returns the title for this Entry. If not present, tries to guess it from
+  # the following Content attributes (in order): +title, name+
+  def title
+    attributes["title"] || try_from_content(:title, :name) || 
+    "#{ content.class } #{ content.to_param }"
+  end
+
+  # Returns the description for this Entry. If not present, tries to guess it from
+  # the following Content attributes (in order): +description, summary+
+  def description
+    attributes["description"] || try_from_content(:description, :summary) || ""
+  end
+
+  private
+
+  def try_from_content(*candidates) #:nodoc:
+    for attribute in candidates
+      if self.content.respond_to?(attribute) && attribute = self.content.send(attribute) 
+        return attribute
+      end
+    end
+    
+    nil
   end
 end

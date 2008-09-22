@@ -52,23 +52,19 @@ module CMS
         cattr_reader :per_page
         class_variable_set "@@per_page", options[:per_page]
 
-        acts_as_sortable
+        attr_writer :entry
+
+        validates_associated :entry
+
+        after_save :entry_save!
+
 
         has_many :content_entries, 
                  :class_name => "Entry",
                  :dependent => :destroy,
                  :as => :content
 
-        # Filter "create" method for Atom Mapping
-        # With this filter, a new content can be crated from a Hash of
-        # Atom Entry parameters
-        # The Atom Entry may include different attibutes than the Content
-        # (see atom_mapping option)
-        #
-        # This methods maps the appropriate attributes
-        class << self
-          alias_method_chain :create, :cms_params_filter
-        end
+        acts_as_sortable
 
         # Named scope in_container returns all Contents in some container
         named_scope :in_container, lambda { |container|
@@ -109,24 +105,11 @@ module CMS
 
       protected
 
-      # Introduce filters for parameters in create chain
-      def create_with_cms_params_filter(params) #:nodoc:
-        create_without_cms_params_filter cms_params_filter(params)
-      end
-
-      # Filter Content parameters:
-      # If there is Atom Entry data, extract information from the Entry to parameters
-      # If there is raw entry data, convert it to suitable plugin
-      def cms_params_filter(params) #:nodoc:
-        params[:atom_entry].blank? ? params : 
-          atom_entry_filter(Atom::Entry.parse(params[:atom_entry]))
-      end
-
-      # Atom Entry filter
-      # Extracts parameter information from an Atom Entry element
+      # Atom Parser
+      # Extracts parameter information from an Atom Element
       #
       # Implement this in your class if you want AtomPub support in your Content
-      def atom_entry_filter(atom_entry)
+      def atom_parser(data)
         {}
       end
     end
@@ -142,8 +125,13 @@ module CMS
       def entry
         @entry ||= if entry_attributes.any? 
                      e = Entry.new(entry_attributes)
-                     e.id = entry_attributes[:id]
-                     e
+                     if e.valid?
+                       e.id = entry_attributes[:id]
+                       e.instance_variable_set("@new_record", false)
+                       e
+                     else
+                       nil
+                     end
                   else 
                     nil
                   end
@@ -154,6 +142,11 @@ module CMS
       # TODO: Works with attachment_fu
       def mime_type
         respond_to?("content_type") ? Mime::Type.lookup(content_type) : nil
+      end
+
+      # Returns the Mime::Type symbol for this content
+      def format
+        mime_type ? mime_type.to_sym : Mime::HTML.to_sym
       end
       
       # Has this Content been posted in this Container? Is there any Entry linking both?
@@ -180,6 +173,17 @@ module CMS
       end
 
       private
+
+      def entry_save! # :nodoc:
+        if entry
+          entry.content = self
+          raise "Invalid entry when saving #{ self.inspect }" unless entry.valid?
+          entry.save!
+        else
+          logger.warn "CMS Warning: Saving Content without an Entry"
+          self.content_entries.map(&:save!)
+        end
+      end
 
       def entry_attributes #:nodoc:
         returning HashWithIndifferentAccess.new do |entry_attrs|
