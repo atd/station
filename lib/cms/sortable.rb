@@ -46,19 +46,21 @@ module CMS
 
       # Sanitize user send params
       def sanitize_order_and_direction(order, direction)
-        order ||= sortable_options[:default_order] || "#{ self.table_name }.updated_at"
-        direction = direction ? 
-          direction.upcase : 
-          sortable_options[:default_direction] || "DESC"
+        default_order = sortable_options[:default_order] ||
+          column_names.include?("updated_at") && "#{ table_name }.updated_at" || 
+          [ table_name, columns.first.name ].join('.')
 
-        default_order = sortable_options[:default_order] || columns.first.name
-        default_direction = sortable_options[:default_direction] || "DESC"
+        default_direction = sortable_options[:default_direction] ||
+          column_names.include?("updated_at") && "ASC" || 
+          "DESC"
 
-        #FIXME joins columns
-        order = default_order unless columns.map(&:name).include?(order) ||
-          columns.map{ |c| "#{ self.table_name }.#{ c.name }" }.include?(order)
-        direction = default_direction unless %w{ ASC DESC }.include?(direction)
- 
+        # Remove all but letters and dots
+        order = order ? order.gsub(/[^\w\.]/, '') : default_order
+
+        direction = direction && %w{ ASC DESC }.include?(direction.upcase) ?
+          direction :
+          default_direction
+
         "#{ order } #{ direction }"
       end
     end
