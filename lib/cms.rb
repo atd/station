@@ -20,6 +20,8 @@ module CMS
       ActiveRecord::Base.send :include, Container
       require 'cms/sortable'
       ActiveRecord::Base.send :include, Sortable
+      require 'cms/taggable'
+      ActiveRecord::Base.send :include, Taggable
     end
 
     # Return an Array with the class constants that act as a Container
