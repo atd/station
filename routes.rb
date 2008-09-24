@@ -1,5 +1,6 @@
 resource :site do |site|
-  site.resources :categories
+  site.resources :entries, :categories
+  site.resources *CMS.contents
 end
 
 open_id_complete 'session', 
