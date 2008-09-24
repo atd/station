@@ -64,9 +64,11 @@ class CategoriesController < ApplicationController
         flash[:valid] = 'Category created'.t
         format.html { redirect_to(@category) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
+        format.js
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
+        format.js
       end
     end
   end

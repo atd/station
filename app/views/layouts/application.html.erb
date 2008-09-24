@@ -48,7 +48,7 @@
     </div>
 
     <!-- containers -->
-    <%= menu_box(:containers) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
+    <%= menu_box(:containers) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item.to_ppath) }<span class=\"box_unit_title\">#{ link_to item.name, item.to_ppath }</span>" } %>
     <!-- agents -->
     <%= menu_box(:agents) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
 

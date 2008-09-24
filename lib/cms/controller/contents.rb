@@ -105,6 +105,7 @@ module CMS
       #   GET /:container_type/:container_id/contents/:id/edit
       def edit
         @title ||= "Editing #{ self.resource_class.to_s.humanize }".t
+        params[:category_ids] ||= @content.entry.category_ids
       end
    
       # Create new Content
@@ -121,9 +122,12 @@ module CMS
         # and find_or_create_by_sha1
         @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.new(params[self.resource_class.to_s.underscore.to_sym])
     
-        @content.entry = Entry.new(params[:entry].merge({ :agent => current_agent,
-                                                          :container => current_container,
-                                                          :content => @content }))
+        params[:entry] ||= {}
+        params[:entry][:agent]     = current_agent
+        params[:entry][:container] = current_container
+        params[:entry][:content]   = @content
+        @content.entry = Entry.new(params[:entry])
+
         respond_to do |format| 
           format.html {
             if @content.save
@@ -161,10 +165,15 @@ module CMS
         # every time a Content is posted.
         # Idea: Should use SHA1 on one or some relevant Content field(s) 
         # and find_or_create_by_sha1
+        #
+        # FIXME: what if there are several entries?
         if @content.entry
-          @content.entry.attributes = params[:entry].merge({ :agent => current_agent,
-                                                             :container => current_container,
-                                                             :content => @content })
+          params[:entry] ||= {}
+          params[:entry][:agent]     = current_agent
+          params[:entry][:container] = current_container || @content.entry.container
+          params[:entry][:content]   = @content
+
+          @content.entry.attributes = params[:entry]
         end
 
         respond_to do |format| 
@@ -172,10 +181,10 @@ module CMS
             if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
               @content.entry.category_ids = params[:category_ids] if @content.entry
               flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
-              redirect_to [ current_container.to_ppath, @content ]
+              redirect_to [ current_container.to_ppath, @content ].compact
             else
               @title ||= "Editing #{ controller_name.singularize.humanize }".t
-              render :action => 'new'
+              render :action => 'edit'
             end
           }
     
@@ -205,7 +214,7 @@ module CMS
         @content.destroy
 
         respond_to do |format|
-          format.html { redirect_to polymorphic_path([ current_container.to_ppath, self.resource_class.new ]) }
+          format.html { redirect_to polymorphic_path([ current_container.to_ppath, self.resource_class.new ].compact) }
           format.atom { head :ok }
           # FIXME: Check AtomPub, RFC 5023
     #      format.send(mime_type) { head :ok }
