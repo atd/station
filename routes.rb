@@ -40,3 +40,5 @@ resources(*(CMS.containers) - Array(:sites)) do |container|
   container.resources :entries, :categories
 end
 
+resources :roles
+
