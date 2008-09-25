@@ -1,0 +1,14 @@
+<h1><%= 'Editing role'.t %></h1>
+
+<% form_for(@role) do |f| %>
+  <%= f.error_messages %>
+
+  <%= render :partial => 'form', :object => f %>
+
+  <p>
+    <%= f.submit "Update".t %>
+  </p>
+<% end %>
+
+<%= link_to 'Show'.t, @role %> |
+<%= link_to 'Back'.t, roles_path %>
