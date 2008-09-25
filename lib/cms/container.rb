@@ -11,7 +11,7 @@ module CMS
       # Content(s) are posted by Agent(s) to Container(s), giving Entry(s)
       #
       # Options:
-      # * <tt>contents</tt>: an Array of Content that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content(s)
+      # * <tt>content_types</tt>: an Array of Content that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content(s)
       # * <tt>name</tt>: alias attribute for Content presentation
       #
       def acts_as_container(options = {})
