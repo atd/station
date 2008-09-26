@@ -121,6 +121,7 @@ class Init < ActiveRecord::Migration
     drop_table :performances
     drop_table :posts
     drop_table :roles
+    drop_table :sites
     drop_table :xhtml_texts    
     drop_table :uris
     drop_table :open_id_ownings
