@@ -29,10 +29,13 @@
 </div>
 
 
+<% if CMS::Agent.activation_class -%>
 
 <div id="help"  style="display: none;">
   <%= link_to 'Forgotten password?'.t, forgot_password_path, :class => "action info" %>
 </div>
+
+<% end -%>
 
 <div id="go">
   <p><%= submit_tag '» ' + 'Log in'.t, { :class => "button" } %></p>
