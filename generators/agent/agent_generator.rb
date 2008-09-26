@@ -69,10 +69,8 @@ class AgentGenerator < Rails::Generator::NamedBase
 
       # Controller, helper, views, and test directories.
       m.directory File.join('app/models', class_path)
-      m.directory File.join('app/controllers', controller_class_path)
       m.directory File.join('app/controllers', model_controller_class_path)
       m.directory File.join('app/helpers', controller_class_path)
-      m.directory File.join('app/views', controller_class_path, controller_file_name)
       m.directory File.join('app/views', class_path, "#{file_name}_mailer") if options[:include_activation]
 
       m.directory File.join('app/controllers', model_controller_class_path)
@@ -102,11 +100,6 @@ class AgentGenerator < Rails::Generator::NamedBase
                                                "#{file_name}_#{model_type}.rb")
         end
       end
-
-      m.template 'controller.rb',
-                  File.join('app/controllers',
-                            controller_class_path,
-                            "#{controller_file_name}_controller.rb")
 
       m.template 'model_controller.rb',
                   File.join('app/controllers',
@@ -162,7 +155,6 @@ class AgentGenerator < Rails::Generator::NamedBase
 
 
       # Controller templates
-      m.template 'login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template 'signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
 
       for action in %w( show.html.erb show.atomsvc.builder ) do
