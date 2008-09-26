@@ -34,7 +34,7 @@ module CMS
           private
           
           def add_openid_identifier_to_openid_uris
-            openid_uris << CMS::URI.find_or_create_by_uri(openid_identifier) if openid_identifier
+            openid_uris << Uri.find_or_create_by_uri(openid_identifier) if openid_identifier
           end
         end
       end

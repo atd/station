@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
       # ...
 
       return_to = open_id_complete_url
-      realm = current_site.domain
+      realm = "http://#{ request.host_with_port }/"
 
       if openid_request.send_redirect?(realm, return_to)
         redirect_to openid_request.redirect_url(realm, return_to)

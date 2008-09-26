@@ -33,7 +33,7 @@ module CMS
         @agent.openid_identifier = session[:openid_identifier]
         @agent.save!
         self.current_agent = @agent
-        redirect_back_or_default('/')
+        redirect_to @agent
         flash[:info] = "Thanks for signing up!".t
 	if self.resource_class.agent_options[:activation]
 	  flash[:info] << '<br />'
