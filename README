@@ -2,10 +2,12 @@
 
 Content Management System plugin.
 
-CMS plugin provides your Rails application with a "Entrying framework". You can define three types of behaviours in your ActiveRecord models:
-* Agents (acts_as_agent): entities that have posting capabilities. Users are the paradigm of Agents.
+CMS plugin provides your Rails application with a "Posting framework". That means users, spaces, roles, categories, etc... but from a very flexible scope.
+
+You can define three types of behaviours in your ActiveRecord models:
+* Agents (acts_as_agent): models that have posting capabilities. Users are the paradigm of Agents.
 * Contents (acts_as_content): units of information that can be posted. Examples of contents are articles, images, events, links, audios, videos, files, etc...
-* Containers (acts_as_container): spaces where agents entries contents
+* Containers (acts_as_container): spaces where agents post contents
 
 CMS plugin follows the SIOC ontology model, http://sioc-project.org/ontology
 
@@ -17,13 +19,15 @@ Project page: http://rubyforge.org/projects/cmsplugin
 * Agents activation: Email validation, Password reset
 * Atom feeds support (RFC 4287)
 * AtomPub protocol support (RFC 5023)
-* Support for multiple Agents, Containers and Contents
 * Categories
+* Tags
 * Sortable lists for models (acts_as_sortable)
+* Taggable models (acts_as_taggable)
+* Support for multiple Agents, Containers and Contents
 
 == Requirements
 
-* Rails 2.1
+* Rails 2.1.1
 * RubyGems: 
   * ruby-openid
   * atom-tools
@@ -40,18 +44,18 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 You first need Rails Engines:
   script/plugin install git://github.com/lazyatom/engines.git
-see vendor/plugins/engines/README to finish the instalation (you have to modify config/environment.rb)
+see vendor/plugins/engines/README to finish the instalation (don't forget to modify config/environment.rb)
 
 Other plugins you need;
 
 AttachmentFu:
   script/plugin install git://github.com/technoweenie/attachment_fu.git
 
-Globalize (CMSplugin version; works with Rails 2.1 and fixes some bugs.
-This requirement will disapear when Rails supports globalize):
+Globalize (CMSplugin version; it works with Rails 2.1 and fixes some bugs.
+This requirement will disapear when Rails supports i18n):
   script/plugin install http://cmsplugin.rubyforge.org/svn/globalize
 
-To install CMS plugin, run:
+To install CMSplugin, run:
   script/plugin install svn://rubyforge.org/var/svn/cmsplugin/trunk
 
 === Gems
@@ -66,10 +70,10 @@ Generate the CMS infraestructure:
 And generate and run the migration:
   script/generate plugin_migration
 
-Now you can generate Agents and Contents
+Now you can generate Agents, Contents and Containers
 
 == Agents
-An Agent has the capability to entry Contents to Containers. An User is the example of Agent
+An Agent has the capability to post Contents to Containers. An User is the example of Agent
 
   script/generate agent Model
 
@@ -93,56 +97,19 @@ Create personal blogs with a pair of commands:
 
 Users now can entry their own Articles
 
-You can add AtomPub support for Articles creation. You must implement atom_entry_filter method in Article model:
+You can add AtomPub support for Articles creation. You must implement atom_parser method in Article model:
 
-  def self.atom_entry_filter(entry)
+  def self.atom_parser(data)
+    entry = Atom::Entry.new(data)
+
     { :body => entry.content.xml.to_s }
   end
-
-
-=== Gallery
-Install attachment_fu plugin
-
-Generate photo content:
-
-  script/generate content Photo size:integer content_type:string filename:string height:integer width:integer parent_id:integer thumbnail:string db_file_id:integer
-
-Modify the migration and include db_files table:
-
-  create_table :db_files do |t|
-    t.binary :data
-  end
-
-and
-
-  drop_table :db_files
-
-Add has_attachment information in the model:
-
-  class Photo < ActiveRecord::Base
-    has_attachment :content_type => :image,
-                   :thumbnails => { :thumb => [64,64] }
-
-    validates_as_attachment
-
-    acts_as_content :named_collection => "Gallery",
-                    :has_media => :attachment_fu,
-                    :disposition => :inline,
-                    :atompub_mime_types => attachment_options[:content_type].join(", ")
-
-  end
-
-Add Mime Types to your config/initializers/mime_types.rb
-
-  Mime::Type.register "image/jpeg", :jpeg, [ "image/pjpeg" ]
-  Mime::Type.register "image/gif", :gif
-  Mime::Type.register "image/png", :png, [ "image/x-png" ]
 
 == TODO
 
 * Agents authentication support: OAuth
+* Performances management
 * Microformats
-* Tags
 * OpenID server
 * RDF: FOAF + SIOC 
 
