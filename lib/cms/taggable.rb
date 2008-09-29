@@ -1,3 +1,6 @@
+# Some of this code comes from has_many_polymorphs plugin
+# Copyright 2007 Cloudburst, LLC. Licensed under the AFL 3.
+#
 module CMS 
   # Taggable ActiveRecord module
   module Taggable
