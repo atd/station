@@ -94,11 +94,6 @@ module CMS
       def actors
         container_performances.map(&:agent).uniq
       end
-
-      # Useful for polymorphic_path. See Site#to_ppath
-      def to_ppath
-        self
-      end
     end
   end
 end

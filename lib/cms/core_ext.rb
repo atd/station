@@ -9,10 +9,10 @@ unless Symbol.instance_methods.include? 'to_class'
 end
 
 # See Site#to_ppath
-unless NilClass.instance_methods.include? 'to_ppath'
-  NilClass.class_eval do
+unless Object.instance_methods.include? 'to_ppath'
+  Object.class_eval do
     def to_ppath
-      nil
+      self
     end
   end
 end
