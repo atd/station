@@ -117,10 +117,12 @@ module CMS
     module InstanceMethods
       # Returns the entry associated with this Content.
       #
-      # It only works if the request have some Container:
-      #   GET /container/1/content/ #=> @content.entry != nil
-      # but
-      #   GET /content/1 #=> @content.entry == nil
+      # Normaly using <tt>in_container(@container)</tt> named_scope.
+      #
+      # Otherwise, return the first entry for this Content: <tt>container_entries.first</tt>
+      #
+      # Useful if the request have some Container:in the path
+      #   GET /container/1/content/ #=> @content.entry
       #
       def entry
         @entry ||= if entry_attributes.any? 
@@ -133,7 +135,7 @@ module CMS
                        nil
                      end
                   else 
-                    nil
+                    self.content_entries.first
                   end
       end
 
@@ -181,6 +183,7 @@ module CMS
           entry.save!
         else
           logger.warn "CMS Warning: Saving Content without an Entry"
+          # Update entries updated_at
           self.content_entries.map(&:save!)
         end
       end
