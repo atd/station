@@ -84,7 +84,7 @@ module CMS
             send_data @content.current_data, :filename => @content.filename,
                                              :type => @content.content_type,
                                              :disposition => @content.class.content_options[:disposition].to_s
-          } if @content.mime_type
+          } if @content.mime_type && Mime::SET.include?(Mime.const_get(@content.mime_type.to_s.upcase))
         end
       end
     
