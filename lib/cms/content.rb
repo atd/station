@@ -18,7 +18,9 @@ module CMS
 
     # Return the first Content class supporting this Content Type
     def self.class_supporting(content_type)
-      mime_type = Mime::Type.lookup(content_type)
+      mime_type = content_type.is_a?(Mime::Type) ?
+        content_type :
+        Mime::Type.lookup(content_type)
       
       for content_class in CMS::content_classes
         return content_class if content_class.mime_types.include?(mime_type)
@@ -26,14 +28,17 @@ module CMS
       nil
     end
 
+
     module ClassMethods
       # Provides an ActiveRecord model with Content capabilities
       #
       # Content(s) are posted by Agent(s) to Container(s), creating Entry(s)
       #
       # Options:
+      # * <tt>:mime_types</tt> - array of Mime::Type accepted for this class. 
+      # Defaults to Mime::ATOM
+      # * <tt>content_type</tt> - content type for instances of this class. Defaults to "application/atom+xml;type=entry"
       # * <tt>:named_collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
-      # * <tt>:atompub_mime_types</tt> - array of Mime Types accepted for this Content via AtomPub. Defaults to "application/atom+xml;type=entry"
       # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: attachment_fu (<tt>:attachment_fu</tt>)
       # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
@@ -42,9 +47,10 @@ module CMS
         CMS.register_model(self, :content)
 
         #FIXME: should this be the default mime type??
-        options[:atompub_mime_types] ||= "application/atom+xml;type=entry"
-        options[:disposition]        ||= :attachment
-        options[:per_page]           ||= 9
+        options[:mime_types]   ||= :atom
+        options[:content_type] ||= "application/atom+xml;type=entry"
+        options[:disposition]  ||= :attachment
+        options[:per_page]     ||= 9
 
         cattr_reader :content_options
         class_variable_set "@@content_options", options
@@ -81,10 +87,6 @@ module CMS
         include CMS::Content::InstanceMethods
       end
       
-      def mime_types
-        Mime::Type.parse content_options[:atompub_mime_types]
-      end
-
       # Returns the symbol for a set of Contents of this item
       # e.g. <tt>:articles</tt> for Article
       def collection
@@ -101,6 +103,20 @@ module CMS
       # a.g. <tt>"Galería"</tt> for Photo
       def translated_named_collection
         content_options[:named_collection] ? content_options[:named_collection].to_s.t : self.to_s.humanize.t(self.to_s.humanize.pluralize, 99)
+      end
+
+      # Array of Mime objects accepted by this Content
+      def mime_types
+        Array(content_options[:mime_types]).map{ |m| Mime.const_get(m.to_sym.to_s.upcase) }
+      end
+
+      # List of comma separated content types accepted for this Content
+      def accepts
+        mime_types.map { |m|
+          m == Mime::ATOM ?
+            Array("application/atom+xml;type=entry") :
+            Array(m.to_s) + m.instance_variable_get("@synonyms")
+        }.flatten.uniq.join(", ")
       end
 
       protected
@@ -139,11 +155,24 @@ module CMS
                   end
       end
 
+      # Returns the content type for this Content instance
+      # Example: "application/atom+xml;type=entry"
+      def content_type
+        attributes['content_type'] || content_options['content_type']
+      end
 
       # Returns the mime type for this Content instance. 
-      # TODO: Works with attachment_fu
+      # Example: Mime::ATOM
       def mime_type
-        respond_to?("content_type") ? Mime::Type.lookup(content_type) : nil
+        mime_type = Mime::Type.lookup(content_type)
+
+        begin
+          Mime::SET.include?(Mime.const_get(mime_type.to_s.upcase)) ?
+            mime_type :
+            nil
+        rescue
+          nil
+        end
       end
 
       # Returns the Mime::Type symbol for this content

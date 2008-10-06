@@ -69,11 +69,10 @@ module CMS
 
         respond_to do |format|
           format.all {
-            headers["Content-type"] = @content.mime_type.to_s
             send_data @content.current_data, :filename => @content.filename,
                                              :type => @content.content_type,
                                              :disposition => @content.class.content_options[:disposition].to_s
-          } if @content.mime_type
+          } if @content.entry.has_media?
 
           format.html
           format.xml { render :xml => @content.to_xml }
@@ -84,7 +83,7 @@ module CMS
             send_data @content.current_data, :filename => @content.filename,
                                              :type => @content.content_type,
                                              :disposition => @content.class.content_options[:disposition].to_s
-          } if @content.mime_type && Mime::SET.include?(Mime.const_get(@content.mime_type.to_s.upcase))
+          } if @content.mime_type
         end
       end
     

@@ -33,16 +33,14 @@ module CMS
       # Set HTTP Forbidden (403) response for actions not authorized
       def not_authorized
         respond_to do |format|
+          format.all do
+            render :text => 'Forbidden',
+                   :status => 403
+          end
+
           format.html do
             render :file => "#{RAILS_ROOT}/public/403.html", 
                    :status => 403
-          end
-          
-          for mime in CMS.mime_types
-            format.send mime.to_sym do
-              render :text => 'Forbidden',
-                     :status => 403
-            end
           end
         end
       end

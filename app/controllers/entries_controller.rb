@@ -120,7 +120,6 @@ class EntriesController < ApplicationController
       @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if 
         params[:thumbnail] && @content.respond_to?(:thumbnails)
 
-      headers["Content-type"] = @content.mime_type.to_s
       send_data @content.current_data, :filename => @content.filename,
                                        :type => @content.content_type,
                                        :disposition => @content.class.content_options[:disposition].to_s
