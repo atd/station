@@ -68,19 +68,19 @@ module CMS
         @agents ||= @content.content_entries.map(&:agent).uniq
 
         respond_to do |format|
+          format.all {
+            headers["Content-type"] = @content.mime_type.to_s
+            send_data @content.current_data, :filename => @content.filename,
+                                             :type => @content.content_type,
+                                             :disposition => @content.class.content_options[:disposition].to_s
+          } if @content.mime_type
+
           format.html
           format.xml { render :xml => @content.to_xml }
           format.atom
     
           # Add Content format Mime Type for content with Attachments
           format.send(@content.mime_type.to_sym.to_s) {
-            send_data @content.current_data, :filename => @content.filename,
-                                             :type => @content.content_type,
-                                             :disposition => @content.class.content_options[:disposition].to_s
-          } if @content.mime_type
-    
-          format.all {
-            headers["Content-type"] = @content.mime_type.to_s
             send_data @content.current_data, :filename => @content.filename,
                                              :type => @content.content_type,
                                              :disposition => @content.class.content_options[:disposition].to_s
