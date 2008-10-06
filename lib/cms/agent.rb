@@ -69,14 +69,10 @@ module CMS
       # All Containers in which this Agent has a Performance
       #
       # Can pass options to the list:
-      # type:: the class of the Containers requested
+      # type:: the class of the Containers requested (Doesn't work with STI!)
+      #
       def stages(options = {})
-        #FIXME: with_scope
-        if options[:type]
-          conditions = [ "container_type = ?", options[:type].to_s.classify ]
-        end
-
-        agent_performances.find(:all, :conditions => conditions).map(&:container).uniq
+        agent_performances.container_type(options[:type]).map(&:container).uniq
       end
 
       def service_documents
