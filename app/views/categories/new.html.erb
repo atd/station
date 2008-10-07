@@ -2,7 +2,7 @@
 
 <%= error_messages_for :category %>
 
-<% form_for([@container.to_ppath, @category]) do |f| %>
+<% form_for([@container, @category]) do |f| %>
   <%= render :partial => 'form', :object => f %>
   <p>
     <%= f.submit "Create".t %>

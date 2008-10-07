@@ -132,7 +132,7 @@ module CMS
             if @content.save
               @content.entry.category_ids = params[:category_ids]
               flash[:valid] = "#{ @content.class.to_s.humanize } created".t
-              redirect_to [ current_container.to_ppath, @content ]
+              redirect_to [ current_container, @content ]
             else
               @title ||= "New #{ controller_name.singularize.humanize }".t
               render :action => 'new'
@@ -141,7 +141,7 @@ module CMS
     
           format.atom {
             if @content.save
-              headers["Location"] = formatted_polymorphic_url([ current_container.to_ppath, @content, :atom ])
+              headers["Location"] = formatted_polymorphic_url([ current_container, @content, :atom ])
               render :action => 'show',
                      :status => :created
 
@@ -180,7 +180,7 @@ module CMS
             if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
               @content.entry.category_ids = params[:category_ids] if @content.entry
               flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
-              redirect_to [ current_container.to_ppath, @content ].compact
+              redirect_to [ current_container, @content ].compact
             else
               @title ||= "Editing #{ controller_name.singularize.humanize }".t
               render :action => 'edit'
@@ -213,7 +213,7 @@ module CMS
         @content.destroy
 
         respond_to do |format|
-          format.html { redirect_to polymorphic_path([ current_container.to_ppath, self.resource_class.new ].compact) }
+          format.html { redirect_to polymorphic_path([ current_container, self.resource_class.new ].compact) }
           format.atom { head :ok }
           # FIXME: Check AtomPub, RFC 5023
     #      format.send(mime_type) { head :ok }

@@ -98,7 +98,7 @@ class CategoriesController < ApplicationController
     @category.destroy
 
     respond_to do |format|
-      format.html { redirect_to(polymorphic_path([ @container.to_ppath, Category.new ])) }
+      format.html { redirect_to(polymorphic_path([ @container, Category.new ])) }
       format.xml  { head :ok }
     end
   end

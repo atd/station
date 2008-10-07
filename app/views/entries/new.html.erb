@@ -8,7 +8,7 @@
 <% end -%>
 
 <% form_for(:entry, 
-            :url => polymorphic_path([current_container.to_ppath, @content.class.new].compact), 
+            :url => polymorphic_path([current_container, @content.class.new].compact), 
             :html => { :multipart => true }) do |f| -%>
 
   <%= render :partial => "entries/form", :object => f %>

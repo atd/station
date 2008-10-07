@@ -7,7 +7,7 @@ module ContentsHelper
       html << "<div id=\"content_new_top\" class=\"block_white_top\">» #{ "New Entry".t } </div>"
       html << "<div id=\"content_new_center\" class=\"block_white_center\">"
       for content_type in current_container.accepted_content_types.sort{ |x, y| x.to_s <=> y.to_s }
-        html << link_to("New #{ content_type.to_s.humanize.singularize }".t, new_polymorphic_path([ current_container.to_ppath, content_type.to_class.new ]), {:class => "action add" })
+        html << link_to("New #{ content_type.to_s.humanize.singularize }".t, new_polymorphic_path([ current_container, content_type.to_class.new ]), {:class => "action add" })
       end
       html << "</div>"
       html << "<div id=\"content_new_bottom\" class=\"block_white_bottom\"></div><br />"
@@ -31,7 +31,7 @@ module ContentsHelper
       for content in content_classes
      #menu << "<span class=\"content_unit button\">"+link_to("» #{ content.collection.to_s.humanize }", send("#{ content.to_s.tableize }_url") , {:id => "content_unit_#{ content.collection }_link", :class => "content_unit_link" })
       #menu << "</span>"
-     content_link = polymorphic_path([ @container.to_ppath, Entry.new ].compact) + "?content_type=#{ content.to_s.tableize }"
+     content_link = polymorphic_path([ @container, Entry.new ].compact) + "?content_type=#{ content.to_s.tableize }"
        html << link_to("<span id=\"content_link_#{ content.collection }\"> » #{ content.to_s.t(content.to_s.pluralize, 99) } </span>", content_link, {:class => "content_link inactive button" })
      end
     end

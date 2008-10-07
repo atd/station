@@ -10,4 +10,4 @@
 <% end %>
 
 <%= link_to 'Show'.t, @category %> |
-<%= link_to 'Back'.t, polymorphic_path([@container.to_ppath, Category.new]) %>
+<%= link_to 'Back'.t, polymorphic_path([@container, Category.new]) %>

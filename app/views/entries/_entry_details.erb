@@ -6,6 +6,6 @@
 <% if entry.categories.any? -%>
 <b class="info"><%= "Category".t("Categories", 99) %></b>: <%= entry.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
 <% end -%>
-<%= link_to("View #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container.to_ppath, entry.content ]), {:class => "view action"}) %>
-<%= link_to("Edit #{entry.content.class.to_s.humanize}".t, edit_polymorphic_path([ entry.container.to_ppath, entry.content ]),{:class => "edit action"}) %>
-<%= link_to("Delete #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container.to_ppath, entry.content ]), {:class => "delete action", :confirm => 'Delete the entry: "%s"?' / sanitize(entry.title), :method => :delete}) %>
+<%= link_to("View #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container, entry.content ]), {:class => "view action"}) %>
+<%= link_to("Edit #{entry.content.class.to_s.humanize}".t, edit_polymorphic_path([ entry.container, entry.content ]),{:class => "edit action"}) %>
+<%= link_to("Delete #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container, entry.content ]), {:class => "delete action", :confirm => 'Delete the entry: "%s"?' / sanitize(entry.title), :method => :delete}) %>

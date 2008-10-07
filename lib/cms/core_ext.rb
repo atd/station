@@ -8,12 +8,33 @@ unless Symbol.instance_methods.include? 'to_class'
   end
 end
 
-# See Site#to_ppath
-unless Object.instance_methods.include? 'to_ppath'
-  Object.class_eval do
-    def to_ppath
-      self
+# Return symbol for polymorphic_path because Site it is a single resource
+#
+# Example:
+#   # current_container = Site.current
+#   polymorphic_path([ current_container, Category.new ]) #=> site_categories_path
+unless ActionController::PolymorphicRoutes.respond_to?(:polymorphic_url_with_cms)
+  ActionController::PolymorphicRoutes.module_eval do
+    def polymorphic_url_with_cms(record_or_hash_or_array, options = {}) #:nodoc:
+      rhoa = case record_or_hash_or_array
+             when Array
+               record_or_hash_or_array.map{ |r| filter_single_resources(r) }.compact
+             else
+               filter_single_resources(record_or_hash_or_array)
+             end
+      polymorphic_url_without_cms(rhoa, options)
     end
+
+    def filter_single_resources(record) #:nodoc:
+      case record
+      when Site
+        :site
+      else
+        record
+      end
+    end
+
+    alias_method_chain :polymorphic_url, :cms
   end
 end
 
@@ -30,7 +51,7 @@ unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
           xml.tag!( "atom:title", container.name )
             # Collections are different type of Contents
             for content in container.accepted_content_types
-              xml.collection(:href => formatted_polymorphic_path([ container.to_ppath, content.to_class.new, :atom ])) do
+              xml.collection(:href => formatted_polymorphic_path([ container, content.to_class.new, :atom ])) do
                 xml.tag!("atom:title", "#{ container.name } - #{ content.to_class.named_collection }")
                 xml.accept(container.authorizes?(current_agent, :create_entries) ? content.to_class.accepts : nil)
               end

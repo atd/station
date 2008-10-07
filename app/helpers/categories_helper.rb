@@ -17,7 +17,7 @@ module CategoriesHelper
       end 
       html << '</div>'
       html << link_to_remote("New Category", 
-                             :url => polymorphic_path([ container.to_ppath, Category.new ]),
+                             :url => polymorphic_path([ container, Category.new ]),
                              :with => "'category[name]=' + window.prompt('#{ 'Category name'.t }')")
                                  
       html << '</p>'
@@ -27,7 +27,7 @@ module CategoriesHelper
   # Return a list of linked Categories, separated by <tt>,</tt>
   def categories_list(item)
     item.categories.map{ |c|
-      link_to c.name, polymorphic_path([ c.container.to_ppath, c ])
+      link_to c.name, polymorphic_path([ c.container, c ])
     }.join(', ')
   end
 end
