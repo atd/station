@@ -57,7 +57,11 @@ module CMS
       # In the last case, +@content.entry+ is entry relative to the Container. See Content#entry
       def show
         # Image thumbnails. &thumbnail=thumb
-        @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) if params[:thumbnail] && @content.respond_to?(:thumbnails)
+        if params[:thumbnail] && @content.respond_to?(:thumbnails)
+          @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) 
+          @content.entry = @content.parent.entry
+        end
+
         instance_variable_set "@#{ self.resource_class.to_s.underscore }", @content
 
         @title ||= @content.entry.title if @content.entry
