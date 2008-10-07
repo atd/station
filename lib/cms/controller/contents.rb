@@ -180,6 +180,14 @@ module CMS
         end
 
         respond_to do |format| 
+          format.any(:atom, :all, @content.format) {
+            if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
+              head :ok
+            else
+              render :xml => @content.errors.to_xml, :status => :not_acceptable
+            end
+          }
+
           format.html {
             if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
               @content.entry.category_ids = params[:category_ids] if @content.entry
@@ -190,22 +198,7 @@ module CMS
               render :action => 'edit'
             end
           }
-    
-          format.atom {
-            if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
-              head :ok
-            else
-              render :xml => @content.errors.to_xml, :status => :not_acceptable
-            end
-          }
 
-          format.send(@content.format) {
-            if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
-              head :ok
-            else
-              render :xml => @content.errors.to_xml, :status => :not_acceptable
-            end
-          }
         end
       end
 
