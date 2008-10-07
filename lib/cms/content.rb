@@ -166,13 +166,9 @@ module CMS
       def mime_type
         mime_type = Mime::Type.lookup(content_type)
 
-        begin
-          Mime::SET.include?(Mime.const_get(mime_type.to_s.upcase)) ?
-            mime_type :
-            nil
-        rescue
+        mime_type.instance_variable_get("@symbol") ?
+          mime_type :
           nil
-        end
       end
 
       # Returns the Mime::Type symbol for this content
