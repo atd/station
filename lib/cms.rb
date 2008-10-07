@@ -5,6 +5,7 @@ require 'cms/autoload'
 module CMS
   class << self
     def enable #:nodoc:
+      self.enable_mime_types
       enable_active_record
       self.autoload
     end
