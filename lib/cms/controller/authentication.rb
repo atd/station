@@ -146,7 +146,7 @@ module CMS
         # simply close itself.
         def access_denied
           case request.format 
-          when Mime::HTML, Mime::ALL
+          when Mime::HTML
             store_location
             redirect_to new_session_path
           else
