@@ -78,7 +78,7 @@ class SessionsController < ApplicationController
     end
 
     if authenticated?
-      if params[:remember_me] == "1"
+      if params[:remember_me] == "1" && current_agent.class.agent_options[:authentication].include?(:cookie_token)
         self.current_agent.remember_me
         cookies[:auth_token] = { :value => self.current_agent.remember_token , :expires => self.current_agent.remember_token_expires_at }
       end

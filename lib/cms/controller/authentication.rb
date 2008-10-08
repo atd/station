@@ -98,7 +98,7 @@ module CMS
         # Set it to AnonymousAgent#current if authentication fails so 
         # that future calls do not hit the database.
         def current_agent
-          @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie || AnonymousAgent.current)
+          @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie_token || AnonymousAgent.current)
         end
   
         def current_polymorphic_agent(agent_klass) #:nodoc:
@@ -188,8 +188,8 @@ module CMS
         end
   
         # Attempt to authenticate by an expiring token in the cookie.
-        def login_from_cookie #:nodoc:
-          ( CMS.agent_classes - Array(AnonymousAgent) ).each do |agent_class|
+        def login_from_cookie_token #:nodoc:
+          CMS.agent_classes.select{ |klass| klass.agent_options[:authentication].include?(:cookie_token) }.each do |agent_class|
             agent = agent_class.find_by_remember_token(cookies[:auth_token])
             if agent && agent.remember_token?
               agent.remember_me

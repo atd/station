@@ -26,7 +26,7 @@ module CMS
       def acts_as_agent(options = {})
         CMS.register_model(self, :agent)
 
-        options[:authentication] ||= [ :login_and_password, :openid ]
+        options[:authentication] ||= [ :login_and_password, :openid, :cookie_token ]
         
         cattr_reader :agent_options
         class_variable_set "@@agent_options", options
@@ -43,13 +43,14 @@ module CMS
           include CMS::Agent::Authentication::OpenID
         end
 
+        if options[:authentication].include? :cookie_token
+          include CMS::Agent::Authentication::CookieToken
+        end
+
         # Verifies agent email
         if options[:activation]
           include CMS::Agent::Activation
         end
-
-        # Remember Agent in browser through cookies
-        include CMS::Agent::Remember
 
         has_many :agent_entries,
                  :class_name => "Entry",
