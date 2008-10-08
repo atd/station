@@ -6,14 +6,14 @@ module ApplicationHelper
 
   # Get title in this order:
   # 1. string argument 
-  # 2. class variable +@title+, typically assigned in the Controller
-  # 3. +current_site[:name]+
+  # 2. class variable <tt>@title</tt>, typically assigned in the Controller
+  # 3. <tt>current_site[:name]</tt>
   def title(new_title = "" )
     sanitize(new_title.any? ? new_title : ( @title || current_site[:name] ))
   end
 
-  # Renders @notification_area@ div if there is a flash entry for types: 
-  # @:valid@, @:error@, @:warning@ and @:info@
+  # Renders notification_area div if there is a flash entry for types: 
+  # <tt>:valid</tt>, <tt>:error</tt>, <tt>:warning</tt> and <tt>:info</tt>
   def notification_area
     returning '<div id="notification_area">' do |html|
       for type in %w{ valid error warning info}
@@ -28,16 +28,21 @@ module ApplicationHelper
     entry.agent.login
   end
 
-  # The path to the icon image for this object.
+  # The path to the icon image for the object.
   #
-  # If the object is a Entry, returns the path for the icon of its content. 
-  # If it is an image, to the icon thumbnail. 
+  # If the object is a Entry, returns the path for the icon of its Content. 
   #
-  # Otherwise, it looks for a file based on mime type or, if the object 
+  # If the object is an image, and it's already saved, it returns the path 
+  # to the icon thumbnail. 
+  #
+  # Else, it builds the file name based on mime type or, if the object 
   # hasn't mime type, the class name tableized.
   #
-  # Finally, it first looks for the icon file in /public/images/icons, and at last 
-  # in /public_assets/cmsplugin/images/icons
+  #   icon_image(attachment) #=> .../application-pdf.png
+  #   icon_image(xhtml_text) #=> .../xhtml_text.png
+  #
+  # Finally, it first looks for the icon file in /public/images/icons, 
+  # and at last in /public_assets/cmsplugin/images/icons
   def icon_image(object)
     if object.is_a?(Entry)
       icon_image object.content
