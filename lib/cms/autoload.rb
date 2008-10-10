@@ -37,39 +37,41 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
 
   @@loaded = false
 
+  class << self
   # Dispatcher callback to identify CMS classes
-  def self.autoload
-    return if @@loaded
+    def autoload
+      return if @@loaded
 
 #    _logger_debug "cms autoload hook invoked"
     
-    options[:requirements].each do |requirement|
+      options[:requirements].each do |requirement|
 #      _logger_warn "forcing requirement load of #{requirement}"
-      require requirement
-    end
+        require requirement
+      end
   
-    for file_pattern in options[:file_patterns]
-      Dir[file_pattern].each do |filename|
-        next if filename =~ /#{options[:file_exclusions].join("|")}/
-        open filename do |file|
-          begin
-            require filename if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/).any?
-          rescue Exception => e
-            #FIXME: logger ?
-            puts "CMSplugin autoload: Couldn't load file #{ filename }: #{ e }"
+      for file_pattern in options[:file_patterns]
+        Dir[file_pattern].each do |filename|
+          next if filename =~ /#{options[:file_exclusions].join("|")}/
+          open filename do |file|
+            begin
+              require filename if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/).any?
+            rescue Exception => e
+              #FIXME: logger ?
+              puts "CMSplugin autoload: Couldn't load file #{ filename }: #{ e }"
+            end
           end
         end
       end
-    end
-    @@loaded = true
-  end  
+      @@loaded = true
+    end  
 
-  # Include Model in CMS "acts_as" list
-  # TODO: documentation
-  def self.register_model(klass, acts_as)
-    return unless MODEL_ACTS_AS.include?(acts_as)
-#            _logger_warn "adding #{klass} to #{ acts_as }"
-    class_variable_set "@@#{ acts_as.to_s.pluralize }", class_variable_get("@@#{ acts_as.to_s.pluralize }") | Array(klass.to_s.tableize.to_sym)
+    # Include Model in CMS "acts_as" list
+    # TODO: documentation
+    def register_model(klass, acts_as)
+      return unless MODEL_ACTS_AS.include?(acts_as)
+  #            _logger_warn "adding #{klass} to #{ acts_as }"
+      class_variable_set "@@#{ acts_as.to_s.pluralize }", class_variable_get("@@#{ acts_as.to_s.pluralize }") | Array(klass.to_s.tableize.to_sym)
+    end
   end
 end
 

@@ -10,6 +10,8 @@ config.after_initialize do
   for mod in [ CMS::Controller::Base, CMS::Controller::Authentication, CMS::Controller::Authorization ]
     ActionController::Base.send(:include, mod) unless ActionController::Base.ancestors.include?(mod)
   end
+
+  CMS.inflections
 end
 
 unless defined? CMS

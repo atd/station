@@ -1,11 +1,12 @@
 require 'cms/core_ext'
 require 'cms/mime_types'
 require 'cms/autoload'
+require 'cms/inflections'
 
 module CMS
   class << self
     def enable #:nodoc:
-      self.enable_mime_types
+      enable_mime_types
       enable_active_record
       self.autoload
     end
