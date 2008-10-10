@@ -11,7 +11,7 @@ module CMS
     module Authorization
       # Inclusion hook to add CMS::Controller::Authentication
       def self.included(base) #:nodoc:
-        base.send :include, CMS::Controller::Authentication unless base.instance_methods.include?('authenticated?')
+        base.send :include, CMS::Controller::Authentication unless base.ancestors.include?(CMS::Controller::Authentication)
 
         base.helper_method :authorized?
         class << base

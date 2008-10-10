@@ -32,9 +32,7 @@ module CMS
           # Authenticates a user by their login name and unencrypted password. 
           # Returns the agent or nil.
           def authenticate_with_login_and_password(login, password)
-            u = agent_options[:activation] ? 
-                  find(:first, :conditions => ['login = ? and activated_at IS NOT NULL', login]) :
-                  find_by_login(login)
+            u = find_by_login(login)
             u && u.password_authenticated?(password) ? u : nil
           end
 

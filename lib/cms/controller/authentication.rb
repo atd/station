@@ -107,11 +107,22 @@ module CMS
   
         # Store the given agent id and agent_type in the session.
         def current_agent=(new_agent)
-          if new_agent.nil? || new_agent.is_a?(Symbol)
+          if new_agent.nil?
             session[:agent_id] = session[:agent_type] = nil
           else
             session[:agent_id]   = new_agent.id
             session[:agent_type] = new_agent.class.to_s
+
+            if params[:remember_me] == "1" && 
+              new_agent.class.agent_options[:authentication].include?(:cookie_token)
+
+              new_agent.remember_me
+
+              cookies[:auth_token] = { 
+                :value => new_agent.remember_token , 
+                :expires => new_agent.remember_token_expires_at 
+              }
+            end
           end
           @current_agent = new_agent || AnonymousAgent.current
         end
@@ -167,7 +178,6 @@ module CMS
           redirect_to(session[:return_to] || default)
           session[:return_to] = nil
         end
-  
   
 	# Attempt to login by the agent id and type stored in the session.
         def login_from_session #:nodoc:

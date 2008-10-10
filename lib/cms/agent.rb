@@ -3,15 +3,33 @@ require 'digest/sha1'
 module CMS
   # Agent(s) can CRUD Content(s) in Container(s), generating Entry(s)
   module Agent
+    class << self
+      # Agent Classes
+      def classes
+        CMS.agents.map(&:to_class)
+      end
 
-    def self.included(base) #:nodoc:
-      base.extend ClassMethods
-    end
+      # Returns the first model that acts as Agent, has activation enabled and 
+      # login and password
+      def activation_class
+        classes.select{ |a| a.agent_options[:activation] && 
+          a.agent_options[:authentication].include?(:login_and_password) }.first
+      end
 
-    # Returns the first model that acts as Agent, has activation enabled and 
-    # login and password
-    def self.activation_class
-      CMS.agents.map(&:to_class).select{ |a| a.agent_options[:activation] && a.agent_options[:authentication].include?(:login_and_password) }.first
+      # An Array with Agent classes supporting authentication @method@
+      def authentication_classes(method)
+        classes.select{ |a| a.agent_options[:authentication] && 
+          a.agent_options[:authentication].include?(method) }
+      end
+
+      # An Array with all authentication methods supported by the application
+      def authentication_methods
+        classes.map{ |a| a.agent_options[:authentication] }.flatten.uniq
+      end
+
+      def included(base) #:nodoc:
+        base.extend ClassMethods
+      end
     end
 
     module ClassMethods
@@ -28,26 +46,21 @@ module CMS
 
         options[:authentication] ||= [ :login_and_password, :openid, :cookie_token ]
         
+        # Set agent options
+        #
         cattr_reader :agent_options
         class_variable_set "@@agent_options", options
 
+        # Load Authentication Methods
         #
-        # Authentication Methods
-        #
-
-        if options[:authentication].include? :login_and_password
-          include CMS::Agent::Authentication::LoginAndPassword
+        options[:authentication].map{ |method| 
+          # Change openid symbol for loading
+          method == :openid ? :open_i_d : method 
+         }.each do |method|
+          include "CMS::Agent::Authentication::#{ method.to_s.camelize }".constantize
         end
 
-        if options[:authentication].include? :openid
-          include CMS::Agent::Authentication::OpenID
-        end
-
-        if options[:authentication].include? :cookie_token
-          include CMS::Agent::Authentication::CookieToken
-        end
-
-        # Verifies agent email
+        # Loads agent email verification
         if options[:activation]
           include CMS::Agent::Activation
         end
@@ -77,7 +90,7 @@ module CMS
       end
 
       def service_documents
-        if self.agent_options[:authentication].include?(:openid)
+        if self.agent_options[:authentication].include?(:open_i_d)
           openid_uris.map(&:atompub_service_document)
         else
           Array.new
