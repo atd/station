@@ -38,6 +38,7 @@ module CMS
           end
         end
       end
+      Openid = OpenID
     end
   end
 end

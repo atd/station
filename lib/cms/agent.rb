@@ -53,10 +53,7 @@ module CMS
 
         # Load Authentication Methods
         #
-        options[:authentication].map{ |method| 
-          # Change openid symbol for loading
-          method == :openid ? :open_i_d : method 
-         }.each do |method|
+        options[:authentication].each do |method|
           include "CMS::Agent::Authentication::#{ method.to_s.camelize }".constantize
         end
 
