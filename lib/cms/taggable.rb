@@ -16,7 +16,8 @@ module CMS
       def acts_as_taggable
         CMS.register_model self, :taggable
 
-        has_many :taggings, :as => :taggable
+        has_many :taggings, :as => :taggable,
+                            :dependent => :destroy
         has_many :tags, :through => :taggings do
           def to_s
             self.map(&:name).sort.join(Tag::DELIMITER)
