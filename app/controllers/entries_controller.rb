@@ -24,7 +24,7 @@ class EntriesController < ApplicationController
       @updated = @entries.blank? ? Site.current.created_at : @entries.first.updated_at
     end
 
-    @agents = CMS::Agent.classes.map(&:all).flatten.sort{ |a, b| a.login <=> b.login }
+    @agents = CMS::Agent.authentication_classes.map(&:all).flatten.sort{ |a, b| a.login <=> b.login }
     container_classes = CMS.container_classes - ( CMS.agent_classes + [ Site, Entry ] )
     @containers = container_classes.map(&:all).flatten.uniq.sort{ |a, b| a.name <=> b.name }
 

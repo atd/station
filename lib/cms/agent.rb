@@ -17,9 +17,14 @@ module CMS
       end
 
       # An Array with Agent classes supporting authentication @method@
-      def authentication_classes(method)
-        classes.select{ |a| a.agent_options[:authentication] && 
-          a.agent_options[:authentication].include?(method) }
+      def authentication_classes(method = nil)
+        classes.select{ |klass|
+          klass.agent_options[:authentication] 
+        }.select { |klass|
+          method ?
+            klass.agent_options[:authentication].include?(method) :
+            ! klass.agent_options[:authentication].blank? 
+        }
       end
 
       # An Array with all authentication methods supported by the application
