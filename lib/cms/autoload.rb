@@ -54,7 +54,7 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
           next if filename =~ /#{options[:file_exclusions].join("|")}/
           open filename do |file|
             begin
-              require filename if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/).any?
+              require_dependency(filename) if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/).any?
             rescue Exception => e
               #FIXME: logger ?
               puts "CMSplugin autoload: Couldn't load file #{ filename }: #{ e }"
