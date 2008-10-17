@@ -1,7 +1,9 @@
 module CMS
   module Controller
     module Sessions
+      # Methods for Sessions based on LoginAndPassword Authentication 
       module LoginAndPassword
+        # Init Session using LoginAndPassword Authentication
         def create_with_login_and_password
           return if params[:login].blank? || params[:password].blank?
 

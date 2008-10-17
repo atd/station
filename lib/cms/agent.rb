@@ -88,6 +88,16 @@ module CMS
     end
 
     module InstanceMethods
+      # Does this Agent needs to set a local password?
+      # True if it supports <tt>:login_and_password</tt> authentication method
+      # and it hasn't any OpenID Owning
+      def needs_password?
+        # False is Login/Password is not supported by this Agent
+        return false unless agent_options[:authentication].include?(:login_and_password)
+        # False if OpenID is suported and there is already an OpenID Owning associated
+        ! (agent_options[:authentication].include?(:openid) && !openid_identifier.blank?)
+      end
+
       # All Containers in which this Agent has a Performance
       #
       # Can pass options to the list:
