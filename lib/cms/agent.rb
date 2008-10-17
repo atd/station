@@ -50,6 +50,7 @@ module CMS
         CMS.register_model(self, :agent)
 
         options[:authentication] ||= [ :login_and_password, :openid, :cookie_token ]
+        options[:activation]     ||= false
         
         # Set agent options
         #
@@ -78,6 +79,11 @@ module CMS
                  :as => :agent
 
         include CMS::Agent::InstanceMethods
+      end
+
+      # Does this Agent class supports password recovery?
+      def password_recovery?
+        agent_options[:authentication].include?(:login_and_password) && agent_options[:activation]
       end
     end
 

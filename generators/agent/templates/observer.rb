@@ -4,7 +4,7 @@ class <%= class_name %>Observer < ActiveRecord::Observer
   end
 
   def after_save(<%= file_name %>)
-    if <%= file_name %>.class.agent_options[:authentication].include?(:login_and_password) && <%= file_name %>.class.agent_options[:activation]
+    if <%= file_name %>.class.password_recovery?
       <%= class_name %>Mailer.deliver_activation(<%= file_name %>) if <%= file_name %>.pending?
       <%= class_name %>Mailer.deliver_forgot_password(<%= file_name %>) if <%= file_name %>.recently_forgot_password?
       <%= class_name %>Mailer.deliver_reset_password(<%= file_name %>) if <%= file_name %>.recently_reset_password?
