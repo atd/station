@@ -108,7 +108,7 @@ module CMS
       end
 
       def service_documents
-        if self.agent_options[:authentication].include?(:open_i_d)
+        if self.agent_options[:authentication].include?(:openid)
           openid_uris.map(&:atompub_service_document)
         else
           Array.new
