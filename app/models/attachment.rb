@@ -6,7 +6,7 @@ class Attachment < ActiveRecord::Base
 
   alias_attribute :media, :uploaded_data
   
-  def self.atom_entry_filter(entry)
+  def self.atom_parser(entry)
     # Example:
     #     # { :body => entry.content.xml.to_s }
     #         {}
