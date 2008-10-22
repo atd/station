@@ -20,7 +20,7 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
   
 =end
   # They are mapped to acts_as#{ term } methods 
-  MODEL_ACTS_AS = [ :container, :agent, :content, :taggable ]
+  MODEL_ACTS_AS = [ :container, :agent, :content, :stage, :taggable ]
 
   MODEL_ACTS_AS.map(&:to_s).map(&:pluralize).each do |t|
     mattr_accessor t

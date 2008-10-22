@@ -32,15 +32,13 @@ module CMS
                  :as => :container
 
 
-        has_many :container_performances,
-                 :class_name => "Performance",
-                 :dependent => :destroy,
-                 :as => :container
-
         has_many :container_categories,
                  :class_name => "Category",
                  :dependent => :destroy,
                  :as => :container
+
+        # All Containers are Stages by default:
+        send(:acts_as_stage) unless respond_to?(:stage_options)
 
         include CMS::Container::InstanceMethods
       end
@@ -51,48 +49,6 @@ module CMS
     module InstanceMethods
       def accepted_content_types
         self.class.container_options[:content_types] || CMS.contents
-      end
-
-      # Agent must have at least one performance for every action
-      def authorizes?(agent, actions)
-        for action in Array(actions)
-          return false unless self.has_role_for?(agent, action)
-        end
-        true
-      end
-      
-      # All roles performed by some Agent in this Container.
-      #
-      # If action is specified, return all roles allowing the Agent to perform the action in this Container
-      def roles_for(agent, action = nil)
-        return Array.new unless agent.respond_to?(:agent_options)
-
-        agent_roles = container_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role).uniq
-
-        return agent_roles unless action
-
-        action = action.to_sym
-        agent_roles.select(&action)
-      rescue NoMethodError => e
-        raise Exception.new("At least one role doesn't support \"#{ action }\" method")
-      end
-      
-      # True if it exists at least one Performance for this Container.
-      #
-      # If some action is specified, return true if there is at least one role that allows
-      # the Agent to perform the action.
-      #
-      #   space.has_role_for?(user, :admin) # => true or false
-      #
-      def has_role_for?(agent, action = nil)
-        roles_for(agent, action).any?
-      end
-      
-      # Return all agents that play one role at least in this container
-      # 
-      # TODO: conditions (roles, etc...)
-      def actors
-        container_performances.map(&:agent).uniq
       end
     end
   end

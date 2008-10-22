@@ -98,13 +98,13 @@ module CMS
         ! (agent_options[:authentication].include?(:openid) && !openid_identifier.blank?)
       end
 
-      # All Containers in which this Agent has a Performance
+      # All Stages in which this Agent has a Performance
       #
       # Can pass options to the list:
-      # type:: the class of the Containers requested (Doesn't work with STI!)
+      # type:: the class of the Stage requested (Doesn't work with STI!)
       #
       def stages(options = {})
-        agent_performances.container_type(options[:type]).map(&:container).uniq
+        agent_performances.stage_type(options[:type]).map(&:stage).uniq
       end
 
       def service_documents

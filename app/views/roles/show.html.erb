@@ -3,45 +3,15 @@
   <%=h @role.name %>
 </p>
 
-<p>
-  <b>Create entries:</b>
-  <%=h @role.create_entries %>
-</p>
+<h2><%= "Permissions".t %></h2>
 
-<p>
-  <b>Read entries:</b>
-  <%=h @role.read_entries %>
-</p>
-
-<p>
-  <b>Update entries:</b>
-  <%=h @role.update_entries %>
-</p>
-
-<p>
-  <b>Delete entries:</b>
-  <%=h @role.delete_entries %>
-</p>
-
-<p>
-  <b>Create performances:</b>
-  <%=h @role.create_performances %>
-</p>
-
-<p>
-  <b>Read performances:</b>
-  <%=h @role.read_performances %>
-</p>
-
-<p>
-  <b>Update performances:</b>
-  <%=h @role.update_performances %>
-</p>
-
-<p>
-  <b>Delete performances:</b>
-  <%=h @role.delete_performances %>
-</p>
+<% if @role.permissions.any? -%>
+  <% @role.permissions.each do |permission| -%>
+    <%= permission.title %><br />
+  <% end -%>
+<% else -%>
+<%= "Role %s hasn't any permission" / @role.name %>
+<% end -%>
 
 
 <%= link_to 'Edit', edit_role_path(@role) %> |

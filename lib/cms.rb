@@ -19,6 +19,8 @@ module CMS
       ActiveRecord::Base.send :include, Content
       require 'cms/container'
       ActiveRecord::Base.send :include, Container
+      require 'cms/stage'
+      ActiveRecord::Base.send :include, Stage
       require 'cms/sortable'
       ActiveRecord::Base.send :include, Sortable
       require 'cms/taggable'
