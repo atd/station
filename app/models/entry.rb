@@ -60,12 +60,12 @@ class Entry < ActiveRecord::Base
   end
 
   # Can the Entry be read by <tt>agent</tt>?
-  def read_by?(agent = :false)
+  def read_by?(agent = AnonymousAgent.current)
     public_read? || container.has_role_for?(agent, :read_entries)
   end
 
   # Can the Entry be modified by <tt>agent</tt>?
-  def update_by?(agent = :false)
+  def update_by?(agent = AnonymousAgent.current)
     public_write? || container.has_role_for?(agent, :update_entries)
   end
 
