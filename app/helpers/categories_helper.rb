@@ -9,7 +9,7 @@ module CategoriesHelper
 
       html << '<div id="categories_list">'
       if container.container_categories.blank?
-        html << "%s has not categories" / sanitize(current_container.name)
+        html << "%s has not categories" / sanitize(container.name)
       else 
         container.container_categories.each do |c|
           html << check_box_tag('category_ids[]', c.id, (params[:category_ids] || []).map(&:to_i).include?(c.id)) + sanitize(c.name) + '<br />'
