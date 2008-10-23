@@ -161,6 +161,13 @@ function changeActiveContent(id_entry){
   $(last_active_content).addClassName("active_entry");
 }
 
+
+function go_to_content_if_active(id_entry,entry_url) {
+  if (last_active_content == ("entry_"+id_entry)) {
+    document.location = entry_url;
+  }
+}
+
 /* DEPRECATED */
 function changeDetail(num_content) {
   if(detail_active!='entry_detail_'+num_content) {

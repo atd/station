@@ -15,8 +15,17 @@
   <div id="list_view">
   <% for entry in @entries %>
     <div id="entry_<%= entry.id %>" class="entry <%= entry.content.class.to_s.tableize %>">
-      <%= link_to_remote "<img src=\"#{icon_image(entry)}\"/>#{sanitize(entry.title)} #{params[:kk]}", :url => details_entry_path(entry), :complete => "$('move_logo').src='#{ image_path 'move_static.png', :plugin => 'cmsplugin' }';changeActiveContent('#{entry.id}');", :loading => "$('move_logo').src='#{ image_path('move_dynamic.gif', :plugin => 'cmsplugin') }';" %>
-      <%= draggable_element("entry_"+entry.id.to_s, :revert => true) %>
+      <%= link_to_remote "<img src=\"#{ icon_image(entry) }\"/>#{ sanitize(entry.title) }",
+          :url => details_entry_path(entry),
+          :complete  => "$('move_logo').src='#{ image_path 'move_static.png',
+                                              :plugin => 'cmsplugin' }'; changeActiveContent('#{entry.id}');",
+          :before => "go_to_content_if_active('#{ entry.id }','#{ entry_path(entry) }');",
+          :loading   => "$('move_logo').src='#{ image_path('move_dynamic.gif',
+                                              :plugin => 'cmsplugin') }';" %>
+      <%= # do we still need dreggable??
+          # only overload brownser and no useless at now 
+          # draggable_element("entry_"+entry.id.to_s, :revert => true)
+      %>
     </div>
   <% end %>
   </div>
