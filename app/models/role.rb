@@ -8,5 +8,5 @@ class Role < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  acts_as_sortable :columns => [ :name ]
+  acts_as_sortable :columns => [ :name, :stage_type ]
 end

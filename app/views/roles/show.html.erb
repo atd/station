@@ -1,9 +1,15 @@
 <p>
-  <b>Name:</b>
+  <b><%= 'Name'.t %>:</b>
   <%=h @role.name %>
 </p>
 
-<h2><%= "Permissions".t %></h2>
+<p>
+  <b><%= "Stage type".t %>:</b> 
+  <%=h @role.stage_type.humanize.t %>
+</p>
+
+<p>
+<b><%= "Permissions".t %>:</b><br/>
 
 <% if @role.permissions.any? -%>
   <% @role.permissions.each do |permission| -%>
@@ -12,6 +18,7 @@
 <% else -%>
 <%= "Role %s hasn't any permission" / @role.name %>
 <% end -%>
+</p>
 
 
 <%= link_to 'Edit', edit_role_path(@role) %> |
