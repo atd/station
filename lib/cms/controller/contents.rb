@@ -180,7 +180,10 @@ module CMS
         end
 
         respond_to do |format| 
-          format.any(:atom, :all, @content.format) {
+          xml_formats = [ :atom, :all ]
+          xml_formats << @content.format unless @content.format == :html
+
+          format.any(*xml_formats) {
             if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
               head :ok
             else
