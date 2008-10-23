@@ -52,6 +52,8 @@ module CMS
         options[:disposition]  ||= :attachment
         options[:per_page]     ||= 9
 
+        alias_attribute :media, :uploaded_data if options[:has_media] == :attachment_fu
+
         cattr_reader :content_options
         class_variable_set "@@content_options", options
 
