@@ -48,7 +48,8 @@ module ApplicationHelper
       icon_image object.content
     elsif ! object.new_record? &&
           object.respond_to?(:mime_type) &&
-          object.respond_to?(:thumbnails) && 
+          object.respond_to?(:attachment_options) && 
+          object.attachment_options[:thumbnails].keys.include?(:icon) &&
           object.thumbnails.find_by_thumbnail('icon')
       "#{ formatted_polymorphic_path([object, object.mime_type.to_sym]) }?thumbnail=icon"
     else
