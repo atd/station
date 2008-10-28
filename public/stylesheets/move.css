@@ -41,6 +41,7 @@ We hope be usefull!!
 @import url('agents.css');
 @import url('containers.css');
 @import url('contents.css');
+@import url('form.css');
 @import url('session.css');
 @import url('footer.css');
 @import url('login.css');
@@ -59,6 +60,8 @@ body {
 }
 
 
+
+/* PENDING DEPRECATED */
 
 a.action {
   color: #55127b;
