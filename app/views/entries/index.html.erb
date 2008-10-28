@@ -19,7 +19,7 @@
           :url => details_entry_path(entry),
           :complete  => "$('move_logo').src='#{ image_path 'move_static.png',
                                               :plugin => 'cmsplugin' }'; changeActiveContent('#{entry.id}');",
-          :before => "go_to_content_if_active('#{ entry.id }','#{ entry_path(entry) }');",
+          :before => "go_to_content_if_active('#{ entry.id }','#{ polymorphic_path([ entry.container, entry.content ]) }');",
           :loading   => "$('move_logo').src='#{ image_path('move_dynamic.gif',
                                               :plugin => 'cmsplugin') }';" %>
       <%= # do we still need dreggable??
