@@ -67,7 +67,7 @@ module ApplicationHelper
   # Show a preview of content if it's not null and it's not a new record. 
   # Preview consists of icon_image and a link to the content
   def preview(content)
-    return "" unless content || ! content.new_record?
+    return "" unless content && ! content.new_record?
 
     returning "" do |html|
       html << '<p>'
