@@ -18,7 +18,8 @@ module CategoriesHelper
       html << '</div>'
       html << link_to_remote("New Category", 
                              :url => polymorphic_path([ container, Category.new ]),
-                             :with => "'category[name]=' + window.prompt('#{ 'Category name'.t }')",
+                             :condition => "(category_name = window.prompt('#{ 'Category name'.t }')) != '' && category_name != null",
+                             :with => "'category[name]=' + category_name",
                              :html => { :id => "new_category", 
                                         :class => "action add" } )
                                  
