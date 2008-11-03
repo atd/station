@@ -34,6 +34,10 @@ class Init < ActiveRecord::Migration
       t.integer :post_id
     end
 
+    create_table :db_files, :force => true do |t|
+      t.binary :data
+    end
+
     create_table :performances do |t|
       t.integer :agent_id
       t.string  :agent_type
@@ -118,6 +122,7 @@ class Init < ActiveRecord::Migration
     drop_table :attachments
     drop_table :categories
     drop_table :categorizations
+    drop_table :db_files
     drop_table :performances
     drop_table :posts
     drop_table :roles
