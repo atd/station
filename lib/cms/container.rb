@@ -1,8 +1,15 @@
 module CMS 
   # Container(s) are models receiving Content(s) posted by Agent(s)
   module Container
-    def self.included(base) #:nodoc:
-      base.extend ClassMethods
+    class << self
+      # Container classes
+      def classes
+        CMS.logotypables.map(&:to_class)
+      end
+
+      def included(base) #:nodoc:
+        base.extend ClassMethods
+      end
     end
 
     module ClassMethods

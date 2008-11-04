@@ -1,7 +1,3 @@
-resource :site do |site|
-  site.resources :entries, :categories
-  site.resources *CMS.contents
-end
 
 open_id_complete 'session', 
   { :controller => 'sessions', 
@@ -33,11 +29,22 @@ resources :entries, :member => { :media => :any,
                                :details => :any }
 resources :categories
 
+resource :site do |site|
+  site.resources :entries, :categories
+  site.resources *CMS.contents
+end
+
 resources *((CMS.contents | CMS.agents) - CMS.containers)
 
 resources(*(CMS.containers) - Array(:sites)) do |container|
   container.resources(*CMS.contents)
   container.resources :entries, :categories
+end
+
+resources :logotypes
+
+resources(*CMS.logotypables) do |logotypable|
+  logotypable.resource :logotype
 end
 
 resources :roles

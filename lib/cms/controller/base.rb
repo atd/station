@@ -50,7 +50,42 @@ module CMS
       def resource_class
         @resource_class ||= controller_name.classify.constantize
       end
-      
+
+      # Obtains a given resource from parameters. 
+      # Options:
+      # * acts_as: the resource must acts_as the given symbol.
+      #   acts_as => :container
+      def get_resource_from_path(options = {})
+        acts_as_module = "CMS::#{ options[:acts_as].to_s.classify }".constantize if options[:acts_as]
+
+        candidates = params.keys.select{ |k| k[-3..-1] == '_id' }
+
+        candidates.each do |candidate_key|
+          # Filter keys that correspond to classes
+          begin
+            candidate_class = candidate_key[0..-4].to_sym.to_class
+          rescue NameError
+            next
+          end
+
+          # acts_as filter
+          if options[:acts_as]
+            next unless acts_as_module.classes.include?(candidate_class)
+          end
+
+          next unless candidate_class.respond_to?(:find)
+
+          # Find record
+          begin
+            return instance_variable_set "@#{ options[:acts_as] }", candidate_class.find(params[candidate_key])
+          rescue ActiveRecord::RecordNotFound
+            next
+          end
+        end
+
+        nil
+      end
+     
       # Fills title and description fields from Entry and Content.
       #
       # Useful when rendering forms
@@ -117,25 +152,7 @@ module CMS
       end
 
       def get_container_from_path #:nodoc:
-        candidates = params.keys.select{ |k| k[-3..-1] == '_id' }
-
-        for candidate_key in candidates
-          begin
-            candidate_class = candidate_key[0..-4].to_sym.to_class
-          rescue NameError
-            next
-          end
-
-          next unless candidate_class.respond_to?(:container_options)
-
-          begin
-            return @container = candidate_class.find(params[candidate_key])
-          rescue ActiveRecord::RecordNotFound
-            next
-          end
-        end
-
-        nil
+        get_resource_from_path(:acts_as => :container)
       end
 
       def get_container_from_session #:nodoc:

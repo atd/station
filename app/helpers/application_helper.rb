@@ -46,6 +46,8 @@ module ApplicationHelper
   def icon_image(object)
     if object.is_a?(Entry)
       icon_image object.content
+    elsif object.is_a?(Logotype)
+      "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=48"
     elsif ! object.new_record? &&
           object.respond_to?(:mime_type) &&
           object.respond_to?(:attachment_options) && 
