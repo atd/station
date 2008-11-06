@@ -1,7 +1,5 @@
 # Categories methods and filters for Category
 class CategoriesController < ApplicationController
-  include CMS::Controller::Base unless self.ancestors.include?(CMS::Controller::Base)
-
   before_filter :needs_container, :only => [ :index, :new, :create ]
 
   before_filter :get_category, :only => [ :show, :edit, :update, :destroy ]

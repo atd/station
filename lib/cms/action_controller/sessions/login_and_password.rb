@@ -1,5 +1,5 @@
 module CMS
-  module Controller
+  module ActionController
     module Sessions
       # Methods for Sessions based on LoginAndPassword Authentication 
       module LoginAndPassword
@@ -9,7 +9,7 @@ module CMS
 
           agent = nil
 
-          CMS::Agent.authentication_classes(:login_and_password).each do |klass|
+          CMS::ActiveRecord::Agent.authentication_classes(:login_and_password).each do |klass|
             agent = klass.authenticate_with_login_and_password(params[:login], params[:password])
             break if agent
           end

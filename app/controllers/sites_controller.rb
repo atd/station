@@ -1,5 +1,4 @@
 class SitesController < ApplicationController
-  include CMS::Controller::Base unless ancestors.include?(CMS::Controller::Base)
 
   # GET /site
   # GET /site.xml

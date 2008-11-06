@@ -1,5 +1,5 @@
 module CMS
-  module Controller
+  module ActionController
     module Sessions
       # Methods for Sessions based on CookieToken Authentication 
       #

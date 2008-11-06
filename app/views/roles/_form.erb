@@ -6,7 +6,7 @@
   <h2><%= "Stage type".t %></h2>
   <p>
   <%= form.select(:stage_type, 
-                  CMS.stages.map{ |st| [ st.to_s.classify ] * 2 }, 
+                  CMS::ActiveRecord::Stage.symbols.map{ |st| [ st.to_s.classify ] * 2 }, 
                   { :selected => @role.stage_type }) %>
   </p>
 

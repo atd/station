@@ -26,8 +26,8 @@ module CMS
     def find_agent_fixture(agent)
       return nil unless agent
 
-      for agent_klass in CMS.agent_classes
-        agent_fixture = send(agent_klass.to_s.tableize, agent)
+      for agent_klass in CMS::ActiveRecord::Agent.symbols
+        agent_fixture = send(agent_klass, agent)
         return agent_fixture if agent_fixture
       end
       nil

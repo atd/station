@@ -10,16 +10,16 @@ resource :session
 login 'login',   :controller => 'sessions', :action => 'new'
 logout 'logout', :controller => 'sessions', :action => 'destroy'
 
-if CMS::Agent.activation_class
+if CMS::ActiveRecord::Agent.activation_class
   activate 'activate/:activation_code', 
-           :controller => CMS::Agent.activation_class.to_s.tableize, 
+           :controller => CMS::ActiveRecord::Agent.activation_class.to_s.tableize, 
            :action => 'activate', 
            :activation_code => nil
   forgot_password 'forgot_password', 
-                  :controller => CMS::Agent.activation_class.to_s.tableize,
+                  :controller => CMS::ActiveRecord::Agent.activation_class.to_s.tableize,
                   :action => 'forgot_password'
   reset_password 'reset_password/:reset_password_code', 
-                 :controller => CMS::Agent.activation_class.to_s.tableize,
+                 :controller => CMS::ActiveRecord::Agent.activation_class.to_s.tableize,
                  :action => 'reset_password',
                  :reset_password_code => nil
 end
@@ -31,19 +31,19 @@ resources :categories
 
 resource :site do |site|
   site.resources :entries, :categories
-  site.resources *CMS.contents
+  site.resources *CMS::ActiveRecord::Content.symbols
 end
 
-resources *((CMS.contents | CMS.agents) - CMS.containers)
+resources *((CMS::ActiveRecord::Content.symbols | CMS::ActiveRecord::Agent.symbols) - CMS::ActiveRecord::Container.symbols)
 
-resources(*(CMS.containers) - Array(:sites)) do |container|
-  container.resources(*CMS.contents)
+resources(*(CMS::ActiveRecord::Container.symbols) - Array(:sites)) do |container|
+  container.resources(*CMS::ActiveRecord::Content.symbols)
   container.resources :entries, :categories
 end
 
 resources :logotypes
 
-resources(*CMS.logotypables) do |logotypable|
+resources(*CMS::ActiveRecord::Logotypable.symbols) do |logotypable|
   logotypable.resource :logotype
 end
 

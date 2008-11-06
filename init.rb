@@ -10,7 +10,7 @@ config.gem 'artmotion-calendar_date_select', :lib => 'gem_init',
 
 config.after_initialize do
   # Controllers
-  for mod in [ CMS::Controller::Base, CMS::Controller::Authentication, CMS::Controller::Authorization ]
+  for mod in [ CMS::ActionController::Base, CMS::ActionController::Authentication, CMS::ActionController::Authorization ]
     ActionController::Base.send(:include, mod) unless ActionController::Base.ancestors.include?(mod)
   end
 

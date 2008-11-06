@@ -2,7 +2,7 @@ require 'openid'
 require 'openid/extensions/sreg'
 
 module CMS
-  module Controller
+  module ActionController
     module Sessions
       # OpenID sessions management
       module OpenID
@@ -49,7 +49,7 @@ module CMS
               flash[:notice] = "Verification of %s succeeded" / openid_response.display_identifier
               uri = Uri.find_or_create_by_uri(openid_response.display_identifier)
 
-              CMS::Agent.authentication_classes(:openid).each do |klass|
+              CMS::ActiveRecord::Agent.authentication_classes(:openid).each do |klass|
                 self.current_agent = 
                   klass.authenticate_with_openid(uri)
                 break if authenticated?
@@ -64,7 +64,7 @@ module CMS
                 # We create new OpenidUser
                 session[:openid_identifier] = openid_response.display_identifier
                 sreg_response = ::OpenID::SReg::Response.from_success_response(openid_response)
-                render_component :controller => CMS::Agent.authentication_classes(:openid).first.to_s.tableize,
+                render_component :controller => CMS::ActiveRecord::Agent.authentication_classes(:openid).first.to_s.tableize,
                                  :action => "create",
                                  :params => { :openid_user => sreg_response.data }
               end

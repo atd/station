@@ -1,10 +1,10 @@
 module CMS
-  module Controller
+  module ActionController
     # Controller methods and default filters for Agents Controllers
     module Contents
       def self.included(base) #:nodoc:
-        base.send :include, CMS::Controller::Base unless base.ancestors.include?(CMS::Controller::Base)
-        base.send :include, CMS::Controller::Authorization unless base.ancestors.include?(CMS::Controller::Authorization)
+        base.send :include, CMS::ActionController::Base unless base.ancestors.include?(CMS::ActionController::Base)
+        base.send :include, CMS::ActionController::Authorization unless base.ancestors.include?(CMS::ActionController::Authorization)
       end
 
       # List Contents of this type posted to a Container
@@ -22,7 +22,7 @@ module CMS
           @agents = current_container.actors
         else
           @title ||= self.resource_class.translated_named_collection
-          @agents = CMS.agent_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
+          @agents = CMS::ActiveRecord::Agent.classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
 
         # AtomPub feeds are ordered by Entry#updated_at
@@ -227,7 +227,7 @@ module CMS
       # Render Bad Request unless the controller name relates to a class that acts_as_content. 
       # If current_container exists, check its valid contents
       def controller_name_is_valid_content
-        unless (current_container && current_container.container_options[:contents] || CMS.contents).include?(self.resource_class.collection)
+        unless (current_container && current_container.container_options[:contents] || CMS::ActiveRecord::Content.symbols).include?(self.resource_class.collection)
           render :text => "Doesn't support this Content type", :status => 400
         end
       end
@@ -238,13 +238,13 @@ module CMS
       #
       # Example:
       #   class ArticlesController < ActiveRecord::Base
-      #     include CMS::Controller::Contents
+      #     include CMS::ActionController::Contents
       #
       #     before_filter :get_content #=> @article = @content = Article.find(params[:id])
       #   end
       #
       # If current_container exists, +@content+ has its entry defined. 
-      # This funcion uses CMS::Content#in_container named scope
+      # This funcion uses CMS::ActiveRecord::Content#in_container named scope
       #
         def get_content
           @content = self.resource_class.in_container(current_container).find params[:id]

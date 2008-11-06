@@ -1,6 +1,6 @@
 class <%= controller_class_name %>Controller < ApplicationController
   # Include some methods and filters.
-  include CMS::Controller::Contents
+  include CMS::ActionController::Contents
   
   # Authentication Filter
   before_filter :authentication_required, :except => [ :index, :show ]

@@ -1,9 +1,9 @@
 module CMS
-  module Controller
+  module ActionController
     # Authorization module provides your Controllers and Views with methods and filters
     # to control the actions of Agents
     #
-    # This module uses Agent identification support from CMS::Controller::Authentication
+    # This module uses Agent identification support from CMS::ActionController::Authentication
     #
     # == Authorization Filters
     # You can define authorization filters in the following way:
@@ -29,9 +29,9 @@ module CMS
     #
     #  end
     module Authorization
-      # Inclusion hook to add CMS::Controller::Authentication
+      # Inclusion hook to add CMS::ActionController::Authentication
       def self.included(base) #:nodoc:
-        base.send :include, CMS::Controller::Authentication unless base.ancestors.include?(CMS::Controller::Authentication)
+        base.send :include, CMS::ActionController::Authentication unless base.ancestors.include?(CMS::ActionController::Authentication)
 
         base.helper_method :authorized?
         class << base

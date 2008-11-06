@@ -2,7 +2,7 @@ require 'casclient'
 require 'casclient/frameworks/rails/filter'
 
 module CMS
-  module Controller
+  module ActionController
     module Sessions
       # Central Authentication Service (CAS) session support
       module CAS
@@ -25,7 +25,7 @@ module CMS
           initialize_cas_filter
 
           if ::CASClient::Frameworks::Rails::Filter.filter(self)
-            CMS::Agent.authentication_classes(:cas).each do |klass|
+            CMS::ActiveRecord::Agent.authentication_classes(:cas).each do |klass|
               self.current_agent = 
                 klass.authenticate_with_cas(session[:cas_user])
 
@@ -36,10 +36,10 @@ module CMS
               flash[:notice] = "Logged in successfully".t
               redirect_back_or_default(after_create_path)
             else
-              render_component :controller => CMS::Agent.authentication_classes(:cas).first.to_s.tableize,
+              render_component :controller => CMS::ActiveRecord::Agent.authentication_classes(:cas).first.to_s.tableize,
                                :action => "create",
                                :params => { 
-                                 CMS::Agent.authentication_classes(:cas).first.to_s.underscore.to_sym => {
+                                 CMS::ActiveRecord::Agent.authentication_classes(:cas).first.to_s.underscore.to_sym => {
                                    :login => session[:cas_user]
                                  }
                                }
@@ -61,7 +61,7 @@ module CMS
           return if ::CASClient::Frameworks::Rails::Filter.config
 
           begin
-            klass = CMS::Agent.authentication_classes(:cas).first
+            klass = CMS::ActiveRecord::Agent.authentication_classes(:cas).first
 
             options = klass.agent_options[:cas_filter].clone
             options[:service_url] ||= session_url

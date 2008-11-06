@@ -19,13 +19,6 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
   end
   
 =end
-  # They are mapped to acts_as#{ term } methods 
-  MODEL_ACTS_AS = [ :container, :agent, :content, :stage, :taggable, :logotypable ]
-
-  MODEL_ACTS_AS.map(&:to_s).map(&:pluralize).each do |t|
-    mattr_accessor t
-    class_variable_set "@@#{ t }", []
-  end
 
   DEFAULT_OPTIONS = {
     :file_patterns => [ RAILS_ROOT, File.dirname(__FILE__).gsub("/lib/cms", '') ].map{ |f| f + '/app/models/**/*.rb' },
@@ -54,7 +47,7 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
           next if filename =~ /#{options[:file_exclusions].join("|")}/
           open filename do |file|
             begin
-              require_dependency(filename) if file.grep(/acts_as_(#{ MODEL_ACTS_AS.join('|') })/).any?
+              require_dependency(filename) if file.grep(/acts_as_(#{ CMS::ActiveRecord::ActsAs::LIST.join('|') })/).any?
             rescue Exception => e
               #FIXME: logger ?
               puts "CMSplugin autoload: Couldn't load file #{ filename }: #{ e }"
@@ -64,14 +57,6 @@ Note that you can override DEFAULT_OPTIONS via Rails::Configuration#cms_options.
       end
       @@loaded = true
     end  
-
-    # Include Model in CMS "acts_as" list
-    # TODO: documentation
-    def register_model(klass, acts_as)
-      return unless MODEL_ACTS_AS.include?(acts_as)
-  #            _logger_warn "adding #{klass} to #{ acts_as }"
-      class_variable_set "@@#{ acts_as.to_s.pluralize }", class_variable_get("@@#{ acts_as.to_s.pluralize }") | Array(klass.to_s.tableize.to_sym)
-    end
   end
 end
 

@@ -1,6 +1,6 @@
 class <%= model_controller_class_name %>Controller < ApplicationController
   # Include some methods and filters. 
-  include CMS::Controller::Agents
+  include CMS::ActionController::Agents
   
   # Get the <%= model_controller_class_name.singularize %> for member actions
   before_filter :get_agent, :only => :show

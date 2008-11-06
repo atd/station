@@ -12,36 +12,12 @@ module CMS
     end
 
     def enable_active_record #:nodoc:
-      #FIXME: DRY
-      require 'cms/agent'
-      ActiveRecord::Base.send :include, Agent
-      require 'cms/content'
-      ActiveRecord::Base.send :include, Content
-      require 'cms/container'
-      ActiveRecord::Base.send :include, Container
-      require 'cms/stage'
-      ActiveRecord::Base.send :include, Stage
-      require 'cms/sortable'
-      ActiveRecord::Base.send :include, Sortable
-      require 'cms/taggable'
-      ActiveRecord::Base.send :include, Taggable
-      require 'cms/logotypable'
-      ActiveRecord::Base.send :include, Logotypable
-    end
+      require 'cms/active_record/acts_as'
 
-    # Return an Array with the class constants that act as a Container
-    def container_classes
-      @@containers.map(&:to_class)
-    end
-
-    # Return an Array with the class constants that act as an Agent
-    def agent_classes
-      @@agents.map(&:to_class)
-    end
-
-    # Return an Array with the class constants that act as a Content
-    def content_classes
-      @@contents.map(&:to_class)
+      ActiveRecord::ActsAs::LIST.each do |item|
+        require "cms/active_record/#{ item }"
+        ::ActiveRecord::Base.send :include, "ActiveRecord::#{ item }".constantize
+      end
     end
   end
 end

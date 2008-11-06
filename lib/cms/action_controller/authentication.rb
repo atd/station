@@ -1,9 +1,9 @@
 module CMS
-  module Controller
+  module ActionController
     # Authentication module provides with Controller and Helper methods 
     # for Agent identification support
     #
-    # For permissions issues in your Controllers, see CMS::Controller::Authorization
+    # For permissions issues in your Controllers, see CMS::ActionController::Authorization
     #
     # == Current Agent
     # There are some methods available to access the Agent
@@ -30,7 +30,7 @@ module CMS
     #
     # HTTP Basic auth:: HTTP headers
     # Session:: Rails Session[http://api.rubyonrails.org/classes/ActionController/Integration/Session.html]
-    # Cookie::  CMS::Agent::Remember
+    # Cookie::  CMS::ActiveRecord::Agent::Remember
     #
     module Authentication
       # Inclusion hook to make #current_agent and #authenticated? methods
@@ -82,12 +82,12 @@ module CMS
         # Compativility with restful_authentication plugin
         alias logged_in? authenticated?
   
-        # Hook for CMS.agents based current_#{ agent_class } methods
+        # Hook for Agent based current_#{ agent_class } methods
         # This allows using current_#{ agent_class } in controllers and helpers
         def method_missing_with_current_polymorphic_agent(method, *args, &block) #:nodoc:
           if method.to_s =~ /^current_(.*)$/
             agent = $1
-            if CMS.agents.include?(agent.pluralize.to_sym)
+            if CMS::ActiveRecord::Agent.symbols.include?(agent.pluralize.to_sym)
               return current_polymorphic_agent(agent.classify.constantize)
             end
           end
@@ -181,7 +181,7 @@ module CMS
   
 	# Attempt to login by the agent id and type stored in the session.
         def login_from_session #:nodoc:
-          if session[:agent_id] && session[:agent_type] && CMS.agents.include?(session[:agent_type].tableize.to_sym)
+          if session[:agent_id] && session[:agent_type] && CMS::ActiveRecord::Agent.symbols.include?(session[:agent_type].tableize.to_sym)
             self.current_agent = session[:agent_type].constantize.find(session[:agent_id])
           end
         end
@@ -189,7 +189,7 @@ module CMS
         # Attempt to authenticate by basic authentication information.
         def login_from_basic_auth #:nodoc:
           authenticate_with_http_basic do |username, password|
-            for klass in CMS.agent_classes.select{ |klass| klass.agent_options[:authentication].include?(:login_and_password) }
+            CMS::ActiveRecord::Agent.authentication_classes(:login_and_password).each do |klass|
               agent = klass.authenticate_with_login_and_password(username, password)
               return (self.current_agent = agent) if agent
             end
@@ -199,7 +199,7 @@ module CMS
   
         # Attempt to authenticate by an expiring token in the cookie.
         def login_from_cookie_token #:nodoc:
-          CMS.agent_classes.select{ |klass| klass.agent_options[:authentication].include?(:cookie_token) }.each do |agent_class|
+          CMS::ActiveRecord::Agent.authentication_classes(:cookie_token) }.each do |agent_class|
             agent = agent_class.find_by_remember_token(cookies[:auth_token])
             if agent && agent.remember_token?
               agent.remember_me

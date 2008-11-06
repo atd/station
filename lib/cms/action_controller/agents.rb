@@ -1,10 +1,12 @@
 module CMS
-  module Controller
+  module ActionController
     # Controller methods and default filters for Agents Controllers
     module Agents
-      def self.included(base) #:nodoc:
-        base.send :include, CMS::Controller::Base unless base.instance_methods.include?('resource_class')
-        base.send :include, CMS::Controller::Authentication unless base.instance_methods.include?('authenticated?')
+      class << self
+        def included(base) #:nodoc:
+          base.send :include, CMS::ActionController::Base unless base.ancestors.include?(CMS::ActionController::Base)
+          base.send :include, CMS::ActionController::Authentication unless base.instance_methods.include?(CMS::ActionController::Authentication)
+        end
       end
 
       # Show agent

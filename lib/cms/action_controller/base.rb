@@ -1,5 +1,5 @@
 module CMS
-  module Controller
+  module ActionController
     # Common Methods for CMS Controllers and Helpers
     module Base
       # Inclusion hook to make container_content methods
@@ -56,7 +56,7 @@ module CMS
       # * acts_as: the resource must acts_as the given symbol.
       #   acts_as => :container
       def get_resource_from_path(options = {})
-        acts_as_module = "CMS::#{ options[:acts_as].to_s.classify }".constantize if options[:acts_as]
+        acts_as_module = "CMS::ActiveRecord::#{ options[:acts_as].to_s.classify }".constantize if options[:acts_as]
 
         candidates = params.keys.select{ |k| k[-3..-1] == '_id' }
 
@@ -156,7 +156,7 @@ module CMS
       end
 
       def get_container_from_session #:nodoc:
-        if session[:container_id] && session[:container_type] && CMS.containers.include?(session[:container_type].tableize.to_sym)
+        if session[:container_id] && session[:container_type] && CMS::ActiveRecord::Container.symbols.include?(session[:container_type].tableize.to_sym)
           @container = session[:container_type].constantize.find(session[:container_id])
         end
       end
