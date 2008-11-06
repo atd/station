@@ -1,6 +1,8 @@
 module CMS 
   module ActiveRecord
     module Stage
+      include ActsAs
+
       class << self
         def included(base) #:nodoc:
           base.extend ClassMethods
@@ -25,8 +27,12 @@ module CMS
 
           include CMS::ActiveRecord::Stage::InstanceMethods
         end
-      end
 
+        # All Roles defined for this class
+        def roles
+          Role.find_all_by_stage_type self.to_s
+        end
+      end
 
       # Instance methods can be redefined in each Model for custom features
       module InstanceMethods

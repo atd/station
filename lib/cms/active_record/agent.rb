@@ -4,6 +4,8 @@ module CMS
   module ActiveRecord
     # Agent(s) can CRUD Content(s) in Container(s), generating Entry(s)
     module Agent
+      include ActsAs
+
       class << self
         # Returns the first model that acts as Agent, has activation enabled and 
         # login and password

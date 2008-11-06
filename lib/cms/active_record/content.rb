@@ -13,6 +13,8 @@ module CMS
     #
     # Contents instances have entries columns in entry_*
     module Content
+      include ActsAs
+
       class << self
         # Return the first Content class supporting this Content Type
         def class_supporting(content_type)

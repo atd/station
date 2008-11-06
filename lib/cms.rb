@@ -16,7 +16,7 @@ module CMS
 
       ActiveRecord::ActsAs::LIST.each do |item|
         require "cms/active_record/#{ item }"
-        ::ActiveRecord::Base.send :include, "ActiveRecord::#{ item }".constantize
+        ::ActiveRecord::Base.send :include, "CMS::ActiveRecord::#{ item.to_s.classify }".constantize
       end
     end
   end

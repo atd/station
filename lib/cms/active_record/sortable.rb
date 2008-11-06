@@ -2,6 +2,8 @@ module CMS
   module ActiveRecord
     # Container(s) are models receiving Content(s) posted by Agent(s)
     module Sortable
+      include ActsAs
+
       def self.included(base) #:nodoc:
         base.extend ClassMethods
       end

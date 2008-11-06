@@ -41,7 +41,7 @@ module CMS
 	  flash[:info] << '<br />'
           flash[:info] << "You should check your email to activate your account".t
 	end
-      rescue ActiveRecord::RecordInvalid
+      rescue ::ActiveRecord::RecordInvalid
         render :action => 'new'
       end
     
