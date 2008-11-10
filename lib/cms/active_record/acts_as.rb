@@ -2,7 +2,8 @@ module CMS
   module ActiveRecord
     # Provides some functionality to modules that enhance ActiveRecord 
     # with acts_as_something
-    module ActsAs #:nodoc:
+    module ActsAs 
+      # All ActiveRecord addons
       LIST = [ :container, :agent, :content, :stage, :taggable, :logotypable, :sortable ]
 
       class << self
@@ -12,7 +13,7 @@ module CMS
         end
       end
 
-      module ClassMethods
+      module ClassMethods #:nodoc:
         def symbols
           @symbols
         end
