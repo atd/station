@@ -1,4 +1,3 @@
-require File.dirname(__FILE__) + '/rails_commands'
 class AgentGenerator < Rails::Generator::NamedBase
   default_options :skip_migration => false,
                   :include_activation => false,
@@ -178,14 +177,6 @@ class AgentGenerator < Rails::Generator::NamedBase
           :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}"
         }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
       end
-      
-      m.route_resource  controller_singular_name
-      m.route_named 'open_id_complete', controller_singular_name,
-        :controller => controller_plural_name,
-        :action => 'create',
-        :conditions => { :method => :get },
-        :open_id_complete => true
-      m.route_resources model_controller_plural_name
     end
 
     action = nil
