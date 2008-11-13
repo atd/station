@@ -49,3 +49,4 @@ end
 
 resources :roles
 
+root :controller => 'entries'
