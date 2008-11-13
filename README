@@ -2,9 +2,9 @@
 
 Content Management System plugin.
 
-CMS plugin provides your Rails application with a "Posting framework". That means users, spaces, roles, categories, etc... but from a very flexible scope.
+CMS plugin provides your Rails application with a "Posting framework". That means users, spaces, roles, permissions, categories, tags, etc... but from a very flexible scope.
 
-You can define three types of behaviours in your ActiveRecord models:
+You can define three basic types of behaviours in your ActiveRecord models:
 * Agents (acts_as_agent): models that have posting capabilities. Users are the paradigm of Agents.
 * Contents (acts_as_content): units of information that can be posted. Examples of contents are articles, images, events, links, audios, videos, files, etc...
 * Containers (acts_as_container): spaces where agents post contents
@@ -15,15 +15,16 @@ Project page: http://rubyforge.org/projects/cmsplugin
 
 == Features
 
-* Agents authentication: Login/Password, OpenID, Central Authentication Service (CAS)
+* Support for multiple Agents, Containers and Contents
+* Agents authentication: Login/Password, OpenID, Central Authentication Service (CAS), CookieToken
 * Agents activation: Email validation, Password reset
 * Atom feeds support (RFC 4287)
 * AtomPub protocol support (RFC 5023)
 * Categories
-* Tags
+* Tags, Taggable models (acts_as_taggable)
 * Sortable lists for models (acts_as_sortable)
-* Taggable models (acts_as_taggable)
-* Support for multiple Agents, Containers and Contents
+* Logotypes for models (acts_as_logotypable)
+* Permissions and Roles in any model (acts_as_stage)
 
 == Requirements
 
