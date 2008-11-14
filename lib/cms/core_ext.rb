@@ -46,14 +46,14 @@ unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
 
       xml.service "xmlns" => "http://www.w3.org/2007/app", "xmlns:atom" => 'http://www.w3.org/2005/Atom' do
       # Workspaces are Containers current_agent can post to:
-      for container in record.stages.select{ |s| s.authorizes?(current_agent, :read_entries) }
+      for container in record.stages.select{ |s| s.authorizes?(current_agent, [ :read, :Content ]) }
         xml.workspace do
           xml.tag!( "atom:title", container.name )
             # Collections are different type of Contents
             for content in container.accepted_content_types
               xml.collection(:href => polymorphic_path([ container, content.to_class.new ]) + '.atom') do
                 xml.tag!("atom:title", "#{ container.name } - #{ content.to_class.named_collection }")
-                xml.accept(container.authorizes?(current_agent, :create_entries) ? content.to_class.accepts : nil)
+                xml.accept(container.authorizes?(current_agent, [ :create, :Content ]) ? content.to_class.accepts : nil)
               end
             end
           end

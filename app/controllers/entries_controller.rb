@@ -123,7 +123,7 @@ class EntriesController < ApplicationController
     elsif request.put?
       # Have to set write entry filter here
       # because doesn't apply to GET
-      unless @entry.update_by? current_agent
+      unless @entry.content.authorizes?(current_agent, :update)
         access_denied
         return
       end

@@ -65,9 +65,7 @@ module CMS
           class_variable_set "@@per_page", options[:per_page]
 
           attr_writer :entry
-
           validates_associated :entry
-
           after_save :entry_save!
 
 
@@ -76,6 +74,7 @@ module CMS
                    :dependent => :destroy,
                    :as => :content
 
+          acts_as_stage
           acts_as_sortable
 
           # Named scope in_container returns all Contents in some container
@@ -188,13 +187,6 @@ module CMS
           content_entries.select{ |p| p.container == container }.any?
         end
         
-
-        # Can this <tt>agent</tt> read this Content?
-        # True if there exists a Entry for this Content that can be read by <tt>agent</tt> 
-        def read_by?(agent = nil)
-          content_entries.select{ |p| p.read_by?(agent) }.any?
-        end
-
         # Method useful for icon files
         #
         # If the Content has a Mime Type, return it scaped with '-' 

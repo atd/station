@@ -8,7 +8,7 @@
 #   Entry.content_type(:articles) #=> entries which content is an Article
 class Entry < ActiveRecord::Base
   acts_as_sortable
-  acts_as_container :name => :title
+  acts_as_stage
 
   # Pagination (will_paginate gem)
   cattr_reader :per_page
@@ -57,16 +57,6 @@ class Entry < ActiveRecord::Base
   # True if the associated Content of this Entry has media
   def has_media?
     ! content.content_options[:has_media].nil?
-  end
-
-  # Can the Entry be read by <tt>agent</tt>?
-  def read_by?(agent = AnonymousAgent.current)
-    public_read? || container.has_role_for?(agent, :read_entries)
-  end
-
-  # Can the Entry be modified by <tt>agent</tt>?
-  def update_by?(agent = AnonymousAgent.current)
-    public_write? || container.has_role_for?(agent, :update_entries)
   end
 
   # Set Entry Categories by it id
