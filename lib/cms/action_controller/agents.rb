@@ -47,7 +47,7 @@ module CMS
     
       # Activate Agent from email
       def activate
-        self.current_agent = params[:activation_code].blank? ? AnonymousAgent.current : self.resource_class.find_by_activation_code(params[:activation_code])
+        self.current_agent = params[:activation_code].blank? ? Anonymous.current : self.resource_class.find_by_activation_code(params[:activation_code])
         if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
           current_agent.activate
           flash[:info] = "Signup complete!".t

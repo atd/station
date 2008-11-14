@@ -10,7 +10,7 @@ module CMS
     # that is requesting some action
     #  
     # authenticated?:: Is there any Agent authenticated in this request?
-    # current_agent::  Agent currently authenticated. Defaults to <tt>AnonymousAgent#current</tt>
+    # current_agent::  Agent currently authenticated. Defaults to <tt>Anonymous.current</tt>
     # current_agent=::  Set current_agent
     #
     # You can also use the name of a model that acts_as_agent
@@ -18,7 +18,7 @@ module CMS
     #     acts_as_agent
     #   end
     #
-    #   current_user # => The authenticated user, or AnonymousAgent#current
+    #   current_user # => The authenticated user, or Anonymous.current
     #
     # == Filters
     # authentication_required:: The action requires to be performed by an 
@@ -76,7 +76,7 @@ module CMS
         # Returns true or false if an Agent is authenticated
         # Preloads @current_agent with the Agent's model if they're authenticated
         def authenticated?
-          current_agent != AnonymousAgent.current
+          current_agent != Anonymous.current
         end
   
         # Compativility with restful_authentication plugin
@@ -95,14 +95,14 @@ module CMS
         end
   
         # Accesses the current Agent from the session.  
-        # Set it to AnonymousAgent#current if authentication fails so 
+        # Set it to Anonymous.current if authentication fails so 
         # that future calls do not hit the database.
         def current_agent
-          @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie_token || AnonymousAgent.current)
+          @current_agent ||= (login_from_session || login_from_basic_auth || login_from_cookie_token || Anonymous.current)
         end
   
         def current_polymorphic_agent(agent_klass) #:nodoc:
-          current_agent.is_a?(agent_klass) ? current_agent : AnonymousAgent.current
+          current_agent.is_a?(agent_klass) ? current_agent : Anonymous.current
         end
   
         # Store the given agent id and agent_type in the session.
@@ -124,7 +124,7 @@ module CMS
               }
             end
           end
-          @current_agent = new_agent || AnonymousAgent.current
+          @current_agent = new_agent || Anonymous.current
         end
   
         # Filter method to enforce an authentication requirement.
