@@ -22,7 +22,7 @@ module CMS
           @agents = current_container.actors
         else
           @title ||= self.resource_class.translated_named_collection
-          @agents = CMS::ActiveRecord::Agent.classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
+          @agents = CMS::ActiveRecord::Agent.authentication_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
 
         # AtomPub feeds are ordered by Entry#updated_at
