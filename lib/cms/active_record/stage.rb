@@ -62,7 +62,7 @@ module CMS
           action_objective = Array(action_objective)
           action_objective << :self unless action_objective.size > 1
 
-          has_role_for?(agent, :permission => action_objective)
+          has_role_for?(agent, :permission => action_objective, :include_anyones => true)
         end
 
         # True if it exists at least one Performance for the Agent in this Stage.
@@ -80,15 +80,10 @@ module CMS
         #   space.roles_for(user, :name => 'Admin')
         # permission:: Array with Permission <tt>action</tt> and <tt>objective</tt>
         #   space.roles_for(user, :permission => [ :create, :Attachment ])
+        # include_anyones:: Include Anyone's Roles. Defaults to false
         #
         def roles_for(agent, options = {})
           agent_roles = stage_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role).uniq
-
-          if agent_roles.include?(nil)
-            puts '+++++++++++++++++++++++'
-            puts self.inspect
-            puts stage_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).inspect
-          end
 
           if options[:name]
             agent_roles = agent_roles.select{ |r| r.name == options[:name] }
@@ -102,7 +97,11 @@ module CMS
             agent_roles = agent_roles.select{ |r| r.permissions.include?(permission) }
           end
 
-          agent_roles
+          anyones_roles = options.delete(:include_anyones) ? 
+                          roles_for(Anyone.current, options) : 
+                          Array.new
+
+          agent_roles | anyones_roles
         end
         
         # Return all agents that play one role at least in this stage
