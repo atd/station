@@ -7,7 +7,7 @@
   <p>
   <%= form.select(:stage_type, 
                   CMS::ActiveRecord::Stage.symbols.map{ |st| [ st.to_s.classify ] * 2 }, 
-                  { :selected => @role.stage_type }) %>
+                  { :selected => @role.stage_type, :include_blank => true }) %>
   </p>
 
   <h2><%= "Permission".t("Permissions", 99) %></h2>
