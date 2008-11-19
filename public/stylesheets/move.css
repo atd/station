@@ -37,7 +37,7 @@ We hope be usefull!!
 
 */
 
-@import url('logo.css');
+@import url('meta.css');
 @import url('agents.css');
 @import url('containers.css');
 @import url('contents.css');
@@ -52,11 +52,13 @@ We hope be usefull!!
 /* General class */
 body {
   /*background-color: #f8e6dc;*/
-  background-color: white;
+  background: black url('../images/move_css/background_body.gif') repeat top left;
   max-width: 1024px; width: 1024px; min-width: 1024px;
   min-height: 768px; height: 768px; max-height: 768px;
   margin: auto;
   text-align: center;
+  font-family: "Lucida Grande",Geneva,Arial,Verdana;
+  font-size: 12px;
 }
 
 
@@ -136,7 +138,6 @@ img { border: 0px; }
 #menu_box_center {
   max-width: 964px; width: 964px; min-width: 964px;
   min-height: 73px; height: 73px; max-height: 73px;
-  background-color: #272727;
   margin: 0px;
 }
 
@@ -151,14 +152,14 @@ img { border: 0px; }
 
 #menu_box_agents {
  position: relative;
- max-width: 354px; width: 354px; min-width: 354px;
+ max-width: 454px; width: 454px; min-width: 454px;
  min-height: 88px; height: 88px; max-height: 88px;
  float: left;
 }
 
 #menu_box_containers {
  position: relative;
- max-width: 354px; width: 354px; min-width: 354px;
+ max-width: 454px; width: 454px; min-width: 454px;
  min-height: 88px; height: 88px; max-height: 88px;
  float: right;
 }
@@ -180,7 +181,7 @@ img { border: 0px; }
 #menu_box_agents .box_view_container, #menu_box_containers .box_view_container {
  text-align: left;
  float: left;
- width: 308px;
+ width: 408px;
  min-height: 88px; height: 88px; max-height: 88px;
  background: transparent url('../images/move_css/background_box_view.png') repeat-x top center;
  overflow: hidden;
@@ -189,7 +190,7 @@ img { border: 0px; }
 
 #menu_box_agents .box_view_wrapper, #menu_box_containers .box_view_wrapper {
  position: absolute;
- width: 308px;
+ width: 408px;
  min-height: 60px; height: 60px; max-height: 60px;
  top: 25px;
  left: 0px;
@@ -208,7 +209,7 @@ div.box_view_container span.box_title {
   margin-top: 5px;
   margin-left: 7px;
   color: white;
-  font-family: 'Monospace';
+  /*font-family: 'Monospace';*/
   font-size: 16px;
   font-weight: bold;
 }
@@ -235,7 +236,7 @@ div.box_view_list span.box_unit_title {
   display: block;
   overflow: hidden;
   color: black;
-  font-family: 'Sans';
+  /*font-family: 'Sans';*/
   font-size: 12px;
   text-align: center;
   margin-top: -4px;
@@ -248,7 +249,7 @@ div.box_view_list span.box_unit_title {
 #interaction_screen {
   position: relative;
   top: 155px;
-  left: 224px;
+  left: 210px;
   max-width: 777px; width: 777px; min-width: 777px;
   min-height: 512px;
   background-color: transparent;
@@ -282,22 +283,19 @@ div.box_view_list span.box_unit_title {
   margin: 0px;
   position: relative;
   text-align: left;
-
+  color: white;
 }
 
 #interaction_screen_center_inside h2 {
-  background: transparent url('../images/move_css/background_interaction_title.png') repeat-x top center;
-  padding-left: 15px;
-  padding-top: 4px;
+  /*background: transparent url('../images/move_css/background_interaction_title.png') repeat-x top center;*/
   min-height: 34px; height: 34px; max-height: 34px;
-  max-width: 701px; width: 701px; min-width: 701px;
-  margin: 0px;
-  margin-left: -1px;
-  font-size: 23px;
+  max-width: 680px; width: 680px; min-width: 680px;
+  margin: 0px 15px 0px 10px;
+  font-size: 1.7em;
   color: #92d585;
-  font-family: 'Sans';
+  border-bottom: 1px solid #92d585;
+  /*font-family: 'Sans';*/
   font-weight: bold;
-  font-style: italic;
 }
 
 #interaction_screen_center_inside div.paginator {
@@ -331,6 +329,7 @@ background-color: transparent;
 
 #interaction_view #list_view a {
   text-decoration: none;
+  color: white;
 }
 
 #interaction_view #detail_view {
@@ -340,7 +339,7 @@ top: -16px;
 right: -16px;
 min-height: 498px; height: 498px; max-height: 498px;
 max-width: 154px; width: 154px; min-width: 154px;
-border-left: 2px solid #272727;
+/*border-left: 2px solid #272727;*/
 padding-left: 8px;
 font-size: 14px;
 overflow: hidden;
@@ -363,7 +362,6 @@ font-style: italic;
 
 #detail_view b {
   font-size: 14px;
-  color: #272727;
   font-weight: bold;
 }
 
@@ -383,7 +381,7 @@ font-style: italic;
 
 #detail_view a {
   color: #55127b;
-  font-family: 'Sans';
+
   font-size: 13px;
   text-decoration: none;
 }
@@ -396,26 +394,55 @@ font-style: italic;
   border: 0px;
 }
 
+#interaction_screen #loading_indicator {
+  float: right;
+  position: absolute;
+  right: 30px;
+  top: 3px;
+  display: block;
+}
 
 #interaction_view div.entry {
   position: relative;
   float: left;
-  background-color: green;
   min-height: 144px; height: 144px; max-height: 144px;
   max-width: 110px; width: 110px; min-width: 110px;
   margin-right: 20px; 
   background-color: transparent;
-  font-size: 14px;
-  color: #272727;
-  font-weight: bold;
-  font-family: 'Sans';
+  font-size: 1em;
   overflow: hidden;
   margin-bottom: 8px;
-  text-align: left;
+  text-align: center;
+}
+
+#interaction_view div.entry img {
+  margin: auto;
+  display: block;
 }
 
 #interaction_view div.entry:hover {
   background: transparent url('../images/move_css/background_box_content_unit_hover.png') no-repeat top center;
+}
+
+#interaction_view div.entry div.entry_link {
+  display: none;
+}
+
+
+
+
+
+#interaction_view div.entry:hover div.entry_link {
+  float: right;
+  top: 5px;
+  color: red;
+  display: block;
+  position: absolute;
+  text-align: right;
+  right: 0px;
+}
+#interaction_view div.entry:hover div.entry_link img {
+  cursor: pointer;
 }
 
 #interaction_view div.active_entry {

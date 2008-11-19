@@ -9,4 +9,8 @@ class Role < ActiveRecord::Base
   validates_uniqueness_of :name
 
   acts_as_sortable :columns => [ :name, :stage_type ]
+
+  named_scope :without_stage_type, lambda {
+    { :conditions => [ "stage_type = ?", nil ] }
+  }
 end

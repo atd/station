@@ -38,13 +38,28 @@
   <!-- open wrap -->
   <div id="wrap">
     <!-- logo -->
-    <div id="logo">
-      <div id="logo_top"></div>
-      <div id="logo_center">
-        <%= image_tag 'move_static.png', :plugin => 'cmsplugin', :alt => "[move static logo]", :id => "move_logo", :onclick => "this.src='#{ image_path('move_dynamic.png', :plugin => 'cmsplugin') }';" %>
+    <div id="meta">
+      <div id="meta_top">
+        <h1><%= current_site.name %></h1>
       </div>
-      <div id="logo_bottom">
-        <%= link_to("Public".t, root_path, {:id => "logo_public_content"}) %>
+      <div id="meta_center">
+        <%= 
+          #image_tag 'move_static.png', :plugin => 'cmsplugin', :alt => "[move static logo]", :id => "move_logo", :onclick => "this.src='#{ image_path('move_dynamic.gif', :plugin => 'cmsplugin') }';"
+         %>
+      </div>
+      <div id="meta_bottom">
+         <% if authenticated? -%>
+         <%= link_to("Log out".t, logout_path, {:id => "logout"} ) %>
+         <%= link_to("Site configuration".t, edit_site_path, {:id => "site_config"}) %>
+         <% else -%>
+         <%= link_to("Sign in".t, login_path) %>
+         <%= link_to("Join".t, new_user_path) %>
+         <%= #"%s or %s" / [ link_to("Sign in".t, login_path), link_to("Join".t, new_user_path) ]
+          %>
+          <% end -%>
+        <%= 
+          #link_to("Public".t, root_path, {:id => "meta_public_content"})
+        %>
       </div>
     </div>
 

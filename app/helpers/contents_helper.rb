@@ -41,7 +41,7 @@ module ContentsHelper
   def content_info(entry = nil)
     entry ||= @entry
 
-    html_return =  "<div id=\"content_info_top\" class=\"block_white_top\">» #{ "Entry Info".t } </div>"
+    html_return =  "<div id=\"content_info_top\" class=\"block_white_top\">» #{ "Details".t } </div>"
     html_return << "<div id=\"content_info_center\" class=\"block_white_center\">#{ render(:partial => "entries/entry_details", :locals => { :entry => entry }) if entry }</div>"
     html_return << "<div id=\"content_info_bottom\" class=\"block_white_bottom\"></div>"
     html_return

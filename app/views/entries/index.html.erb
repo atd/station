@@ -9,6 +9,10 @@
 <% end -%>
 
 <h2><%= title %></h2>
+<div id="loading_indicator" style="display: none;">
+  <%= image_tag 'actions/loading.gif', { :plugin => 'cmsplugin' } %>
+</div>
+
 <div class="paginator"><%= will_paginate(@entries, {:prev_label => "«", :next_label => "»"}) %></div>
 <div id="interaction_view">
 
@@ -17,11 +21,12 @@
     <div id="entry_<%= entry.id %>" class="entry <%= entry.content.class.to_s.tableize %>">
       <%= link_to_remote "<img src=\"#{ icon_image(entry) }\"/>#{ sanitize(entry.title) }",
           :url => details_entry_path(entry),
-          :complete  => "$('move_logo').src='#{ image_path 'move_static.png',
-                                              :plugin => 'cmsplugin' }'; changeActiveContent('#{entry.id}');",
+          :complete  => "$('loading_indicator').toggle(); changeActiveContent('#{entry.id}');",
           :before => "go_to_content_if_active('#{ entry.id }','#{ polymorphic_path([ entry.container, entry.content ]) }');",
-          :loading   => "$('move_logo').src='#{ image_path('move_dynamic.gif',
-                                              :plugin => 'cmsplugin') }';" %>
+          :loading   => "$('loading_indicator').toggle();" %>
+      <div class="entry_link">
+        <%= image_tag 'move_css/view.png', { :plugin => 'cmsplugin', :onclick => "document.location = '#{ polymorphic_path([ entry.container, entry.content ]) }'" } %>
+      </div>
       <%= # do we still need dreggable??
           # only overload brownser and no useless at now 
           # draggable_element("entry_"+entry.id.to_s, :revert => true)
