@@ -50,7 +50,7 @@
       <div id="meta_bottom">
          <% if authenticated? -%>
          <%= link_to("Log out".t, logout_path, {:id => "logout"} ) %>
-         <%= link_to("Site configuration".t, edit_site_path, {:id => "site_config"}) %>
+         <%= link_to("Site".t, site_path, {:id => "site_config"}) %>
          <% else -%>
          <%= link_to("Sign in".t, login_path) %>
          <%= link_to("Join".t, new_user_path) %>
@@ -74,7 +74,7 @@
       <div id="session_center">
         <div id="session_center_inside">
          <% if authenticated? -%>
-         <%= link_to("Site configuration".t, edit_site_path) %><br />
+         <%= link_to("Site".t, site_path) %><br />
          <%= link_to("Log out".t, logout_path) %>
          <% else -%>
          <%= "%s or %s" / [ link_to("Sign in".t, login_path), link_to("Join".t, new_user_path) ] %>
