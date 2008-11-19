@@ -55,6 +55,8 @@ module ApplicationHelper
           object.attachment_options[:thumbnails].keys.include?(:icon) &&
           object.thumbnails.find_by_thumbnail('icon')
       "#{ formatted_polymorphic_path([object, object.mime_type.to_sym]) }?thumbnail=icon"
+    elsif object.respond_to?(:logotype) && object.logotype
+      icon_image object.logotype
     else
       file = object.respond_to?(:mime_type) && object.mime_type ?
         object.mime_type.to_s.gsub(/[\/\+]/, '-') : 

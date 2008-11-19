@@ -3,7 +3,9 @@ class SitesController < ApplicationController
   # GET /site
   # GET /site.xml
   def show
-    redirect_to edit_site_path
+    @site = current_site
+    @agents = CMS::ActiveRecord::Agent.authentication_classes.map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
+    @containers = ( CMS::ActiveRecord::Container.classes - CMS::ActiveRecord::Agent.classes).map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
   end
 
   # GET /site/new
@@ -27,9 +29,16 @@ class SitesController < ApplicationController
   # PUT /site.xml
   def update
     respond_to do |format|
+      #TODO acts_as_logotypable: Rails support for nested objects
+      if current_site.logotype
+        current_site.logotype.attributes = params[:logotype]
+      else
+        current_site.logotype = Logotype.new(params[:logotype])
+      end unless params[:logotype][:media].blank?
+
       if current_site.update_attributes(params[:site])
         flash[:valid] = 'Site configuration was successfully updated.'.t
-        format.html { redirect_to root_path }
+        format.html { redirect_to site_path }
         format.xml  { head :ok }
       else
         @site = current_site

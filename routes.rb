@@ -43,7 +43,7 @@ end
 
 resources :logotypes
 
-resources(*CMS::ActiveRecord::Logotypable.symbols) do |logotypable|
+resources(*(CMS::ActiveRecord::Logotypable.symbols - Array(:sites))) do |logotypable|
   logotypable.resource :logotype
 end
 
