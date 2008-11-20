@@ -9,12 +9,6 @@ module CMS
         base.helper_method :current_container
 
         class << base
-
-          def log_params
-            before_filter do |controller|
-              logger.debug controller.params.inspect
-            end
-          end
           # Set params from AtomPub raw post
           def set_params_from_atom(atom_parser, options)
             parser = case atom_parser
