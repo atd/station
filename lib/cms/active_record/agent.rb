@@ -105,6 +105,11 @@ module CMS
           agent_performances.stage_type(options[:type]).map(&:stage).uniq
         end
 
+        # Agents that have at least one Role in stages
+        def fellows
+          stages.map(&:actors).flatten.uniq.sort{ |x, y| x.name <=> y.name }
+        end
+
         def service_documents
           if self.agent_options[:authentication].include?(:openid)
             openid_uris.map(&:atompub_service_document)
