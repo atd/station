@@ -42,7 +42,7 @@ module CMS
         #
         # Options
         # * <tt>authentication</tt>: Array with Authentication methods supported for this Agent. 
-        # Defaults to <tt>[ :login_and_password, :openid ]</tt>
+        # Defaults to <tt>[ :login_and_password, :openid, :cookie_token ]</tt>
         # * <tt>activation</tt>: Agent must verify email
         def acts_as_agent(options = {})
           CMS::ActiveRecord::Agent.register_class(self)
