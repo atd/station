@@ -49,6 +49,13 @@ module CMS
               flash[:notice] = "Verification of %s succeeded" / openid_response.display_identifier
               uri = Uri.find_or_create_by_uri(openid_response.display_identifier)
 
+              # If already authenticated, add URI to Agent.openid_ownings
+              if authenticated? && ! current_agent.openid_uris.include?(uri)
+                current_agent.openid_uris << uri
+                flash[:notice] = "OpenID: #{ uri } attached to your account".t
+                return
+              end
+
               CMS::ActiveRecord::Agent.authentication_classes(:openid).each do |klass|
                 self.current_agent = 
                   klass.authenticate_with_openid(uri)
