@@ -21,9 +21,9 @@ module ContentsHelper
 
   # Menu for container contents
   def contents_menu
-    return "" unless current_container
-
-    content_classes = current_container.accepted_content_types.map(&:to_class).sort{ |a, b| 
+    content_classes = ( current_container ?
+      current_container.accepted_content_types.map(&:to_class) :
+      CMS::ActiveRecord::Content.classes ).sort{ |a, b| 
       a.to_s.t(a.to_s.pluralize, 99) <=> b.to_s.t(b.to_s.pluralize, 99) 
     }
 
@@ -31,7 +31,7 @@ module ContentsHelper
       for content in content_classes
      #menu << "<span class=\"content_unit button\">"+link_to("» #{ content.collection.to_s.humanize }", send("#{ content.to_s.tableize }_url") , {:id => "content_unit_#{ content.collection }_link", :class => "content_unit_link" })
       #menu << "</span>"
-     content_link = polymorphic_path([ @container, Entry.new ].compact) + "?content_type=#{ content.to_s.tableize }"
+     content_link = polymorphic_path([ current_container, Entry.new ].compact) + "?content_type=#{ content.to_s.tableize }"
        html << link_to("<span id=\"content_link_#{ content.collection }\"> » #{ content.to_s.t(content.to_s.pluralize, 99) } </span>", content_link, {:class => "content_link inactive button" })
      end
     end
