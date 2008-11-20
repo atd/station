@@ -5,7 +5,7 @@ module CMS
       class << self
         def included(base) #:nodoc:
           base.send :include, CMS::ActionController::Base unless base.ancestors.include?(CMS::ActionController::Base)
-          base.send :include, CMS::ActionController::Authentication unless base.instance_methods.include?(CMS::ActionController::Authentication)
+          base.send :include, CMS::ActionController::Authentication unless base.ancestors.include?(CMS::ActionController::Authentication)
         end
       end
 
@@ -22,27 +22,45 @@ module CMS
       # Render a form for creating a new Agent
       def new
         @agent = self.resource_class.new
+        @title = authenticated? ?
+          "New #{ self.resource_class.to_s.humanize }".t :
+          "Join to %s" / Site.current.name
       end
     
       # Create new Agent instance
       def create
-        cookies.delete :auth_token
-        # protects against session fixation attacks, wreaks havoc with 
-        # request forgery protection.
-        # uncomment at your own risk
-        # reset_session
         @agent = self.resource_class.new(params[:agent])
-        @agent.openid_identifier = session[:openid_identifier]
+
+        unless authenticated?
+          cookies.delete :auth_token unless authenticated?
+          @agent.openid_identifier = session[:openid_identifier]
+        end
+
         @agent.save!
-        self.current_agent = @agent
-        redirect_to @agent
-        flash[:info] = "Thanks for signing up!".t
+
+        if authenticated?
+          redirect_to polymorphic_path(self.resource_class.new)
+          flash[:info] = "#{ @agent.class.to_s.humanize } created".t
+        else
+          self.current_agent = @agent
+          redirect_to @agent
+          flash[:info] = "Thanks for signing up!".t
+        end
+
 	if self.resource_class.agent_options[:activation]
 	  flash[:info] << '<br />'
-          flash[:info] << "You should check your email to activate your account".t
+          flash[:info] << ( @agent.active? ?
+            "Activation email has been sent to #{ @agent.class.to_s.humanize }" :
+            "You should check your email to activate your account".t )
 	end
       rescue ::ActiveRecord::RecordInvalid
         render :action => 'new'
+      end
+
+      def destroy
+        @agent.destroy
+        flash[:info] = "#{ @agent.class.to_s.humanize } deleted".t
+        redirect_to polymorphic_path(self.resource_class.new)
       end
     
       # Activate Agent from email
@@ -97,6 +115,7 @@ module CMS
       # Example GET /users/1 or GET /users/quentin
       def get_agent
         @agent = ( params[:id].match(/\d+/) ? self.resource_class.find(params[:id]) : self.resource_class.find_by_login(params[:id]) )
+        instance_variable_set "@#{ self.resource_class.to_s.underscore }", @agent
       end
     
       # Filter for activation methods
