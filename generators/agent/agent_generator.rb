@@ -185,23 +185,22 @@ class AgentGenerator < Rails::Generator::NamedBase
       when "generate" 
         puts
         puts ("-" * 70)
-        puts "Don't forget to:"
+        puts "You have these default routes available:"
+        puts "(see vendor/plugins/cmsplugin/routes.rb)"
         puts
+        puts %(map.signup '/signup', :controller => '#{model_controller_file_name}', :action => 'new')
+        puts %(map.login '/login', :controller => '#{controller_file_name}', :action => 'new')
+        puts %(map.logout '/logout', :controller => '#{controller_file_name}', :action => 'destroy')
         if options[:include_activation]
-          puts "    map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate'"
-          puts "    map.forgot_password '/forgot_password', :controller => '#{model_controller_file_name}', :action => 'forgot_password'"
-          puts "    map.reset_password '/reset_password/:reset_password_code', :controller => '#{model_controller_file_name}', :action => 'reset_password'"
+          puts %(map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate')
+          puts %(map.forgot_password '/forgot_password', :controller => '#{model_controller_file_name}', :action => 'forgot_password')
+          puts %(map.reset_password '/reset_password/:reset_password_code', :controller => '#{model_controller_file_name}', :action => 'reset_password')
           puts
+          puts "Don't forget to:"
           puts "  - add an observer to config/environment.rb"
           puts "    config.active_record.observers = :#{file_name}_observer"
           puts
         end
-        puts "Try these for some familiar login URLs if you like:"
-        puts
-        puts %(map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate', :activation_code => nil)
-        puts %(map.signup '/signup', :controller => '#{model_controller_file_name}', :action => 'new')
-        puts %(map.login '/login', :controller => '#{controller_file_name}', :action => 'new')
-        puts %(map.logout '/logout', :controller => '#{controller_file_name}', :action => 'destroy')
         puts
         puts ("-" * 70)
         puts
