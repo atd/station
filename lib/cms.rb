@@ -13,8 +13,10 @@ module CMS
     end
 
     def enable_action_pack
-      require 'action_view/helpers/form_categories_helper'
-      ::ActionView::Base.send :include, ActionView::Helpers::FormCategoriesHelper
+      %w( categories performances ).each do |item|
+        require "action_view/helpers/form_#{ item }_helper"
+        ::ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.classify.pluralize }Helper".constantize
+      end
     end
 
 

@@ -30,6 +30,11 @@ module CMS
           classes.map{ |a| a.agent_options[:authentication] }.flatten.uniq
         end
 
+        # All Agent instances, sort by name
+        def all
+          classes.map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
+        end
+
         def included(base) #:nodoc:
           base.extend ClassMethods
         end

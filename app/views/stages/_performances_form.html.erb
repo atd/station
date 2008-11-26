@@ -3,10 +3,11 @@
 
   <div class="form_data performances_form">
   <% if roles.empty? %>
-    <%= "The are any role avaible. Permissions can't be set. #{ link_to "Go to manage roles".t, roles_path}"  %>
+    <%= "The aren't any Roles avaible. Permissions can't be set.".t %> 
+    <%= link_to "Go to manage roles".t, roles_path %>
   <% else %>
     <p id="performances_list_<%= dom_id stage %>">
-      <%= hidden_field_tag "performances_length", @space.stage_performances.length %>
+      <%= hidden_field_tag "performances_length", stage.stage_performances.count %>
     </p>
 
     <%= link_to_function("New Permission".t, "addNewPerformance('#{dom_id stage}')", { :id => "new_performance",  :class => "action add" } ) %>
@@ -15,7 +16,7 @@
       <%= "Select Role".t %>
       <%= select(nil, "role_id", roles.collect {|r| [ r.name, r.id ] }, { :include_blank => true }) %>
       <%= "Select User".t %>
-      <%= select(nil, "agent_id", User.all.collect {|u| [ u.name, u.id ] }, { :include_blank => true }) %>
+      <%= select(nil, "agent_id", CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, u.id ] }, { :include_blank => true }) %>
       <%= hidden_field_tag "[agent_type]", "User", { :id => "_agent_type" } %>
 
     </div>
