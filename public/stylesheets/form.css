@@ -1,52 +1,35 @@
-.form {
-  margin: 20px;
-}
-
+.form { margin: 20px; }
 .form input, .form select, .form textarea {
   background-color: white;
   border: 1px solid #8C5EA0;
   padding: 1px;
 }
-
 .form input:focus, .form select:focus, .form textarea:focus {
   border: 1px solid #92d585;
 }
-
-
 .form .form_entry {
   margin-bottom: 10px;
 }
-
 .form .form_entry .form_label {
   font-weight: bold;
 }
-
 .form .smallest input, .form .smallest select, .form .smallest textarea  {
   width: 40px;
 }
-
 .form .biggest input, .form .biggest select, .form .biggest textarea  {
   width: 670px;
 }
 
-.form .form_categories, .form .form_permission {
+.form .categories_form, .form .performances_form {
   background-color: white;
   border: 1px solid #8C5EA0;
-  padding-left: 5px;
+  padding: 5px;
   margin-bottom: 3px;
 }
 
-.form_categories #categories_form {
-  color: black;
-  text-decoration: underline;
-  font-size: 1.1em;
+.form .categories_form:focus, .form .performances_form:focus {
+  border: 1px solid #92d585;
 }
 
-.form_categories #categories_list {
-  margin: 5px;
-}
 
-.form_categories a {
-  color: #92d585;
 
-}

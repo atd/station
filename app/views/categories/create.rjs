@@ -1,6 +1,6 @@
 if error_messages_for(:category).blank?
   page.insert_html :bottom, 
-                   'categories_list', 
+                   "categories_list_#{ dom_id @category.container }", 
                     check_box_tag('category_ids[]', @category.id, true) + 
                       sanitize(@category.name) + '<br />'
 else
