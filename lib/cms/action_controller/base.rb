@@ -71,7 +71,7 @@ module CMS
 
           # Find record
           begin
-            return instance_variable_set "@#{ options[:acts_as] }", candidate_class.find(params[candidate_key])
+            return instance_variable_set("@#{ options[:acts_as] }", candidate_class.find(params[candidate_key]))
           rescue ActiveRecord::RecordNotFound
             next
           end
