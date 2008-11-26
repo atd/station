@@ -1,0 +1,20 @@
+<div id="categories_form_<%= dom_id container %>" class="form_entry">
+  <div class="form_label"><%= 'Category'.t('Categories', 99) %></div>
+  <div class="form_data categories_form">
+  <% if container.container_categories.blank? %>
+    <%= "%s has not categories" / sanitize(container.name) %>
+  <% else %>
+    <p id="categories_list_<%= dom_id container %>">
+    <% container.container_categories.each do |c| %>
+        <%= check_box_tag('category_ids[]', c.id, (params[:category_ids] || []).map(&:to_i).include?(c.id)) + sanitize(c.name) %><br />
+    <% end %>
+    </p>
+  <% end %>
+  <%= link_to_remote("New Category", 
+                      :url => polymorphic_path([ container, Category.new ]),
+                      :condition => "(category_name = window.prompt('#{ 'Category name'.t }')) != '' && category_name != null",
+                      :with => "'category[name]=' + category_name",
+                      :html => { :id => "new_category", 
+                      :class => "action add" } ) %>
+  </div>
+</div>
