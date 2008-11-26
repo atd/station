@@ -1,3 +1,4 @@
+openid_server 'openid_server', :controller => 'openid_server'
 
 open_id_complete 'session', 
   { :controller => 'sessions', 

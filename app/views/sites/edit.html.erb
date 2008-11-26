@@ -2,7 +2,7 @@
 
 <%= error_messages_for :site %>
 
-<% form_for(@site, :html => { :method => :put }) do |f| %>
+<% form_for(:site, :url => site_path, :html => { :method => :put, :multipart => true }) do |f| %>
   <p>
     <b><%= "Name".t %></b><br />
     <%= f.text_field :name %>
@@ -22,6 +22,11 @@
   <p>
     <b><%= "Domain".t %></b><br />
     <%= f.text_field :domain %>
+  </p>
+
+  <p>
+    <b><%= "SSL".t %></b><br />
+    <%= f.check_box :ssl %>
   </p>
 
   <p>

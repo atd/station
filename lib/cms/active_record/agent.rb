@@ -48,11 +48,13 @@ module CMS
         # Options
         # * <tt>authentication</tt>: Array with Authentication methods supported for this Agent. 
         # Defaults to <tt>[ :login_and_password, :openid, :cookie_token ]</tt>
-        # * <tt>activation</tt>: Agent must verify email
+        # * <tt>openid_server</tt>: Support for OpenID Server. Defaults to false
+        # * <tt>activation</tt>: Agent must verify email. Defaults to false
         def acts_as_agent(options = {})
           CMS::ActiveRecord::Agent.register_class(self)
 
           options[:authentication] ||= [ :login_and_password, :openid, :cookie_token ]
+          options[:openid_server]  ||= false
           options[:activation]     ||= false
           
           # Set agent options
@@ -64,6 +66,10 @@ module CMS
           #
           options[:authentication].each do |method|
             include "CMS::ActiveRecord::Agent::Authentication::#{ method.to_s.camelize }".constantize
+          end
+
+          if options[:openid_server]
+            include CMS::ActiveRecord::Agent::OpenidServer
           end
 
           # Loads agent email verification

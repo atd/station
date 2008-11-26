@@ -8,6 +8,8 @@ require 'atom/service'
 class Uri < ActiveRecord::Base
   has_many :openid_ownings, 
            :class_name => "CMS::OpenID::Owning"
+  has_many :openid_trusts,
+           :class_name => "CMS::OpenID::Trust"
              
   # Return this URI string         
   def to_s

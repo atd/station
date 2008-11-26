@@ -14,8 +14,14 @@ module CMS
       # Responds to Atom Service format, returning the Containers this Agent can post to
       def show
         respond_to do |format|
-          format.html
+          format.html {
+            if @agent.agent_options[:openid_server]
+              headers['X-XRDS-Location'] = formatted_polymorphic_url([ @agent, :xrds ])
+              @openid_server_agent = @agent
+            end
+          }
           format.atomsvc
+          format.xrds
         end
       end
     

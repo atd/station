@@ -4,12 +4,15 @@
 <head>
   <title><%= title %></title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<% if @xrds_url -%>
-  <meta http-equiv="X-XRDS-Location" content="<%= @xrds_url -%>" />
+  <meta name="description" content="<%= @description %>" />
+  <meta name="keywords" content="red,social" />
+  <meta name="author" content="atd, nogates / Design: Gnoyxs - http://www.gnoxys.net/" />
+<% if @openid_server_agent -%>
+  <meta http-equiv="X-XRDS-Location" content="<%= formatted_polymorphic_url([ @openid_server_agent, :xrds ]) -%>" />
+  <link rel="openid.server" href="<%= openid_server_url -%>" />
+  <link rel="openid2.provider" href="<%= openid_server_url -%>" />
 <% end -%>
-<meta name="description" content="<%= @description %>" />
-<meta name="keywords" content="red,social" />
-<meta name="author" content="atd, nogates / Design: Gnoyxs - http://www.gnoxys.net/" />
+
 <%= stylesheet_link_tag "move", :media => 'all', :plugin => 'cmsplugin' %>
 
 <%= javascript_include_tag :defaults %>
@@ -19,10 +22,6 @@
 
 <% if @collection_path -%>
 <link href="<%= @collection_path + '.atom' %>" rel="alternate" title="<%= @title %>" type="application/atom+xml" />
-<% end -%>
-
-<% if @openid_server -%>
-<link rel="openid.server" href="<%= @openid_server -%>" />
 <% end -%>
 
 <% if false # @space %>

@@ -21,6 +21,11 @@
   </p>
 
   <p>
+    <b><%= "SSL".t %></b>: 
+    <%= current_site.ssl? %>
+  </p>
+
+  <p>
     <b><%= "Email".t %></b>: 
     <%= sanitize current_site.email %>
   </p>

@@ -3,6 +3,13 @@ require 'openid/store/interface'
 module CMS
   module OpenID
     class ActiveRecordStore < ::OpenID::Store::Interface
+      class << self
+        def cleanup
+          new.cleanup_nonces
+          new.cleanup_associations
+        end
+      end
+
       def store_association(server_url, assoc)
         remove_association(server_url, assoc.handle)    
         Association.create(:server_url => server_url,
@@ -42,7 +49,7 @@ module CMS
         Nonce.create(:server_url => server_url, :timestamp => timestamp, :salt => salt)
         return true
       end
-      
+
       def cleanup_nonces
         now = Time.now.to_i
         Nonce.delete_all(["timestamp > ? OR timestamp < ?", now + ::OpenID::Nonce.skew, now - ::OpenID::Nonce.skew])
