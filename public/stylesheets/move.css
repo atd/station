@@ -493,3 +493,7 @@ background: transparent url('../images/move_css/view.png') no-repeat center left
   padding: 10px;
   font-weight: bold;
 }
+
+.none  { display: none; }
+.right { float: right; }
+.left { float: left; }

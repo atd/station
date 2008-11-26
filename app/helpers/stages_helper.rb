@@ -1,12 +1,9 @@
 module StagesHelper
 
-  def performances_form(stage)
+  def performances_form(stage, form)
     roles = stage.class.roles + Role.without_stage_type
-    returning "" do |html|
-      html << "<div id=\"performance_form_#{ dom_id stage }\" class=\"performance_forms\">"
-      html << "#{ roles.map(&:name) }de<br />"
-      html << "</div>"
-    end
+    render :partial => "stages/perfomances_form", 
+           :locals => { :stage => stage, :roles => roles, :form => form }
   end
 
 end

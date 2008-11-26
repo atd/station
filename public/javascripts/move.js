@@ -168,6 +168,35 @@ function go_to_content_if_active(id_entry,entry_url) {
   }
 }
 
+
+/* Perfomances */
+function addNewPerformance(stage_id) {
+    element = $('empty_performance')
+    var clone = new Element(element.tagName);
+    $A(element.attributes).each(function(attribute) {
+     clone[attribute.name] = attribute.value; 
+    });
+
+    //take number of permission and increment
+    number_permission = parseInt($('performances_length').value)
+    $('performances_length').value = number_permission + 1;
+    //Data
+    clone.update(element.innerHTML);
+    //change the input id and name
+    clone.childElements().each(function(child) {
+      if (child["id"] == "delete_performance") {
+        child["id"] = child["id"] + "_" + number_permission
+      } else {
+        child["id"] = "performances_" + number_permission + child["id"]
+        child["name"] = "performances[]" + child["name"]
+      }
+    })
+    //Reparse
+    clone["id"] = "div_performance_" + number_permission
+    //Insert in html
+    $('performances_list_'+stage_id).insert(clone)
+  }
+
 /* DEPRECATED */
 function changeDetail(num_content) {
   if(detail_active!='entry_detail_'+num_content) {
