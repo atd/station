@@ -1,18 +1,18 @@
 # Categories methods and filters for Category
 class CategoriesController < ApplicationController
-  before_filter :needs_container, :only => [ :index, :new, :create ]
+  before_filter :needs_categories_domain, :only => [ :index, :new, :create ]
 
   before_filter :get_category, :only => [ :show, :edit, :update, :destroy ]
 
-  before_filter :containers_and_agents
+  before_filter :categories_domains_and_agents
 
   # List categories belonging to a Container
   #
-  # GET /:container_type/:container_id/categories
-  # GET /container_type/:container_id/categories.xml
+  # GET /:categories_domain_type/:categories_domain_id/categories
+  # GET /categories_domain_type/:categories_domain_id/categories.xml
   def index
-    @categories = @container.container_categories.column_sort(params[:order], params[:direction])
-    @title = "#{ 'Listing categories'.t } - #{ @container.name }"
+    @categories = @categories_domain.domain_categories.column_sort(params[:order], params[:direction])
+    @title = "#{ 'Listing categories'.t } - #{ @categories_domain.name }"
     
     respond_to do |format|
       format.html # index.html.erb
@@ -33,10 +33,10 @@ class CategoriesController < ApplicationController
 
   # New Category form
   #
-  # GET /:container_type/:container_id/categories/new
-  # GET /:container_type/:container_id/categories/new.xml
+  # GET /:categories_domain_type/:categories_domain_id/categories/new
+  # GET /:categories_domain_type/:categories_domain_id/categories/new.xml
   def new
-    @category = @container.container_categories.new
+    @category = @categories_domain.domain_categories.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -52,10 +52,10 @@ class CategoriesController < ApplicationController
 
   # Create new category
   #
-  # POST /:container_type/:container_id/categories
-  # POST /:container_type/:container_id/categories.xml
+  # POST /:categories_domain_type/:categories_domain_id/categories
+  # POST /:categories_domain_type/:categories_domain_id/categories.xml
   def create
-    @category = @container.container_categories.new(params[:category])
+    @category = @categories_domain.domain_categories.new(params[:category])
 
     respond_to do |format|
       if @category.save
@@ -96,27 +96,33 @@ class CategoriesController < ApplicationController
     @category.destroy
 
     respond_to do |format|
-      format.html { redirect_to(polymorphic_path([ @container, Category.new ])) }
+      format.html { redirect_to(polymorphic_path([ @categories_domain, Category.new ])) }
       format.xml  { head :ok }
     end
   end
 
   protected
 
-  # Find Category using params[:id]
-  #
-  # Sets @category and @container variables
-  def get_category
-    @category = Category.find(params[:id])
-    @container = @category.container
+  # Sets @categories_domain, getting a CategoriesDomain from path (using get_resource_from_path) or current_site
+  def needs_categories_domain
+    @categories_domain = get_resource_from_path(:acts_as => :categories_domain) || current_site
   end
 
-  # Set @containers and @agents variables from @container
+  # Find Category using params[:id]
   #
-  # @container variable is set either in :needs_container or :get_category
-  def containers_and_agents #:nodoc:
-    @containers = Array(@container)
-    @agents = @container.actors
+  # Sets @category and @categories_domain variables
+  def get_category
+    @category = Category.find(params[:id])
+    @categories_domain = @category.domain
+  end
+
+  # Set @container and @agents variables from @categories_domain
+  #
+  # @categories_domain variable is set either in :needs_categories_domain or :get_category
+  def categories_domains_and_agents #:nodoc:
+    #TODO return unless @categories_domain && @categories_domain.acts_as_container?
+    @containers = Array(@categories_domain)
+    @agents = @categories_domain.actors
   end
 end
 

@@ -33,10 +33,7 @@ module CMS
                    :as => :container
 
 
-          has_many :container_categories,
-                   :class_name => "Category",
-                   :dependent => :destroy,
-                   :as => :container
+          acts_as_categories_domain
 
           # All Containers are Stages by default:
           send(:acts_as_stage) unless respond_to?(:stage_options)

@@ -1,20 +1,29 @@
 class Category < ActiveRecord::Base
   acts_as_sortable :columns => [ :name,
                                  :description,
-                                 { :name => "Container", 
+                                 { :name => "Domain", 
                                    :content => proc { |helper, category| 
-    helper.link_to(category.container.name, helper.polymorphic_path(category.container))
+    helper.link_to(category.domain.name, helper.polymorphic_path(category.domain))
                                    },
                                    :no_sort => true } ]
 
-  belongs_to :container, 
+  belongs_to :domain, 
              :polymorphic => true
 
   has_many :categorizations,
            :dependent => :destroy
-  has_many :entries,
-           :through => :categorizations
 
-  validates_presence_of :name, :container_id, :container_type
-  validates_uniqueness_of :name, :scope => [ :container_id, :container_type ]
+  for categorizable in CMS::ActiveRecord::Categorizable.symbols
+    has_many categorizable, :through => :categorizations,
+                            :source => :categorizable,
+                            :source_type => categorizable.to_s.classify
+  end
+
+  # All the instances categorized with some Category
+  def categorizables
+    CMS::ActiveRecord::Categorizable.symbols.map{ |t| send(t) }.flatten
+  end
+
+  validates_presence_of :name, :domain_id, :domain_type
+  validates_uniqueness_of :name, :scope => [ :domain_id, :domain_type ]
 end

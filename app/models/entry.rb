@@ -23,12 +23,6 @@ class Entry < ActiveRecord::Base
   belongs_to :container, :polymorphic => true
   belongs_to :agent,     :polymorphic => true
 
-  has_many :categorizations,
-             :dependent => :destroy
-  has_many :categories,
-           :through => :categorizations
-
-
   validates_presence_of :agent_id,
                         :agent_type,
                         :container_id, 
@@ -57,16 +51,6 @@ class Entry < ActiveRecord::Base
   # True if the associated Content of this Entry has media
   def has_media?
     ! content.content_options[:has_media].nil?
-  end
-
-  # Set Entry Categories by it id
-  def category_ids=(cids)
-    cids ||= []
-    #FIXME: optimize
-    categorizations.map(&:destroy)
-    for cid in cids
-      categories << Category.find(cid)
-    end
   end
 
   # Returns the title for this Entry. If not present, tries to guess it from

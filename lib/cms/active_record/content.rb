@@ -76,6 +76,7 @@ module CMS
 
           acts_as_stage
           acts_as_sortable
+          acts_as_categorizable
 
           # Named scope in_container returns all Contents in some container
           named_scope :in_container, lambda { |container|

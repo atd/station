@@ -108,7 +108,6 @@ module CMS
       #   GET /:container_type/:container_id/contents/:id/edit
       def edit
         @title ||= "Editing #{ self.resource_class.to_s.humanize }".t
-        params[:category_ids] ||= @content.entry.category_ids
       end
    
       # Create new Content
@@ -134,7 +133,6 @@ module CMS
         respond_to do |format| 
           format.html {
             if @content.save
-              @content.entry.category_ids = params[:category_ids]
               flash[:valid] = "#{ @content.class.to_s.humanize } created".t
               redirect_to [ current_container, @content ]
             else
@@ -193,7 +191,6 @@ module CMS
 
           format.html {
             if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
-              @content.entry.category_ids = params[:category_ids] if @content.entry
               flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
               redirect_to [ current_container, @content ].compact
             else

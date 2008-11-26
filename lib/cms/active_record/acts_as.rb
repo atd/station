@@ -4,7 +4,7 @@ module CMS
     # with acts_as_something
     module ActsAs 
       # All ActiveRecord addons
-      LIST = [ :container, :agent, :content, :stage, :taggable, :logotypable, :sortable ]
+      LIST = [ :container, :agent, :content, :stage, :taggable, :logotypable, :sortable, :categories_domain, :categorizable ]
 
       class << self
         def included(base) #:nodoc:
