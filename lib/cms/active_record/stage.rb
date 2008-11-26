@@ -26,6 +26,9 @@ module CMS
                    :as => :stage
 
           include CMS::ActiveRecord::Stage::InstanceMethods
+
+          send :attr_writer, :_stage_performances
+          after_save :_save_stage_performances!
         end
 
         # All Roles defined for this class
@@ -109,6 +112,28 @@ module CMS
         # TODO: conditions (roles, etc...)
         def actors
           stage_performances.map(&:agent).uniq
+        end
+
+        private
+
+        def _save_stage_performances! #:nodoc:
+          return unless @_stage_performances
+
+          Performance.transaction do
+            old_ps = stage_performances.clone
+
+            @_stage_performances.each do |new_p|
+              present_p = stage_performances.find :first, :conditions => new_p
+
+              present_p ?
+                old_ps.delete(present_p) :
+                stage_performances.create!(new_p)
+            end
+
+            old_ps.map(&:destroy)
+          end
+
+          @_stage_performances = nil
         end
       end
     end
