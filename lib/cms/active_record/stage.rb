@@ -86,7 +86,7 @@ module CMS
         # include_anyones:: Include Anyone's Roles. Defaults to false
         #
         def roles_for(agent, options = {})
-          agent_roles = stage_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.to_s).map(&:role).uniq
+          agent_roles = stage_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.base_class.to_s).map(&:role).uniq
 
           if options[:name]
             agent_roles = agent_roles.select{ |r| r.name == options[:name] }
