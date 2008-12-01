@@ -26,7 +26,7 @@ module CMS
     def find_agent_fixture(agent)
       return nil unless agent
 
-      ( CMS::ActiveRecord::Agent.symbols - [ :singular_agents ] ) do |agent_klass|
+      ( CMS::ActiveRecord::Agent.symbols - [ :singular_agents ] ).each do |agent_klass|
         agent_fixture = send(agent_klass, agent)
         return agent_fixture if agent_fixture
       end
