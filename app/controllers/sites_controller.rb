@@ -29,13 +29,6 @@ class SitesController < ApplicationController
   # PUT /site.xml
   def update
     respond_to do |format|
-      #TODO acts_as_logotypable: Rails support for nested objects
-      if current_site.logotype
-        current_site.logotype.attributes = params[:logotype]
-      else
-        current_site.logotype = Logotype.new(params[:logotype])
-      end unless params[:logotype][:media].blank?
-
       if current_site.update_attributes(params[:site])
         flash[:valid] = 'Site configuration was successfully updated.'.t
         format.html { redirect_to site_path }

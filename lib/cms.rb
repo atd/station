@@ -14,9 +14,9 @@ module CMS
     end
 
     def enable_action_pack #:nodoc:
-      %w( categories performances ).each do |item|
+      %w( categories performances logotype ).each do |item|
         require "action_view/helpers/form_#{ item }_helper"
-        ::ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.classify.pluralize }Helper".constantize
+        ::ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.camelcase }Helper".constantize
       end
     end
 
