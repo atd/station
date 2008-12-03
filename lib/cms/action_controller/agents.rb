@@ -13,6 +13,9 @@ module CMS
       #
       # Responds to Atom Service format, returning the Containers this Agent can post to
       def show
+        @containers = @agent.stages.select{ |s| s.authorizes?(current_agent, :read) }.sort{ |x, y| x.name <=> y.name }
+        @agents = @agent.fellows
+
         respond_to do |format|
           format.html {
             if @agent.agent_options[:openid_server]
