@@ -171,40 +171,79 @@ function go_to_content_if_active(id_entry,entry_url) {
 
 /* Perfomances */
 function addNewPerformance(stage_id, stage_name) {
-    element = $('empty_performance')
+    //FIXME: markup element for fix empty performances non-updating when nothing is sended
+    if ($('fix_performance_empty')) {
+      $('fix_performance_empty').remove();
+    }
+
+    element = $('empty_performance');
     var clone = new Element(element.tagName);
     $A(element.attributes).each(function(attribute) {
      clone[attribute.name] = attribute.value; 
     });
 
     //take number of permission and increment
-    number_permission = parseInt($('performances_length').value)
+    number_permission = parseInt($('performances_length').value);
     $('performances_length').value = number_permission + 1;
     //Data
     clone.update(element.innerHTML);
     //change the input id and name
     clone.childElements().each(function(child) {
       if (child["id"] == "delete_performance") {
-        child["id"] = child["id"] + "_" + number_permission
+        child["id"] = child["id"] + "_" + number_permission;
       } else if (child["id"] == "_agent") {
-        child["id"] = "performances_" + number_permission + child["id"]
+        child["id"] = "performances_" + number_permission + child["id"];
       } else {
-        child["id"] = "performances_" + number_permission + child["id"]
-        child["name"] = stage_name + "[_stage_performances][]" + child["name"]
+        child["id"] = "performances_" + number_permission + child["id"];
+        child["name"] = stage_name + "[_stage_performances][]" + child["name"];
       }
     })
     //Reparse
-    clone["id"] = "div_performance_" + number_permission
+    clone["id"] = "div_performance_" + number_permission;
     //Insert in html
-    $('performances_list_'+stage_id).insert(clone,{'position' : 'bottom'})
+    $('performances_list_'+stage_id).insert(clone,{'position' : 'bottom'});
   }
 
 
-function selectAgentAttributesForPerformances(select_agent_field) {
-  agent_data = select_agent_field.value.split('_')
-  $(select_agent_field.identify()+'_type').value = agent_data[0]
-  $(select_agent_field.identify()+'_id').value = agent_data[1]
+  function selectAgentAttributesForPerformances(select_agent_field) {
+    agent_data = select_agent_field.value.split('_')
+    $(select_agent_field.identify()+'_type').value = agent_data[0]
+    $(select_agent_field.identify()+'_id').value = agent_data[1]
+  }
+
+
+var last_role_details;
+
+function showRolesDetails(select_roles_tag,evt) {
+  if (last_role_details) {
+    $('role_data_'+last_role_details).hide()
+  }
+  if (select_roles_tag.value != "") {
+    $('role_data_'+select_roles_tag.value).show();
+    last_role_details = select_roles_tag.value;
+  }
 }
+
+function hideRolesDetails() {
+  if (last_role_details) {
+    $('role_data_'+last_role_details).hide()
+  }
+}
+
+function deletePerformance(delete_link,stage_id, stage_name) {
+  //get parent div
+  parent_div = 'div' + delete_link.identify().split('delete')[1];
+  $(parent_div).remove();
+  //if is the last => 
+  //FIXME: markup element for fix empty performances non-updating when nothing is sended
+  if ($('performances_list_'+stage_id).childElements().length <= 1) {
+    var fix_performance_empty = new Element('input', { 'type': 'hidden', 'id': 'fix_performance_empty', 'value': "", 'name': stage_name + "[_stage_performances][]" });
+    // add to performaces_list
+    $('performances_list_'+stage_id).insert(fix_performance_empty);
+  }
+}
+
+
 
 // END performances functions
 

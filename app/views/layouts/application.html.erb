@@ -39,7 +39,7 @@
     <!-- logo -->
     <div id="meta">
       <div id="meta_top">
-        <h1><%= current_site.name %></h1>
+        <span class="site_title"><%= current_site.name %></span>
       </div>
       <div id="meta_center">
         <%= 
@@ -121,7 +121,7 @@
     </div>
     <!-- open footer -->
      <div id="footer">
-        © 2008 <%= link_to 'Gnoxys', 'http://www.gnoxys.net/' %>
+        <%= "#{ current_site.name } works over #{ link_to('cmsplugin','http://rubyforge.org/projects/cmsplugin/') }  developed by #{ link_to('Gnoxys','http://www.gnoxys.net/') }"  %>
      <!-- cloose footer -->
     </div>
   <!-- close wrap -->

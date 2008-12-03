@@ -79,21 +79,17 @@ a.action:hover {
   background-color: #c9eabd;
 }
 
-a.add {
-  background: transparent url('../images/move_css/add.png') no-repeat top left;
-} 
-a.view {
-  background: transparent url('../images/move_css/view.png') no-repeat top left;
-} 
-a.edit {
-  background: transparent url('../images/move_css/edit.png') no-repeat top left;
-} 
-a.delete {
-  background: transparent url('../images/move_css/delete.png') no-repeat top left;
-} 
-a.info {
-  background: transparent url('../images/move_css/info.png') no-repeat top left;
-} 
+/* FIXME */
+.add { background: transparent url('../images/move_css/add.png') no-repeat top left; } 
+.create { background: transparent url('../images/move_css/add.png') no-repeat top left; }
+
+.view { background: transparent url('../images/move_css/view.png') no-repeat top left; } 
+.read { background: transparent url('../images/move_css/view.png') no-repeat top left; } 
+.edit {   background: transparent url('../images/move_css/edit.png') no-repeat top left; } 
+.update {   background: transparent url('../images/move_css/edit.png') no-repeat top left; } 
+
+.delete {  background: transparent url('../images/move_css/delete.png') no-repeat top left; } 
+.info { background: transparent url('../images/move_css/info.png') no-repeat top left; } 
 
 
 a.action:hover {
@@ -290,17 +286,18 @@ div.box_view_list span.box_unit_title a {
   color: black;
 }
 
+/* DEPRECATED!!!!!! 
 #interaction_screen_center_inside h2 {
-  /*background: transparent url('../images/move_css/background_interaction_title.png') repeat-x top center;*/
+
   min-height: 34px; height: 34px; max-height: 34px;
   max-width: 680px; width: 680px; min-width: 680px;
   margin: 0px 15px 0px 10px;
   font-size: 1.7em;
   color: #6D2A7A;
   border-bottom: 1px solid #6D2A7A;
-  /*font-family: 'Sans';*/
   font-weight: bold;
 }
+*/
 
 #interaction_screen_center_inside div.paginator {
   margin: -27px 180px 0px 0px;
@@ -454,7 +451,7 @@ font-style: italic;
 }
 
 #interaction_view div.entry:hover a {
-  color: #6D2A7A;
+  color: white;
 }
 
 
@@ -497,3 +494,62 @@ background: transparent url('../images/move_css/view.png') no-repeat center left
 .none  { display: none; }
 .right { float: right; }
 .left { float: left; }
+
+.site_title {
+  margin: 3px 0px 7px 0px;
+  color: #92D585;
+  font-size: 2.2em;
+  font-weight: bolder;
+}
+
+h1 {
+  margin: 0px 15px 0px 10px;
+  font-size: 1.7em;
+  color: #6D2A7A;
+  border-bottom: 1px solid #6D2A7A;
+  font-weight: bold;
+}
+
+.errorExplanation {
+  margin-top: 5px;
+  background: #FF6767 url('../images/move_css/background_error_explanation.png') repeat-y top left;
+  color: #a80707;
+  padding: 1px 0px 1px 8px;
+  margin: 20px 39px 0px 40px;
+  border: 1px solid #a80707;
+}
+
+.errorExplanation h2 {
+  font-size: 1.1em;
+  font-weight: bold;
+  background: transparent url('../images/move_css/error.png') no-repeat center left;
+  padding: 10px 34px;
+}
+
+
+.errorExplanation p { display: none; }
+
+/* FIXME */
+.roles_data {
+  position: relative;
+  top: -35px;
+  left: -100px;
+  background-color: #CFCFCF;
+  padding: 10px;
+  width: 400px;
+  float: right;
+}
+
+.roles_data .role_title {
+  color: #6d2a7a;
+}
+
+.roles_data ul {
+  margin-left: 0px;
+}
+
+.roles_data li {
+  background: transparent url('../images/move_css/permission.png') no-repeat center left;
+  padding-left: 20px;
+  list-style-type: none;
+}

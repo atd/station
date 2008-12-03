@@ -6,6 +6,7 @@
     <%= "The aren't any Roles avaible. Permissions can't be set.".t %> 
     <%= link_to "Go to manage roles".t, roles_path %>
   <% else %>
+    <%= link_to_function("New Permission".t, "addNewPerformance('#{dom_id stage}','#{ stage_name }')", { :id => "new_performance",  :class => "action add" } ) %>
     <div id="performances_list_<%= dom_id stage %>">
       <% current_performances = stage._stage_performances || stage.stage_performances %>
       <%= hidden_field_tag "performances_length", current_performances.size %>
@@ -23,9 +24,9 @@
             end
         performance_num = current_performances.index(p) %>
         <div id="div_performance_<%= performance_num %>">
-          <%= link_to_function("Delete Permission".t, "$('div' + this.identify().split('delete')[1]).remove(); return false;", {:id => "delete_performance_#{ performance_num }",  :class => "action delete right" } ) %>
+          <%= link_to_function("Delete Permission".t, "deletePerformance(this,'#{ dom_id stage }','#{ stage_name }');", {:id => "delete_performance_#{ performance_num }",  :class => "action delete right" } ) %>
           <%= "Select Role".t %>
-          <select name="<%= stage_name %>[_stage_performances][][role_id]" id="<%= "performances_#{ performance_num }_role_id" %>"> 
+          <select name="<%= stage_name %>[_stage_performances][][role_id]" id="<%= "performances_#{ performance_num }_role_id" %>" onmousemove="showRolesDetails(this); return false;" onchange="hideRolesDetails(); return false;" onmouseout="hideRolesDetails(); return false;">
             <option value=""></option>
           <%= options_for_select( roles.map {|r| [r.name,r.id] }, role_id.to_i) %>
           </select>
@@ -41,16 +42,34 @@
       end %>
     </div>
 
-    <%= link_to_function("New Permission".t, "addNewPerformance('#{dom_id stage}','#{ stage_name }')", { :id => "new_performance",  :class => "action add" } ) %>
+<script>
+
+</script>
+
+
     <div id="empty_performance" class="none">
-      <%= link_to_function("Delete Permission".t, "$('div' + this.identify().split('delete')[1]).remove(); return false;", {:id => "delete_performance",  :class => "action delete right" } ) %>
+      <%= link_to_function("Delete".t, "deletePerformance(this,'#{ dom_id stage }','#{ stage_name }');", {:id => "delete_performance",  :class => "action delete right" } ) %>
       <%= "Select Role".t %>
-      <%= select(nil, "role_id", roles.collect {|r| [ r.name, r.id ] }, { :include_blank => true }) %>
+      <%= select(nil, "role_id", roles.collect {|r| [ r.name, r.id ] },
+                                 { :include_blank => true },
+                                 {:onmousemove => 'showRolesDetails(this); return false;',
+                                  :onchange => 'hideRolesDetails(); return false;', :onmouseout => 'hideRolesDetails(); return false;' } ) %>
       <%= "Select User".t %>
       <%= select(nil, "agent", CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, { :include_blank => true }, { :onchange => "selectAgentAttributesForPerformances(this); return false;" }) %>
       <%= hidden_field_tag "[agent_type]", "#{  }", { :id => "_agent_type" } %>
       <%= hidden_field_tag "[agent_id]", "#{  }", { :id => "_agent_id" } %>
     </div>
+
+      <% # render roles info
+        for role in roles %>
+      <div id="role_data_<%= role.id %>" style="display: none;" class="roles_data">
+        <p><span class="role_title"><%= "%s permissions:" / role.name %></span></p>
+        <ul>
+        <% for permission in role.permissions %>
+          <li><%= "Can %s " / permission.action %> @ <%= permission.objective %></li>
+        <% end %>
+      </div>
+      <% end %>
 
   <% end %>
   </div>
