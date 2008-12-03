@@ -121,7 +121,7 @@
     </div>
     <!-- open footer -->
      <div id="footer">
-        <%= "#{ current_site.name } works over #{ link_to('cmsplugin','http://rubyforge.org/projects/cmsplugin/') }  developed by #{ link_to('Gnoxys','http://www.gnoxys.net/') }"  %>
+        <%= "%s is based on %s. Design by %s" / [ link_to(current_site.name, root_path), link_to('CMSplugin','http://rubyforge.org/projects/cmsplugin/'), link_to('Gnoxys','http://www.gnoxys.net/') ] %>
      <!-- cloose footer -->
     </div>
   <!-- close wrap -->
