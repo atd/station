@@ -22,7 +22,7 @@ module ActionView
         # TODO
         # raise "#{ object } isn't Categorizable" unless object.acts_as_categorizable?
 
-        @template_object.render :partial => "categories/categories_form", 
+        @template_object.render :partial => "categorizables/categories_form", 
                                 :locals => { :categorizable => object,
                                              :categorizable_name => object_name, 
                                              :domain => options[:domain] }
