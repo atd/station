@@ -13,4 +13,6 @@ class Performance < ActiveRecord::Base
       { :conditions => [ "stage_type = ?", type.to_s.classify ] } :
       {}
   }
+
+  validates_presence_of :agent_id, :agent_type, :stage_id, :stage_type, :role_id
 end
