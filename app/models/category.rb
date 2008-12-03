@@ -13,7 +13,7 @@ class Category < ActiveRecord::Base
   has_many :categorizations,
            :dependent => :destroy
 
-  for categorizable in CMS::ActiveRecord::Categorizable.symbols
+  CMS::ActiveRecord::Categorizable.symbols.each do |categorizable|
     has_many categorizable, :through => :categorizations,
                             :source => :categorizable,
                             :source_type => categorizable.to_s.classify
