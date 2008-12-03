@@ -6,19 +6,50 @@
     <%= "The aren't any Roles avaible. Permissions can't be set.".t %> 
     <%= link_to "Go to manage roles".t, roles_path %>
   <% else %>
-    <p id="performances_list_<%= dom_id stage %>">
-      <%= hidden_field_tag "performances_length", stage.stage_performances.count %>
-    </p>
+    <div id="performances_list_<%= dom_id stage %>">
+      <% current_performances = stage._stage_performances || stage.stage_performances %>
+      <%= hidden_field_tag "performances_length", current_performances.size %>
 
-    <%= link_to_function("New Permission".t, "addNewPerformance('#{dom_id stage}')", { :id => "new_performance",  :class => "action add" } ) %>
+      <% # FIXME ñapa!
+      unless current_performances.empty? 
+        current_performances.each { |p|
+          role_id, agent_id, agent_type = case p
+            when Performance
+              [ p.role_id, p.agent_id, p.agent_type ]
+            when Hash
+              [ p[:role_id], p[:agent_id], p[:agent_type] ]
+            else
+              raise "Undefined object type to the ñapa!"
+            end
+        performance_num = current_performances.index(p) %>
+        <div id="div_performance_<%= performance_num %>">
+          <%= link_to_function("Delete Permission".t, "$('div' + this.identify().split('delete')[1]).remove(); return false;", {:id => "delete_performance_#{ performance_num }",  :class => "action delete right" } ) %>
+          <%= "Select Role".t %>
+          <select name="<%= stage_name %>[_stage_performances][][role_id]" id="<%= "performances_#{ performance_num }_role_id" %>"> 
+            <option value=""></option>
+          <%= options_for_select( roles.map {|r| [r.name,r.id] }, role_id.to_i) %>
+          </select>
+          <%= "Select User".t %>
+          <select name="[agent]" id="<%= "performances_#{ performance_num }_agent" %>" onchange="selectAgentAttributesForPerformances(this)">
+            <option value=""></option>
+            <%= options_for_select( CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, "#{ agent_type }_#{ agent_id }" ) %>
+          </select>
+          <%= hidden_field_tag "#{ stage_name }[_stage_performances][][agent_type]", "#{ agent_type }", { :id => "performances_#{ performance_num }_agent_type" } %>
+          <%= hidden_field_tag "#{ stage_name }[_stage_performances][][agent_id]", "#{ agent_id }", { :id => "performances_#{ performance_num }_agent_id" } %>
+        </div>
+    <% }
+      end %>
+    </div>
+
+    <%= link_to_function("New Permission".t, "addNewPerformance('#{dom_id stage}','#{ stage_name }')", { :id => "new_performance",  :class => "action add" } ) %>
     <div id="empty_performance" class="none">
       <%= link_to_function("Delete Permission".t, "$('div' + this.identify().split('delete')[1]).remove(); return false;", {:id => "delete_performance",  :class => "action delete right" } ) %>
       <%= "Select Role".t %>
       <%= select(nil, "role_id", roles.collect {|r| [ r.name, r.id ] }, { :include_blank => true }) %>
       <%= "Select User".t %>
-      <%= select(nil, "agent_id", CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, u.id ] }, { :include_blank => true }) %>
-      <%= hidden_field_tag "[agent_type]", "User", { :id => "_agent_type" } %>
-
+      <%= select(nil, "agent", CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, { :include_blank => true }, { :onchange => "selectAgentAttributesForPerformances(this); return false;" }) %>
+      <%= hidden_field_tag "[agent_type]", "#{  }", { :id => "_agent_type" } %>
+      <%= hidden_field_tag "[agent_id]", "#{  }", { :id => "_agent_id" } %>
     </div>
 
   <% end %>

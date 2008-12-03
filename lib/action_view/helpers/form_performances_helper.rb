@@ -24,6 +24,7 @@ module ActionView
 
         @template_object.render :partial => "stages/performances_form", 
                                 :locals => { :stage => object,
+                                             :stage_name => object_name,
                                              :roles => options[:roles] }
       end
     end

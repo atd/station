@@ -27,7 +27,7 @@ module CMS
 
           include CMS::ActiveRecord::Stage::InstanceMethods
 
-          send :attr_writer, :_stage_performances
+          send :attr_accessor, :_stage_performances
           after_save :_save_stage_performances!
         end
 

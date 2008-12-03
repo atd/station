@@ -170,7 +170,7 @@ function go_to_content_if_active(id_entry,entry_url) {
 
 
 /* Perfomances */
-function addNewPerformance(stage_id) {
+function addNewPerformance(stage_id, stage_name) {
     element = $('empty_performance')
     var clone = new Element(element.tagName);
     $A(element.attributes).each(function(attribute) {
@@ -186,16 +186,28 @@ function addNewPerformance(stage_id) {
     clone.childElements().each(function(child) {
       if (child["id"] == "delete_performance") {
         child["id"] = child["id"] + "_" + number_permission
+      } else if (child["id"] == "_agent") {
+        child["id"] = "performances_" + number_permission + child["id"]
       } else {
         child["id"] = "performances_" + number_permission + child["id"]
-        child["name"] = "performances[]" + child["name"]
+        child["name"] = stage_name + "[_stage_performances][]" + child["name"]
       }
     })
     //Reparse
     clone["id"] = "div_performance_" + number_permission
     //Insert in html
-    $('performances_list_'+stage_id).insert(clone)
+    $('performances_list_'+stage_id).insert(clone,{'position' : 'bottom'})
   }
+
+
+function selectAgentAttributesForPerformances(select_agent_field) {
+  agent_data = select_agent_field.value.split('_')
+  $(select_agent_field.identify()+'_type').value = agent_data[0]
+  $(select_agent_field.identify()+'_id').value = agent_data[1]
+}
+
+// END performances functions
+
 
 /* DEPRECATED */
 function changeDetail(num_content) {
