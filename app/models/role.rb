@@ -11,6 +11,6 @@ class Role < ActiveRecord::Base
   acts_as_sortable :columns => [ :name, :stage_type ]
 
   named_scope :without_stage_type, lambda {
-    { :conditions => [ "stage_type = ?", nil ] }
+    { :conditions => [ "stage_type = ? OR stage_type = ?", nil, "" ] }
   }
 end
