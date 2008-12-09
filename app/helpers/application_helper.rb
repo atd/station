@@ -50,11 +50,11 @@ module ApplicationHelper
     elsif object.is_a?(Logotype)
       "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=48"
     elsif ! object.new_record? &&
-          object.respond_to?(:mime_type) &&
+          object.respond_to?(:format) &&
           object.respond_to?(:attachment_options) && 
           object.attachment_options[:thumbnails].keys.include?(:icon) &&
           object.thumbnails.find_by_thumbnail('icon')
-      "#{ formatted_polymorphic_path([object, object.mime_type.to_sym]) }?thumbnail=icon"
+      "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=icon"
     elsif object.respond_to?(:logotype) && object.logotype
       icon_image object.logotype
     else

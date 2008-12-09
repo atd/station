@@ -12,10 +12,17 @@ module CMS
 
       module ClassMethods
         # Provides an ActiveRecord model with Logos
-        def acts_as_logotypable
+        #
+        # Options:
+        # class_name:: The model associated with this Logotypable. Defaults to Logotype.
+        #
+        def acts_as_logotypable(options = {})
           CMS::ActiveRecord::Logotypable.register_class(self)
 
-          has_one :logotype, :as => :logotypable
+          options[:class_name] ||= "Logotype"
+
+          has_one :logotype, :as => :logotypable,
+                             :class_name => options[:class_name]
 
           send :attr_accessor, :_logotype
           before_validation :_create_or_update_logotype
