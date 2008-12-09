@@ -1,10 +1,10 @@
-<b class="info"><%= "Title".t %></b>: <%= entry.title %><br />
-<b class="info"><%= "Author".t %></b>: <%= link_to entry.agent.name, entry.agent %><br />
-<b class="info"><%= entry.container.class.to_s.humanize.t %></b>: <%= link_to entry.container.name, entry.container %><br />
-<b class="info"><%= "Created at".t %></b>: <%= entry.created_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
-<b class="info"><%= "Updated at".t %></b>: <%= entry.updated_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
+<b class="details_info"><%= "Title".t %></b>: <%= entry.title %><br />
+<b class="details_info"><%= "Author".t %></b>: <%= link_to entry.agent.name, entry.agent %><br />
+<b class="details_info"><%= entry.container.class.to_s.humanize.t %></b>: <%= link_to entry.container.name, entry.container %><br />
+<b class="details_info"><%= "Created at".t %></b>: <%= entry.created_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
+<b class="details_info"><%= "Updated at".t %></b>: <%= entry.updated_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
 <% if entry.content.categories.any? -%>
-<b class="info"><%= "Category".t("Categories", 99) %></b>: <%= entry.content.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
+<b class="details_info"><%= "Category".t("Categories", 99) %></b>: <%= entry.content.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
 <% end -%>
 <%= link_to("View #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container, entry.content ]), {:class => "view action"}) %>
 <%= link_to("Edit #{entry.content.class.to_s.humanize}".t, edit_polymorphic_path([ entry.container, entry.content ]),{:class => "edit action"}) %>
