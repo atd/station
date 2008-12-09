@@ -531,13 +531,14 @@ h1 {
 
 /* FIXME */
 .roles_data {
-  position: relative;
-  top: -35px;
-  left: -100px;
+  position: absolute;
+  margin-top: -5px;
+  margin-left: 160px;
   background-color: #CFCFCF;
   padding: 10px;
-  width: 400px;
+  width: 300px;
   float: right;
+  z-index: 10;
 }
 
 .roles_data .role_title {

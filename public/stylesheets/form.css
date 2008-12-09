@@ -31,5 +31,11 @@
   border: 1px solid #92d585;
 }
 
+.form_actions {
+  text-align: center;
+}
+.form_actions input {
+  color: black;
+}
 
 

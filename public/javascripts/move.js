@@ -204,13 +204,11 @@ function addNewPerformance(stage_id, stage_name) {
     $('performances_list_'+stage_id).insert(clone,{'position' : 'bottom'});
   }
 
-
   function selectAgentAttributesForPerformances(select_agent_field) {
     agent_data = select_agent_field.value.split('_')
     $(select_agent_field.identify()+'_type').value = agent_data[0]
     $(select_agent_field.identify()+'_id').value = agent_data[1]
   }
-
 
 var last_role_details;
 
