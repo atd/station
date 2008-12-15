@@ -9,7 +9,7 @@ class Tag < ActiveRecord::Base
   # Change this validation if you need more complex tag names.
   validates_format_of :name, :with => /^[\w\_\ \-\.]+$/, :message => "can not contain special characters"
   
-  has_many :taggings
+  has_many :taggings, :dependent => :destroy
 
   for taggable in CMS::ActiveRecord::Taggable.symbols
     has_many taggable, :through => :taggings,
