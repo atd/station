@@ -13,7 +13,7 @@ class SingularAgent < ActiveRecord::Base
   end
 
   def login
-    self.class.to_s.tableize.t
+    self.class.to_s.underscore.t
   end
 end
 
