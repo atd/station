@@ -11,7 +11,11 @@ module CMS
     #
     # auth_object:: the instance variable of the controller that will respond to <tt>authorizes?(current_agent, auth_argument)</tt>
     # auth_argument:: Argument passed to @@auth_object.authorizes?@. See authorizes? methods
-    # filter_options:: Hash of options passed to before_filter
+    # options:: Available options are:
+    #   if:: A Proc proc{ |controller| ... } or Symbol to be executed as condition of the filter
+    #   
+    #  The rest of options are passed to before_filter. See Rails before_filter documentation
+    #   
     #
     # === Examples
     #
@@ -36,9 +40,21 @@ module CMS
         base.helper_method :authorized?
         class << base
           # Calls not_authorized unless stage allows current_agent to perform actions
-          def authorization_filter(auth_object, auth_argument, filter_options = {})
-            before_filter filter_options do |controller|
-              controller.not_authorized unless controller.authorized?(auth_object, auth_argument)
+          def authorization_filter(auth_object, auth_argument, options = {})
+            if_condition = options.delete(:if)
+            filter_condition = case if_condition
+                               when Proc
+                                 if_condition
+                               when Symbol
+                                 proc{ |controller| controller.send(if_condition) }
+                               else
+                                 proc{ |controller| true }
+                               end
+
+            before_filter options do |controller|
+              if filter_condition.call(controller)
+                controller.not_authorized unless controller.authorized?(auth_object, auth_argument)
+              end
             end
           end
         end
