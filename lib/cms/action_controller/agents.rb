@@ -123,7 +123,7 @@ module CMS
       #
       # Example GET /users/1 or GET /users/quentin
       def get_agent
-        @agent = ( params[:id].match(/\d+/) ? self.resource_class.find(params[:id]) : self.resource_class.find_by_login(params[:id]) )
+        @agent = ( params[:id].match(/^\d+$/) ? self.resource_class.find(params[:id]) : self.resource_class.find_by_login(params[:id]) )
         instance_variable_set "@#{ self.resource_class.to_s.underscore }", @agent
       end
     
