@@ -1,38 +1,38 @@
-<h2><%= "Site configuration".t %></h2>
+<h2><%= t(:"site.config") %></h2>
 
   <p>
-    <b><%= "Name".t %></b>: 
+    <b><%= t(:name) %></b>: 
     <%= sanitize current_site.name %>
   </p>
 
   <p>
-    <b><%= "Description".t %></b>: 
+    <b><%= t(:description) %></b>: 
     <%= sanitize current_site.description %>
   </p>
 
   <p>
-    <b><%= "Logotype".t %></b>: 
+    <b><%= t(:"logotype.title.one") %></b>: 
     <%= image_tag(icon_image(current_site)) %>
   </p>
 
   <p>
-    <b><%= "Domain".t %></b>: 
+    <b><%= t(:"site.domain") %></b>: 
     <%= sanitize current_site.domain %>
   </p>
 
   <p>
-    <b><%= "SSL".t %></b>: 
+    <b><%= t(:"site.ssl") %></b>: 
     <%= current_site.ssl? %>
   </p>
 
   <p>
-    <b><%= "Email".t %></b>: 
+    <b><%= t(:email) %></b>: 
     <%= sanitize current_site.email %>
   </p>
 
   <p>
-    <b><%= "Locale".t %></b>: 
+    <b><%= t(:"site.locale") %></b>: 
     <%= sanitize current_site.locale %>
   </p>
 
-  <%= link_to "Edit".t, edit_site_path %>
+  <%= link_to t(:edit), edit_site_path %>

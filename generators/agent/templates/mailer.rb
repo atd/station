@@ -1,34 +1,34 @@
 class <%= class_name %>Mailer < ActionMailer::Base
   def signup_notification(<%= file_name %>)
     setup_email(<%= file_name %>)
-    @subject    += 'Please activate your new account'
+    @subject    += I18n.t(:please_activate_account)
   <% if options[:include_activation] %>
-    @body[:url]  = "http://YOURSITE/activate/#{<%= file_name %>.activation_code}"
+    @body[:url]  = "http://#{ Site.current.domain }/activate/#{<%= file_name %>.activation_code}"
   <% else %>
-    @body[:url]  = "http://YOURSITE/login/" <% end %>
+    @body[:url]  = "http://#{ Site.current.domain}/login/" <% end %>
   end
   
   def activation(<%= file_name %>)
     setup_email(<%= file_name %>)
-    @subject    += 'Your account has been activated!'
-    @body[:url]  = "http://YOURSITE/"
+    @subject    += I18n.t(:account_activated)
+    @body[:url]  = "http://#{ Site.current.domain }/"
   end
 
   def forgot_password(<%= file_name %>)
     setup_email(<%= file_name %>)
-    @subject    += 'Request to change your password'
-    @body[:url]  = "http://YOURSITE/reset_password/#{ <%= file_name %>.reset_password_code }"
+    @subject    += I18n.t(:request_change_password)
+    @body[:url]  = "http://#{ Site.current.domain }/reset_password/#{ <%= file_name %>.reset_password_code }"
   end
 
   def reset_password(<%= file_name %>)
     setup_email(<%= file_name %>)
-    @subject    += 'Your password has been reset'
+    @subject    += I18n.t(:password_has_been_reset)
   end
   
   protected
     def setup_email(<%= file_name %>)
       @recipients  = "#{<%= file_name %>.email}"
-      @from        = "ADMINEMAIL"
+      @from        = Site.current.email
       @subject     = "[YOURSITE] "
       @sent_on     = Time.now
       @body[:<%= file_name %>] = <%= file_name %>

@@ -1,20 +1,20 @@
-<h1><%%= @title %></h1>
+<h1><%%= title %></h1>
 
 <table>
   <tr>
-    <th>Title</th>
+    <th><%%= t(:title) %></th>
   </tr>
 
-<%% for entry in @entries -%>
+<%% for <%= singular_name %> in @<%= singular_name.pluralize %> -%>
   <tr>
-    <td><%%=sanitize entry.title %></td>
-    <td><%%= link_to 'Show', entry_url(entry) %></td>
-    <td><%%= link_to 'Edit', edit_entry_url(entry) %></td>
-    <td><%%= link_to 'Destroy', entries_url, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%%=sanitize <%= singular_name %>.title %></td>
+    <td><%%= link_to t(:show), polymorphic_path(<%= singular_name %>) %></td>
+    <td><%%= link_to t(:edit), edit_polymorphic_path(<%= singular_name %>) %></td>
+    <td><%%= link_to t(:destroy), polymorphic_path(<%= singular_name %>), :confirm => t(:are_you_sure), :method => :delete %></td>
   </tr>
 <%% end -%>
 </table>
 
 <br />
 
-<%%= link_to 'New <%= singular_name %>', new_<%= singular_name %>_path %>
+<%%= link_to t(:new, :scope => <%= singular_name %>), new_<%= singular_name %>_path %>

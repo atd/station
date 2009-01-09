@@ -4,8 +4,8 @@ config.gem "hpricot", :version => '>= 0.6'
 config.gem "mislav-will_paginate", :lib => 'will_paginate', 
                                    :version => '>= 2.3.2',
                                    :source => 'http://gems.github.com/'
-config.gem 'artmotion-calendar_date_select', :lib => 'gem_init',
-                                              :version => '1.10.9', 
+config.gem 'atd-calendar_date_select', :lib => 'calendar_date_select',
+                                       :version => '>= 1.11.20090109', 
                                               :source => 'http://gems.github.com'
 
 config.after_initialize do

@@ -17,7 +17,7 @@ module MenuBoxHelper
           <div class="box_botton_left" onmouseover="setStateMove(1,'left','#{ symbol }');" onmouseout="setStateMove(0,'left','#{ symbol }');" id="#{ symbol }_botton_left"></div>
           <!-- menu box #{ symbol } view container  -->
           <div class="box_view_container">
-            <span class="box_title">#{ symbol.to_s.humanize.singularize.t(symbol.to_s.humanize.pluralize, 99) }</span>
+            <span class="box_title">#{ t(symbol.to_s.singularize, :count => :other) }</span>
             <div class="box_view_wrapper" id="#{ symbol }_wrapper">
               <div class="box_view_list" id="#{ symbol }_list">
       end_html

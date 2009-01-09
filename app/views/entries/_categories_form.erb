@@ -1,9 +1,9 @@
 <p>
-  <b><%= "Category".t("Categories", 99) %></b><br />
-  <% if @container.container_categories.blank? -%>
-    <%= "%s has not categories" / sanitize(@container.name) %>
+<b><%= t('category.other') %></b><br />
+  <% if @container.domain_categories.blank? -%>
+    <%= t('categories_domain.without_categories', :domain => sanitize(@container.name)) %>
   <% else -%>
-    <% @container.container_categories.each do |c| -%>
+    <% @container.domain_categories.each do |c| -%>
       <%= check_box_tag 'category_ids[]', c.id, (params[:category_ids] || []).map(&:to_i).include?(c.id) %><%= sanitize c.name %><br /> 
     <% end -%>
   <% end -%>

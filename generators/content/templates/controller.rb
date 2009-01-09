@@ -2,9 +2,6 @@ class <%= controller_class_name %>Controller < ApplicationController
   # Include some methods and filters.
   include CMS::ActionController::Contents
   
-  # Authentication Filter
-  before_filter :authentication_required, :except => [ :index, :show ]
-  
   # Needs a Container when posting a new <%= controller_class_name.singularize %>
   before_filter :needs_container, :only => [ :new, :create ]
       

@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-  <title><%= 'Log in to %s' / current_site.name %></title>
+  <title><%= t(:login_to, :site => current_site.name) %></title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="<%= current_site.description %>" />
 <meta name="author" content="atd, nogates / Design: Gnoyxs - http://www.gnoxys.net/" />
@@ -14,10 +14,10 @@
   <%= notification_area %>
   <div id="login_wrap">
     <div id="by_link">
-      <a href="#" onclick="javascript:loginSelector('login_by_user');"><%= "Login".t %></a>
-      <a href="#" onclick="javascript:loginSelector('login_by_openid');">OpenID</a>
-      <a href="#" onclick="javascript:loginSelector('new');"><%= "I'm new".t %></a>
-      <a href="#" onclick="javascript:loginSelector('help');"><%= "Help".t %></a>
+      <a href="#" onclick="javascript:loginSelector('login_by_user');"><%= t(:"agent.authentication.login") %></a>
+      <a href="#" onclick="javascript:loginSelector('login_by_openid');"><%= t(:"openid.title") %></a>
+      <a href="#" onclick="javascript:loginSelector('new');"><%= t(:join) %></a>
+      <a href="#" onclick="javascript:loginSelector('help');"><%= t(:help) %></a>
     </div>
     <div id="by_box">
       <%= yield %>

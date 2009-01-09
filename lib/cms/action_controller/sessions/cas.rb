@@ -33,7 +33,7 @@ module CMS
             end
 
             if authenticated?
-              flash[:notice] = "Logged in successfully".t
+              flash[:notice] = t(:logged_in_successfully)
               redirect_back_or_default(after_create_path)
             else
               render_component :controller => CMS::ActiveRecord::Agent.authentication_classes(:cas).first.to_s.tableize,

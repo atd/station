@@ -48,17 +48,12 @@
       </div>
       <div id="meta_bottom">
          <% if authenticated? -%>
-         <%= link_to("Log out".t, logout_path, {:id => "logout"} ) %>
-         <%= link_to("Site".t, site_path, {:id => "site_config"}) %>
+           <%= link_to(t(:logout), logout_path, {:id => "logout"} ) %>
+           <%= link_to(t(:"site.config"), site_path, {:id => "site_config"}) %>
          <% else -%>
-         <%= link_to("Log in".t, login_path) %>
-         <%= link_to("Join".t, new_user_path) %>
-         <%= #"%s or %s" / [ link_to("Sign in".t, login_path), link_to("Join".t, new_user_path) ]
-          %>
-          <% end -%>
-        <%= 
-          #link_to("Public".t, root_path, {:id => "meta_public_content"})
-        %>
+           <%= link_to(t(:login), login_path) %>
+           <%= link_to(t(:join), new_user_path) %>
+         <% end -%>
       </div>
     </div>
 
@@ -66,23 +61,6 @@
     <%= menu_box(:containers) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
     <!-- agents -->
     <%= menu_box(:agents) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
-
-    <!-- session -->
-    <div id="session">
-      <div id="session_top"></div>
-      <div id="session_center">
-        <div id="session_center_inside">
-         <% if authenticated? -%>
-         <%= link_to("Site".t, site_path) %><br />
-         <%= link_to("Log out".t, logout_path) %>
-         <% else -%>
-         <%= "%s or %s" / [ link_to("Sign in".t, login_path), link_to("Join".t, new_user_path) ] %>
-          <% end -%>
-        </div>
-      </div>
-      <div id="session_bottom"></div>
-    </div>
-
 
     <!-- open menu content div -->
     <div id="contents">
@@ -121,7 +99,7 @@
     </div>
     <!-- open footer -->
      <div id="footer">
-        <%= "%s is based on %s. Design by %s" / [ link_to(current_site.name, root_path), link_to('CMSplugin','http://rubyforge.org/projects/cmsplugin/'), link_to('Gnoxys','http://www.gnoxys.net/') ] %>
+       <%= t(:layout_footnote, :site => link_to(current_site.name, root_path), :plugin => link_to('CMSplugin','http://rubyforge.org/projects/cmsplugin/'), :designer => link_to('Gnoxys','http://www.gnoxys.net/')) %>
      <!-- cloose footer -->
     </div>
   <!-- close wrap -->

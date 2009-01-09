@@ -36,10 +36,6 @@ class ContentGenerator < ScaffoldGenerator
       m.template 'form.erb', File.join('app/views', controller_class_path, controller_file_name, "_form.erb")
       m.template 'atom_entry.builder', File.join('app/views', controller_class_path, controller_file_name, "_atom_entry.builder")
 
-      # Layout and stylesheet.
-      m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "#{controller_file_name}.html.erb"))
-      m.template('style.css', 'public/stylesheets/scaffold.css')
-
       m.dependency 'model', [name] + @args, :collision => :skip
       #FIXME: we should reopen the file and add acts_as_content method
       m.template 'model.rb', File.join('app/models', class_path, "#{ file_name }.rb"), :collision => :force

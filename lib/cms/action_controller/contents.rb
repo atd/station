@@ -18,10 +18,10 @@ module CMS
       #   GET /:container_type/:container_id/contents
       def index(&block)
         if current_container
-          @title ||= "#{ self.resource_class.translated_named_collection } - #{ current_container.name }"
+          @title ||= t('other_in_container', :container => current_container.name, :scope => self.resource_class.to_s.underscore)
           @agents = current_container.actors
         else
-          @title ||= self.resource_class.translated_named_collection
+          @title ||= t(self.resource_class.to_s.underscore, :count => :other)
           @agents = CMS::ActiveRecord::Agent.authentication_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
         end
 
@@ -99,7 +99,7 @@ module CMS
         @content = self.resource_class.new
         @content.entry = Entry.new(:content => @content)
         instance_variable_set("@#{ self.resource_class.to_s.underscore }", @content)
-        @title ||= "New #{ self.resource_class.to_s.humanize }".t
+        @title ||= t(:new, :scope => self.resource_class.to_s.underscore)
       end
 
       # Render form for updating Content
@@ -107,7 +107,7 @@ module CMS
       #   GET /contents/:id/edit
       #   GET /:container_type/:container_id/contents/:id/edit
       def edit
-        @title ||= "Editing #{ self.resource_class.to_s.humanize }".t
+        @title ||= t(:editing, :scope => self.resource_class.to_s.underscore)
       end
    
       # Create new Content
@@ -133,10 +133,10 @@ module CMS
         respond_to do |format| 
           format.html {
             if @content.save
-              flash[:valid] = "#{ @content.class.to_s.humanize } created".t
+              flash[:valid] = t(:created, :scope => @content.class.to_s.underscore)
               redirect_to [ current_container, @content ]
             else
-              @title ||= "New #{ controller_name.singularize.humanize }".t
+              @title ||= t(:new, self.resource_class.to_s.underscore)
               render :action => 'new'
             end
           }
@@ -191,10 +191,10 @@ module CMS
 
           format.html {
             if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
-              flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
+              flash[:valid] = t(:updated, :scope => @content.class.to_s.underscore)
               redirect_to [ current_container, @content ].compact
             else
-              @title ||= "Editing #{ controller_name.singularize.humanize }".t
+              @title ||= t(:editing, :scope => self.resource_class.to_s.underscore)
               render :action => 'edit'
             end
           }

@@ -12,7 +12,7 @@ module CMS
             begin
               openid_request = openid_consumer.begin params[:openid_identifier]
             rescue ::OpenID::OpenIDError => e
-              flash[:error] = "Discovery failed for %s: %s" / [ params[:openid_identifier], e ]
+              flash[:error] = t(:discovery_failed, :id => params[:openid_identifier], :error => e)
               render :action => "new"
               return
             end
@@ -46,13 +46,13 @@ module CMS
 
             case openid_response.status
             when ::OpenID::Consumer::SUCCESS
-              flash[:notice] = "Verification of %s succeeded" / openid_response.display_identifier
+              flash[:notice] = t(:verification_succeeded, :id => openid_response.display_identifier)
               uri = Uri.find_or_create_by_uri(openid_response.display_identifier)
 
               # If already authenticated, add URI to Agent.openid_ownings
               if authenticated? && ! current_agent.openid_uris.include?(uri)
                 current_agent.openid_uris << uri
-                flash[:notice] = "OpenID: #{ uri } attached to your account".t
+                flash[:notice] = t(:id_attached_to_account, :id => uri)
                 return
               end
 
@@ -64,7 +64,7 @@ module CMS
 
               if authenticated?
                 redirect_back_or_default after_create_path
-                flash[:notice] = "Logged in successfully".t
+                flash[:notice] = t(:logged_in_successfully)
               else
                 # TODO if already authenticated, add URI to Agent.openid_ownings
                 # else
@@ -77,14 +77,14 @@ module CMS
               end
             when ::OpenID::Consumer::FAILURE
               flash[:error] = openid_response.display_identifier ?
-                "Verification of %s failed: %s" / [ openid_response.display_identifier, openid_response.message ] :
-                "Verification failed: %s" / openid_response.message
+                t(:verification_failed_with_id, :id => openid_response.display_identifier, :message => openid_response.message) :
+                t(:verification_failed, :message => openid_response.message)
               render :action => 'new'
             when ::OpenID::Consumer::SETUP_NEEDED
-              flash[:error] = "Immediate request failed - Setup Needed".t
+              flash[:error] = t(:immediate_request_failed)
               render :action => 'new'
             when ::OpenID::Consumer::CANCEL
-              flash[:notice] = "OpenID transaction cancelled".t
+              flash[:notice] = t(:transaction_cancelled)
               render :action => 'new'
             end
           end

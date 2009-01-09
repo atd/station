@@ -1,4 +1,4 @@
-<h2><%= title("New Entry".t) %></h2>
+<h2><%= title(t('entry.new')) %></h2>
 
 <% unless error_messages_for(:entry).blank? && error_messages_for(:content).blank? -%>
 <div class="errors">
@@ -13,6 +13,6 @@
 
   <%= render :partial => "entries/form", :object => f %>
 
-  <%= submit_tag "Create".t %>
+  <%= submit_tag t(:create) %>
 
 <% end -%>

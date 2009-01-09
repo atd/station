@@ -1,25 +1,25 @@
 <p>
-  <b><%= 'Name'.t %>:</b>
+  <b><%= t(:name) %>:</b>
   <%=h @role.name %>
 </p>
 
 <p>
-  <b><%= "Stage type".t %>:</b> 
-  <%=h @role.stage_type.humanize.t %>
+  <b><%= t('role.stage_type') %>:</b> 
+  <%=h @role.stage_type.blank? ? t('stage.all') : t(@role.stage_type.tableize, :count => 1) %>
 </p>
 
 <p>
-<b><%= "Permissions".t %>:</b><br/>
+<b><%= t('permission.other') %>:</b><br/>
 
 <% if @role.permissions.any? -%>
   <% @role.permissions.each do |permission| -%>
     <%= permission.title %><br />
   <% end -%>
 <% else -%>
-<%= "Role %s hasn't any permission" / @role.name %>
+  <%= t('role.without_permissions', :role => @role.name) %>
 <% end -%>
 </p>
 
 
-<%= link_to 'Edit', edit_role_path(@role) %> |
-<%= link_to 'Back', roles_path %>
+<%= link_to t(:edit), edit_role_path(@role) %> |
+<%= link_to t(:index), roles_path %>

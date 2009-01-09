@@ -42,7 +42,7 @@ module CMS
         # * <tt>:mime_types</tt> - array of Mime::Type accepted for this class. 
         # Defaults to Mime::ATOM
         # * <tt>content_type</tt> - content type for instances of this class. Defaults to "application/atom+xml;type=entry"
-        # * <tt>:named_collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
+        # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
         # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: attachment_fu (<tt>:attachment_fu</tt>)
         # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
         # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
@@ -96,21 +96,9 @@ module CMS
         # Returns the symbol for a set of Contents of this item
         # e.g. <tt>:articles</tt> for Article
         def collection
-          self.to_s.tableize.to_sym
+          content_options[:collection] || self.to_s.tableize.to_sym
         end
         
-        # Returns the word for a named collection of this item
-        # a.g. <tt>"Gallery"</tt> for Photo
-        def named_collection
-          content_options[:named_collection] ? content_options[:named_collection].to_s : self.to_s.humanize.pluralize
-        end
-
-        # Returns the translated named collection for this item
-        # a.g. <tt>"Galería"</tt> for Photo
-        def translated_named_collection
-          content_options[:named_collection] ? content_options[:named_collection].to_s.t : self.to_s.humanize.t(self.to_s.humanize.pluralize, 99)
-        end
-
         # Array of Mime objects accepted by this Content
         def mime_types
           Array(content_options[:mime_types]).map{ |m| Mime.const_get(m.to_sym.to_s.upcase) }

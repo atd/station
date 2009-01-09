@@ -1,16 +1,16 @@
+  <h2><%= t('name') %></h2>
   <p>
-    <%= form.label :name %><br />
     <%= form.text_field :name %>
   </p>
 
-  <h2><%= "Stage type".t %></h2>
+  <h2><%= t('role.stage_type') %></h2>
   <p>
   <%= form.select(:stage_type, 
                   CMS::ActiveRecord::Stage.symbols.map{ |st| [ st.to_s.classify ] * 2 }, 
                   { :selected => @role.stage_type, :include_blank => true }) %>
   </p>
 
-  <h2><%= "Permission".t("Permissions", 99) %></h2>
+  <h2><%= t('permission.other') %></h2>
   <p>
   <%= collection_select :role, 
                         :permission_ids, 

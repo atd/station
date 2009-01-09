@@ -1,7 +1,7 @@
 class Category < ActiveRecord::Base
   acts_as_sortable :columns => [ :name,
                                  :description,
-                                 { :name => "Domain", 
+                                 { :name => I18n.t('categories_domain.title'), 
                                    :content => proc { |helper, category| 
     helper.link_to(category.domain.name, helper.polymorphic_path(category.domain))
                                    },

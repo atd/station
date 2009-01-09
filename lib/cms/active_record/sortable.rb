@@ -78,11 +78,11 @@ module CMS
           case column
           when Symbol
             @content = column
-            @name = column.to_s.humanize
+            @name = I18n.t(column)
             @order = column.to_s
           when Hash
             @content = column[:content]
-            @name = column[:name] || column[:content] && column[:content].is_a?(Symbol) && column[:content].to_s.humanize || ""
+            @name = column[:name] || column[:content] && column[:content].is_a?(Symbol) && I18n.t(column[:content]) || ""
             @order = column[:order] || column[:content] && column[:content].is_a?(Symbol) && column[:content].to_s || ""
             @no_sort = column[:no_sort]
           end

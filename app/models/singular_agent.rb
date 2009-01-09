@@ -9,12 +9,10 @@ class SingularAgent < ActiveRecord::Base
   end
 
   def name
-    self.class.to_s.t
+    I18n.t :name, :scope => "singular_agent.#{ self.class.to_s.underscore }"
   end
 
-  def login
-    self.class.to_s.underscore.t
-  end
+  alias login name
 end
 
 class Anonymous < SingularAgent ; end

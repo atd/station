@@ -12,7 +12,7 @@ class CategoriesController < ApplicationController
   # GET /categories_domain_type/:categories_domain_id/categories.xml
   def index
     @categories = @categories_domain.domain_categories.column_sort(params[:order], params[:direction])
-    @title = "#{ 'Listing categories'.t } - #{ @categories_domain.name }"
+    @title = t('category.other_in_domain', :domain => @categories_domain.name)
     
     respond_to do |format|
       format.html # index.html.erb
@@ -59,7 +59,7 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
-        flash[:valid] = 'Category created'.t
+        flash[:valid] = t('category.created')
         format.html { redirect_to(@category) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
         format.js
@@ -78,7 +78,7 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update_attributes(params[:category])
-        flash[:valid] = 'Category updated'.t
+        flash[:valid] = t('category.updated')
         format.html { redirect_to(@category) }
         format.xml  { head :ok }
       else

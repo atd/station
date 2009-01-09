@@ -1,11 +1,11 @@
 <% form_tag session_path do -%>
 <div id="login_by_user">
   <p>
-    <label for="login"><%= "Login".t %></label>
+    <label for="login"><%= t('agent.authentication.login') %></label>
     <%= text_field_tag 'login', params[:login] %>
   </p>
   <p>
-    <label for="password"><%= "Password".t %></label>
+    <label for="password"><%= t('agent.authentication.password') %></label>
     <%= password_field_tag 'password' %>
   </p>
   
@@ -17,14 +17,14 @@
 
 <div id="login_by_openid" style="display: none;">
   <p>
-    <label for="openid_identifier">OpenID:</label>
+    <label for="openid_identifier"><%= t(:"openid.title") %></label>
     <%= text_field_tag "openid_identifier", params[:openid_identifier], :size => 30 %>
   </p>
 </div>
 
 <div id="new" style="display: none;">
   <p>
-   <%= link_to "Join in %s" / current_site.name, new_user_path, :class => "action add" %>
+    <%= link_to t(:join_to_site, :site => current_site.name), new_user_path, :class => "action add" %>
   </p>
 </div>
 
@@ -32,13 +32,13 @@
 <% if CMS::ActiveRecord::Agent.activation_class -%>
 
 <div id="help"  style="display: none;">
-  <%= link_to 'Forgotten password?'.t, forgot_password_path, :class => "action info" %>
+  <%= link_to t('agent.authentication.forgotten_password'), forgot_password_path, :class => "action info" %>
 </div>
 
 <% end -%>
 
 <div id="go">
-  <p><%= submit_tag '» ' + 'Log in'.t, { :class => "button" } %></p>
+  <p><%= submit_tag '» ' + t(:login), { :class => "button" } %></p>
 </div>
 
 <% end -%>

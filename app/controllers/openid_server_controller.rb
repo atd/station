@@ -23,7 +23,7 @@ class OpenidServerController < ApplicationController
 
     # no openid.mode was given
     unless openid_request
-      render :text => "This is an OpenID server endpoint", :status => :bad_request
+      render :text => t('openid.server.endpoint'), :status => :bad_request
       return 
     end
 
@@ -36,7 +36,7 @@ class OpenidServerController < ApplicationController
         # TODO: claimed_id
         @identity = Uri.find_by_uri(openid_request.identity)
         unless @identity && current_agent.openid_uris.include?(@identity)
-          render :text => "That identity url doesn't belong to you: #{ openid_request.identity }", :status => :forbidden
+          render :text => t(:invalid_uri, :uri => openid_request.identity), :status => :forbidden
           return
         end
       end
@@ -76,13 +76,13 @@ class OpenidServerController < ApplicationController
     # There is not previous OpenID request
     openid_request = session[:openid_request]
     unless openid_request
-      render :text => "Bad Request", :status => :bad_request
+      render :text => t(:bad_request), :status => :bad_request
       return
     end
 
     # Decision is blank or invalid
     unless %w( once trust cancel ).include?(params[:decision])
-      flash[:message] = "You must take a decision".t
+      flash[:info] = t('openid.server.decision')
       render :partial => "new", :layout => "application"
       return
     end

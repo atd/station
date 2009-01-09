@@ -1,0 +1,175 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  site:
+    config: "Site configuration"
+    editing: "Editing Site configuration"
+    updated: "Site configuration was successfully updated."
+    domain: "Domain"
+    ssl: "SSL"
+    locale: "Locale"
+
+  login: "Log in"
+  login_to: "Log in {{site}}"
+  logged_in_successfully: "Logged in successfully"
+  logout: "Log out"
+  logged_out: "You have been logged out"
+  join: "Unirse"
+  join_to_site: "Join in {{site}}"
+  im_new: "I'm new"
+  help: "Help"
+  invalid_credentials: "Invalid Credentials"
+
+  account_created: "Your account has been created"
+
+  visit_link_to_activate_account: "Visit this link to activate your account"
+  should_check_email_to_activate_account: "You should check your email to activate your account."
+  account_activated: "Your account has been activated!"
+  account_activated_with_agent: "{{agent}}, your account has been activated"
+  please_activate_account: "Please activate your new account"
+
+  password_reset: "Password Reset"
+  could_not_find_anybody_with_that_email_address: "Could not find anybody with that email address"
+  send_reset_password_request: "Send Reset Password Request"
+  reset_password: "Reset Password"
+  request_change_password: "Request to change your password"
+  follow_reset_password: "{{agent}}, please follow the link to reset your password"
+  password_reset_link_sent_to_email_address: "A password reset link has been sent to email address"
+  password_has_been_reset: "Your password has been reset"
+  password_has_been_reset_with_agent: "{{agent}}, your password has been reset"
+  invalid_password_reset_code: "Invalid reset code. Please, check the link and try again. (Tip: Did your email client break the link?)"
+
+  user:
+    other: "Users"
+    activation_email_sent: "Activation email has been sent to user"
+    disabled: "Disabled user"
+
+  index: "Index"
+  create: "Create"
+  show: "Show"
+  edit: "Edit"
+  update: "Update"
+  back: "Back"
+  send: "Send"
+
+  are_you_sure: "Are you sure?"
+
+  name: "Name"
+  description: "Descriptión"
+  file: "File"
+
+  agent:
+    one: "Agent"
+    other: "Agents"
+    authentication:
+      login: "Login"
+      password: "Password"
+      confirm_password: "Confirm Password"
+      forgotten_password: "I forgot the password!"
+    select:
+      one: "Select Agent"
+  singular_agent:
+    anonymous:
+      name: "Anonymous"
+    anyone:
+      name: "Anyone"
+  container:
+    one: "Container"
+    other: "Containers"
+  content:
+    create: "Create Content"
+    read: "Read Content"
+    update: "Update Content"
+    delete: "Delete Content"
+
+  entry:
+    one: "Entry"
+    other: "Entries"
+    other_in_container: "Entries - {{container}}"
+    new: "New Entry"
+
+  category:
+    one: "Category"
+    other: "Categories"
+    other_in_domain: "Categories - {{domain}}"
+    new: "New Category"
+    created: "Category created"
+    editing: "Editing Category"
+    name: "Category name"
+
+  categories_domain:
+    title: "Domain"
+    without_categories: "{{domain}} hasn't any categories"
+
+  performance:
+    other: "Performances"
+    new: "New Performance"
+    create: "Create Performances"
+    read: "Read Performances"
+    update: "Update Performances"
+    delete: 
+      one: "Delete Performance"
+      other: "Delete Performances"
+    without_roles_available: "The aren't any Roles avaible. Performances can't be set."
+
+  role:
+    index: "Listing Roles"
+    without_permissions: "Role {{role}} hasn't any permissions"
+    new: "New Role"
+    created: "Role was successfully created."
+    editing: "Editing Role"
+    updated: "Role was successfully updated."
+    select:
+      one: "Select Role"
+    stage_type: "Stage Type"
+    go_to_manage: "Go to manage roles"
+    name_permissions: "{{name}} permissions"
+  stage_type: "Stage Type"
+
+  permission:
+    other: "Permission"
+
+  stage:
+    all: "All"
+
+  logotype:
+    one: "Logotype"
+    preview_current: "Preview current Logotype"
+
+  detail:
+    other: "Details"
+  title: "Title"
+  author: "Author"
+  created_at: "Created: {{date}}"
+  updated_at: "Updated: {{date}}"
+  email: "Email"
+  bad_request: "Bad Request"
+  layout_footnote: "{{site}} is based on {{plugin}}. Design by {{designer}}."
+
+  openid:
+    title: "OpenID"
+    client:
+      discovery_failed: "Discovery failed for {{id}}: {{error}}"
+      verification_succeeded: "Verification of {{id}} succeeded"
+      verification_failed: "Verification failed: {{message}}"
+      verification_failed_with_id: "Verification of {{id}} failed: {{message}}"
+      id_attached_to_account: "OpenID: {{id}} attached to your account"
+      immediate_request_failed: "Immediate request failed - Setup Needed"
+      transaction_cancelled: "OpenID transaction cancelled"
+      associating_to_id: "Associating to OpenID: {{id}}"
+    server:
+      endpoint: "This is an OpenID server endpoint"
+      invalid_uri: "This identity doesn't belong to you: {{uri}}"
+      decision: "You must take a decision:"
+      must_login: "You must log in {{server}}"
+      anti_phishing: "This page hasn't links to avoid <i>phishing</i>. You must enter yourself the address in your browser."
+      login_to: "Login to {{server}}"
+      about_login_to: "You are about log in to {{server}}"
+      once: "Yes, only this time"
+      trust: "Yes, remember from now on"
+      cancel: "No, cancel"
+      required_information_by: "Required information requested by {{server}}"
+      optional_information_by: "Optional information requested by {{server}}"
+
+

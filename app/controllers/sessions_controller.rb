@@ -9,6 +9,11 @@ class SessionsController < ApplicationController
 
   def create
     authentication_methods_chain(:create)
+
+    unless performed?
+      flash[:error] = t(:invalid_credentials)
+      render(:action => "new")
+    end
   end
 
   def destroy
@@ -17,7 +22,7 @@ class SessionsController < ApplicationController
 
     return if performed?
 
-    flash[:notice] = "You have been logged out.".t
+    flash[:notice] = t(:logged_out)
     redirect_back_or_default(after_destroy_path)
   end
 

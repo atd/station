@@ -1,8 +1,8 @@
 <div id="categories_form_<%= dom_id categorizable %>" class="form_entry">
-  <div class="form_label"><%= 'Category'.t('Categories', 99) %></div>
+  <div class="form_label"><%= t('category.other') %></div>
   <div class="form_data categories_form">
   <% if domain.domain_categories.blank? %>
-    <%= "%s hasn't any categories" / sanitize(domain.name) %>
+  <%= t('categories_domain.without_categories', :domain => sanitize(domain.name)) %>
   <% else %>
     <p id="categories_list_<%= dom_id domain %>">
     <% domain.domain_categories.each do |c| %>
@@ -10,9 +10,9 @@
     <% end %>
     </p>
   <% end %>
-  <%= link_to_remote("New Category", 
+  <%= link_to_remote(t('category.new'), 
                       :url => polymorphic_path([ domain, Category.new ]),
-                      :condition => "(category_name = window.prompt('#{ 'Category name'.t }')) != '' && category_name != null",
+                      :condition => "(category_name = window.prompt('#{ t('category.name') }')) != '' && category_name != null",
                       :with => "'categorizable_name=#{ categorizable_name }&category[name]=' + category_name",
                       :html => { :id => "new_category", 
                       :class => "action add" } ) %>

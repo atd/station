@@ -17,7 +17,7 @@ module ActionView
       include FormLogotypeHelper
 
       def to_logotype_tag(options)
-        options[:title] ||= "Logotype".t
+        options[:title] ||= I18n.t(:logotype, :count => 1)
 
         # TODO
         # raise "#{ object } isn't Logotypable" unless object.acts_as_logotypable?

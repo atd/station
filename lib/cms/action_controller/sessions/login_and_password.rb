@@ -16,17 +16,17 @@ module CMS
 
           if agent
             if agent.agent_options[:activation] && ! agent.activated_at
-              flash[:notice] = "Please confirm your registration".t
+              flash[:notice] = t(:please_activate_account)
             elsif agent.respond_to?(:disabled) && agent.disabled
-              flash[:notice] = "Disabled #{ agent.class.to_s }".t
+              flash[:error] = t(:disabled, :scope => agent.class.to_s.tableize)
             else
               self.current_agent = agent
-              flash[:notice] = "Logged in successfully".t
+              flash[:notice] = t(:logged_in_successfully)
               redirect_back_or_default(after_create_path)
               return
             end
           else
-            flash[:error] ||= "Wrong credentials".t
+            flash[:error] ||= t(:invalid_credentials)
           end
           render :action => 'new'
         end

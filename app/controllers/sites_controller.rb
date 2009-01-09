@@ -30,7 +30,7 @@ class SitesController < ApplicationController
   def update
     respond_to do |format|
       if current_site.update_attributes(params[:site])
-        flash[:valid] = 'Site configuration was successfully updated.'.t
+        flash[:valid] = t('site.updated')
         format.html { redirect_to site_path }
         format.xml  { head :ok }
       else

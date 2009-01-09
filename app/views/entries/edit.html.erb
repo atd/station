@@ -1,4 +1,4 @@
-<h2><%= title("Edit #{ @entry.content.class.to_s }".t) %></h2>
+<h2><%= t(:edit, :scope => @entry.content.class.to_s.underscore ) %></h2>
 
 <% unless error_messages_for(:entry).blank? && error_messages_for(:content).blank? -%>
 <div class="errors">
@@ -13,5 +13,5 @@
                        :multipart => true }) do |f| -%>
   <%= render :partial => "form", :object => f %>
 
-  <%= submit_tag "Update" %>
+  <%= submit_tag t(:update) %>
 <% end -%>

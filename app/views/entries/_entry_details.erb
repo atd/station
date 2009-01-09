@@ -1,11 +1,11 @@
-<b class="details_info"><%= "Title".t %></b>: <%= entry.title %><br />
-<b class="details_info"><%= "Author".t %></b>: <%= link_to entry.agent.name, entry.agent %><br />
-<b class="details_info"><%= entry.container.class.to_s.humanize.t %></b>: <%= link_to entry.container.name, entry.container %><br />
-<b class="details_info"><%= "Created at".t %></b>: <%= entry.created_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
-<b class="details_info"><%= "Updated at".t %></b>: <%= entry.updated_at.loc("%a, %d de %B del %Y, %H:%M") %><br />
+<b class="details_info"><%= t(:title) %></b>: <%= entry.title %><br />
+<b class="details_info"><%= t(:author) %></b>: <%= link_to entry.agent.name, entry.agent %><br />
+<b class="details_info"><%= t(entry.container.class.to_s.underscore, :count => 1) %></b>: <%= link_to entry.container.name, entry.container %><br />
+<b class="details_info"><%= t(:created_at, :date => localize(entry.created_at)) %><br />
+<b class="details_info"><%= t(:updated_at, :date => localize(entry.updated_at)) %><br />
 <% if entry.content.categories.any? -%>
-<b class="details_info"><%= "Category".t("Categories", 99) %></b>: <%= entry.content.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
+<b class="details_info"><%= t('category.other')%></b>: <%= entry.content.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
 <% end -%>
-<%= link_to("View #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container, entry.content ]), {:class => "view action"}) %>
-<%= link_to("Edit #{entry.content.class.to_s.humanize}".t, edit_polymorphic_path([ entry.container, entry.content ]),{:class => "edit action"}) %>
-<%= link_to("Delete #{entry.content.class.to_s.humanize}".t, polymorphic_path([ entry.container, entry.content ]), {:class => "delete action", :confirm => 'Delete the entry: "%s"?' / sanitize(entry.title), :method => :delete}) %>
+<%= link_to(t(:show, :scope => entry.content.class.to_s.underscore), polymorphic_path([ entry.container, entry.content ]), {:class => "view action"}) %>
+<%= link_to(t(:edit, :scope => entry.content.class.to_s.underscore), edit_polymorphic_path([ entry.container, entry.content ]),{:class => "edit action"}) %>
+<%= link_to(t(:delete, :scope => entry.content.class.to_s.underscore), polymorphic_path([ entry.container, entry.content ]), {:class => "delete action", :confirm => t(:confirm_delete, :scope => entry.content.class.to_s.underscore), :method => :delete}) %>

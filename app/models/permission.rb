@@ -4,6 +4,6 @@ class Permission < ActiveRecord::Base
   validates_presence_of :action, :objective
 
   def title
-    "#{ action.humanize.t } #{ objective.humanize.t }"
+    I18n.t(action, :scope => objective.underscore)
   end
 end

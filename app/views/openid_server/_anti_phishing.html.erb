@@ -1,2 +1,2 @@
-<h1><%= "You must log in %s" / Site.current.name %></h1>
-<%= "This page hasn't links to avoid <i>phishing</i>. You must enter yourself the address in your browser.".t %>
+<h1><%= t(:"openid.server.must_login", :server => Site.current.name) %></h1>
+<%= t(:"openid.server.anti_phishing") %>

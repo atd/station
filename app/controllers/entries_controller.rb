@@ -10,13 +10,13 @@ class EntriesController < ApplicationController
   #   GET /entries
   def index
     if current_container
-      @title ||= "#{ current_container.name } - #{ 'Entry'.t('Entries', 99) }"
+      @title ||= t('entry.other_in_container', :container => current_container.name)
       
       @entries = current_container.container_entries.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :per_page => Entry.per_page)
 
       @updated = @entries.blank? ? current_container.updated_at : @entries.first.updated_at
     else
-      @title ||= 'Entry'.t('Entries', 99)
+      @title ||= t('entry.other')
       @entries = Entry.content_type(params[:content_type]).column_sort(params[:order], params[:direction]).paginate(:page =>  params[:page])
       @updated = @entries.blank? ? Site.current.created_at : @entries.first.updated_at
     end
@@ -85,7 +85,7 @@ class EntriesController < ApplicationController
         if @entry.content.update_attributes(params[:content]) && 
           @entry.update_attributes(params[:entry])
           @entry.category_ids = params[:category_ids]
-          flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
+          flash[:valid] = t(:updated, :scope => @content.class.to_s.underscore)
           redirect_to @entry
         else
           render :template => "entries/edit" 
@@ -134,7 +134,7 @@ class EntriesController < ApplicationController
       respond_to do |format|
         format.html {
           if @entry.content.update_attributes(params[:content])
-            flash[:valid] = "#{ @content.class.to_s.humanize } updated".t
+            flash[:valid] = t(:updated, :scope => @content.class.to_s.underscore)
             redirect_to @entry
           else
             render :template => "entries/edit_media"

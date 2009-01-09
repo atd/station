@@ -31,9 +31,10 @@ module CMS
       # Render a form for creating a new Agent
       def new
         @agent = self.resource_class.new
+        instance_variable_set "@#{ self.resource_class.to_s.underscore }", @agent
         @title = authenticated? ?
-          "New #{ self.resource_class.to_s.humanize }".t :
-          "Join to %s" / Site.current.name
+          t(:new, :scope => self.resource_class.to_s.underscore) :
+          t(:join_to_site, :site => Site.current.name)
       end
     
       # Create new Agent instance
@@ -49,18 +50,18 @@ module CMS
 
         if authenticated?
           redirect_to polymorphic_path(self.resource_class.new)
-          flash[:info] = "#{ @agent.class.to_s.humanize } created".t
+          flash[:info] = t(:created, :scope => @agent.class.to_s.underscore)
         else
           self.current_agent = @agent
           redirect_to @agent
-          flash[:info] = "Thanks for signing up!".t
+          flash[:info] = t(:account_created)
         end
 
 	if self.resource_class.agent_options[:activation]
 	  flash[:info] << '<br />'
           flash[:info] << ( @agent.active? ?
-            "Activation email has been sent to #{ @agent.class.to_s.humanize }" :
-            "You should check your email to activate your account".t )
+            t(:activation_email_sent, :scope => @agent.class.to_s.underscore) :
+            t(:should_check_email_to_activate_account))
 	end
       rescue ::ActiveRecord::RecordInvalid
         render :action => 'new'
@@ -68,7 +69,7 @@ module CMS
 
       def destroy
         @agent.destroy
-        flash[:info] = "#{ @agent.class.to_s.humanize } deleted".t
+        flash[:info] = t(:deleted, :scope => @agent.class.to_s.underscore)
         redirect_to polymorphic_path(self.resource_class.new)
       end
     
@@ -77,7 +78,7 @@ module CMS
         self.current_agent = params[:activation_code].blank? ? Anonymous.current : self.resource_class.find_by_activation_code(params[:activation_code])
         if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
           current_agent.activate
-          flash[:info] = "Signup complete!".t
+          flash[:info] = t(:account_activated)
         end
         redirect_back_or_default('/')
       end
@@ -86,12 +87,12 @@ module CMS
         if params[:email]
           @agent = self.resource_class.find_by_email(params[:email])
           unless @agent
-            flash[:error] = "Could not find anybody with that email address".t
+            flash[:error] = t(:could_not_find_anybody_with_that_email_address)
             return
           end
     
           @agent.forgot_password
-          flash[:info] = "A password reset link has been sent to email address".t
+          flash[:info] = t(:password_reset_link_sent_to_email_address)
           redirect_to("/")
         end
       end
@@ -107,12 +108,12 @@ module CMS
         if @agent.valid?
           @agent.reset_password
           current_agent = @agent
-          flash[:info] = "Password reset".t
+          flash[:info] = t(:password_has_been_reset)
           redirect_to("/")
         end
     
         rescue
-          flash[:error] = "Invalid reset code. Please, check the link and try again. (Tip: Did your email client break the link?)".t
+          flash[:error] = t(:invalid_password_reset_code)
           redirect_to("/")
       end
     

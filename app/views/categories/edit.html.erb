@@ -1,13 +1,13 @@
-<h2><%= 'Editing category'.t %></h2>
+<h2><%= t('category.editing') %></h2>
 
 <%= error_messages_for :category %>
 
 <% form_for(@category) do |f| %>
   <%= render :partial => 'form', :object => f %>
   <p>
-    <%= f.submit "Update".t %>
+    <%= f.submit t(:update) %>
   </p>
 <% end %>
 
-<%= link_to 'Show'.t, @category %> |
-<%= link_to 'Back'.t, polymorphic_path([@container, Category.new]) %>
+<%= link_to t(:show), @category %> |
+<%= link_to t(:index), polymorphic_path([@container, Category.new]) %>

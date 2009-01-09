@@ -78,7 +78,7 @@ module ApplicationHelper
       html << '<p>'
       html << link_to(image_tag(icon_image(content)), formatted_polymorphic_path([ content, content.format ]))
       html << '<br />'
-      html << '<i>' + link_to("Preview current #{ content.class.to_s.humanize }".t, formatted_polymorphic_path([ content, content.format ])) + '</i>'
+      html << '<i>' + link_to(t(:preview_current, :scope => content.class.to_s.underscore), formatted_polymorphic_path([ content, content.format ])) + '</i>'
       html << '</p>'
     end
   end

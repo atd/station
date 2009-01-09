@@ -26,7 +26,7 @@ module SortableHelper
           html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=desc#{ options[:append] }", :class => "sortable desc" )
           html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=asc#{ options[:append] }", { :class => "sortable asc" })
         end
-        html << "<label>#{ column.name.t }</label>"
+        html << "<label>#{ column.name }</label>"
         html << "</th>"
       end
       html << '<th class="list_actions">'
@@ -41,14 +41,14 @@ module SortableHelper
         html << '<td class="list_actions">'
         actions = options[:actions].clone
         # Show
-        html << link_to(image_tag("actions/show.png", :alt => "Show".t, :title => "Show".t, :plugin => 'cmsplugin'), polymorphic_path(object)) if actions.delete(:show)
+        html << link_to(image_tag("actions/show.png", :alt => t(:show), :title => t(:show), :plugin => 'cmsplugin'), polymorphic_path(object)) if actions.delete(:show)
 
         # Delete
-        delete_html = link_to(image_tag("actions/delete.png", :alt => "Delete".t, :title => "Delete".t, :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => 'Are you sure?'.t, :method => :delete) if actions.delete(:delete)
+        delete_html = link_to(image_tag("actions/delete.png", :alt => t(:delete), :title => t(:delete), :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => t(:confirm_delete, :scope => object.class.to_s.tableize), :method => :delete) if actions.delete(:delete)
 
         # Rest of actions
         actions.each do |a|
-          html << link_to(image_tag("actions/#{ a }.png", :alt => a.to_s.humanize.t, :title => a.to_s.humanize.t, :plugin => 'cmsplugin'), send("#{ a }_polymorphic_path", object))
+          html << link_to(image_tag("actions/#{ a }.png", :alt => t(a), :title => t(a), :plugin => 'cmsplugin'), send("#{ a }_polymorphic_path", object))
         end
 
         html << delete_html

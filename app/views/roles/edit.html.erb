@@ -1,4 +1,4 @@
-<h1><%= 'Editing role'.t %></h1>
+<h1><%= t('role.editing') %></h1>
 
 <% form_for(@role) do |f| %>
   <%= f.error_messages %>
@@ -6,9 +6,9 @@
   <%= render :partial => 'form', :object => f %>
 
   <p>
-    <%= f.submit "Update".t %>
+    <%= f.submit t(:update) %>
   </p>
 <% end %>
 
-<%= link_to 'Show'.t, @role %> |
-<%= link_to 'Back'.t, roles_path %>
+<%= link_to t(:show), @role %> |
+<%= link_to t(:index), roles_path %>

@@ -1,45 +1,45 @@
-<h2><%= "Editing site configuration".t %></h2>
+<h2><%= t(:"site.editing") %></h2>
 
 <%= error_messages_for :site %>
 
 <% form_for(:site, :url => site_path, :html => { :method => :put, :multipart => true }) do |f| %>
   <p>
-    <b><%= "Name".t %></b><br />
+    <b><%= t(:name) %></b><br />
     <%= f.text_field :name %>
   </p>
 
   <p>
-    <b><%= "Description".t %></b><br />
+    <b><%= t(:description) %></b><br />
     <%= f.text_area :description %>
   </p>
 
   <p>
-    <b><%= "Logotype".t %></b><br />
+    <b><%= t(:"logotype.title.one") %></b><br />
     <%= file_field_tag 'logotype[media]' %>
     <%= preview(@site.logotype) %>
   </p>
 
   <p>
-    <b><%= "Domain".t %></b><br />
+    <b><%= t(:"site.domain") %></b><br />
     <%= f.text_field :domain %>
   </p>
 
   <p>
-    <b><%= "SSL".t %></b><br />
+    <b><%= t(:"site.ssl") %></b><br />
     <%= f.check_box :ssl %>
   </p>
 
   <p>
-    <b><%= "Email".t %></b><br />
+    <b><%= t(:email) %></b><br />
     <%= f.text_field :email %>
   </p>
 
   <p>
-    <b><%= "Locale".t %></b><br />
+    <b><%= t(:locale) %></b><br />
     <%= f.text_field :locale %>
   </p>
 
   <p>
-    <%= f.submit "Update".t %>
+    <%= f.submit t(:update) %>
   </p>
 <% end %>

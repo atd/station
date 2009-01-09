@@ -53,7 +53,7 @@ unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
               # Collections are different type of Contents
               for content in container.accepted_content_types
                 xml.collection(:href => polymorphic_path([ container, content.to_class.new ]) + '.atom') do
-                  xml.tag!("atom:title", "#{ container.name } - #{ content.to_class.named_collection }")
+                  xml.tag!("atom:title", I18n.t('other_in_container', :container => container.name, :scope => content.to_class.to_s.underscore))
                   xml.accept(container.authorizes?(current_agent, [ :create, :Content ]) ? content.to_class.accepts : nil)
                 end
               end
