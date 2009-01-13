@@ -1,8 +1,8 @@
 <b class="details_info"><%= t(:title) %></b>: <%= entry.title %><br />
 <b class="details_info"><%= t(:author) %></b>: <%= link_to entry.agent.name, entry.agent %><br />
 <b class="details_info"><%= t(entry.container.class.to_s.underscore, :count => 1) %></b>: <%= link_to entry.container.name, entry.container %><br />
-<b class="details_info"><%= t(:created_at, :date => localize(entry.created_at)) %><br />
-<b class="details_info"><%= t(:updated_at, :date => localize(entry.updated_at)) %><br />
+<b class="details_info"><%= t(:created_at_date, :date => localize(entry.created_at)) %><br />
+<b class="details_info"><%= t(:updated_at_date, :date => localize(entry.updated_at)) %><br />
 <% if entry.content.categories.any? -%>
 <b class="details_info"><%= t('category.other')%></b>: <%= entry.content.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
 <% end -%>
