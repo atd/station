@@ -23,7 +23,7 @@ es:
   visit_link_to_activate_account: "Visite este enlace para activar su cuenta"
   should_check_email_to_activate_account: "Debe comprobar el correo para activar su cuenta."
   account_activated: "Su cuenta ha sido activada"
-  account_activated_with_agent: "{{agent}}, tu cuenta ha sido activada"
+  account_activated_with_agent: "{{agent}}, su cuenta ha sido activada"
   please_activate_account: "Por favor, active su cuenta"
 
   password_reset: "Cambio de Contraseña"
