@@ -44,10 +44,12 @@ es:
   index: "Índice"
   create: "Crear"
   show: "Ver"
+  read: "Ver"
   edit: "Editar"
   update: "Actualizar"
   back: "Atrás"
   send: "Enviar"
+  delete: "Borrar"
 
   are_you_sure: "Are you sure?"
 
@@ -74,11 +76,21 @@ es:
     one: "Contenedor"
     other: "Contenedores"
   content:
+    one: "Contenido"
+    other: "Contenidos"
     new: "Nuevo Contenido"
-    create: "Crear Contenido"
-    read: "Ver Contenido"
-    update: "Actualizar Contenido"
-    delete: "Borrar Contenido"
+    create: 
+      one: "Crear Contenido"
+      other: "Crear Contenidos"
+    read: 
+      one: "Ver Contenido"
+      other: "Ver Contenidos"
+    update:
+      one: "Actualizar Contenido"
+      other: "Actualizar Contenidos"
+    delete:
+      one: "Borrar Contenido"
+      other: "Borrar Contenidos"
 
   entry:
     one: "Entrada"
@@ -102,9 +114,15 @@ es:
   performance:
     other: "Actuaciones"
     new: "Nueva Actuación"
-    create: "Crear Actuaciones"
-    read: "Ver Actuaciones"
-    update: "Actualizar Actuaciones"
+    create: 
+      one: "Crear Actuacione"
+      other: "Crear Actuaciones"
+    read:
+      one: "Ver Actuacione"
+      other: "Ver Actuaciones"
+    update:
+      one: "Actualizar Actuacione"
+      other: "Actualizar Actuaciones"
     delete:
       one: "Borrar Actuación"
       other: "Borrar Actuaciones"

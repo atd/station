@@ -6,7 +6,9 @@
   <h2><%= t('role.stage_type') %></h2>
   <p>
   <%= form.select(:stage_type, 
-                  CMS::ActiveRecord::Stage.symbols.map{ |st| [ st.to_s.classify ] * 2 }, 
+                  CMS::ActiveRecord::Stage.symbols.map{ |st| 
+                    [ I18n.t(st.to_s.singularize, :count => 1), st.to_s.classify ] 
+                  }, 
                   { :selected => @role.stage_type, :include_blank => true }) %>
   </p>
 
@@ -14,7 +16,7 @@
   <p>
   <%= collection_select :role, 
                         :permission_ids, 
-                        Permission.find(:all, :order => 'objective ASC'), 
+                        Permission.find(:all).sort, 
                         :id, 
                         :title, 
                         { :selected => @role.permission_ids }, 

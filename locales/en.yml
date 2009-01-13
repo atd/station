@@ -48,10 +48,12 @@ en:
   index: "Index"
   create: "Create"
   show: "Show"
+  read: "Read"
   edit: "Edit"
   update: "Update"
   back: "Back"
   send: "Send"
+  delete: "Delete"
 
   are_you_sure: "Are you sure?"
 
@@ -78,10 +80,21 @@ en:
     one: "Container"
     other: "Containers"
   content:
-    create: "Create Content"
-    read: "Read Content"
-    update: "Update Content"
-    delete: "Delete Content"
+    one: "Content"
+    other: "Contents"
+    new: "New Content"
+    create:
+      one: "Create Content"
+      other: "Create Contents"
+    read: 
+      one: "Read Content"
+      other: "Read Contents"
+    update:
+      one: "Update Content"
+      other: "Update Contents"
+    delete: 
+      one: "Delete Content"
+      other: "Delete Contents"
 
   entry:
     one: "Entry"
@@ -105,9 +118,15 @@ en:
   performance:
     other: "Performances"
     new: "New Performance"
-    create: "Create Performances"
-    read: "Read Performances"
-    update: "Update Performances"
+    create:
+      one: "Create Performance"
+      other: "Create Performances"
+    read: 
+      one: "Read Performance"
+      other: "Read Performances"
+    update:
+      one: "Update Performance"
+      other: "Update Performances"
     delete: 
       one: "Delete Performance"
       other: "Delete Performances"

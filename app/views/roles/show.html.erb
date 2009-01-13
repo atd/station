@@ -1,11 +1,8 @@
-<p>
-  <b><%= t(:name) %>:</b>
-  <%=h @role.name %>
-</p>
+<h1><%= sanitize @role.name %></h1>
 
 <p>
   <b><%= t('role.stage_type') %>:</b> 
-  <%=h @role.stage_type.blank? ? t('stage.all') : t(@role.stage_type.tableize, :count => 1) %>
+  <%=h @role.stage_type.blank? ? t('stage.all') : t(@role.stage_type.underscore, :count => 1) %>
 </p>
 
 <p>
