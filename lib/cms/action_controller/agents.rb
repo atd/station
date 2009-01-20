@@ -80,7 +80,8 @@ module CMS
           current_agent.activate
           flash[:info] = t(:account_activated)
         end
-        redirect_back_or_default('/')
+
+        redirect_back_or_default(after_activate_path)
       end
     
       def forgot_password
@@ -136,6 +137,12 @@ module CMS
       # Filter for methods that require login_and_password authentication, like reset_password
       def login_and_pass_auth_required
         redirect_back_or_default('/') unless self.resource_class.agent_options[:authentication].include?(:login_and_password)
+      end
+
+      private
+
+      def after_activate_path
+        '/'
       end
     end
   end
