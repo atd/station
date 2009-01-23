@@ -133,6 +133,8 @@ en:
     without_roles_available: "The aren't any Roles avaible. Performances can't be set."
 
   role:
+    one: "Role"
+    other: "Roles"
     index: "Listing Roles"
     without_permissions: "Role {{role}} hasn't any permissions"
     new: "New Role"
@@ -150,7 +152,13 @@ en:
     other: "Permission"
 
   stage:
+    one: "Stage"
     all: "All"
+
+  invitation:
+    one: "Invitation"
+    other: "Invitations"
+    not_found: "Invitation not found"
 
   logotype:
     one: "Logotype"

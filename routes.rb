@@ -49,5 +49,10 @@ resources(*(CMS::ActiveRecord::Logotypable.symbols - Array(:sites))) do |logotyp
 end
 
 resources :roles
+resources :invitations, :member => { :accept => :get }
+
+resources(*CMS::ActiveRecord::Stage.symbols - Array(:sites)) do |stage|
+  stage.resources :invitations
+end
 
 root :controller => 'entries'

@@ -129,6 +129,8 @@ es:
     without_roles_available: "No hay ningún Rol disponible. Las Actuaciones no se pueden establecer."
 
   role:
+    one: "Rol"
+    other: "Roles"
     index: "Lista de Roles"
     without_permissions: "El rol {{role}} no tiene permisos"
     new: "Nuevo Rol"
@@ -146,7 +148,13 @@ es:
     other: "Permisos"
 
   stage:
+    one: "Escenario"
     all: "Todos"
+
+  invitation:
+    one: "Invitación"
+    other: "Invitaciones"
+    not_found: "Invitación no encontrada"
 
   logotype:
     one: "Logotipo"

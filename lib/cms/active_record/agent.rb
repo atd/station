@@ -50,12 +50,14 @@ module CMS
         # Defaults to <tt>[ :login_and_password, :openid, :cookie_token ]</tt>
         # * <tt>openid_server</tt>: Support for OpenID Server. Defaults to false
         # * <tt>activation</tt>: Agent must verify email. Defaults to false
+        # * <tt>invite</tt>: Agent can be invited to application. Can be <tt>false</tt>. Defaults to <tt>:email</tt>
         def acts_as_agent(options = {})
           CMS::ActiveRecord::Agent.register_class(self)
 
           options[:authentication] ||= [ :login_and_password, :openid, :cookie_token ]
           options[:openid_server]  ||= false
           options[:activation]     ||= false
+          options[:invitation] = :email if options[:invitation].nil?
           
           # Set agent options
           #
@@ -77,6 +79,13 @@ module CMS
             include CMS::ActiveRecord::Agent::Activation
           end
 
+          if options[:invite]
+            unless column_names.include?(options[:invite].to_s)
+              raise "#{ self.to_s } class hasn't column #{ options[:invitation] }" 
+            end
+            include CMS::ActiveRecord::Agent::Invite
+          end
+
           has_many :agent_entries,
                    :class_name => "Entry",
                    :dependent => :destroy,
@@ -84,6 +93,11 @@ module CMS
 
           has_many :agent_performances, 
                    :class_name => "Performance", 
+                   :dependent => :destroy,
+                   :as => :agent
+
+          has_many :agent_invitations,
+                   :class_name => "Invitation",
                    :dependent => :destroy,
                    :as => :agent
 
@@ -113,7 +127,7 @@ module CMS
         # type:: the class of the Stage requested (Doesn't work with STI!)
         #
         def stages(options = {})
-          agent_performances.stage_type(options[:type]).map(&:stage).uniq
+          agent_performances.stage_type(options[:type]).map(&:stage)
         end
 
         # Agents that have at least one Role in stages

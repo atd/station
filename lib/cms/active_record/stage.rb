@@ -25,6 +25,11 @@ module CMS
                    :dependent => :destroy,
                    :as => :stage
 
+          has_many :stage_invitations,
+                   :class_name => "Invitation",
+                   :dependent => :destroy,
+                   :as => :stage
+
           include CMS::ActiveRecord::Stage::InstanceMethods
 
           send :attr_accessor, :_stage_performances
@@ -39,11 +44,11 @@ module CMS
 
       # Instance methods can be redefined in each Model for custom features
       module InstanceMethods
-        # agent is authorized in the Stage if it has at least one Role that 
-        # has one Permission for performing action_objective
+        # agent is authorized in the Stage if its Role has a Permission
+        # matching action_objective
         #
         # If the Stage is also a Content, it has entries, authorizes? looks for authorization
-        # in those entries' containers.
+        # in those entries' Containers.
         #
         # action_objective can be:
         # Symbol or String:: describes the action of the Permission. Objective will be :self
@@ -65,53 +70,45 @@ module CMS
           action_objective = Array(action_objective)
           action_objective << :self unless action_objective.size > 1
 
-          has_role_for?(agent, :permission => action_objective, :include_anyones => true)
+          permission = action_objective.is_a?(Permission) ?
+            action_objective :
+            Permission.find_by_action_and_objective(*action_objective.map(&:to_s))
+
+          role_for(agent) && role_for(agent).permissions.include?(permission) ||
+            role_for(Anyone.current) && role_for(Anyone.current).permissions.include?(permission)
         end
 
-        # True if it exists at least one Performance for the Agent in this Stage.
-        #
-        # Options: See roles_for options
-        #
-        def has_role_for?(agent, options = {})
-          roles_for(agent, options).any?
-        end
-       
-        # All roles performed by some Agent in this Stage.
+        # True if agent has a Performance in this Stage.
         #
         # Options:
-        # name:: Name of the Roles
-        #   space.roles_for(user, :name => 'Admin')
-        # permission:: Array with Permission <tt>action</tt> and <tt>objective</tt>
-        #   space.roles_for(user, :permission => [ :create, :Attachment ])
-        # include_anyones:: Include Anyone's Roles. Defaults to false
+        # name:: Name of the Role
+        #   space.role_for?(user, :name => 'Admin')
+        def role_for?(agent, options = {})
+          return false unless role_for(agent)
+
+          options[:name] ?
+            role_for(agent).name == options[:name] :
+            true
+        end
+       
+        # Role performed by this Agent in the Stage.
         #
-        def roles_for(agent, options = {})
-          agent_roles = stage_performances.find_all_by_agent_id_and_agent_type(agent.id, agent.class.base_class.to_s).map(&:role).uniq
-
-          if options[:name]
-            agent_roles = agent_roles.select{ |r| r.name == options[:name] }
-          end
-
-          if options[:permission]
-            permission = options[:permission].is_a?(Permission) ?
-              options[:permission] :
-              Permission.find_by_action_and_objective(*options[:permission].map(&:to_s))
-
-            agent_roles = agent_roles.select{ |r| r.permissions.include?(permission) }
-          end
-
-          anyones_roles = options.delete(:include_anyones) ? 
-                          roles_for(Anyone.current, options) : 
-                          Array.new
-
-          agent_roles | anyones_roles
+        def role_for(agent)
+          #FIXME: Role named scope
+          Role.find :first,
+                    :joins => :performances,
+                    :conditions => { 'performances.agent_id'   => agent.id,
+                                     'performances.agent_type' => agent.class.base_class.to_s,
+                                     'performances.stage_id'   => self.id,
+                                     'performances.stage_type' => self.class.base_class.to_s },
+                    :include => :permissions
         end
         
         # Return all agents that play one role at least in this stage
         # 
         # TODO: conditions (roles, etc...)
         def actors
-          stage_performances.map(&:agent).uniq
+          stage_performances.map(&:agent)
         end
 
         private

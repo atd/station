@@ -4,6 +4,7 @@
 class Role < ActiveRecord::Base
   has_many :performances
   has_and_belongs_to_many :permissions
+  has_many :invitations
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :stage_type

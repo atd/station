@@ -1,6 +1,7 @@
 # Singular Agents: Anonymous, Anyone, etc..
 class SingularAgent < ActiveRecord::Base
-  acts_as_agent :authentication => []
+  acts_as_agent :authentication => [],
+                :invitation     => false
 
   class << self
     def current
