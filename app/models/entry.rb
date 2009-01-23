@@ -8,7 +8,6 @@
 #   Entry.content_type(:articles) #=> entries which content is an Article
 class Entry < ActiveRecord::Base
   acts_as_sortable
-  acts_as_stage
 
   # Pagination (will_paginate gem)
   cattr_reader :per_page
