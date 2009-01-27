@@ -60,12 +60,14 @@ module CMS
         end
       end
 
-      # Is current_agent authorized to perform actions in stage?
+      # Is current_agent authorized to perform auth_argument over auth_object?
       #
-      # For options, see Stage#authorizes?
-      def authorized?(auth_object_sym, auth_argument)
-        auth_object = self.instance_variable_get("@#{ auth_object_sym }")
-        raise "Authorization instance `@#{ auth_object_sym }' is not defined" unless auth_object
+      # auth_object_name:: the name of an instance variable, or the name of a method
+      #   that returns the Stage asked auth_argument
+      # auth_argument:: defined in CMS::ActiveRecord::Stage#authorizes?
+      def authorized?(auth_object_name, auth_argument)
+        auth_object = self.instance_variable_get("@#{ auth_object_name }") ||
+          send(auth_object_name)
         auth_object.authorizes?(current_agent, auth_argument)
       end
 
