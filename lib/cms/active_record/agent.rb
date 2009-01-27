@@ -57,7 +57,7 @@ module CMS
           options[:authentication] ||= [ :login_and_password, :openid, :cookie_token ]
           options[:openid_server]  ||= false
           options[:activation]     ||= false
-          options[:invitation] = :email if options[:invitation].nil?
+          options[:invite] = :email if options[:invite].nil?
           
           # Set agent options
           #
@@ -81,7 +81,7 @@ module CMS
 
           if options[:invite]
             unless column_names.include?(options[:invite].to_s)
-              raise "#{ self.to_s } class hasn't column #{ options[:invitation] }" 
+              raise "#{ self.to_s } class hasn't column #{ options[:invite] }" 
             end
             include CMS::ActiveRecord::Agent::Invite
           end

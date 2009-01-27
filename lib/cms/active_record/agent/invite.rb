@@ -9,13 +9,13 @@ module CMS
         class << self
           # All classes supporting Invitation
           def classes
-            CMS::ActiveRecord::Agent.classes.select{ |a| a.agent_options[:invitation] }
+            CMS::ActiveRecord::Agent.classes.select{ |a| a.agent_options[:invite] }
           end
 
           # Find all Agent instances by invitation key
           def find_all(key)
             classes.map{ |klass|
-              klass.send "find_all_by_#{ klass.agent_options[:invitation] }", key
+              klass.send "find_all_by_#{ klass.agent_options[:invite] }", key
             }.flatten.uniq
           end
 
@@ -29,8 +29,8 @@ module CMS
         private
 
         # Create a Performance for each Invitation of this Agent
-        def invitations_to_performances
-          key = send(agent_options[:invitation])
+        def invitations_to_performances #:nodoc:
+          key = send(agent_options[:invite])
 
           # FIXME: Probably Agent doesn't want to accept all invitations
           Invitation.find_all_by_email(key).map(&:accept!)
