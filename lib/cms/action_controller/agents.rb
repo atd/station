@@ -79,9 +79,10 @@ module CMS
         if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
           current_agent.activate
           flash[:info] = t(:account_activated)
+          redirect_back_or_default(after_activate_path)
+        else
+          redirect_back_or_default(after_not_activate_path)
         end
-
-        redirect_back_or_default(after_activate_path)
       end
     
       def forgot_password
@@ -142,7 +143,11 @@ module CMS
       private
 
       def after_activate_path
-        '/'
+        root_path
+      end
+
+      def after_not_activate_path
+        root_path
       end
     end
   end
