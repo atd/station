@@ -1,14 +1,14 @@
 #interaction_screen table {
       clear:            both;
-      width:            100%;
-      margin:           auto;
+      width:            95%;
+      margin:           10px auto;
 }
 
 #interaction_screen table th {
-        background-color: #E7E7E7;
-        font-size:        1.1em;
-        color:            #080808;
-        padding:          5px 3px 5px 3px;
+        background-color: #4f4f4f;
+        font-size:        1.2em;
+        color:            white;
+        padding:          5px 5px 5px 5px;
         border:           2px solid #E7E7E7;
 }
 
@@ -29,9 +29,16 @@
 #interaction_screen table th a.asc {
           background-image:     url('../images/sortable/asc.png');
 }
+#interaction_screen table th a.asc_active {
+          background-image:     url('../images/sortable/asc_active.png');
+}
 
 #interaction_screen table th a.desc {
           background-image:     url('../images/sortable/desc.png');
+}
+
+#interaction_screen table th a.desc_active {
+          background-image:     url('../images/sortable/desc_active.png');
 }
 
 #interaction_screen table tr.style_0 {
@@ -39,7 +46,7 @@
 }
 
 #interaction_screen table tr.style_1 {
-          background-color: #F8DDDD;
+          background-color: #CFCFCF;
 }
 
 #interaction_screen table td {

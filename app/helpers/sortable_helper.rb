@@ -23,8 +23,8 @@ module SortableHelper
       for column in list_class.sortable_columns
         html << '<th>'
         unless column.no_sort?
-          html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=desc#{ options[:append] }", :class => "sortable desc" )
-          html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=asc#{ options[:append] }", { :class => "sortable asc" })
+          html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=desc#{ options[:append] }", :class => "sortable desc#{"_active" if (params[:direction] == 'desc' and column.order == params[:order]) }" )
+          html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=asc#{ options[:append] }", { :class => "sortable asc#{ "_active" if (params[:direction] == 'asc' and column.order == params[:order]) }" })
         end
         html << "<label>#{ column.name }</label>"
         html << "</th>"
@@ -41,14 +41,14 @@ module SortableHelper
         html << '<td class="list_actions">'
         actions = options[:actions].clone
         # Show
-        html << link_to(image_tag("actions/show.png", :alt => t(:show), :title => t(:show), :plugin => 'cmsplugin'), polymorphic_path(object)) if actions.delete(:show)
+        html << link_to(image_tag("move_css/view.png", :alt => t(:show), :title => t(:show), :plugin => 'cmsplugin'), polymorphic_path(object)) if actions.delete(:show)
 
         # Delete
-        delete_html = link_to(image_tag("actions/delete.png", :alt => t(:delete), :title => t(:delete), :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => t(:confirm_delete, :scope => object.class.to_s.tableize), :method => :delete) if actions.delete(:delete)
+        delete_html = link_to(image_tag("move_css/delete.png", :alt => t(:delete), :title => t(:delete), :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => t(:confirm_delete, :scope => object.class.to_s.tableize), :method => :delete) if actions.delete(:delete)
 
         # Rest of actions
         actions.each do |a|
-          html << link_to(image_tag("actions/#{ a }.png", :alt => t(a), :title => t(a), :plugin => 'cmsplugin'), send("#{ a }_polymorphic_path", object))
+          html << link_to(image_tag("move_css/#{ a }.png", :alt => t(a), :title => t(a), :plugin => 'cmsplugin'), send("#{ a }_polymorphic_path", object))
         end
 
         html << delete_html
