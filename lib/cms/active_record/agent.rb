@@ -80,7 +80,7 @@ module CMS
           end
 
           if options[:invite]
-            unless column_names.include?(options[:invite].to_s)
+            if table_exists? && ! column_names.include?(options[:invite].to_s)
               raise "#{ self.to_s } class hasn't column #{ options[:invite] }" 
             end
             include CMS::ActiveRecord::Agent::Invite
