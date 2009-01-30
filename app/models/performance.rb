@@ -4,9 +4,17 @@
 #
 # stage_type(type): find Peformances by Stage type
 class Performance < ActiveRecord::Base
-  belongs_to :agent,     :polymorphic => true
+  belongs_to :agent, :polymorphic => true
   belongs_to :stage, :polymorphic => true
   belongs_to :role
+
+  acts_as_sortable :columns => [ { :name => I18n.t('agent.one'),
+                                   :content => :agent,
+                                   :sortable => false },
+                                 { :name => I18n.t('role.one'),
+                                   :render => 'edit_role_form',
+                                   :sortable => true }
+                               ]
 
   named_scope :stage_type, lambda { |type|
     type ?

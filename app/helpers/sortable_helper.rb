@@ -22,7 +22,7 @@ module SortableHelper
       html << '<tr>'
       for column in list_class.sortable_columns
         html << '<th>'
-        unless column.no_sort?
+        if column.sortable?
           html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=desc#{ options[:append] }", :class => "sortable desc#{"_active" if (params[:direction] == 'desc' and column.order == params[:order]) }" )
           html << link_to("", "#{ polymorphic_path(list_path) }?order=#{ column.order }&direction=asc#{ options[:append] }", { :class => "sortable asc#{ "_active" if (params[:direction] == 'asc' and column.order == params[:order]) }" })
         end
@@ -35,7 +35,7 @@ module SortableHelper
       for object in list
         html << "<tr class=\"style_#{ cycle('0', '1') }\">"
         for column in list_class.sortable_columns
-          html << "<td>#{ sanitize column.data(self, object).to_s }</td>"
+          html << "<td>#{ column.data(self, object).to_s }</td>"
         end
 
         html << '<td class="list_actions">'
@@ -44,7 +44,7 @@ module SortableHelper
         html << link_to(image_tag("move_css/view.png", :alt => t(:show), :title => t(:show), :plugin => 'cmsplugin'), polymorphic_path(object)) if actions.delete(:show)
 
         # Delete
-        delete_html = link_to(image_tag("move_css/delete.png", :alt => t(:delete), :title => t(:delete), :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => t(:confirm_delete, :scope => object.class.to_s.tableize), :method => :delete) if actions.delete(:delete)
+        delete_html = link_to(image_tag("move_css/delete.png", :alt => t(:delete), :title => t(:delete), :plugin => 'cmsplugin'), polymorphic_path(object), :confirm => t(:confirm_delete, :scope => object.class.to_s.underscore), :method => :delete) if actions.delete(:delete)
 
         # Rest of actions
         actions.each do |a|

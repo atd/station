@@ -110,13 +110,14 @@ en:
     created: "Category created"
     editing: "Editing Category"
     name: "Category name"
-
-  categories_domain:
-    title: "Domain"
-    without_categories: "{{domain}} hasn't any categories"
+    domain:
+      one: "Domain"
+      other: "Domains"
+      without_categories: "{{domain}} hasn't any categories"
 
   performance:
     other: "Performances"
+    other_in: "Performances in {{stage}}"
     new: "New Performance"
     create:
       one: "Create Performance"
@@ -130,6 +131,7 @@ en:
     delete: 
       one: "Delete Performance"
       other: "Delete Performances"
+    confirm_delete: "Delete Performance?"
     without_roles_available: "The aren't any Roles avaible. Performances can't be set."
 
   role:
@@ -158,6 +160,7 @@ en:
   invitation:
     one: "Invitation"
     other: "Invitations"
+    new: "New Invitation"
     not_found: "Invitation not found"
 
   logotype:

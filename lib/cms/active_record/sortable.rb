@@ -16,7 +16,7 @@ module CMS
         #                                  :description,
         #                                  { :name    => "Container",
         #                                    :content => :container,
-        #                                    :no_sort => true } ]
+        #                                    :sortable => false } ]
         #
         # Options:
         # default_order:: Sort by this order by default.
@@ -27,7 +27,7 @@ module CMS
         # * name: Title of the column
         # * content: The content that will be displayed for each object of the list. See CMS::ActiveRecord::Sortable::Column#data
         # * order: The +ORDER+ fragment in the SQL code
-        # * no_sort: The column is not sortable
+        # * sortable: The list can be ordered by this column. Defaults to <tt>true</tt>
         # Symbol:: Takes defaults for each column attribute
         def acts_as_sortable(options = {})
           CMS::ActiveRecord::Sortable.register_class(self)
@@ -72,25 +72,30 @@ module CMS
 
       # This class models columns that are shown in sortable_list
       class Column
-        attr_reader :content, :name, :order, :no_sort
+        attr_reader :content, :name, :order, :sortable, :render
+        alias sortable? sortable
 
         def initialize(column) #:nodoc:
           case column
           when Symbol
             @content = column
-            @name = I18n.t(column)
+            @name = I18n.t(column).is_a?(String) ? 
+                      I18n.t(column) :
+                      I18n.t("#{ column }.one")
             @order = column.to_s
+            @sortable = true
           when Hash
             @content = column[:content]
-            @name = column[:name] || column[:content] && column[:content].is_a?(Symbol) && I18n.t(column[:content]) || ""
-            @order = column[:order] || column[:content] && column[:content].is_a?(Symbol) && column[:content].to_s || ""
-            @no_sort = column[:no_sort]
-          end
-        end
+            @name = column[:name] || 
+                    column[:content] && column[:content].is_a?(Symbol) && 
+                    ( I18n.t(column[:content]).is_a?(String) ?
+                        I18n.t(column[:content]) :
+                        I18n.t("#{ column[:content] }.one") )
 
-        # Is this column sortable?
-        def no_sort?
-          ! @no_sort.nil?
+            @order = column[:order] || column[:content] && column[:content].is_a?(Symbol) && column[:content].to_s || ""
+            @sortable = column[:sortable] || true
+            @render = column[:render]
+          end
         end
 
         # Get data for this object based in <tt>:content</tt> parameter. 
@@ -102,9 +107,22 @@ module CMS
         #   }
         #
         def data(helper, object)
+          if render
+            return helper.render(:partial => render, :object => object)
+          end
+
           case content
           when Symbol
-            object.send content
+            o = object.send content
+            if o.is_a?(::ActiveRecord::Base)
+              begin
+                helper.link_to(helper.sanitize(o.name), helper.polymorphic_path(o))
+              rescue 
+                helper.sanitize(o.name)
+              end
+            else
+              helper.sanitize(o)
+            end
           when Proc
             content.call(helper, object)
           end

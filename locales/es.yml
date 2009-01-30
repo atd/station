@@ -106,13 +106,14 @@ es:
     created: "Categoría creada"
     editing: "Editando Categoría"
     name: "Nombre de la Categoría"
-
-  categories_domain:
-    title: "Dominio"
-    without_categories: "{{domain}} no tiene categorías"
+    domain:
+      one: "Dominio"
+      other: "Dominios"
+      without_categories: "{{domain}} no tiene categorías"
 
   performance:
     other: "Actuaciones"
+    other_in: "Actuaciones en {{stage}}"
     new: "Nueva Actuación"
     create: 
       one: "Crear Actuacione"
@@ -126,6 +127,7 @@ es:
     delete:
       one: "Borrar Actuación"
       other: "Borrar Actuaciones"
+    confirm_delete: "¿Borrar la Actuación?"
     without_roles_available: "No hay ningún Rol disponible. Las Actuaciones no se pueden establecer."
 
   role:
@@ -154,6 +156,7 @@ es:
   invitation:
     one: "Invitación"
     other: "Invitaciones"
+    new: "Nueva Invitación"
     not_found: "Invitación no encontrada"
 
   logotype:
