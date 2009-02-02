@@ -1,5 +1,5 @@
-module ActionView
-  module Helpers
+module ActionView #:nodoc:
+  module Helpers # :nodoc:
     # Provides methods for Categorizable forms
     module FormCategoriesHelper
       # Render checkboxes for assigning Categories to object.

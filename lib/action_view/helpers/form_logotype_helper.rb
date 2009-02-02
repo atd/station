@@ -1,5 +1,5 @@
-module ActionView
-  module Helpers
+module ActionView #:nodoc:
+  module Helpers #:nodoc:
     # Provides methods for Logotypable forms
     module FormLogotypeHelper
       # Render Logotype file field and preview for Logotypable models

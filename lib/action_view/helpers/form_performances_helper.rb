@@ -1,5 +1,5 @@
-module ActionView
-  module Helpers
+module ActionView #:nodoc:
+  module Helpers #:nodoc:
     # Provides methods for Performances forms
     module FormPerformancesHelper
       # Render Performances form for object
