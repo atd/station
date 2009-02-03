@@ -11,7 +11,7 @@ class Category < ActiveRecord::Base
   has_many :categorizations,
            :dependent => :destroy
 
-  CMS::ActiveRecord::Categorizable.symbols.each do |categorizable|
+  ActiveRecord::Categorizable.symbols.each do |categorizable|
     has_many categorizable, :through => :categorizations,
                             :source => :categorizable,
                             :source_type => categorizable.to_s.classify
@@ -19,7 +19,7 @@ class Category < ActiveRecord::Base
 
   # All the instances categorized with some Category
   def categorizables
-    CMS::ActiveRecord::Categorizable.symbols.map{ |t| send(t) }.flatten
+    ActiveRecord::Categorizable.symbols.map{ |t| send(t) }.flatten
   end
 
   validates_presence_of :name, :domain_id, :domain_type

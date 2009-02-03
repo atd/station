@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class <%= model_controller_class_name %>ControllerTest < ActionController::TestCase
-  # Be sure to include CMS::AuthenticationTestHelper in test/test_helper.rb instead
+  # Be sure to include ActionController::AuthenticationTestHelper in test/test_helper.rb instead
   # Then, you can remove it from this and the units test.
-  include CMS::AuthenticationTestHelper
+  include ActionController::AuthenticationTestHelper
 
   fixtures :<%= table_name %>
 

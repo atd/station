@@ -11,7 +11,7 @@ class Tag < ActiveRecord::Base
   
   has_many :taggings, :dependent => :destroy
 
-  for taggable in CMS::ActiveRecord::Taggable.symbols
+  for taggable in ActiveRecord::Taggable.symbols
     has_many taggable, :through => :taggings,
                        :source => :taggable,
                        :source_type => taggable.to_s.classify
@@ -19,7 +19,7 @@ class Tag < ActiveRecord::Base
 
   # All the instances tagged with some Tag
   def taggables
-    CMS::ActiveRecord::Taggable.symbols.map{ |t| send(t) }.flatten
+    ActiveRecord::Taggable.symbols.map{ |t| send(t) }.flatten
   end
 
 

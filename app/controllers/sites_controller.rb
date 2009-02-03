@@ -4,8 +4,8 @@ class SitesController < ApplicationController
   # GET /site.xml
   def show
     @site = current_site
-    @agents = CMS::ActiveRecord::Agent.authentication_classes.map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
-    @containers = ( CMS::ActiveRecord::Container.classes - CMS::ActiveRecord::Agent.classes).map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
+    @agents = ActiveRecord::Agent.authentication_classes.map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
+    @containers = ( ActiveRecord::Container.classes - ActiveRecord::Agent.classes).map(&:all).flatten.uniq.sort{ |x, y| x.name <=> y.name }
   end
 
   # GET /site/new

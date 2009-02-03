@@ -1,6 +1,6 @@
 class <%= controller_class_name %>Controller < ApplicationController
   # Include some methods and filters.
-  include CMS::ActionController::Contents
+  include ActionController::Contents
   
   # Needs a Container when posting a new <%= controller_class_name.singularize %>
   before_filter :needs_container, :only => [ :new, :create ]

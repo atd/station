@@ -1,13 +1,9 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require '<%= controller_file_name %>_controller'
 
-# Re-raise errors caught by the controller.
-class <%= controller_class_name %>Controller; def rescue_action(e) raise e end; end
-
-class <%= controller_class_name %>ControllerTest < Test::Unit::TestCase
-  # Be sure to include CMS::AuthenticationTestHelper in test/test_helper.rb instead
+class <%= controller_class_name %>ControllerTest < ActionController::TestCase
+  # Be sure to include ActionController::AuthenticationTestHelper in test/test_helper.rb instead
   # Then, you can remove it from this and the units test.
-  include CMS::AuthenticationTestHelper
+  include ActionController::AuthenticationTestHelper
 
   fixtures :<%= table_name %>
 

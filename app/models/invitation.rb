@@ -15,7 +15,7 @@ class Invitation < ActiveRecord::Base
   def to_performance!
     return unless stage && role
 
-    CMS::ActiveRecord::Agent::Invite.find_all(email).each do |invited_agent|
+    ActiveRecord::Agent::Invite.find_all(email).each do |invited_agent|
       Performance.create! :agent => invited_agent,
                           :stage => stage,
                           :role  => role

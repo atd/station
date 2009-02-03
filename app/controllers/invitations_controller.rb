@@ -33,7 +33,7 @@ class InvitationsController < ApplicationController
       return
     end
 
-    redirect_to send("new_#{ CMS::ActiveRecord::Agent::Invite.classes.first.to_s.underscore }_path", 
+    redirect_to send("new_#{ ActiveRecord::Agent::Invite.classes.first.to_s.underscore }_path", 
                      :invitation => @invitation.acceptation_code)
 
   end

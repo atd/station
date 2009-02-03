@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-# Be sure to include CMS::AuthenticationTestHelper in spec/spec_helper.rb instead.
+# Be sure to include ActionController::AuthenticationTestHelper in spec/spec_helper.rb instead.
 # Then, you can remove it from this and the functional test.
-include CMS::AuthenticationTestHelper
+include ActionController::AuthenticationTestHelper
 
 describe <%= class_name %> do
   fixtures :<%= table_name %>

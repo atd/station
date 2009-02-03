@@ -32,7 +32,7 @@ class Entry < ActiveRecord::Base
     return Hash.new if content_type.blank?
 
     content_sym = content_type.to_s.tableize.to_sym
-    return Hash.new unless CMS::ActiveRecord::Content.symbols.include?(content_sym)
+    return Hash.new unless ActiveRecord::Content.symbols.include?(content_sym)
     content_class = content_sym.to_class
     
     from, conditions = if content_class.column_names.include?("type")

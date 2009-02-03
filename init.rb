@@ -8,16 +8,62 @@ config.gem 'atd-calendar_date_select', :lib => 'calendar_date_select',
                                        :version => '>= 1.11.20090109', 
                                               :source => 'http://gems.github.com'
 
-config.after_initialize do
-  # Controllers
-  for mod in [ CMS::ActionController::Base, CMS::ActionController::Authentication, CMS::ActionController::Authorization ]
-    ActionController::Base.send(:include, mod) unless ActionController::Base.ancestors.include?(mod)
-  end
+# Core Extensions
+require 'move/core_ext'
 
-  CMS.inflections
+# ActiveRecord
+require 'active_record/acts_as'
+
+ActiveRecord::ActsAs::LIST.each do |item|
+  require "active_record/#{ item }"
+  ActiveRecord::Base.send :include, "ActiveRecord::#{ item.to_s.classify }".constantize
 end
 
-unless defined? CMS
-  require 'cms'
-  CMS.enable
+# Singular Agents
+if SingularAgent.table_exists?
+  SingularAgent
+  Anonymous.current
+  Anyone.current
+end
+
+# Mime Types
+# Redefine Mime::ATOM to include "application/atom+xml;type=entry"
+Mime::Type.register "application/atom+xml", :atom, [ "application/atom+xml;type=entry" ]
+Mime::Type.register "application/atomsvc+xml", :atomsvc
+Mime::Type.register "application/atomcat+xml", :atomcat
+Mime::Type.register "application/xrds+xml",    :xrds
+
+# ActionController
+for mod in [ ActionController::Move, ActionController::Authentication, ActionController::Authorization ]
+  ActionController::Base.send(:include, mod) unless ActionController::Base.ancestors.include?(mod)
+end
+
+# ActionView
+%w( categories performances logotype ).each do |item|
+  require "action_view/helpers/form_#{ item }_helper"
+  ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.camelcase }Helper".constantize
+end
+
+# Inflections
+ActiveSupport::Inflector.inflections do |inflect|
+  inflect.uncountable 'cas'
+  inflect.uncountable 'anonymous'
+end
+
+# Preload Models
+file_patterns = [ RAILS_ROOT, File.dirname(__FILE__) ].map{ |f| f + '/app/models/**/*.rb' }
+file_exclusions = ['svn', 'CVS', 'bzr']
+
+file_patterns.each do |file_pattern|
+  Dir[file_pattern].each do |filename|
+    next if filename =~ /#{file_exclusions.join("|")}/
+    open filename do |file|
+      begin
+        require_dependency(filename) if file.grep(/acts_as_(#{ ActiveRecord::ActsAs::LIST.join('|') })/).any?
+      rescue Exception => e
+        #FIXME: logger ?
+        puts "CMSplugin autoload: Couldn't load file #{ filename }: #{ e }"
+      end
+    end
+  end
 end

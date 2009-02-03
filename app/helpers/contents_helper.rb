@@ -31,7 +31,7 @@ module ContentsHelper
   def contents_menu
     content_classes = ( current_container ?
       current_container.accepted_content_types.map(&:to_class) :
-      CMS::ActiveRecord::Content.classes ).sort{ |a, b| 
+      ActiveRecord::Content.classes ).sort{ |a, b| 
         t(a.to_s.underscore, :count => :other) <=>
         t(b.to_s.underscore, :count => :other)
     }

@@ -77,7 +77,7 @@ class PerformancesController < ApplicationController
     @roles = @stage.class.roles.sort{ |x, y| y <=> x }
     @roles = @roles.select{ |r| r < @stage.role_for(current_agent) } if @stage.role_for(current_agent)
 
-    @agents = CMS::ActiveRecord::Agent.all - @performances.map(&:agent)
+    @agents = ActiveRecord::Agent.all - @performances.map(&:agent)
   end
 
   def parse_polymorphic_agent
@@ -85,7 +85,7 @@ class PerformancesController < ApplicationController
       klass, id = a.split("-", 2)
       params[:performance][:agent_id] = id 
       params[:performance][:agent_type] = klass.classify
-      unless CMS::ActiveRecord::Agent.symbols.include?(klass.pluralize.to_sym)
+      unless ActiveRecord::Agent.symbols.include?(klass.pluralize.to_sym)
         raise "Wrong Agent Type in PerformancesController: #{ h params[:performance][:agent_type] }"
       end
     end

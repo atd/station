@@ -58,7 +58,7 @@ en:
   are_you_sure: "Are you sure?"
 
   name: "Name"
-  description: "Descriptión"
+  description: "Description"
   file: "File"
 
   agent:

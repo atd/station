@@ -33,7 +33,7 @@
           <%= t('user.select.one') %>
           <select name="[agent]" id="<%= "performances_#{ performance_num }_agent" %>" onchange="selectAgentAttributesForPerformances(this)">
             <option value=""></option>
-            <%= options_for_select( CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, "#{ agent_type }_#{ agent_id }" ) %>
+            <%= options_for_select( ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, "#{ agent_type }_#{ agent_id }" ) %>
           </select>
           <%= hidden_field_tag "#{ stage_name }[_stage_performances][][agent_type]", "#{ agent_type }", { :id => "performances_#{ performance_num }_agent_type" } %>
           <%= hidden_field_tag "#{ stage_name }[_stage_performances][][agent_id]", "#{ agent_id }", { :id => "performances_#{ performance_num }_agent_id" } %>
@@ -55,7 +55,7 @@
                                  {:onmousemove => 'showRolesDetails(this); return false;',
                                   :onchange => 'hideRolesDetails(); return false;', :onmouseout => 'hideRolesDetails(); return false;' } ) %>
       <%= t('agent.select.one') %>
-      <%= select(nil, "agent", CMS::ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, { :include_blank => true }, { :onchange => "selectAgentAttributesForPerformances(this); return false;" }) %>
+      <%= select(nil, "agent", ActiveRecord::Agent.all.collect {|u| [ u.name, "#{ u.class }_#{ u.id }" ] }, { :include_blank => true }, { :onchange => "selectAgentAttributesForPerformances(this); return false;" }) %>
       <%= hidden_field_tag "[agent_type]", "#{  }", { :id => "_agent_type" } %>
       <%= hidden_field_tag "[agent_id]", "#{  }", { :id => "_agent_id" } %>
     </div>

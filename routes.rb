@@ -11,16 +11,16 @@ resource :session
 login 'login',   :controller => 'sessions', :action => 'new'
 logout 'logout', :controller => 'sessions', :action => 'destroy'
 
-if CMS::ActiveRecord::Agent.activation_class
+if ActiveRecord::Agent.activation_class
   activate 'activate/:activation_code', 
-           :controller => CMS::ActiveRecord::Agent.activation_class.to_s.tableize, 
+           :controller => ActiveRecord::Agent.activation_class.to_s.tableize, 
            :action => 'activate', 
            :activation_code => nil
   forgot_password 'forgot_password', 
-                  :controller => CMS::ActiveRecord::Agent.activation_class.to_s.tableize,
+                  :controller => ActiveRecord::Agent.activation_class.to_s.tableize,
                   :action => 'forgot_password'
   reset_password 'reset_password/:reset_password_code', 
-                 :controller => CMS::ActiveRecord::Agent.activation_class.to_s.tableize,
+                 :controller => ActiveRecord::Agent.activation_class.to_s.tableize,
                  :action => 'reset_password',
                  :reset_password_code => nil
 end
@@ -32,26 +32,26 @@ resources :categories
 
 resource :site do |site|
   site.resources :entries, :categories
-  site.resources *CMS::ActiveRecord::Content.symbols
+  site.resources *ActiveRecord::Content.symbols
 end
 
-resources *((CMS::ActiveRecord::Content.symbols | CMS::ActiveRecord::Agent.symbols) - CMS::ActiveRecord::Container.symbols)
+resources *((ActiveRecord::Content.symbols | ActiveRecord::Agent.symbols) - ActiveRecord::Container.symbols)
 
-resources(*(CMS::ActiveRecord::Container.symbols) - Array(:sites)) do |container|
-  container.resources(*CMS::ActiveRecord::Content.symbols)
+resources(*(ActiveRecord::Container.symbols) - Array(:sites)) do |container|
+  container.resources(*ActiveRecord::Content.symbols)
   container.resources :entries, :categories
 end
 
 resources :logotypes
 
-resources(*(CMS::ActiveRecord::Logotypable.symbols - Array(:sites))) do |logotypable|
+resources(*(ActiveRecord::Logotypable.symbols - Array(:sites))) do |logotypable|
   logotypable.resource :logotype
 end
 
 resources :roles
 resources :invitations, :member => { :accept => :get }
 
-resources(*CMS::ActiveRecord::Stage.symbols - Array(:sites)) do |stage|
+resources(*ActiveRecord::Stage.symbols - Array(:sites)) do |stage|
   stage.resources :invitations
 end
 

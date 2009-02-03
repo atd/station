@@ -8,9 +8,14 @@ module ApplicationHelper
   # Get title in this order:
   # 1. string argument 
   # 2. class variable <tt>@title</tt>, typically assigned in the Controller
-  # 3. <tt>current_site[:name]</tt>
+  # 3. <tt>controller.controller_name</tt> - <tt>site.name</tt>
   def title(new_title = "" )
-    sanitize(new_title.any? ? new_title : ( @title || current_site[:name] ))
+    title = new_title.present? ?
+            new_title :
+            @title ||
+            "#{ controller.controller_name.titleize } - #{ site.name }"
+            
+    sanitize(title)
   end
 
   # Renders notification_area div if there is a flash entry for types: 

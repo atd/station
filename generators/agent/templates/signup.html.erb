@@ -1,9 +1,9 @@
-<h2><%%= title %></h2>
+<h1><%%= title %></h1>
 
 <%%= error_messages_for :agent %>
 
 <%% form_for :agent, :url => <%= table_name %>_path do |f| -%>
-<p><label for="login"><%%= t(:"agents.authentication.login") %></label><br/>
+<p><label for="login"><%%= t(:"agent.authentication.login") %></label><br/>
 <%%= f.text_field :login %></p>
 
 <p><label for="email"><%%= t(:email) %></label><br/>
@@ -11,10 +11,10 @@
 
 <%% if @agent.needs_password? -%>
 
-<p><label for="password"><%%= t(:"agents.authentication.password") %></label><br/>
+<p><label for="password"><%%= t(:"agent.authentication.password") %></label><br/>
 <%%= f.password_field :password %></p>
 
-<p><label for="password_confirmation"><%%= t(:"agents.authentication.confirm_password") %></label><br/>
+<p><label for="password_confirmation"><%%= t(:"agent.authentication.confirm_password") %></label><br/>
 <%%= f.password_field :password_confirmation %></p>
 
 <%% else -%>

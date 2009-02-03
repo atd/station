@@ -1,4 +1,4 @@
-<h2><%= t(:"site.editing") %></h2>
+<h1><%= t(:"site.editing") %></h1>
 
 <%= error_messages_for :site %>
 
@@ -14,7 +14,7 @@
   </p>
 
   <p>
-    <b><%= t(:"logotype.title.one") %></b><br />
+    <b><%= t(:"logotype.one") %></b><br />
     <%= file_field_tag 'logotype[media]' %>
     <%= preview(@site.logotype) %>
   </p>

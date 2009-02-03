@@ -6,7 +6,7 @@
   <h2><%= t('role.stage_type') %></h2>
   <p>
   <%= form.select(:stage_type, 
-                  CMS::ActiveRecord::Stage.symbols.map{ |st| 
+                  ActiveRecord::Stage.symbols.map{ |st| 
                     [ I18n.t(st.to_s.singularize, :count => 1), st.to_s.classify ] 
                   }, 
                   { :selected => @role.stage_type, :include_blank => true }) %>

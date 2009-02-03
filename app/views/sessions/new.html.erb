@@ -29,7 +29,7 @@
 </div>
 
 
-<% if CMS::ActiveRecord::Agent.activation_class -%>
+<% if ActiveRecord::Agent.activation_class -%>
 
 <div id="help"  style="display: none;">
   <%= link_to t('agent.authentication.forgotten_password'), forgot_password_path, :class => "action info" %>

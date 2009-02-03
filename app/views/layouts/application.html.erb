@@ -39,7 +39,7 @@
     <!-- logo -->
     <div id="meta">
       <div id="meta_top">
-        <span class="site_title"><%= current_site.name %></span>
+        <span class="site_title"><%= site.name %></span>
       </div>
       <div id="meta_center">
         <%= 
@@ -99,7 +99,7 @@
     </div>
     <!-- open footer -->
      <div id="footer">
-       <%= t(:layout_footnote, :site => link_to(current_site.name, root_path), :plugin => link_to('CMSplugin','http://rubyforge.org/projects/cmsplugin/'), :designer => link_to('Gnoxys','http://www.gnoxys.net/')) %>
+       <%= t(:layout_footnote, :site => link_to(site.name, root_path), :plugin => link_to('CMSplugin','http://rubyforge.org/projects/cmsplugin/'), :designer => link_to('Gnoxys','http://www.gnoxys.net/')) %>
      <!-- cloose footer -->
     </div>
   <!-- close wrap -->
