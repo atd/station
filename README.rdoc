@@ -1,0 +1,126 @@
+= CMS plugin
+
+Content Management System plugin. 
+
+CMSplugin is to {Rails}[http://rubyonrails.org/] in Content Management Systems like 
+{Rails}[http://rubyonrails.org/] is to {Ruby}[http://www.ruby-lang.org/] in Web Development.
+
+  Rails     = Ruby  + Web Development
+  CMSplugin = Rails + Content Management
+
+CMSplugin provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
+
+CMSplugin follows the SIOC ontology model, http://sioc-project.org/ontology
+
+Project page: http://rubyforge.org/projects/cmsplugin
+
+Documentation: http://cmsplugin.rubyforge.org/
+
+== Architecture
+
+You can add functionality to any of your ActiveRecord models:
+
+=== Basic
+Resource:: a model that have, at least, {CRUD}[http://en.wikipedia.org/wiki/Create,_read,_update_and_delete] operations and can be imported/exported in different formats.
+ActiveRecord::Content:: a Resource that belongs to a Container.
+ActiveRecord::Container:: a model that host Contents.
+ActiveRecord::Agent:: a model with authentication, authorization and potencial to perform actions over Resources.
+ActiveRecord::Stage:: a model that defines an Authorization framework for Agents.
+
+=== Complements
+ActiveRecord::CategoriesDomain:: a model which instances define Ontology domains
+ActiveRecord::Categorizable:: a model that can be classified in any Category
+ActiveRecord::Taggable:: a model that can be tagged
+ActiveRecord::Logotypable:: a model with Logotype
+ActiveRecord::Sortable:: a model with a sortable list
+
+
+== Features
+
+* Authentication: Login/Password, {OpenID}[http://openid.net/], {Central Authentication Service (CAS)}[http://www.ja-sig.org/products/cas/], CookieToken
+* Authorization: Roles and Permisssions
+* Activation: Email validation, Password reset
+* Atom feeds, {RFC 4287}[http://tools.ietf.org/html/rfc4287]
+* AtomPub protocol, {RFC 5023}[http://tools.ietf.org/html/rfc5023]
+* Taxonomies: Categories, Categories Domains
+* Folksonomies: Tags, Taggable models
+* Logotypes for models
+* Sortable lists for models
+* Logotypes for models
+
+== Requirements
+
+* Rails 2.2.2
+* RubyGems: 
+  * ruby-openid
+  * atom-tools
+  * hpricot
+  * mislav-will_paginate
+  * atd-calendar_date_select
+* Rails Plugins:
+  * engines
+  * attachment_fu
+
+== Installation
+
+=== Plugins
+
+You need Rails Engines first:
+  script/plugin install git://github.com/atd/engines.git
+see vendor/plugins/engines/README to finish the instalation (don't forget to modify config/environment.rb)
+
+To install CMSplugin, run:
+  script/plugin install git://github.com/atd/cmsplugin.git
+
+=== Gems
+
+Run rake gems:install to install the required gems
+
+=== CMS
+
+Generate the CMS infraestructure:
+  script/generate cms
+
+And generate and run the migration:
+  script/generate plugin_migration
+
+Now you can generate Agents and Contents.
+
+== Generators
+
+=== Agents
+An Agent has the capability to post Contents to Containers. An User is the example of Agent
+
+  script/generate agent Model
+
+=== Contents
+A Content is a piece of information suitable to be posted to some Container by some Agent
+
+  script/generate content Model attributes
+
+== Example
+
+=== Blog
+Create personal blogs with a pair of commands:
+
+  script/generate agent User
+  script/generate content Article body:text
+
+Users now can entry their own Articles
+
+You can add AtomPub support for Articles creation. You must implement atom_parser method in Article model:
+
+  def self.atom_parser(data)
+    entry = Atom::Entry.new(data)
+
+    { :body => entry.content.xml.to_s }
+  end
+
+== TODO
+
+* Agents authentication support: OAuth
+* Microformats
+* RDF: FOAF + SIOC 
+
+
+Copyright (c) 2008-2009 Antonio Tapiador, released under the LGPL license

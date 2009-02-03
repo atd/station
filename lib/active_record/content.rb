@@ -1,13 +1,10 @@
 require 'atom/entry'
 
 module ActiveRecord #:nodoc:
-  # A Content is a unit of information suitable to be published online.
-  # Examples of contents are texts, images, events, URIs
+  # A Content is a Resource that belongs to a Continer.
   #
-  # Content(s) are posted by Agent(s) to Container(s), resulting in Entry(s)
-  #
-  # == Contents in some container
-  # You can use the named_scope +in_container+ to get all Contents in some container.
+  # == Named Scope
+  # You can use the named_scope +in_container+ to get all Contents in some Container.
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
   # Contents instances have entries columns in entry_*

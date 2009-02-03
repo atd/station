@@ -18,7 +18,7 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.title    = 'CMSplugin'
   rdoc.template = 'doc/template/horo.rb'
   rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
+  rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb', 'app/**/*.rb')
 end
 
