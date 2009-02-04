@@ -12,6 +12,10 @@
         border:           2px solid #E7E7E7;
 }
 
+#interaction_screen table th.list_actions {
+	color: black;
+}
+
 #interaction_screen table th a.sortable {
           min-height:           20px;
           height:               20px;
