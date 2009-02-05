@@ -4,7 +4,7 @@ class PerformancesController < ApplicationController
   before_filter :parse_polymorphic_agent, :only => [ :create, :update ]
 
   def index
-    set_performances_index
+    index_data
   end
 
   def create
@@ -14,7 +14,7 @@ class PerformancesController < ApplicationController
     if @performance.save
       respond_to do |format|
         format.js {
-          set_performances_index
+          index_data
         }
       end
     else
@@ -35,7 +35,7 @@ class PerformancesController < ApplicationController
           redirect_to polymorphic_path([ @stage, Performance.new ])
         }
         format.js {
-          set_performances_index
+          index_data
         }
       end
     else
@@ -55,7 +55,7 @@ class PerformancesController < ApplicationController
       }
 
       format.js {
-        set_performances_index
+        index_data
       }
     end
   end
@@ -71,11 +71,11 @@ class PerformancesController < ApplicationController
     @stage = @performance.stage
   end
 
-  def set_performances_index
+  def index_data
     @performances = @stage.stage_performances.find(:all,
                                                    :include => :role).sort{ |x, y| y.role <=> x.role }
     @roles = @stage.class.roles.sort{ |x, y| y <=> x }
-    @roles = @roles.select{ |r| r < @stage.role_for(current_agent) } if @stage.role_for(current_agent)
+    @roles = @roles.select{ |r| r <= @stage.role_for(current_agent) } if @stage.role_for(current_agent)
 
     @agents = ActiveRecord::Agent.all - @performances.map(&:agent)
   end

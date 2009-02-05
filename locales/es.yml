@@ -43,6 +43,7 @@ es:
 
   index: "Índice"
   create: "Crear"
+  create_: "Crear..."
   show: "Ver"
   read: "Ver"
   edit: "Editar"
@@ -50,6 +51,9 @@ es:
   back: "Atrás"
   send: "Enviar"
   delete: "Borrar"
+  action:
+    one: "Acción"
+    other: "Acciones"
 
   are_you_sure: "Are you sure?"
 

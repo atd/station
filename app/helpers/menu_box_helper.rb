@@ -26,9 +26,13 @@ module MenuBoxHelper
 
       items.inject html do |html, item|
         html << "<div class=\"box_unit\">"
-        html << yield(item)
-#        html << send(link_method, image_tag(icon_image(item), :alt => item.name + " logo"), 
-#        html << "<span class=\"box_unit_title\">#{ link_to item.name, item }</span>"
+        begin
+          html << yield(item)
+  #        html << send(link_method, image_tag(icon_image(item), :alt => item.name + " logo"), 
+  #        html << "<span class=\"box_unit_title\">#{ link_to item.name, item }</span>"
+        rescue
+          html << ""
+        end
         html << "</div>"
       end
 

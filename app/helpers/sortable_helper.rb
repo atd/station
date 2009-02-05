@@ -30,6 +30,7 @@ module SortableHelper
         html << "</th>"
       end
       html << '<th class="list_actions">'
+      html << t('action.other')
       html << '</th>'
       html << '</tr>'
       for object in list

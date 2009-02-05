@@ -185,6 +185,20 @@ module ActiveRecord #:nodoc:
         mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
       end
 
+      # The author of this Content
+      def author
+        entry ?
+          entry.agent :
+          nil
+      end
+
+      # The container of this Content
+      def container
+        entry ?
+          entry.container :
+          nil
+      end
+
       private
 
       def entry_save! # :nodoc:

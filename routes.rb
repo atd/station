@@ -32,6 +32,7 @@ resources :categories
 
 resource :site do |site|
   site.resources :entries, :categories
+  site.resources :performances, :requirements => { :site_id => Site.current.id }
   site.resources *ActiveRecord::Content.symbols
 end
 
@@ -54,5 +55,7 @@ resources :invitations, :member => { :accept => :get }
 resources(*ActiveRecord::Stage.symbols - Array(:sites)) do |stage|
   stage.resources :invitations
 end
+
+resources :performances
 
 root :controller => 'entries'

@@ -1,19 +1,46 @@
 module ContentsHelper
-  # Display buttons for add contents to current_container
+
+  # Separator
+  def contents_menu_separator
+    '<hr class="separator" />'
+  end
+
+  # Menu for container contents
+  #
+  # Options:
+  #   container:: Set to false it ignores the container
+  def contents_menu(options = {})
+    options[:contents]  ||= contents_list(options)
+    options[:container] = true if options[:container].nil?
+    container = options[:container] ? self.container : nil
+
+    returning "" do |menu|
+      options[:contents].each do |content|
+        content_link = polymorphic_path([ container, content.to_class.new ])
+        menu << link_to("<span id=\"content_link_#{ content.to_s.tableize }\"> » #{ t(content.to_s.singularize, :count => :other) } </span>", content_link, {:class => "content_link #{ controller.controller_name == content.to_s.pluralize ? "active" : "inactive" } button" })
+     end
+    end
+  end
+
   def new_content_button
-    return "" unless current_container
+    logger.debug "DEPRECATION WARNING: new_content_button is deprecated. Use new_contents_menu"
+    new_contents_menu
+  end
+
+  # Display buttons for add contents to current_container
+  def new_contents_menu(options = {})
+    options[:contents]  ||= contents_list(options)
+    options[:container] = true if options[:container].nil?
+    container = options[:container] ? self.container : nil
 
     returning "" do |html|
-      html << "<div id=\"content_new_top\" class=\"block_white_top\">» #{ t('new.content') } </div>"
+      html << "<div id=\"content_new_top\" class=\"block_white_top\">» #{ t('create_') } </div>"
       html << "<div id=\"content_new_center\" class=\"block_white_center\">"
 
-      current_container.accepted_content_types.sort{ |x, y| 
-        t(x.to_s.singularize, :count => 1) <=> 
-          t(y.to_s.singularize, :count => 1)
-      }.each do |content_type|
-        html << link_to(t(:new, :scope => content_type.to_s.singularize),
-                        new_polymorphic_path([ current_container, 
-                                               content_type.to_class.new ]), 
+      options[:contents].each do |content|
+        html << link_to(t(:new, :scope => content.to_s.singularize),
+                        new_polymorphic_path([ container, 
+                                               content.to_class.new ]), 
                                              {:class => "action add" })
       end
 
@@ -22,38 +49,32 @@ module ContentsHelper
     end
   end
 
-  # Separator
-  def contents_menu_separator
-    '<hr class="separator" />'
-  end
+  # List of contents available for this view
+  #
+  # Options:
+  #   container:: Set to false it ignores the container
+  #
+  def contents_list(options = {})
+    options[:container] ||= true
 
-  # Menu for container contents
-  def contents_menu
-    content_classes = ( current_container ?
-      current_container.accepted_content_types.map(&:to_class) :
-      ActiveRecord::Content.classes ).sort{ |a, b| 
-        t(a.to_s.underscore, :count => :other) <=>
-        t(b.to_s.underscore, :count => :other)
+    ( options[:container] && container ?
+        container.class.container_options[:contents] :
+        ActiveRecord::Content.symbols 
+    ).sort { |a, b| 
+      t(a.to_s.singularize, :count => :other) <=>
+      t(b.to_s.singularize, :count => :other)
     }
-
-    returning "" do |html|
-      content_classes.each do |content|
-     #menu << "<span class=\"content_unit button\">"+link_to("» #{ content.collection.to_s.humanize }", send("#{ content.to_s.tableize }_url") , {:id => "content_unit_#{ content.collection }_link", :class => "content_unit_link" })
-      #menu << "</span>"
-     content_link = polymorphic_path([ current_container, Entry.new ].compact) + "?content_type=#{ content.to_s.tableize }"
-       html << link_to("<span id=\"content_link_#{ content.collection }\"> » #{ t(content.to_s.underscore, :count => :other) } </span>", content_link, {:class => "content_link inactive button" })
-     end
-    end
   end
 
   # Show info about the Content
-  def content_info(entry = nil)
-    entry ||= @entry
+  def content_info(content)
+    content ||= @content
 
-    html_return =  "<div id=\"content_info_top\" class=\"block_white_top\">» #{ t('detail.other') } </div>"
-    html_return << "<div id=\"content_info_center\" class=\"block_white_center\">#{ render(:partial => "entries/entry_details", :locals => { :entry => entry }) if entry }</div>"
-    html_return << "<div id=\"content_info_bottom\" class=\"block_white_bottom\"></div>"
-    html_return
+    returning "" do |html|
+      html <<  "<div id=\"content_info_top\" class=\"block_white_top\">» #{ t('detail.other') } </div>"
+      html << "<div id=\"content_info_center\" class=\"block_white_center\">#{ render(:partial => "contents/info", :locals => { :content => content } ) if content }</div>"
+      html << "<div id=\"content_info_bottom\" class=\"block_white_bottom\"></div>"
+    end
   end
 end
 

@@ -2,7 +2,7 @@
   <div class="form_label"><%= t('category.other') %></div>
   <div class="form_data categories_form">
   <% if domain.domain_categories.blank? %>
-  <%= t('categories_domain.without_categories', :domain => sanitize(domain.name)) %>
+  <%= t('category.domain.without_categories', :domain => sanitize(domain.name)) %>
   <% else %>
     <p id="categories_list_<%= dom_id domain %>">
     <% domain.domain_categories.each do |c| %>

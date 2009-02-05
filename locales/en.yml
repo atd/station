@@ -54,6 +54,9 @@ en:
   back: "Back"
   send: "Send"
   delete: "Delete"
+  action:
+    one: "Action"
+    other: "Actions"
 
   are_you_sure: "Are you sure?"
 

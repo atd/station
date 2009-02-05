@@ -1,0 +1,15 @@
+<b class="details_info"><%= t(:title) %></b>: <%= content.title %><br />
+<% if content.author -%>
+<b class="details_info"><%= t(:author) %></b>: <%= link_to content.author.name, content.author %><br />
+<% end -%>
+<% if content.container -%>
+<b class="details_info"><%= t(content.container.class.to_s.underscore, :count => 1) %></b>: <%= link_to content.container.name, content.container %><br />
+<% end -%>
+<b class="details_info"><%= t(:created_at_date, :date => localize(content.created_at)) %><br />
+<b class="details_info"><%= t(:updated_at_date, :date => localize(content.updated_at)) %><br />
+<% if content.categories.any? -%>
+<b class="details_info"><%= t('category.other')%></b>: <%= content.categories.map{ |c| link_to(sanitize(c.name), c) }.join(", ") %><br />
+<% end -%>
+<%= link_to(t(:show, :scope => content.class.to_s.underscore), polymorphic_path([content.container, content ]), {:class => "view action"}) %>
+<%= link_to(t(:edit, :scope => content.class.to_s.underscore), edit_polymorphic_path([ content.container, content ]),{:class => "edit action"}) %>
+<%= link_to(t(:delete, :scope => content.class.to_s.underscore), polymorphic_path([ content.container, content ]), {:class => "delete action", :confirm => t(:confirm_delete, :scope => content.class.to_s.underscore), :method => :delete}) %>

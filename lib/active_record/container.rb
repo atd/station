@@ -15,12 +15,13 @@ module ActiveRecord #:nodoc:
       # Content(s) are posted by Agent(s) to Container(s), giving Entry(s)
       #
       # Options:
-      # * <tt>content_types</tt>: an Array of Content that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content(s)
+        # * <tt>contents</tt>: an Array of Contents that can be posted to this Container. Ex: [ :article, :image ]. Defaults to all available Content models.
       # * <tt>name</tt>: alias attribute for Content presentation
       #
       def acts_as_container(options = {})
         ActiveRecord::Container.register_class(self)
 
+        options[:contents] ||= ActiveRecord::Content.symbols
         send(:alias_attribute, :name, options.delete(:name)) if options[:name]
 
         cattr_reader :container_options
@@ -44,9 +45,6 @@ module ActiveRecord #:nodoc:
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
-      def accepted_content_types
-        self.class.container_options[:content_types] || ActiveRecord::Content.symbols
-      end
     end
   end
 end
