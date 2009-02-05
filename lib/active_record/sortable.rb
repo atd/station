@@ -120,7 +120,7 @@ module ActiveRecord #:nodoc:
               helper.sanitize(o.name)
             end
           else
-            helper.sanitize(o)
+            helper.sanitize(o.to_s)
           end
         when Proc
           content.call(helper, object)
