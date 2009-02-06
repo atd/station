@@ -1,5 +1,7 @@
 es:
   site:
+    one: "Sitio"
+    other: "Sitios"
     config: "Configuración del Sitio"
     editing: "Editando la configuración del Sitio"
     updated: "La configuración del sitio se ha actualizado satisfactoriamente"

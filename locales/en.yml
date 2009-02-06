@@ -3,6 +3,8 @@
 
 en:
   site:
+    one: "Site"
+    other: "Sites"
     config: "Site configuration"
     editing: "Editing Site configuration"
     updated: "Site configuration was successfully updated."

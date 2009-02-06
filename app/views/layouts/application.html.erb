@@ -28,7 +28,7 @@
 <link rel="icon" href="<%= @space.logo.public_filename('icon') %>" type="image/x-icon">
 <% end -%>
 
-<% if logged_in? -%>
+<% if false -%>
 <link rel="service" type="application/atomsvc+xml" href="<%= url_for :controller => :users, :action => :show, :id => current_user.id, :format => "atomsvc", :only_path => false %>" />
 <% end -%>
 </head>
