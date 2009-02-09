@@ -17,7 +17,7 @@ module ActionView #:nodoc:
       include FormCategoriesHelper
 
       def to_categories_tag(options)
-        options[:domain] ||= @template_object.current_container || Site.current
+        options[:domain] ||= @template_object.categories_domain
 
         # TODO
         # raise "#{ object } isn't Categorizable" unless object.acts_as_categorizable?

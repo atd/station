@@ -19,6 +19,7 @@ module ActionController
         base.helper_method :current_site
         base.helper_method :container
         base.helper_method :current_container
+        base.helper_method :categories_domain
 
         class << base
           # Set params from AtomPub raw post
@@ -44,27 +45,20 @@ module ActionController
       end
     end
 
-    def site
-      @site ||= Site.current
-    end
-
-    deprecated_method :current_site, :site
-
-    protected
     # Returns the Model Class related to this Controller 
     #
     # e.g. Attachment for AttachmentsController
     #
     # Useful for Controller inheritance
-    def resource_class
-      @resource_class ||= controller_name.classify.constantize
+    def model_class
+      @model_class ||= controller_name.classify.constantize
     end
 
-    # Obtains a given resource from parameters. 
+    # Obtains a given ActiveRecord from parameters. 
     # Options:
-    # * acts_as: the resource must acts_as the given symbol.
+    # * acts_as: the ActiveRecord model must acts_as the given symbol.
     #   acts_as => :container
-    def get_resource_from_path(options = {})
+    def record_from_path(options = {})
       acts_as_module = "ActiveRecord::#{ options[:acts_as].to_s.classify }".constantize if options[:acts_as]
 
       candidates = params.keys.select{ |k| k[-3..-1] == '_id' }
@@ -94,29 +88,13 @@ module ActionController
 
       nil
     end
-   
-    # Extract request parameters when posting raw data
-    def set_params_from_raw_post(content = controller_name.singularize.to_sym)
-      return if request.raw_post.blank? || params[content]
 
-      filename = request.env["HTTP_SLUG"] || controller_name.singularize
-      content_type = request.content_type
-      
-      file = Tempfile.new("media")
-      file.write request.raw_post
-      (class << file; self; end).class_eval do
-        alias local_path path
-        define_method(:content_type) { content_type.dup.taint }
-        define_method(:original_filename) { filename.dup.taint }
-      end
-
-      params[:entry]                   ||= {}
-      params[:entry][:title]           ||= filename
-      params[:entry][:public_read]     ||= true
-      params[content]                  ||= {}
-      params[content][:media]          ||= file
+    def site
+      @site ||= Site.current
     end
 
+    deprecated_method :current_site, :site
+  
     # Find current Container using:
     # * path from the request
     # * session
@@ -127,6 +105,20 @@ module ActionController
 
     deprecated_method :current_container, :container
     deprecated_method :get_container, :container
+
+    # Tries to find a Container suitable for this Content
+    # 
+    # Calls container to figure out from params. If unsuccesful, 
+    # it tries with site
+    # 
+    # Renders Forbidden if no Container is found
+    def container!
+      @container = container || site
+
+      render(:text => "Container not present", :status => :precondition_failed) unless @container.respond_to?("container_options")
+    end
+
+    deprecated_method :needs_container, :container!
 
     # Store the given container_id and container_type in the session.
     def container=(new_container)
@@ -142,7 +134,7 @@ module ActionController
     deprecated_method :current_container=, :container=
 
     def get_container_from_path #:nodoc:
-      get_resource_from_path(:acts_as => :container)
+      record_from_path(:acts_as => :container)
     end
 
     def get_container_from_session #:nodoc:
@@ -151,18 +143,8 @@ module ActionController
       end
     end
 
-    # Tries to find a Container suitable for this Content
-    # 
-    # Calls container to figure out from params. If unsuccesful, 
-    # it tries with site
-    # 
-    # Renders Forbidden if no Container is found
-    def container!
-      @container = container || site
-
-      render(:text => "Container not present", :status => :precondition_failed) unless @container.respond_to?("container_options")
+    def categories_domain
+      record_from_path(:acts_as => :categories_domain) || site
     end
-
-    deprecated_method :needs_container, :container!
   end
 end

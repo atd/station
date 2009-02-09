@@ -3,7 +3,7 @@ module ActionController #:nodoc:
   module Agents
     class << self
       def included(base) #:nodoc:
-        base.send :include, ActionController::Base unless base.ancestors.include?(ActionController::Base)
+        base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
         base.send :include, ActionController::Authentication unless base.ancestors.include?(ActionController::Authentication)
       end
     end
@@ -29,16 +29,16 @@ module ActionController #:nodoc:
   
     # Render a form for creating a new Agent
     def new
-      @agent = self.resource_class.new
-      instance_variable_set "@#{ self.resource_class.to_s.underscore }", @agent
+      @agent = model_class.new
+      instance_variable_set "@#{ model_class.to_s.underscore }", @agent
       @title = authenticated? ?
-        t(:new, :scope => self.resource_class.to_s.underscore) :
+        t(:new, :scope => model_class.to_s.underscore) :
         t(:join_to_site, :site => Site.current.name)
     end
   
     # Create new Agent instance
     def create
-      @agent = self.resource_class.new(params[:agent])
+      @agent = model_class.new(params[:agent])
 
       unless authenticated?
         cookies.delete :auth_token unless authenticated?
@@ -48,7 +48,7 @@ module ActionController #:nodoc:
       @agent.save!
 
       if authenticated?
-        redirect_to polymorphic_path(self.resource_class.new)
+        redirect_to polymorphic_path(model_class.new)
         flash[:info] = t(:created, :scope => @agent.class.to_s.underscore)
       else
         self.current_agent = @agent
@@ -56,7 +56,7 @@ module ActionController #:nodoc:
         flash[:info] = t(:account_created)
       end
 
-      if self.resource_class.agent_options[:activation]
+      if model_class.agent_options[:activation]
         flash[:info] << '<br />'
         flash[:info] << ( @agent.active? ?
           t(:activation_email_sent, :scope => @agent.class.to_s.underscore) :
@@ -69,12 +69,12 @@ module ActionController #:nodoc:
     def destroy
       @agent.destroy
       flash[:info] = t(:deleted, :scope => @agent.class.to_s.underscore)
-      redirect_to polymorphic_path(self.resource_class.new)
+      redirect_to polymorphic_path(model_class.new)
     end
   
     # Activate Agent from email
     def activate
-      self.current_agent = params[:activation_code].blank? ? Anonymous.current : self.resource_class.find_by_activation_code(params[:activation_code])
+      self.current_agent = params[:activation_code].blank? ? Anonymous.current : model_class.find_by_activation_code(params[:activation_code])
       if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
         current_agent.activate
         flash[:info] = t(:account_activated)
@@ -86,7 +86,7 @@ module ActionController #:nodoc:
   
     def forgot_password
       if params[:email]
-        @agent = self.resource_class.find_by_email(params[:email])
+        @agent = model_class.find_by_email(params[:email])
         unless @agent
           flash[:error] = t(:could_not_find_anybody_with_that_email_address)
           return
@@ -100,7 +100,7 @@ module ActionController #:nodoc:
   
     # Resets Agent password via email
     def reset_password
-      @agent = self.resource_class.find_by_reset_password_code(params[:reset_password_code])
+      @agent = model_class.find_by_reset_password_code(params[:reset_password_code])
       raise unless @agent
       return if params[:password].blank?
       
@@ -125,18 +125,18 @@ module ActionController #:nodoc:
     #
     # Example GET /users/1 or GET /users/quentin
     def get_agent
-      @agent = ( params[:id].match(/^\d+$/) ? self.resource_class.find(params[:id]) : self.resource_class.find_by_login(params[:id]) )
-      instance_variable_set "@#{ self.resource_class.to_s.underscore }", @agent
+      @agent = ( params[:id].match(/^\d+$/) ? model_class.find(params[:id]) : model_class.find_by_login(params[:id]) )
+      instance_variable_set "@#{ model_class.to_s.underscore }", @agent
     end
   
     # Filter for activation methods
     def activation_required
-      redirect_back_or_default('/') unless self.resource_class.agent_options[:activation]
+      redirect_back_or_default('/') unless model_class.agent_options[:activation]
     end
   
     # Filter for methods that require login_and_password authentication, like reset_password
     def login_and_pass_auth_required
-      redirect_back_or_default('/') unless self.resource_class.agent_options[:authentication].include?(:login_and_password)
+      redirect_back_or_default('/') unless model_class.agent_options[:authentication].include?(:login_and_password)
     end
 
     private

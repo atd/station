@@ -3,7 +3,16 @@ module ActiveRecord #:nodoc:
   # with acts_as_something
   module ActsAs #:nodoc:
     # All ActiveRecord addons
-    LIST = [ :container, :agent, :content, :stage, :taggable, :logotypable, :sortable, :categories_domain, :categorizable ]
+    LIST = [ :resource,
+             :container,
+             :agent,
+             :content, 
+             :stage, 
+             :taggable, 
+             :logotypable, 
+             :sortable, 
+             :categories_domain, 
+             :categorizable ]
 
     class << self
       def included(base) #:nodoc:

@@ -81,6 +81,9 @@ es:
   container:
     one: "Contenedor"
     other: "Contenedores"
+  resource:
+    one: "Recurso"
+    other: "Recursos"
   content:
     one: "Contenido"
     other: "Contenidos"

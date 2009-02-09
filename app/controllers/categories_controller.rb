@@ -1,6 +1,6 @@
 # Categories methods and filters for Category
 class CategoriesController < ApplicationController
-  before_filter :needs_categories_domain, :only => [ :index, :new, :create ]
+  before_filter :categories_domain!, :only => [ :index, :new, :create ]
 
   before_filter :get_category, :only => [ :show, :edit, :update, :destroy ]
 
@@ -103,9 +103,9 @@ class CategoriesController < ApplicationController
 
   protected
 
-  # Sets @categories_domain, getting a CategoriesDomain from path (using get_resource_from_path) or current_site
-  def needs_categories_domain
-    @categories_domain = get_resource_from_path(:acts_as => :categories_domain) || current_site
+  # Sets @categories_domain, getting a CategoriesDomain from path (using record_from_path) or site
+  def categories_domain!
+    @categories_domain = record_from_path(:acts_as => :categories_domain) || site
   end
 
   # Find Category using params[:id]
@@ -118,7 +118,7 @@ class CategoriesController < ApplicationController
 
   # Set @container and @agents variables from @categories_domain
   #
-  # @categories_domain variable is set either in :needs_categories_domain or :get_category
+  # @categories_domain variable is set either in :categories_domain! or :get_category
   def categories_domains_and_agents #:nodoc:
     #TODO return unless @categories_domain && @categories_domain.acts_as_container?
     @containers = Array(@categories_domain)

@@ -36,7 +36,11 @@ resource :site do |site|
   site.resources *ActiveRecord::Content.symbols
 end
 
-resources *((ActiveRecord::Content.symbols | ActiveRecord::Agent.symbols) - ActiveRecord::Container.symbols)
+resources *( ( ActiveRecord::Resource.symbols | 
+               ActiveRecord::Content.symbols  | 
+               ActiveRecord::Agent.symbols ) - 
+              ActiveRecord::Container.symbols 
+           )
 
 resources(*(ActiveRecord::Container.symbols) - Array(:sites)) do |container|
   container.resources(*ActiveRecord::Content.symbols)

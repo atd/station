@@ -1,6 +1,6 @@
 class PerformancesController < ApplicationController
-  before_filter :get_stage, :only => [ :index, :new, :create ]
-  before_filter :get_performance, :only => [ :edit, :update, :destroy ]
+  before_filter :stage, :only => [ :index, :new, :create ]
+  before_filter :performance, :only => [ :edit, :update, :destroy ]
   before_filter :parse_polymorphic_agent, :only => [ :create, :update ]
 
   def index
@@ -9,7 +9,7 @@ class PerformancesController < ApplicationController
 
   def create
     @performance = Performance.new(params[:performance])
-    @performance.stage = get_stage
+    @performance.stage = stage
 
     if @performance.save
       respond_to do |format|
@@ -62,11 +62,11 @@ class PerformancesController < ApplicationController
 
   private
 
-  def get_stage
-    @stage ||= get_resource_from_path(:acts_as => :stage)
+  def stage
+    @stage ||= record_from_path(:acts_as => :stage)
   end
 
-  def get_performance
+  def performance
     @performance = Performance.find(params[:id])
     @stage = @performance.stage
   end

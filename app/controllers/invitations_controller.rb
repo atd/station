@@ -2,8 +2,8 @@ class InvitationsController < ApplicationController
   # GET /invitations
   # GET /invitations.xml
   def index
-    @invitations = get_stage ?
-      get_stage.stage_invitations.column_sort(params[:order], params[:direction]) :
+    @invitations = stage ?
+      stage.stage_invitations.column_sort(params[:order], params[:direction]) :
       Invitation.column_sort(params[:order], params[:direction])
 
     respond_to do |format|
@@ -102,7 +102,7 @@ class InvitationsController < ApplicationController
 
   private
 
-  def get_stage
-    @stage ||= get_resource_from_path(:acts_as => :stage)
+  def stage
+    @stage ||= record_from_path(:acts_as => :stage)
   end
 end

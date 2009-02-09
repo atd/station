@@ -10,7 +10,7 @@ module ActionController #:nodoc:
       @logotype = ( 
         @logotypable ? 
         @logotypable.logotype : 
-        self.resource_class.find(params[:id]) 
+        model_class.find(params[:id]) 
       )
 
       @logotype = 
@@ -25,7 +25,7 @@ module ActionController #:nodoc:
     private
 
     def get_logotypable_from_path #:nodoc:
-      get_resource_from_path(:acts_as => :logotypable)
+      record_from_path(:acts_as => :logotypable)
     end
   end
 end

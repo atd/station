@@ -2,7 +2,7 @@ module ActionController #:nodoc:
   # Controller methods and default filters for Agents Controllers
   module Contents
     def self.included(base) #:nodoc:
-      base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
+      base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::MoveResources)
       base.send :include, ActionController::Authorization unless base.ancestors.include?(ActionController::Authorization)
     end
 
@@ -17,10 +17,10 @@ module ActionController #:nodoc:
     #   GET /:container_type/:container_id/contents
     def index(&block)
       if current_container
-        @title ||= t('other_in_container', :container => current_container.name, :scope => self.resource_class.to_s.underscore)
+        @title ||= t('other_in_container', :container => current_container.name, :scope => model_class.to_s.underscore)
         @agents = current_container.actors
       else
-        @title ||= t(self.resource_class.to_s.underscore, :count => :other)
+        @title ||= t(model_class.to_s.underscore, :count => :other)
         @agents = ActiveRecord::Agent.authentication_classes.map(&:all).flatten.sort{ |a, b| a.name <=> b.name }
       end
 
@@ -29,8 +29,8 @@ module ActionController #:nodoc:
         params[:order], params[:direction] = "entries.updated_at", "DESC"
       end
 
-      @contents = self.resource_class.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
-      instance_variable_set "@#{ self.resource_class.to_s.tableize }", @contents
+      @contents = model_class.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+      instance_variable_set "@#{ model_class.to_s.tableize }", @contents
 
       @updated = @contents.any? ? @contents.first.entry.updated_at : Time.now.utc
 
@@ -61,7 +61,7 @@ module ActionController #:nodoc:
         @content.entry = @content.parent.entry
       end
 
-      instance_variable_set "@#{ self.resource_class.to_s.underscore }", @content
+      instance_variable_set "@#{ model_class.to_s.underscore }", @content
 
       @title ||= @content.entry.title if @content.entry
 
@@ -95,10 +95,10 @@ module ActionController #:nodoc:
     #   GET /:container_type/:container_id/contents/new
     #   GET /contents/new
     def new
-      @content = self.resource_class.new
+      @content = model_class.new
       @content.entry = Entry.new(:content => @content)
-      instance_variable_set("@#{ self.resource_class.to_s.underscore }", @content)
-      @title ||= t(:new, :scope => self.resource_class.to_s.underscore)
+      instance_variable_set("@#{ model_class.to_s.underscore }", @content)
+      @title ||= t(:new, :scope => model_class.to_s.underscore)
     end
 
     # Render form for updating Content
@@ -106,7 +106,7 @@ module ActionController #:nodoc:
     #   GET /contents/:id/edit
     #   GET /:container_type/:container_id/contents/:id/edit
     def edit
-      @title ||= t(:editing, :scope => self.resource_class.to_s.underscore)
+      @title ||= t(:editing, :scope => model_class.to_s.underscore)
     end
  
     # Create new Content
@@ -121,7 +121,7 @@ module ActionController #:nodoc:
       # every time a Content is posted.
       # Idea: Should use SHA1 on one or some relevant Content field(s) 
       # and find_or_create_by_sha1
-      @content = instance_variable_set "@#{controller_name.singularize}", self.resource_class.new(params[self.resource_class.to_s.underscore.to_sym])
+      @content = instance_variable_set "@#{controller_name.singularize}", model_class.new(params[model_class.to_s.underscore.to_sym])
   
       params[:entry] ||= {}
       params[:entry][:agent]     = current_agent
@@ -135,7 +135,7 @@ module ActionController #:nodoc:
             flash[:valid] = t(:created, :scope => @content.class.to_s.underscore)
             redirect_to [ current_container, @content ]
           else
-            @title ||= t(:new, self.resource_class.to_s.underscore)
+            @title ||= t(:new, :scope => model_class.to_s.underscore)
             render :action => 'new'
           end
         }
@@ -181,7 +181,7 @@ module ActionController #:nodoc:
         xml_formats << @content.format unless @content.format == :html
 
         format.any(*xml_formats) {
-          if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
+          if @content.update_attributes(params[model_class.to_s.underscore.to_sym])
             head :ok
           else
             render :xml => @content.errors.to_xml, :status => :not_acceptable
@@ -189,11 +189,11 @@ module ActionController #:nodoc:
         }
 
         format.html {
-          if @content.update_attributes(params[self.resource_class.to_s.underscore.to_sym])
+          if @content.update_attributes(params[model_class.to_s.underscore.to_sym])
             flash[:valid] = t(:updated, :scope => @content.class.to_s.underscore)
             redirect_to [ current_container, @content ].compact
           else
-            @title ||= t(:editing, :scope => self.resource_class.to_s.underscore)
+            @title ||= t(:editing, :scope => model_class.to_s.underscore)
             render :action => 'edit'
           end
         }
@@ -209,7 +209,7 @@ module ActionController #:nodoc:
       @content.destroy
 
       respond_to do |format|
-        format.html { redirect_to polymorphic_path([ current_container, self.resource_class.new ].compact) }
+        format.html { redirect_to polymorphic_path([ current_container, model_class.new ].compact) }
         format.atom { head :ok }
         # FIXME: Check AtomPub, RFC 5023
   #      format.send(mime_type) { head :ok }
@@ -223,7 +223,7 @@ module ActionController #:nodoc:
     # Render Bad Request unless the controller name relates to a class that acts_as_content. 
     # If current_container exists, check its valid contents
     def controller_name_is_valid_content
-      unless (current_container && current_container.container_options[:contents] || ActiveRecord::Content.symbols).include?(self.resource_class.collection)
+      unless (current_container && current_container.container_options[:contents] || ActiveRecord::Content.symbols).include?(model_class.collection)
         render :text => "Doesn't support this Content type", :status => 400
       end
     end
@@ -243,8 +243,8 @@ module ActionController #:nodoc:
     # This funcion uses ActiveRecord::Content#in_container named scope
     #
       def get_content
-        @content = self.resource_class.in_container(current_container).find params[:id]
-        instance_variable_set "@#{ self.resource_class.to_s.underscore }", @content
+        @content = model_class.in_container(current_container).find params[:id]
+        instance_variable_set "@#{ model_class.to_s.underscore }", @content
       end
   end
 end

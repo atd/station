@@ -1,7 +1,7 @@
 require 'atom/entry'
 
 module ActiveRecord #:nodoc:
-  # A Content is a Resource that belongs to a Continer.
+  # A Content is a Resource that belongs to a Container.
   #
   # == Named Scope
   # You can use the named_scope +in_container+ to get all Contents in some Container.
@@ -12,18 +12,6 @@ module ActiveRecord #:nodoc:
     include ActsAs
 
     class << self
-      # Return the first Content class supporting this Content Type
-      def class_supporting(content_type)
-        mime_type = content_type.is_a?(Mime::Type) ?
-          content_type :
-          Mime::Type.lookup(content_type)
-        
-        classes.each do |klass|
-          return klass if klass.mime_types.include?(mime_type)
-        end
-        nil
-      end
-
       def included(base) # :nodoc:
         base.extend ClassMethods
       end
@@ -32,27 +20,8 @@ module ActiveRecord #:nodoc:
     module ClassMethods
       # Provides an ActiveRecord model with Content capabilities
       #
-      # Content(s) are posted by Agent(s) to Container(s), creating Entry(s)
-      #
-      # Options:
-      # * <tt>:mime_types</tt> - array of Mime::Type accepted for this class. 
-      # Defaults to Mime::ATOM
-      # * <tt>content_type</tt> - content type for instances of this class. Defaults to "application/atom+xml;type=entry"
-      # * <tt>:collection</tt> - this Content has an particular collection name, (ex. blog for articles, calendar for events, etc..)
-      # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: attachment_fu (<tt>:attachment_fu</tt>)
-      # * <tt>:disposition</tt> - specifies whether the Content will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
-      # * <tt>:per_page</tt> - number of contents shown per page, using will_pagination plugin. Defaults to 9
-      #
       def acts_as_content(options = {})
         ActiveRecord::Content.register_class(self)
-
-        #FIXME: should this be the default mime type??
-        options[:mime_types]   ||= :atom
-        options[:content_type] ||= "application/atom+xml;type=entry"
-        options[:disposition]  ||= :attachment
-        options[:per_page]     ||= 9
-
-        alias_attribute :media, :uploaded_data if options[:has_media] == :attachment_fu
 
         cattr_reader :content_options
         class_variable_set "@@content_options", options
@@ -88,36 +57,6 @@ module ActiveRecord #:nodoc:
 
         include ActiveRecord::Content::InstanceMethods
       end
-      
-      # Returns the symbol for a set of Contents of this item
-      # e.g. <tt>:articles</tt> for Article
-      def collection
-        content_options[:collection] || self.to_s.tableize.to_sym
-      end
-      
-      # Array of Mime objects accepted by this Content
-      def mime_types
-        Array(content_options[:mime_types]).map{ |m| Mime.const_get(m.to_sym.to_s.upcase) }
-      end
-
-      # List of comma separated content types accepted for this Content
-      def accepts
-        mime_types.map { |m|
-          m == Mime::ATOM ?
-            Array("application/atom+xml;type=entry") :
-            Array(m.to_s) + m.instance_variable_get("@synonyms")
-        }.flatten.uniq.join(", ")
-      end
-
-      protected
-
-      # Atom Parser
-      # Extracts parameter information from an Atom Element
-      #
-      # Implement this in your class if you want AtomPub support in your Content
-      def atom_parser(data)
-        {}
-      end
     end
 
     module InstanceMethods
@@ -145,43 +84,12 @@ module ActiveRecord #:nodoc:
                   end
       end
 
-      # Returns the content type for this Content instance
-      # Example: "application/atom+xml;type=entry"
-      def content_type
-        attributes['content_type'] || content_options['content_type']
-      end
-
-      # Returns the mime type for this Content instance. 
-      # Example: Mime::ATOM
-      def mime_type
-        mime_type = Mime::Type.lookup(content_type)
-
-        mime_type.instance_variable_get("@symbol") ?
-          mime_type :
-          nil
-      end
-
-      # Returns the Mime::Type symbol for this content
-      def format
-        mime_type ? mime_type.to_sym : Mime::HTML.to_sym
-      end
-      
       # Has this Content been posted in this Container? Is there any Entry linking both?
       def posted_in?(container)
         return false unless container
         content_entries.select{ |p| p.container == container }.any?
       end
       
-      # Method useful for icon files
-      #
-      # If the Content has a Mime Type, return it scaped with '-' 
-      #   application/jpg => application-jpg
-      # else, return the underscored class name:
-      #   photo
-      def mime_type_or_class_name
-        mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
-      end
-
       # The author of this Content
       def author
         entry ?

@@ -67,7 +67,7 @@ module ContentsHelper
   end
 
   # Show info about the Content
-  def content_info(content)
+  def content_info(content = nil)
     content ||= @content
 
     returning "" do |html|

@@ -84,6 +84,9 @@ en:
   container:
     one: "Container"
     other: "Containers"
+  resource:
+    one: "Resource"
+    other: "Resources"
   content:
     one: "Content"
     other: "Contents"
