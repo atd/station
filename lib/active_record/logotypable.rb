@@ -36,7 +36,7 @@ module ActiveRecord #:nodoc:
       private
 
       def _create_or_update_logotype #:nodoc:
-        return unless @_logotype
+        return unless @_logotype.present? && @_logotype[:media].present?
 
         logotype ?
           logotype.attributes = @_logotype :
