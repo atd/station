@@ -114,7 +114,7 @@ class OpenidServerController < ApplicationController
   protected
 
   def openid_server
-    @openid_server ||= Server.new(CMS::OpenID::ActiveRecordStore.new, 
+    @openid_server ||= Server.new(OpenIdActiveRecordStore.new, 
                                   url_for(:action => 'index', :only_path => false))
   end
 

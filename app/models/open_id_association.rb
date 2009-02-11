@@ -1,7 +1,6 @@
 require 'openid/association'
 
-class CMS::OpenID::Association < ActiveRecord::Base
-  set_table_name 'open_id_associations'
+class OpenIdAssociation < ActiveRecord::Base
   def from_record
     OpenID::Association.new(handle, secret, issued, lifetime, assoc_type)
   end

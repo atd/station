@@ -45,7 +45,7 @@ module ActionController #:nodoc:
 
           case openid_response.status
           when ::OpenID::Consumer::SUCCESS
-            flash[:notice] = t(:verification_succeeded, :id => openid_response.display_identifier)
+            flash[:notice] = t('openid.client.verification_succeeded_with_id', :id => openid_response.display_identifier)
             uri = Uri.find_or_create_by_uri(openid_response.display_identifier)
 
             # If already authenticated, add URI to Agent.openid_ownings
@@ -76,8 +76,8 @@ module ActionController #:nodoc:
             end
           when ::OpenID::Consumer::FAILURE
             flash[:error] = openid_response.display_identifier ?
-              t(:verification_failed_with_id, :id => openid_response.display_identifier, :message => openid_response.message) :
-              t(:verification_failed, :message => openid_response.message)
+              t('openid.client.verification_failed_with_id', :id => openid_response.display_identifier, :message => openid_response.message) :
+              t('openid.client.verification_failed', :message => openid_response.message)
             render :action => 'new'
           when ::OpenID::Consumer::SETUP_NEEDED
             flash[:error] = t(:immediate_request_failed)
@@ -93,7 +93,7 @@ module ActionController #:nodoc:
 
       def openid_consumer #:nodoc:
         @openid_consumer ||= ::OpenID::Consumer.new(session,
-                                                    CMS::OpenID::ActiveRecordStore.new)
+                                                    OpenIdActiveRecordStore.new)
       end
     end
     Openid = OpenID

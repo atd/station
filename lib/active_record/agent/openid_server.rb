@@ -8,7 +8,7 @@ module ActiveRecord #:nodoc:
           base.class_eval do 
             has_many :openid_ownings,
                      :as => :agent,
-                     :class_name => "CMS::OpenID::Owning",
+                     :class_name => "OpenIdOwning",
                      :dependent => :destroy
             has_many :openid_uris,
                      :through => :openid_ownings,
@@ -16,7 +16,7 @@ module ActiveRecord #:nodoc:
 
             has_many :openid_trusts,
                      :as => :agent,
-                     :class_name => "CMS::OpenID::Trust",
+                     :class_name => "OpenIdTrust",
                      :dependent => :destroy
             has_many :openid_trust_uris, 
                      :through => :openid_trusts,

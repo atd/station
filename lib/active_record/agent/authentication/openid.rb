@@ -12,7 +12,7 @@ module ActiveRecord #:nodoc:
 
             has_many :openid_ownings,
                      :as => :agent,
-                     :class_name => "CMS::OpenID::Owning"
+                     :class_name => "OpenIdOwning"
             has_many :openid_uris,
                      :through => :openid_ownings,
                      :source => :uri

@@ -7,9 +7,9 @@ require 'atom/service'
 # URI storage in the database
 class Uri < ActiveRecord::Base
   has_many :openid_ownings, 
-           :class_name => "CMS::OpenID::Owning"
+           :class_name => "OpenIdOwning"
   has_many :openid_trusts,
-           :class_name => "CMS::OpenID::Trust"
+           :class_name => "OpenIdTrust"
              
   # Return this URI string         
   def to_s
