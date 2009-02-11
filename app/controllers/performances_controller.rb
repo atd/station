@@ -81,6 +81,8 @@ class PerformancesController < ApplicationController
   end
 
   def parse_polymorphic_agent
+    return if params[:performance].blank?
+
     if a = params[:performance].delete(:agent)
       klass, id = a.split("-", 2)
       params[:performance][:agent_id] = id 
