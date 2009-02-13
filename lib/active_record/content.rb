@@ -26,9 +26,6 @@ module ActiveRecord #:nodoc:
         cattr_reader :content_options
         class_variable_set "@@content_options", options
 
-        cattr_reader :per_page
-        class_variable_set "@@per_page", options[:per_page]
-
         attr_writer :entry
         validates_associated :entry
         after_save :entry_save!
