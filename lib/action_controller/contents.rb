@@ -34,7 +34,7 @@ module ActionController #:nodoc:
 
       @updated = @contents.any? ? @contents.first.entry.updated_at : Time.now.utc
 
-      @containers = current_user.stages
+      @containers = current_agent.stages
   
       if block
         yield
