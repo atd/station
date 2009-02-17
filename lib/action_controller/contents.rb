@@ -75,7 +75,7 @@ module ActionController #:nodoc:
           send_data @content.current_data, :filename => @content.filename,
                                            :type => @content.content_type,
                                            :disposition => @content.class.content_options[:disposition].to_s
-        } if @content.entry.has_media?
+        } if @content.resource_options[:has_media]
 
         format.html
         format.xml { render :xml => @content.to_xml }
@@ -122,18 +122,14 @@ module ActionController #:nodoc:
       # Idea: Should use SHA1 on one or some relevant Content field(s) 
       # and find_or_create_by_sha1
       @content = instance_variable_set "@#{controller_name.singularize}", model_class.new(params[model_class.to_s.underscore.to_sym])
-  
-      params[:entry] ||= {}
-      params[:entry][:agent]     = current_agent
-      params[:entry][:container] = current_container
-      params[:entry][:content]   = @content
-      @content.entry = Entry.new(params[:entry])
+      @content.author = agent
+      @content.container = container
 
       respond_to do |format| 
         format.html {
           if @content.save
             flash[:valid] = t(:created, :scope => @content.class.to_s.underscore)
-            redirect_to [ current_container, @content ]
+            redirect_to [ container, @content ]
           else
             @title ||= t(:new, :scope => model_class.to_s.underscore)
             render :action => 'new'
@@ -161,21 +157,10 @@ module ActionController #:nodoc:
       # Fill params when POSTing raw data
       set_params_from_raw_post
   
-      # TODO?: we should look for an existing content instead of creating a new one
-      # every time a Content is posted.
-      # Idea: Should use SHA1 on one or some relevant Content field(s) 
-      # and find_or_create_by_sha1
-      #
-      # FIXME: what if there are several entries?
-      if @content.entry
-        params[:entry] ||= {}
-        params[:entry][:agent]     = current_agent
-        params[:entry][:container] = current_container || @content.entry.container
-        params[:entry][:content]   = @content
-
-        @content.entry.attributes = params[:entry]
-      end
-
+      # Avoid Entry forgery
+      params[model_class.to_s.underscore.to_sym].delete(:agent)
+      params[model_class.to_s.underscore.to_sym].delete(:container)
+      
       respond_to do |format| 
         xml_formats = [ :atom, :all ]
         xml_formats << @content.format unless @content.format == :html
@@ -197,7 +182,6 @@ module ActionController #:nodoc:
             render :action => 'edit'
           end
         }
-
       end
     end
 
