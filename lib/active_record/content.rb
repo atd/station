@@ -2,8 +2,12 @@ require 'atom/entry'
 
 module ActiveRecord #:nodoc:
   # A Content is a Resource that belongs to a Container.
+  # 
+  # == Entries
+  # The relation between Content, Container and Agent can be tracked by an Entry
+  # See options in acts_as_content
   #
-  # == Named Scope
+  # === Named Scope
   # You can use the named_scope +in_container+ to get all Contents in some Container.
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
@@ -20,6 +24,8 @@ module ActiveRecord #:nodoc:
     module ClassMethods
       # Provides an ActiveRecord model with Content capabilities
       #
+      # == Options
+      # <tt>entry</tt>:: Use Entry to track the relation between Content, Container and Agent. Default to <tt>false</tt>
       def acts_as_content(options = {})
         ActiveRecord::Content.register_class(self)
 
