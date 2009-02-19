@@ -119,6 +119,10 @@ es:
       one: "Dominio"
       other: "Dominios"
       without_categories: "{{domain}} no tiene categorías"
+  
+  tag:
+    one: "Etiqueta"
+    other: "Etiquetas"
 
   performance:
     other: "Actuaciones"

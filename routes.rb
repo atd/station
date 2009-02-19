@@ -29,6 +29,7 @@ resources :entries, :member => { :media => :any,
                                :edit_media => :get,
                                :details => :any }
 resources :categories
+resources :tags
 
 resource :site do |site|
   site.resources :entries, :categories

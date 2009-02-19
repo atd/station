@@ -122,6 +122,9 @@ en:
       one: "Domain"
       other: "Domains"
       without_categories: "{{domain}} hasn't any categories"
+  tag:
+    one: "Tag"
+    other: "Tags"
 
   performance:
     other: "Performances"

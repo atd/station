@@ -5,6 +5,7 @@ module ApplicationHelper
   include MenuBoxHelper
   include SortableHelper
   include StagesHelper
+  include TagsHelper
 
   # Get title in this order:
   # 1. string argument 
