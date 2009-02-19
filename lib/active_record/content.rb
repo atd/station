@@ -25,12 +25,34 @@ module ActiveRecord #:nodoc:
       # Provides an ActiveRecord model with Content capabilities
       #
       # == Options
+      # <tt>reflection</tt>:: Name of the (usually <tt>belongs_to</tt>)association that relates this model with its Container. Defaults to <tt>:container</tt>
       # <tt>entry</tt>:: Use Entry to track the relation between Content, Container and Agent. Default to <tt>false</tt>
       def acts_as_content(options = {})
         ActiveRecord::Content.register_class(self)
 
+        options[:reflection] ||= :container
+
         cattr_reader :content_options
         class_variable_set "@@content_options", options
+
+        if options[:reflection] != :container
+          alias_attribute :container, options[:reflection]
+        end
+
+        named_scope :in_container, lambda { |container|
+          conditions = HashWithIndifferentAccess.new
+
+          if container && container.respond_to?("container_options")
+            conditions["#{ table_name }.#{ container_reflection.primary_key_name }"] =
+              container.id
+            if container_reflection.options[:polymorphic]
+              conditions["#{ table_name }.#{ container_reflection.options[:foreign_type] }"] =
+              container.class.base_class.to_s
+            end
+          end
+
+          { :conditions => conditions }
+        }
 
         acts_as_stage
         acts_as_sortable
@@ -38,10 +60,16 @@ module ActiveRecord #:nodoc:
 
         include ActiveRecord::Content::InstanceMethods
         
+        # Warning: this overwrites some methods, like in_container named scope
         if options[:entry]
           include ActiveRecord::Content::Entry
         end
         
+      end
+
+      # The ActiveRecord reflection that represents the Container for this model
+      def container_reflection
+        reflections[content_options[:reflection]]
       end
     end
 
