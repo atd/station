@@ -31,8 +31,8 @@ module ApplicationHelper
     end 
   end
 
-  def link_icon_and_name_with_author(entry)
-    entry.agent.login
+  def link_icon_and_name_with_author(resource)
+    resource.author.name
   end
 
   # The path to the icon image for the object.
