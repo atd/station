@@ -26,13 +26,13 @@ module ActionController #:nodoc:
 
       # AtomPub feeds are ordered by Entry#updated_at
       if request.format == Mime::ATOM
-        params[:order], params[:direction] = "entries.updated_at", "DESC"
+        params[:order], params[:direction] = "#{ table_name }.updated_at", "DESC"
       end
 
       @contents = model_class.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
       instance_variable_set "@#{ model_class.to_s.tableize }", @contents
 
-      @updated = @contents.any? ? @contents.first.entry.updated_at : Time.now.utc
+      @updated = @contents.any? ? @contents.first.updated_at : Time.now.utc
 
       @containers = current_agent.stages
   
