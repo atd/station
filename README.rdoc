@@ -38,7 +38,7 @@ ActiveRecord::Sortable:: a model with a sortable list
 == Features
 
 * Authentication: Login/Password, {OpenID}[http://openid.net/], {Central Authentication Service (CAS)}[http://www.ja-sig.org/products/cas/], CookieToken
-* Authorization: Roles and Permisssions
+* Authorization: Roles and Permissions
 * Activation: Email validation, Password reset
 * Atom feeds, {RFC 4287}[http://tools.ietf.org/html/rfc4287]
 * AtomPub protocol, {RFC 5023}[http://tools.ietf.org/html/rfc5023]
@@ -46,7 +46,6 @@ ActiveRecord::Sortable:: a model with a sortable list
 * Folksonomies: Tags, Taggable models
 * Logotypes for models
 * Sortable lists for models
-* Logotypes for models
 
 == Requirements
 
