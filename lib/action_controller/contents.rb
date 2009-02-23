@@ -10,8 +10,8 @@ module ActionController #:nodoc:
     #
     # When there is no Container requested, just deliver all Contents
     #
-    # If a Container is requested, each Content has an Entry associated with it.
-    # See Content#entry
+    # If Contents have Entries, and a Container is requested, each Content has an Entry associated with it.
+    # See ActiveRecord::Content::Entry
     #
     #   GET /contents
     #   GET /:container_type/:container_id/contents
@@ -53,22 +53,13 @@ module ActionController #:nodoc:
     #   GET /contents/:id
     #   GET /:container_type/:container_id/contents/:id
     #
-    # In the last case, +@content.entry+ is entry relative to the Container. See Content#entry
     def show
       # Image thumbnails. &thumbnail=thumb
-      if params[:thumbnail] && @content.respond_to?(:thumbnails)
+      if params[:thumbnail] && content.respond_to?(:thumbnails)
         @content = @content.thumbnails.find_by_thumbnail(params[:thumbnail]) 
-        @content.entry = @content.parent.entry
       end
 
-      instance_variable_set "@#{ model_class.to_s.underscore }", @content
-
-      @title ||= @content.entry.title if @content.entry
-
-      @containers ||= current_container ? 
-                      Array(current_container) : 
-                      @content.content_entries.map(&:container).uniq
-      @agents ||= @content.content_entries.map(&:agent).uniq
+      @title ||= content.title
 
       respond_to do |format|
         format.all {
@@ -96,7 +87,6 @@ module ActionController #:nodoc:
     #   GET /contents/new
     def new
       @content = model_class.new
-      @content.entry = Entry.new(:content => @content)
       instance_variable_set("@#{ model_class.to_s.underscore }", @content)
       @title ||= t(:new, :scope => model_class.to_s.underscore)
     end
@@ -106,6 +96,7 @@ module ActionController #:nodoc:
     #   GET /contents/:id/edit
     #   GET /:container_type/:container_id/contents/:id/edit
     def edit
+      content
       @title ||= t(:editing, :scope => model_class.to_s.underscore)
     end
  
@@ -122,7 +113,7 @@ module ActionController #:nodoc:
       # Idea: Should use SHA1 on one or some relevant Content field(s) 
       # and find_or_create_by_sha1
       @content = instance_variable_set "@#{controller_name.singularize}", model_class.new(params[model_class.to_s.underscore.to_sym])
-      @content.author = agent
+      @content.author = current_agent
       @content.container = container
 
       respond_to do |format| 
@@ -154,6 +145,7 @@ module ActionController #:nodoc:
     #   PUT /:container_type/:container_id/contents/:id
     #   PUT /contents/:id
     def update
+      content
       # Fill params when POSTing raw data
       set_params_from_raw_post
   
@@ -190,7 +182,7 @@ module ActionController #:nodoc:
     #   DELETE /contents/:id
     #   DELETE /:container_type/:container_id/contents/:id
     def destroy
-      @content.destroy
+      content.destroy
 
       respond_to do |format|
         format.html { redirect_to polymorphic_path([ current_container, model_class.new ].compact) }
@@ -220,15 +212,14 @@ module ActionController #:nodoc:
     #   class ArticlesController < ActiveRecord::Base
     #     include ActionController::Contents
     #
-    #     before_filter :get_content #=> @article = @content = Article.find(params[:id])
+    #     before_filter :content #=> @article = @content = Article.find(params[:id])
     #   end
     #
-    # If current_container exists, +@content+ has its entry defined. 
     # This funcion uses ActiveRecord::Content#in_container named scope
     #
-      def get_content
-        @content = model_class.in_container(current_container).find params[:id]
-        instance_variable_set "@#{ model_class.to_s.underscore }", @content
-      end
+    def content
+      @content ||= model_class.in_container(container).find params[:id]
+      instance_variable_set "@#{ model_class.to_s.underscore }", @content
+    end
   end
 end
