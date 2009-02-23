@@ -155,27 +155,5 @@ module ActionController #:nodoc:
       @resource ||= instance_variable_set("@#{ model_class.to_s.underscore }", 
                                           model_class.find(params[:id]))
     end
-
-    # Extract request parameters when posting raw data
-    def set_params_from_raw_post(content = controller_name.singularize.to_sym)
-      return if request.raw_post.blank? || params[content]
-
-      filename = request.env["HTTP_SLUG"] || controller_name.singularize
-      content_type = request.content_type
-      
-      file = Tempfile.new("media")
-      file.write request.raw_post
-      (class << file; self; end).class_eval do
-        alias local_path path
-        define_method(:content_type) { content_type.dup.taint }
-        define_method(:original_filename) { filename.dup.taint }
-      end
-
-      params[:entry]                   ||= {}
-      params[:entry][:title]           ||= filename
-      params[:entry][:public_read]     ||= true
-      params[content]                  ||= {}
-      params[content][:media]          ||= file
-    end
   end
 end

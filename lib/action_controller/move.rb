@@ -146,5 +146,28 @@ module ActionController
     def categories_domain
       record_from_path(:acts_as => :categories_domain) || site
     end
+
+    protected
+
+    # Extract request parameters when posting raw data
+    def set_params_from_raw_post(content = controller_name.singularize.to_sym)
+      return if request.raw_post.blank? || params[content]
+
+      filename = request.env["HTTP_SLUG"] || controller_name.singularize
+      content_type = request.content_type
+      
+      file = Tempfile.new("media")
+      file.write request.raw_post
+      (class << file; self; end).class_eval do
+        alias local_path path
+        define_method(:content_type) { content_type.dup.taint }
+        define_method(:original_filename) { filename.dup.taint }
+      end
+
+      params[content]                  ||= {}
+      params[content][:title]          ||= filename
+      params[content][:media]          ||= file
+      params[content][:public_read]    ||= true
+    end
   end
 end
