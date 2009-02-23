@@ -25,6 +25,9 @@ module ActiveRecord #:nodoc:
         end
 
         include InstanceMethods
+
+        send :attr_accessor, :_tags
+        after_save :_save_tags!
       end
     end
 
@@ -75,6 +78,12 @@ module ActiveRecord #:nodoc:
 
       
       private 
+
+      def _save_tags!
+        return unless @_tags
+        tag_with @_tags
+        @_tags = nil
+      end
       
       def tag_cast_to_string obj #:nodoc:
         case obj

@@ -1,0 +1,6 @@
+<div id="tags_form_<%= dom_id taggable %>" class="form_entry">
+  <div class="form_label"><%= t('tag.other') %></div>
+  <div class="form_data tags_form">
+    <%= text_field_tag "#{ taggable_name }[_tags]", taggable._tags || taggable.tag_list %>
+  </div>
+</div>
