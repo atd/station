@@ -1,8 +1,6 @@
 module ActiveRecord #:nodoc:
   # Categorizable ActiveRecord module
   module Categorizable
-    include ActsAs
-
     class << self
       def included(base) #:nodoc:
         base.extend ClassMethods

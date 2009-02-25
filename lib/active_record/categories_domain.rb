@@ -1,8 +1,6 @@
 module ActiveRecord #:nodoc:
   # CategoriesDomain ActiveRecord module
   module CategoriesDomain
-    include ActsAs
-
     class << self
       def included(base) #:nodoc:
         base.extend ClassMethods

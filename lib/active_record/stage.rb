@@ -1,7 +1,5 @@
 module ActiveRecord #:nodoc:
   module Stage
-    include ActsAs
-
     class << self
       def included(base) #:nodoc:
         base.extend ClassMethods

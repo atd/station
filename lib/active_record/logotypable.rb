@@ -1,8 +1,6 @@
 module ActiveRecord #:nodoc:
   # Logotypable ActiveRecord module
   module Logotypable
-    include ActsAs
-
     class << self
       def included(base) #:nodoc:
         base.extend ClassMethods

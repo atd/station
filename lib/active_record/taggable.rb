@@ -4,8 +4,6 @@
 module ActiveRecord #:nodoc:
   # Taggable ActiveRecord module
   module Taggable
-    include ActsAs
-
     def self.included(base) #:nodoc:
       base.extend ClassMethods
     end

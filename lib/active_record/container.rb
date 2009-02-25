@@ -1,8 +1,6 @@
 module ActiveRecord #:nodoc:
   # Container(s) are models receiving Content(s) posted by Agent(s)
   module Container
-    include ActsAs
-
     class << self
       def included(base) #:nodoc:
         base.extend ClassMethods

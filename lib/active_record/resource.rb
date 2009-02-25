@@ -5,8 +5,6 @@ module ActiveRecord #:nodoc:
   # imported/exported in several formats
   #
   module Resource
-    include ActsAs
-
     class << self
       # Return the first Resource class supporting this Content Type
       def class_supporting(content_type)

@@ -3,35 +3,54 @@ module ActiveRecord #:nodoc:
   # with acts_as_something
   module ActsAs #:nodoc:
     # All ActiveRecord addons
-    LIST = [ :resource,
-             :container,
-             :agent,
-             :content, 
-             :stage, 
-             :taggable, 
-             :logotypable, 
-             :sortable, 
-             :categories_domain, 
-             :categorizable ]
+    Features = [ :resource,
+                 :container,
+                 :agent,
+                 :content,
+                 :stage,
+                 :taggable,
+                 :logotypable,
+                 :sortable,
+                 :categories_domain,
+                 :categorizable ]
 
     class << self
-      def included(base) #:nodoc:
-        base.instance_variable_set "@symbols", Array.new
-        base.extend ClassMethods
+      def extended(base)
+        Features.each do |feature|
+          require "active_record/#{ feature }"
+          feature_const = "ActiveRecord::#{ feature.to_s.classify }".constantize
+          feature_const.send :include, Feature
+          base.send :include, feature_const
+        end
       end
     end
 
-    module ClassMethods #:nodoc:
-      def symbols
-        @symbols
+    def acts_as?(feature)
+      return false unless Features.include?(feature.to_sym)
+
+      respond_to? "#{ feature }_options"
+    end
+
+    module Feature #:nodoc:
+      class << self
+        def included(base) #:nodoc:
+          base.instance_variable_set "@symbols", Array.new
+          base.extend ClassMethods
+        end
       end
 
-      def register_class(klass)
-        @symbols |= Array(klass.to_s.tableize.to_sym)
-      end
+      module ClassMethods #:nodoc:
+        def symbols
+          @symbols
+        end
 
-      def classes
-        @symbols.map(&:to_class)
+        def register_class(klass)
+          @symbols |= Array(klass.to_s.tableize.to_sym)
+        end
+
+        def classes
+          @symbols.map(&:to_class)
+        end
       end
     end
   end

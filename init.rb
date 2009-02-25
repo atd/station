@@ -13,11 +13,7 @@ require 'move/core_ext'
 
 # ActiveRecord
 require 'active_record/acts_as'
-
-ActiveRecord::ActsAs::LIST.each do |item|
-  require "active_record/#{ item }"
-  ActiveRecord::Base.send :include, "ActiveRecord::#{ item.to_s.classify }".constantize
-end
+ActiveRecord::Base.extend ActiveRecord::ActsAs
 
 # Singular Agents
 if SingularAgent.table_exists?
@@ -59,7 +55,7 @@ file_patterns.each do |file_pattern|
     next if filename =~ /#{file_exclusions.join("|")}/
     open filename do |file|
       begin
-        require_dependency(filename) if file.grep(/acts_as_(#{ ActiveRecord::ActsAs::LIST.join('|') })/).any?
+        require_dependency(filename) if file.grep(/acts_as_(#{ ActiveRecord::ActsAs::Features.join('|') })/).any?
       rescue Exception => e
         #FIXME: logger ?
         puts "CMSplugin autoload: Couldn't load file #{ filename }: #{ e }"

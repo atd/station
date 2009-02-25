@@ -13,8 +13,6 @@ module ActiveRecord #:nodoc:
   #
   # Contents instances have entries columns in entry_*
   module Content
-    include ActsAs
-
     class << self
       def included(base) # :nodoc:
         base.extend ClassMethods
