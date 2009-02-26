@@ -74,8 +74,10 @@ module ActiveRecord #:nodoc:
       # Returns the mime type for this Content instance. 
       # Example: Mime::XML
       def mime_type
-        mime_type = Mime::Type.lookup(content_type)
+        return nil unless respond_to?(:content_type)
 
+        mime_type = Mime::Type.lookup(content_type)
+        # mime_type must be a registered Mime::Type
         mime_type.instance_variable_get("@symbol") ?
           mime_type :
           nil
