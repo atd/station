@@ -45,6 +45,7 @@ module ActiveRecord #:nodoc:
         options[:per_page]     ||= 9
 
         alias_attribute :media, :uploaded_data if options[:has_media] == :attachment_fu
+        attr_protected :author, :author_id, :author_type
 
         cattr_reader :resource_options
         class_variable_set "@@resource_options", options

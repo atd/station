@@ -35,7 +35,13 @@ module ActiveRecord #:nodoc:
 
         if options[:reflection] != :container
           alias_attribute :container, options[:reflection]
+          attr_protected options[:reflection]
+          attr_protected reflections[options[:reflection]].primary_key_name
+          if reflections[options[:reflection]].options[:polymorphic]
+            attr_protected reflections[options[:reflection]].options[:foreign_type]
+          end
         end
+        attr_protected :container, :container_id, :container_type
 
         named_scope :in_container, lambda { |container|
           conditions = HashWithIndifferentAccess.new
