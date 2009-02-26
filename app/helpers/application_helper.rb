@@ -9,13 +9,36 @@ module ApplicationHelper
 
   # Get title in this order:
   # 1. string argument 
-  # 2. class variable <tt>@title</tt>, typically assigned in the Controller
-  # 3. <tt>controller.controller_name</tt> - <tt>site.name</tt>
-  def title(new_title = "" )
-    title = new_title.present? ?
-            new_title :
-            @title ||
-            "#{ controller.controller_name.titleize } - #{ site.name }"
+  # 2. @title instance variable
+  # 3. Title based on variables set by the Controller
+  # 4. <tt>controller.controller_name</tt> - <tt>site.name</tt>
+  #
+  # Options:
+  # <tt>append_site_name</tt>:: Append the Site name to the title, ie, "Title - Example Site". Defaults to <tt>false</tt>
+  #
+  def title(new_title = "", options = {})
+    title = if new_title.present?
+              new_title
+            elsif @title
+              @title
+            elsif @contents
+              container ?
+                t(:other_in_container, :scope => controller.controller_name.singularize) :
+                t(:other, :scope => controller.controller_name.singularize)
+            elsif @resources
+                t(:other, :scope => controller.controller_name.singularize)
+            elsif @resource
+              if @resource.new_record?
+                t(:new, :scope => @resource.class.to_s.underscore)
+              elsif controller.action_name == 'edit' || @resource.errors.any?
+                t(:editing, :scope => @resource.class.to_s.underscore)
+              else
+                @resource.title
+              end
+            else
+              controller.controller_name.titleize
+            end
+    title << " - #{ site.name }" if options[:append_site_name]
             
     sanitize(title)
   end
