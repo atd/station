@@ -5,30 +5,51 @@ module ActionController #:nodoc:
     class << self
       def included(base) #:nodoc:
         base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
+        base.send :include, ActionController::Authorization unless base.ancestors.include?(ActionController::Authorization)
       end
     end
 
-    # GET /resources
-    # GET /resources.xml
-    def index
+    # List Resources
+    #
+    # When the Resource is a Content, uses in_container named_scope
+    # When it's a Sortable, uses column_sort named_scope
+    #
+    # It also paginates using great Mislav will_paginate plugin
+    #
+    #   GET /resources
+    #   GET /resources.xml
+    #   GET /resources.atom
+    #
+    #   GET /:container_type/:container_id/contents
+    #   GET /:container_type/:container_id/contents.xml
+    #   GET /:container_type/:container_id/contents.atom
+    def index(&block)
       # AtomPub feeds are ordered by Entry#updated_at
+      # TODO: move this to ActionController::Base#params_parser
       if request.format == Mime::ATOM
         params[:order], params[:direction] = "updated_at", "DESC"
       end
 
-      @resources = model_class.column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+      @resources = model_class.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
-      @title ||= t(model_class.to_s.underscore, :count => :other)
+      @contents = @resources if model_class.acts_as?(:content)
 
-      respond_to do |format|
-        format.html # index.html.erb
-        format.xml  { render :xml => @resources }
-        format.atom
+      if block
+        yield
+      else
+        respond_to do |format|
+          format.html # index.html.erb
+          format.js
+          format.xml  { render :xml => @resources }
+          format.atom
+        end
       end
     end
 
-    # GET /resources/1
-    # GET /resources/1.xml
+    # Show this Content
+    #
+    #   GET /resources/1
+    #   GET /resources/1.xml
     def show
       if params[:thumbnail] && resource.respond_to?(:thumbnails)
         @resource = resource.thumbnails.find_by_thumbnail(params[:thumbnail]) 
@@ -42,7 +63,7 @@ module ActionController #:nodoc:
           send_data resource.current_data, :filename => resource.filename,
                                            :type => resource.content_type,
                                            :disposition => resource.class.resource_options[:disposition].to_s
-        } unless resource.class.resource_options[:has_media].nil?
+        } if resource.class.resource_options[:has_media]
 
         format.html # show.html.erb
         format.xml  { render :xml => @resource }
@@ -58,12 +79,15 @@ module ActionController #:nodoc:
       end
     end
 
-    # GET /resources/new
-    # GET /resources/new.xml
+    # Render form for posting new Resource
+    #
+    #   GET /resources/new
+    #   GET /resources/new.xml
+    #   GET /:container_type/:container_id/contents/new
     def new
       @resource = model_class.new
       instance_variable_set "@#{ model_class.to_s.underscore }", @resource
-      @title ||= t(:new, :scope => model_class.to_s.underscore)
+      @content = @resource if model_class.acts_as?(:content)
 
       respond_to do |format|
         format.html # new.html.erb
@@ -74,32 +98,43 @@ module ActionController #:nodoc:
     # GET /resources/1/edit
     def edit
       resource
-      @title ||= t(:editing, :scope => model_class.to_s.underscore)
     end
 
-    # POST /resources
-    # POST /resources.xml
+    # Create new Resource
+    #
+    #   POST /resources
+    #   POST /resources.xml
+    #   POST /:container_type/:container_id/contents
     def create
       # Fill params when POSTing raw data
       set_params_from_raw_post
 
       @resource = model_class.new(params[model_class.to_s.underscore.to_sym])
       instance_variable_set "@#{ model_class.to_s.underscore }", @resource
+      @content = @resource if @resource.class.acts_as?(:content)
+
+      @resource.author = current_agent if @resource.respond_to?(:author=)
+      @resource.container = container  if @resource.respond_to?(:container=)
 
       respond_to do |format|
         if @resource.save
           flash[:valid] = t(:created, :scope => @resource.class.to_s.underscore)
-          format.html { redirect_to(@resource) }
-          format.xml  { render :xml => @resource, :status => :created, :location => @resource }
+          format.html { 
+            redirect_to resource_or_content_path_args
+          }
+          format.xml  { 
+            render :xml      => @resource, 
+                   :status   => :created, 
+                   :location => @resource 
+          }
           format.atom {
-            headers["Location"] = polymorphic_url(@resource)
             render :action => 'show',
-                   :status => :created
+                   :status => :created,
+                   :location => formatted_polymorphic_url(resource_or_content_path_args << :atom)
           }
         else
           format.html { 
             render :action => "new"
-            @title ||= t(:new, :scope => model_class.to_s.underscore)
           }
           format.xml  { render :xml => @resource.errors, :status => :unprocessable_entity }
           format.atom { render :xml => @resource.errors.to_xml, :status => :bad_request }
@@ -107,15 +142,19 @@ module ActionController #:nodoc:
       end
     end
 
+    # Update Resource
+    #
     # PUT /resources/1
     # PUT /resources/1.xml
     def update
       # Fill params when POSTing raw data
       set_params_from_raw_post
 
+      resource
+
       respond_to do |format| 
         xml_formats = [ :atom, :all ]
-        xml_formats << resource.format unless resource.format == :html
+        xml_formats << resource.format if resource.format
 
         format.any(*xml_formats) {
           if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
@@ -128,9 +167,8 @@ module ActionController #:nodoc:
         format.html {
           if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
             flash[:valid] = t(:updated, :scope => @resource.class.to_s.underscore)
-            redirect_to @resource
+            redirect_to resource_or_content_path_args
           else
-            @title ||= t(:editing, :scope => model_class.to_s.underscore)
             render :action => 'edit'
           end
         }
@@ -143,7 +181,10 @@ module ActionController #:nodoc:
       resource.destroy
 
       respond_to do |format|
-        format.html { redirect_to(polymorphic_path(model_class.new)) }
+        format.html { redirect_to(polymorphic_path(model_class.acts_as?(:content) ? 
+                                                   [ container, model_class.new ] :
+                                                   model_class.new))
+        }
         format.xml  { head :ok }
         format.atom { head :ok }
       end
@@ -153,7 +194,12 @@ module ActionController #:nodoc:
 
     def resource
       @resource ||= instance_variable_set("@#{ model_class.to_s.underscore }", 
-                                          model_class.find(params[:id]))
+                                          model_class.in_container(container).find(params[:id]))
+      @content  ||= @resource if @resource.class.acts_as?(:content)
+    end
+
+    def resource_or_content_path_args
+      resource.class.acts_as?(:content) ? [ container, resource ] : Array(resource)
     end
   end
 end

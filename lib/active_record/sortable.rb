@@ -2,6 +2,8 @@ module ActiveRecord #:nodoc:
   # Container(s) are models receiving Content(s) posted by Agent(s)
   module Sortable
     def self.included(base) #:nodoc:
+      # Fake named_scope for ActiveRecord that aren't Sortables
+      base.named_scope :column_sort, lambda { |order, direction| {} }
       base.extend ClassMethods
     end
 

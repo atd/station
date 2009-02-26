@@ -1,8 +1,13 @@
 require 'atom/entry'
 
 module ActiveRecord #:nodoc:
-  # A Resource is a model that supports, at least, CRUD operations and can be 
-  # imported/exported in several formats
+  # A Resource is a model that supports, at least, CRUD operations. 
+  # As consecuence, it can be imported/exported in several Content Types, which include:
+  #
+  # XML:: text document encoded using Extensible Markup Language (XML). These include XHTML, Atom and RSS.
+  # YAML:: text document encoded using YAML Ain't a Markup Language (YAML). These include JSON.
+  # HTML encoding:: usually the result of HTML Forms, uses application/x-www-form-urlencoded or multipart/form-data
+  # Raw:: binary data
   #
   module Resource
     class << self
@@ -27,10 +32,7 @@ module ActiveRecord #:nodoc:
       # Provides an ActiveRecord model with Resource capabilities
       #
       # Options:
-      # * <tt>:mime_types</tt> - array of Mime::Type accepted for this class. 
-      # Defaults to Mime::ATOM
-      # * <tt>content_type</tt> - content type for Resource instances. AttachmentFu sets content_type to the relative to the 
-      # uploaded file. It defaults to "application/atom+xml;type=entry" (FIXME)
+      # * <tt>:mime_types</tt> - array of Mime::Type supported by this Resource.
       # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: AttachmentFu (<tt>:attachment_fu</tt>)
       # * <tt>:disposition</tt> - specifies whether the Resource will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of Resources shown per page, using will_pagination plugin. Defaults to 9
@@ -38,9 +40,6 @@ module ActiveRecord #:nodoc:
       def acts_as_resource(options = {})
         ActiveRecord::Resource.register_class(self)
 
-        #FIXME: should this be the default mime type??
-        options[:mime_types]   ||= :atom
-        options[:content_type] ||= "application/atom+xml;type=entry"
         options[:disposition]  ||= :attachment
         options[:per_page]     ||= 9
 
@@ -65,33 +64,15 @@ module ActiveRecord #:nodoc:
 
       # List of comma separated content types accepted for this Content
       def accepts
-        mime_types.map { |m|
-          m == Mime::ATOM ?
-            Array("application/atom+xml;type=entry") :
-            Array(m.to_s) + m.instance_variable_get("@synonyms")
-        }.flatten.uniq.join(", ")
-      end
-
-      protected
-
-      # Atom Parser
-      # Extracts parameter information from an Atom Element
-      #
-      # Implement this in your class if you want AtomPub support in your Content
-      def atom_parser(data)
-        {}
+        list = mime_types.map{ |m| Array(m.to_s) + m.instance_variable_get("@synonyms") }.flatten
+        list << "application/atom+xml;type=entry" if self.respond_to?(:from_atom)
+        list.uniq.join(", ")
       end
     end
 
     module InstanceMethods
-      # Returns the content type for this Content instance
-      # Example: "application/atom+xml;type=entry"
-      def content_type
-        attributes['content_type'] || resource_options['content_type']
-      end
-
       # Returns the mime type for this Content instance. 
-      # Example: Mime::ATOM
+      # Example: Mime::XML
       def mime_type
         mime_type = Mime::Type.lookup(content_type)
 
@@ -102,7 +83,7 @@ module ActiveRecord #:nodoc:
 
       # Returns the Mime::Type symbol for this content
       def format
-        mime_type ? mime_type.to_sym : Mime::HTML.to_sym
+        mime_type ? mime_type.to_sym : nil
       end
       
       # Method useful for icon files

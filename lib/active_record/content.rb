@@ -11,10 +11,12 @@ module ActiveRecord #:nodoc:
   # You can use the named_scope +in_container+ to get all Contents in some Container.
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
-  # Contents instances have entries columns in entry_*
+  # Contents instances have entries columns in entry_* when using <tt>entry</tt> option.
   module Content
     class << self
       def included(base) # :nodoc:
+        # Fake named_scope to ActiveRecord instances that aren't Contents
+        base.named_scope :in_container, lambda { |container| {} }
         base.extend ClassMethods
       end
     end
