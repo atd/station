@@ -145,6 +145,12 @@ module ActiveRecord #:nodoc:
                     end
         end
         
+        # Has this Content been posted in this Container? Is there any Entry linking both?
+        def posted_in?(container)
+          return false unless container
+          content_entries.select{ |p| p.container == container }.any?
+        end
+        
         private
         
         def build_entry #:nodoc:
@@ -167,11 +173,7 @@ module ActiveRecord #:nodoc:
           end
         end
         
-        # Has this Content been posted in this Container? Is there any Entry linking both?
-        def posted_in?(container)
-          return false unless container
-          content_entries.select{ |p| p.container == container }.any?
-        end
+
       end
     end
   end
