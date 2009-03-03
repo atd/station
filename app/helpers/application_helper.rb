@@ -56,7 +56,10 @@ module ApplicationHelper
   end
 
   def link_icon_and_name_with_author(resource)
-    resource.author.name
+    author = resource.respond_to?(:author) && resource.author ?
+               resource.author :
+               Anonymous.current
+    author.name
   end
 
   # The path to the icon image for the object.
