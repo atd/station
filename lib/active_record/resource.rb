@@ -24,6 +24,8 @@ module ActiveRecord #:nodoc:
       end
 
       def included(base) # :nodoc:
+        # Fake named_scope to ActiveRecord instances that haven't children
+        base.named_scope :parents, lambda  { {} }
         base.extend ClassMethods
       end
     end
@@ -43,7 +45,13 @@ module ActiveRecord #:nodoc:
         options[:disposition]  ||= :attachment
         options[:per_page]     ||= 9
 
-        alias_attribute :media, :uploaded_data if options[:has_media] == :attachment_fu
+        if options[:has_media] == :attachment_fu
+          alias_attribute :media, :uploaded_data
+
+          named_scope :parents, lambda {
+            { :conditions => { :parent_id => nil } }
+          } if column_names.include?('parent_id')
+        end
         attr_protected :author, :author_id, :author_type
 
         cattr_reader :resource_options
