@@ -115,5 +115,13 @@ module ApplicationHelper
       html << '</p>'
     end
   end
+
+  # Prints an atom <tt>link</tt> header for feed autodiscovery.
+  # Use it in partials:
+  #   atom_link(container, Content.new)
+  # You must have <tt>yield(:headers)</tt> in your layout
+  def atom_link_header(*args)
+    content_for :headers, "<link href=\"#{ polymorphic_url(args) }.atom\" rel=\"alternate\" title=\"#{ title }\" type=\"application/atom+xml\" />"
+  end
 end
 
