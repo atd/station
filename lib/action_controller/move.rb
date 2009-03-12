@@ -80,7 +80,10 @@ module ActionController
 
         # Find record
         begin
-          return instance_variable_set("@#{ options[:acts_as] }", candidate_class.find(params[candidate_key]))
+          record = candidate_class.find_with_param(params[candidate_key])
+          instance_variable_set("@#{ options[:acts_as] }", record) if options[:acts_as]
+          instance_variable_set("@#{ candidate_class.to_s.underscore }", record)
+          return record
         rescue ::ActiveRecord::RecordNotFound
           next
         end

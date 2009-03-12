@@ -194,7 +194,8 @@ module ActionController #:nodoc:
 
     def resource
       @resource ||= instance_variable_set("@#{ model_class.to_s.underscore }", 
-                                          model_class.in_container(container).find(params[:id]))
+                                          model_class.in_container(container).find_with_param(params[:id]))
+
       @content  ||= @resource if @resource.class.acts_as?(:content)
       @resource
     end

@@ -36,14 +36,16 @@ module ActiveRecord #:nodoc:
       # Options:
       # * <tt>:mime_types</tt> - array of Mime::Type supported by this Resource.
       # * <tt>:has_media</tt> - this Content has attachment data. Supported plugins: AttachmentFu (<tt>:attachment_fu</tt>)
+      # * <tt>:param</tt> - used to find and build the URLs. Defaults to <tt>:id</tt>
       # * <tt>:disposition</tt> - specifies whether the Resource will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of Resources shown per page, using will_pagination plugin. Defaults to 9
       #
       def acts_as_resource(options = {})
         ActiveRecord::Resource.register_class(self)
 
-        options[:disposition]  ||= :attachment
-        options[:per_page]     ||= 9
+        options[:param]       ||= :id
+        options[:disposition] ||= :attachment
+        options[:per_page]    ||= 9
 
         if options[:has_media] == :attachment_fu
           alias_attribute :media, :uploaded_data
@@ -76,6 +78,15 @@ module ActiveRecord #:nodoc:
         list << "application/atom+xml;type=entry" if self.respond_to?(:from_atom)
         list.uniq.join(", ")
       end
+
+      # Find with params
+      def find_with_param(*args)
+        if respond_to?(:resource_options)
+          send "find_by_#{ resource_options[:param] }", *args
+        else
+          find *args
+        end
+      end
     end
 
     module InstanceMethods
@@ -104,6 +115,11 @@ module ActiveRecord #:nodoc:
       #   photo
       def mime_type_or_class_name
         mime_type ? mime_type.to_s.gsub(/[\/\+]/, '-') : self.class.to_s.underscore
+      end
+
+      # Define to_param method with acts_as_resource param option
+      def to_param
+        send(self.class.resource_options[:param])
       end
     end
   end
