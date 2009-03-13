@@ -119,7 +119,7 @@ module ActiveRecord #:nodoc:
 
       # Define to_param method with acts_as_resource param option
       def to_param
-        send(self.class.resource_options[:param])
+        send(self.class.resource_options[:param]).to_s
       end
     end
   end
