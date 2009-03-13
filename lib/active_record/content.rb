@@ -19,6 +19,16 @@ module ActiveRecord #:nodoc:
         base.named_scope :in_container, lambda { |container| {} }
         base.extend ClassMethods
       end
+
+      # List of Contents from many models
+      #
+      # Options::
+      # container:: The Container for the Contents
+      # page:: Number of page.
+      # per_page:: Number of Contents per page
+      def all(options = {})
+        Inquirer.all(options)
+      end
     end
 
     module ClassMethods
@@ -48,7 +58,7 @@ module ActiveRecord #:nodoc:
         named_scope :in_container, lambda { |container|
           conditions = HashWithIndifferentAccess.new
 
-          if container && container.respond_to?("container_options")
+          if container && container.class.acts_as?(:container)
             conditions["#{ table_name }.#{ container_reflection.primary_key_name }"] =
               container.id
             if container_reflection.options[:polymorphic]
@@ -106,7 +116,7 @@ module ActiveRecord #:nodoc:
             
             # Named scope in_container returns all Contents in some container
             named_scope :in_container, lambda { |container|
-              if container && container.respond_to?("container_options")
+              if container && container.class.acts_as?(:container)
                 container_conditions = " AND entries.container_id = '#{ container.id }' AND entries.container_type = '#{ container.class.base_class.to_s }'"
               end
     
@@ -172,9 +182,54 @@ module ActiveRecord #:nodoc:
             end
           end
         end
-        
+      end
+    end
 
+    class Inquirer < ActiveRecord::Base #:nodoc:
+      @colums = Array.new
+      @columns_hash = { "type" => :fake }
+
+      class << self
+        def query(options = {})
+          options[:select]   ||= "id, title, created_at, updated_at"
+          container = options.delete(:container)
+
+          content_classes = container ?
+                             container.class.contents.map(&:to_class) :
+                             ActiveRecord::Content.classes
+
+          content_classes.map { |content|
+            params = Hash.new.replace options
+            params[:select] += ", ( SELECT \"#{ content }\" ) AS type"
+            params[:select] += if content.resource_options[:has_media]
+                                 ", content_type"
+                               else
+                                 ", ( SELECT NULL ) AS content_type"
+                               end
+            content.parents.in_container(container).construct_finder_sql(params)
+          }.join(" UNION ")
+        end
+
+        def all(options = {})
+          order     = options.delete(:order)    || "updated_at DESC"
+          per_page  = options.delete(:per_page) || 30
+          page      = options.delete(:page)     || 1
+          offset = ( page.to_i - 1 ) * per_page
+
+          WillPaginate::Collection.create(page, per_page) do |pager|
+            contents = find_by_sql "SELECT * FROM (#{ query(options.dup) }) AS contents ORDER BY contents.#{ order } LIMIT #{ per_page } OFFSET #{ offset }"
+            pager.replace(contents)
+
+            pager.total_entries = count(options)
+          end
+        end
+
+        def count(options = {})
+          count_by_sql "SELECT COUNT(*) FROM (#{ query(options) })"
+        end
       end
     end
   end
 end
+
+
