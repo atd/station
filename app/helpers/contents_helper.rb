@@ -58,7 +58,7 @@ module ContentsHelper
     options[:container] ||= true
 
     ( options[:container] && container ?
-        container.class.container_options[:contents] :
+        container.class.contents :
         ActiveRecord::Content.symbols 
     ).sort { |a, b| 
       t(a.to_s.singularize, :count => :other) <=>
