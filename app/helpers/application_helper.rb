@@ -55,11 +55,30 @@ module ApplicationHelper
     end 
   end
 
-  def link_icon_and_name_with_author(resource)
+  def link_author(resource)
     author = resource.respond_to?(:author) && resource.author ?
                resource.author :
                Anonymous.current
-    author.name
+    link_agent(author)
+  end
+
+  def link_agent(agent)
+    returning "" do |html|
+      html << link_to(image_tag(icon_image(agent), 
+                                :alt => "#{ sanitize agent.name } icon", 
+                                :title => sanitize(agent.name),
+                                :class => 'icon'))
+      html << ( agent.is_a?(SingularAgent) ?
+        agent.name :
+        link_to(sanitize(agent.name), polymorphic_path(agent)))
+    end
+  end
+
+  def link_icon(resource)
+    link_to(image_tag(icon_image(resource),
+                      :alt => "#{ resource.class } icon",
+                      :title => resource.class.to_s,
+                      :class => 'icon'), resource)
   end
 
   # The path to the icon image for the object.
@@ -77,11 +96,16 @@ module ApplicationHelper
   #
   # Finally, it first looks for the icon file in /public/images/icons, 
   # and at last in /public_assets/cmsplugin/images/icons
-  def icon_image(object)
+  #
+  # Options:
+  # size:: Size of the icon. Defaults to 16 pixels.
+  def icon_image(object, options = {})
+    options[:size] ||= 16
+
     if object.is_a?(Entry)
       icon_image object.content
     elsif object.is_a?(Logotype)
-      "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=48"
+      "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=#{ options[:size] }"
     elsif ! object.new_record? &&
           object.respond_to?(:format) &&
           object.respond_to?(:attachment_options) && 
@@ -94,7 +118,7 @@ module ApplicationHelper
       file = object.respond_to?(:mime_type) && object.mime_type ?
         object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
         object.class.to_s.underscore
-      file = "icons/#{ file }.png"
+      file = "icons/#{ options[:size] }/#{ file }.png"
 
       File.exists?("#{ RAILS_ROOT }/public/images/#{ file }") ?
         image_path(file) :
