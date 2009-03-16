@@ -3,21 +3,19 @@ require 'atom/entry'
 module ActiveRecord #:nodoc:
   # A Content is a Resource that belongs to a Container.
   # 
-  # == Entries
-  # The relation between Content, Container and Agent can be tracked by an Entry
-  # See options in acts_as_content
+  # Include this functionality in your models using ActsAsMethods#acts_as_content
   #
-  # === Named Scope
+  # == Named Scope
   # You can use the named_scope +in_container+ to get all Contents in some Container.
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
-  # Contents instances have entries columns in entry_* when using <tt>entry</tt> option.
+  # Deprecated: Contents instances have entries columns in entry_* when using <tt>entry</tt> option.
   module Content
     class << self
       def included(base) # :nodoc:
         # Fake named_scope to ActiveRecord instances that aren't Contents
         base.named_scope :in_container, lambda { |container| {} }
-        base.extend ClassMethods
+        base.extend ActsAsMethods
       end
 
       # List of Contents from many models
@@ -31,12 +29,12 @@ module ActiveRecord #:nodoc:
       end
     end
 
-    module ClassMethods
+    module ActsAsMethods
       # Provides an ActiveRecord model with Content capabilities
       #
       # == Options
-      # <tt>reflection</tt>:: Name of the (usually <tt>belongs_to</tt>)association that relates this model with its Container. Defaults to <tt>:container</tt>
-      # <tt>entry</tt>:: Use Entry to track the relation between Content, Container and Agent. Default to <tt>false</tt>
+      # <tt>reflection</tt>:: Name of the (usually <tt>belongs_to</tt>) association that relates this model with its Container. Defaults to <tt>:container</tt>
+      # <tt>entry</tt>:: Deprecated: Use Entry to track the relation between Content, Container and Agent. Default to <tt>false</tt>
       def acts_as_content(options = {})
         ActiveRecord::Content.register_class(self)
 
@@ -74,7 +72,8 @@ module ActiveRecord #:nodoc:
         acts_as_sortable
         acts_as_categorizable
 
-        include ActiveRecord::Content::InstanceMethods
+        extend  ClassMethods
+        include InstanceMethods
         
         # Warning: this overwrites some methods, like in_container named scope
         if options[:entry]
@@ -82,7 +81,9 @@ module ActiveRecord #:nodoc:
         end
         
       end
+    end
 
+    module ClassMethods
       # The ActiveRecord reflection that represents the Container for this model
       def container_reflection
         reflections[content_options[:reflection]]

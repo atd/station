@@ -9,6 +9,7 @@ module ActiveRecord #:nodoc:
   # HTML encoding:: usually the result of HTML Forms, uses application/x-www-form-urlencoded or multipart/form-data
   # Raw:: binary data
   #
+  # Include this functionality in your models using ActsAsMethods#acts_as_resource
   module Resource
     class << self
       # Return the first Resource class supporting this Content Type
@@ -26,11 +27,11 @@ module ActiveRecord #:nodoc:
       def included(base) # :nodoc:
         # Fake named_scope to ActiveRecord instances that haven't children
         base.named_scope :parents, lambda  { {} }
-        base.extend ClassMethods
+        base.extend ActsAsMethods
       end
     end
 
-    module ClassMethods
+    module ActsAsMethods
       # Provides an ActiveRecord model with Resource capabilities
       #
       # Options:
@@ -64,9 +65,21 @@ module ActiveRecord #:nodoc:
 
         acts_as_sortable
 
-        include ActiveRecord::Resource::InstanceMethods
+        extend  ClassMethods
+        include InstanceMethods
       end
-      
+
+      # Find with params
+      def find_with_param(*args)
+        if respond_to?(:resource_options)
+          send "find_by_#{ resource_options[:param] }", *args
+        else
+          find *args
+        end
+      end
+    end
+
+    module ClassMethods
       # Array of Mime objects accepted by this Content
       def mime_types
         Array(resource_options[:mime_types]).map{ |m| Mime.const_get(m.to_sym.to_s.upcase) }
@@ -77,15 +90,6 @@ module ActiveRecord #:nodoc:
         list = mime_types.map{ |m| Array(m.to_s) + m.instance_variable_get("@synonyms") }.flatten
         list << "application/atom+xml;type=entry" if self.respond_to?(:from_atom)
         list.uniq.join(", ")
-      end
-
-      # Find with params
-      def find_with_param(*args)
-        if respond_to?(:resource_options)
-          send "find_by_#{ resource_options[:param] }", *args
-        else
-          find *args
-        end
       end
     end
 

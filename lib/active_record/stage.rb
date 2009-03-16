@@ -1,16 +1,18 @@
 module ActiveRecord #:nodoc:
+  # Each Stage defines an Authorization framework in your application.
+  #
+  # Stages have many Performances. A Performance defines the Role an Agent plays in the Stage
+  #
+  # Include Stage functionality in your models using ActsAsMethods#acts_as_stage
   module Stage
     class << self
       def included(base) #:nodoc:
-        base.extend ClassMethods
+        base.extend ActsAsMethods
       end
     end
 
-    module ClassMethods
-      # Provides an ActiveRecord model with Authorization capabilities
-      #
-      # Stages have Performance
-      #
+    module ActsAsMethods
+      # Provide a model with Stage functionality
       def acts_as_stage(options = {})
         ActiveRecord::Stage.register_class(self)
 
@@ -27,12 +29,15 @@ module ActiveRecord #:nodoc:
                  :dependent => :destroy,
                  :as => :stage
 
-        include ActiveRecord::Stage::InstanceMethods
+        extend  ClassMethods
+        include InstanceMethods
 
         send :attr_accessor, :_stage_performances
         after_save :_save_stage_performances!
       end
+    end
 
+    module ClassMethods
       # All Roles defined for this class
       def roles
         Role.find_all_by_stage_type self.to_s

@@ -1,5 +1,7 @@
 module ActiveRecord #:nodoc:
-  # Container(s) are models receiving Content(s) posted by Agent(s)
+  # A Container is a model that have many Contents
+  #
+  # Include this functionality in your modules using ActsAsMethods#acts_as_container
   module Container
     class << self
       def included(base) #:nodoc:
@@ -10,10 +12,8 @@ module ActiveRecord #:nodoc:
     module ActsAsMethods
       # Provides an ActiveRecord model with Container capabilities
       #
-      # Content(s) are posted by Agent(s) to Container(s), giving Entry(s)
-      #
       # Options:
-        # * <tt>contents</tt>: an Array of Contents that can be posted to this Container. Ex: [ :article, :image ]. Defaults to all available Content models.
+      # <tt>contents</tt>:: an Array of Contents that can be posted to this Container. Ex: [ :article, :image ]. Defaults to all available Content models.
       def acts_as_container(options = {})
         ActiveRecord::Container.register_class(self)
 
@@ -45,7 +45,7 @@ module ActiveRecord #:nodoc:
 
 
     # Instance methods can be redefined in each Model for custom features
-    module InstanceMethods
+    module InstanceMethods #:nodoc:
     end
   end
 end

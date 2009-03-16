@@ -1,8 +1,6 @@
-= CMS plugin
+= Content Management System plugin
 
-Content Management System plugin. 
-
-CMSplugin is to {Rails}[http://rubyonrails.org/] in Content Management Systems like 
+CMSplugin is to {Rails}[http://rubyonrails.org/] in Content Management like 
 {Rails}[http://rubyonrails.org/] is to {Ruby}[http://www.ruby-lang.org/] in Web Development.
 
   Rails     = Ruby  + Web Development
@@ -18,12 +16,12 @@ Documentation: http://cmsplugin.rubyforge.org/
 
 == Architecture
 
-You can add functionality to any of your ActiveRecord models:
+You can add this functionality to any of your ActiveRecord models:
 
 === Basic
 ActiveRecord::Resource:: a model that have, at least, {CRUD}[http://en.wikipedia.org/wiki/Create,_read,_update_and_delete] operations and can be imported/exported in different formats.
 ActiveRecord::Content:: a Resource that belongs to a Container.
-ActiveRecord::Container:: a model that host Contents.
+ActiveRecord::Container:: a model that have many Contents.
 ActiveRecord::Agent:: a model with authentication, authorization and potencial to perform actions over Resources.
 ActiveRecord::Stage:: a model that defines an Authorization framework for Agents.
 
