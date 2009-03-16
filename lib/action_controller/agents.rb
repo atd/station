@@ -8,6 +8,25 @@ module ActionController #:nodoc:
       end
     end
 
+    def index
+      # AtomPub feeds are ordered by Entry#updated_at
+      # TODO: move this to ActionController::Base#params_parser
+      if request.format == Mime::ATOM
+        params[:order], params[:direction] = "updated_at", "DESC"
+      end
+
+      @resources = model_class.parents.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+      instance_variable_set "@#{ model_class.to_s.tableize }", @resources
+      @agents = @resources
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.js
+        format.xml  { render :xml => @resources }
+        format.atom
+      end
+    end
+
     # Show agent
     #
     # Responds to Atom Service format, returning the Containers this Agent can post to
@@ -35,13 +54,13 @@ module ActionController #:nodoc:
         t(:new, :scope => model_class.to_s.underscore) :
         t(:join_to_site, :site => Site.current.name)
     end
-  
+
     # Create new Agent instance
     def create
       @agent = model_class.new(params[:agent])
 
       unless authenticated?
-        cookies.delete :auth_token unless authenticated?
+        cookies.delete :auth_token
         @agent.openid_identifier = session[:openid_identifier]
       end
 
