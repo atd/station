@@ -20,12 +20,6 @@ module ActiveRecord #:nodoc:
         cattr_reader :container_options
         class_variable_set "@@container_options", options
 
-        has_many :container_entries, 
-                 :class_name => "Entry",
-                 :dependent => :destroy,
-                 :as => :container
-
-
         acts_as_categories_domain
 
         # All Containers are Stages by default:

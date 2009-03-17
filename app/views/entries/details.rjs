@@ -1,4 +1,0 @@
-page.replace_html :content_info_center, :partial => "entry_details", :locals => { :entry => @entry }
-#page.visual_effect :highlight, :menu_entry_articles_container
-
-#

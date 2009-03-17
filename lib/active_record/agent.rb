@@ -89,11 +89,6 @@ module ActiveRecord #:nodoc:
           include Invite
         end
 
-        has_many :agent_entries,
-                 :class_name => "Entry",
-                 :dependent => :destroy,
-                 :as => :agent
-
         has_many :agent_performances, 
                  :class_name => "Performance", 
                  :dependent => :destroy,

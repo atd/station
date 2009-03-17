@@ -24,7 +24,7 @@ module ActionController #:nodoc:
     #   GET /:container_type/:container_id/contents.xml
     #   GET /:container_type/:container_id/contents.atom
     def index(&block)
-      # AtomPub feeds are ordered by Entry#updated_at
+      # AtomPub feeds are ordered by updated_at
       # TODO: move this to ActionController::Base#params_parser
       if request.format == Mime::ATOM
         params[:order], params[:direction] = "updated_at", "DESC"

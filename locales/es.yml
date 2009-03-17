@@ -101,12 +101,6 @@ es:
       one: "Borrar Contenido"
       other: "Borrar Contenidos"
 
-  entry:
-    one: "Entrada"
-    other: "Entradas"
-    other_in_container: "Entradas - {{container}}"
-    new: "Nueva Entrada"
-
   category:
     one: "Categoría"
     other: "Categorías"

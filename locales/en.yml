@@ -104,12 +104,6 @@ en:
       one: "Delete Content"
       other: "Delete Contents"
 
-  entry:
-    one: "Entry"
-    other: "Entries"
-    other_in_container: "Entries - {{container}}"
-    new: "New Entry"
-
   category:
     one: "Category"
     other: "Categories"
