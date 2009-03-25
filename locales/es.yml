@@ -5,9 +5,12 @@ es:
     config: "Configuración del Sitio"
     editing: "Editando la configuración del Sitio"
     updated: "La configuración del sitio se ha actualizado satisfactoriamente"
+    name: "Nombre"
+    description: "Descripción"
     domain: "Dominio"
+    email: "Correo electrónico"
+    logotype: "Logotipo"
     ssl: "SSL"
-    locale: "Idioma"
 
   login: "Entrar"
   login_to: "Entrar en {{site}}"

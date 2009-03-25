@@ -1,38 +1,33 @@
-<h1><%= t(:"site.config") %></h1>
+<h1><%= t('site.config') %></h1>
 
   <p>
-    <b><%= t(:name) %></b>: 
-    <%= sanitize current_site.name %>
+    <b><%= t('site.name') %></b>: 
+    <%= sanitize site.name %>
   </p>
 
   <p>
-    <b><%= t(:description) %></b>: 
-    <%= sanitize current_site.description %>
+    <b><%= t('site.description') %></b>: 
+    <%= sanitize site.description %>
   </p>
 
   <p>
-    <b><%= t(:"logotype.one") %></b>: 
-    <%= image_tag(icon_image(current_site)) %>
+    <b><%= t('site.logotype') %></b>: 
+    <%= image_tag(icon_image(site)) %>
   </p>
 
   <p>
-    <b><%= t(:"site.domain") %></b>: 
-    <%= sanitize current_site.domain %>
+    <b><%= t('site.domain') %></b>: 
+    <%= sanitize site.domain %>
   </p>
 
   <p>
-    <b><%= t(:"site.ssl") %></b>: 
-    <%= current_site.ssl? %>
+    <b><%= t('site.ssl') %></b>: 
+    <%= site.ssl? %>
   </p>
 
   <p>
-    <b><%= t(:email) %></b>: 
-    <%= sanitize current_site.email %>
-  </p>
-
-  <p>
-    <b><%= t(:"site.locale") %></b>: 
-    <%= sanitize current_site.locale %>
+    <b><%= t('site.email') %></b>: 
+    <%= sanitize site.email %>
   </p>
 
   <%= link_to t(:edit), edit_site_path %>

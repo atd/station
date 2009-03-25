@@ -80,7 +80,6 @@ class Init < ActiveRecord::Migration
       t.text   :description
       t.string :domain, :default => 'cms.example.org'
       t.string :email, :default => 'admin@example.org'
-      t.string :locale
       t.timestamps
     end
 
