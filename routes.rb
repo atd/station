@@ -33,7 +33,9 @@ resources :tags
 
 resource :site do |site|
   site.resources :entries, :categories
-  site.resources :performances, :requirements => { :site_id => Site.current.id }
+  if Site.table_exists?
+    site.resources :performances, :requirements => { :site_id => Site.current.id }
+  end
   site.resources *ActiveRecord::Content.symbols
 end
 
