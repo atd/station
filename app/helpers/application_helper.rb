@@ -47,43 +47,52 @@ module ApplicationHelper
   # <tt>:valid</tt>, <tt>:error</tt>, <tt>:warning</tt> and <tt>:info</tt>
   def notification_area
     returning '<div id="notification_area">' do |html|
-      for type in %w{ valid error warning info}
+      for type in %w{ valid error warning info notice}
         next if flash[type.to_sym].blank?
-        html << "<div class=\"#{ type }_action\">#{ flash[type.to_sym] }</div>"
+        html << "<div class=\"#{ type }\">#{ flash[type.to_sym] }</div>"
       end
       html << "</div>"
     end 
   end
 
+  # Prints link_icon_and_name of the resource author. If the resource hasn't author, uses Anonymous user.
   def link_author(resource)
     author = resource.respond_to?(:author) && resource.author ?
                resource.author :
                Anonymous.current
-    link_agent(author)
+    link_icon_and_name(author)
   end
 
-  def link_agent(agent)
+  # Prints the icon and name for the resource. If the resource is a SingularAgent, no link is printed.
+  def link_icon_and_name(resource, options = {})
     returning "" do |html|
-      html << link_to(image_tag(icon_image(agent), 
-                                :alt => "#{ sanitize agent.name } icon", 
-                                :title => sanitize(agent.name),
-                                :class => 'icon'))
-      html << ( agent.is_a?(SingularAgent) ?
-        agent.name :
-        link_to(sanitize(agent.name), polymorphic_path(agent)))
+      if resource.is_a?(SingularAgent)
+        html << image_tag(icon_image(resource, options), 
+                                     :alt => "[ #{ sanitize resource.name } icon ]",
+                                     :title => sanitize(resource.name),
+                                     :class => 'icon')
+        html << resource.name
+      else
+        html << link_to(image_tag(icon_image(resource, options), 
+                                  :alt => "[ #{ sanitize resource.name } icon ]",
+                                  :title => sanitize(resource.name),
+                                  :class => 'icon'), polymorphic_path(resource))
+        html << link_to(sanitize(resource.name), polymorphic_path(resource))
+      end
     end
   end
 
-  def link_icon(resource)
-    link_to(image_tag(icon_image(resource),
-                      :alt => "#{ resource.class } icon",
-                      :title => resource.class.to_s,
+  # Prints the icon_image for resource, linking it to the resource path.
+  def link_icon(resource, options = {})
+    link_to(image_tag(icon_image(resource, options),
+                      :alt => "#{ resource.respond_to?(:name) ? sanitize(resource.name) : resource.class } icon",
+                      :title => (resource.respond_to?(:title) ? sanitize(resource.title) : resource.class.to_s),
                       :class => 'icon'), resource)
   end
 
   # The path to the icon image for the object.
   #
-  # If the object is a Entry, returns the path for the icon of its Content. 
+  # If the object is a Logotype, returns the path for the Logotype data.
   #
   # If the object is an image, and it's already saved, it returns the path 
   # to the icon thumbnail. 
@@ -94,7 +103,7 @@ module ApplicationHelper
   #   icon_image(attachment) #=> .../application-pdf.png
   #   icon_image(xhtml_text) #=> .../xhtml_text.png
   #
-  # Finally, it first looks for the icon file in /public/images/icons, 
+  # Finally, it looks for the icon file in /public/images/icons, 
   # and at last in /public_assets/cmsplugin/images/icons
   #
   # Options:
@@ -102,9 +111,7 @@ module ApplicationHelper
   def icon_image(object, options = {})
     options[:size] ||= 16
 
-    if object.is_a?(Entry)
-      icon_image object.content
-    elsif object.is_a?(Logotype)
+    if object.is_a?(Logotype)
       "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=#{ options[:size] }"
     elsif ! object.new_record? &&
           object.respond_to?(:format) &&
@@ -113,7 +120,7 @@ module ApplicationHelper
           object.thumbnails.find_by_thumbnail('icon')
       "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=icon"
     elsif object.respond_to?(:logotype) && object.logotype
-      icon_image object.logotype
+      icon_image object.logotype, options
     else
       file = object.respond_to?(:mime_type) && object.mime_type ?
         object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
@@ -133,7 +140,7 @@ module ApplicationHelper
 
     returning "" do |html|
       html << '<p>'
-      html << link_to(image_tag(icon_image(content)), formatted_polymorphic_path([ content, content.format ]))
+      html << link_to(image_tag(icon_image(content), :site => 64), formatted_polymorphic_path([ content, content.format ]))
       html << '<br />'
       html << '<i>' + link_to(t(:preview_current, :scope => content.class.to_s.underscore), formatted_polymorphic_path([ content, content.format ])) + '</i>'
       html << '</p>'
