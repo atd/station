@@ -83,11 +83,16 @@ module ApplicationHelper
   end
 
   # Prints the icon_image for resource, linking it to the resource path.
+  #
+  # Options:
+  # url:: The URL that will be used in the link. Defaults to the resource.
   def link_icon(resource, options = {})
+    url = options.delete(:url) || resource
+
     link_to(image_tag(icon_image(resource, options),
                       :alt => "#{ resource.respond_to?(:name) ? sanitize(resource.name) : resource.class } icon",
                       :title => (resource.respond_to?(:title) ? sanitize(resource.title) : resource.class.to_s),
-                      :class => 'icon'), resource)
+                      :class => 'icon'), url)
   end
 
   # The path to the icon image for the object.
