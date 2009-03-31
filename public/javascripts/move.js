@@ -60,9 +60,9 @@ setTimeout(moveCommand, 50);
 
 //always change the image
 if (stateMove==0) {
-$(what+'_botton_'+direction).setStyle({
-    backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+".png')"
-    });
+//$(what+'_botton_'+direction).setStyle({
+//    backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+".png')"
+//    });
 }
 
 }
@@ -90,9 +90,10 @@ function makeScroll(direction,what) {
     if ((marginLeftWrapperArea)<5) {
     //the botton can move 
     //change image
-    $(what+'_botton_'+direction).setStyle({
-      backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+"_in_move.png')"
-    });
+    // FIXME not needed change image, just add active class TODO
+    //$(what+'_botton_'+direction).setStyle({
+    //  backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+"_in_move.png')"
+    //});
     //make move 
     resultedMargin=marginLeftWrapperArea+10;
     $(what+'_list').setStyle({
@@ -100,9 +101,9 @@ function makeScroll(direction,what) {
     });
     } else {
     //not more move, change the image 
-    $(what+'_botton_'+direction).setStyle({
-      backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+".png')"
-    });
+    //$(what+'_botton_'+direction).setStyle({
+    //  backgroundImage: "url('/plugin_assets/cmsplugin/images/move_css/box_arrow_"+direction+".png')"
+    //});
     }
   }
 }
