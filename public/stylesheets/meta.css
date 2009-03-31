@@ -2,7 +2,7 @@
   position: absolute;
   top: 5px;
   left: 15px;
-  min-height: 150px; height: 150px; max-height: 150px;
+  min-height: 40px; height: 40px; max-height: 40px;
   background-color: transparent;  /*background-color: black;*/
   text-align: left;
   width: 910px;

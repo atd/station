@@ -59,11 +59,6 @@
       </div>
     </div>
 
-    <!-- containers -->
-    <%= menu_box(:containers) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
-    <!-- agents -->
-    <%= menu_box(:agents) { |item| "#{ link_to(image_tag(icon_image(item), :alt => item.name + ' logo'), item) }<span class=\"box_unit_title\">#{ link_to item.name, item }</span>" } %>
-
     <!-- open menu content div -->
     <div id="contents">
        <!-- top menu content decoration, close it -->
