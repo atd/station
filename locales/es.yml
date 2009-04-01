@@ -123,23 +123,23 @@ es:
     other: "Etiquetas"
 
   performance:
-    other: "Actuaciones"
-    other_in: "Actuaciones en {{stage}}"
-    new: "Nueva Actuación"
+    other: "Integrantes"
+    other_in: "Integrantes de {{stage}}"
+    new: "Nuevo Integrante"
     create: 
-      one: "Crear Actuacione"
-      other: "Crear Actuaciones"
+      one: "Crear Integrante"
+      other: "Crear Integrantes"
     read:
-      one: "Ver Actuacione"
-      other: "Ver Actuaciones"
+      one: "Ver Integrante"
+      other: "Ver Integrantes"
     update:
-      one: "Actualizar Actuacione"
-      other: "Actualizar Actuaciones"
+      one: "Actualizar Integrante"
+      other: "Actualizar Integrantes"
     delete:
-      one: "Borrar Actuación"
-      other: "Borrar Actuaciones"
-    confirm_delete: "¿Borrar la Actuación?"
-    without_roles_available: "No hay ningún Rol disponible. Las Actuaciones no se pueden establecer."
+      one: "Borrar Integrante"
+      other: "Borrar Integrantes"
+    confirm_delete: "¿Borrar el Integrante?"
+    without_roles_available: "No hay ningún Rol disponible. Los Integrantes no se pueden establecer."
 
   role:
     one: "Rol"
