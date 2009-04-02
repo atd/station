@@ -103,8 +103,8 @@ module ApplicationHelper
   #   icon_image(attachment) #=> .../application-pdf.png
   #   icon_image(xhtml_text) #=> .../xhtml_text.png
   #
-  # Finally, it looks for the icon file in /public/images/icons, 
-  # and at last in /public_assets/cmsplugin/images/icons
+  # Finally, it looks for the icon file in /public/images/models, 
+  # and at last in /public_assets/cmsplugin/images/models
   #
   # Options:
   # size:: Size of the icon. Defaults to 16 pixels.
@@ -125,7 +125,7 @@ module ApplicationHelper
       file = object.respond_to?(:mime_type) && object.mime_type ?
         object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
         object.class.to_s.underscore
-      file = "icons/#{ options[:size] }/#{ file }.png"
+      file = "models/#{ options[:size] }/#{ file }.png"
 
       File.exists?("#{ RAILS_ROOT }/public/images/#{ file }") ?
         image_path(file) :
