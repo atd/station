@@ -9,7 +9,7 @@ module ActiveRecord #:nodoc:
                  :content,
                  :stage,
                  :taggable,
-                 :logotypable,
+                 :logoable,
                  :sortable,
                  :categories_domain,
                  :categorizable ]

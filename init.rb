@@ -35,7 +35,7 @@ for mod in [ ActionController::Move, ActionController::Authentication, ActionCon
 end
 
 # ActionView
-%w( categories tags performances logotype ).each do |item|
+%w( categories tags performances logo ).each do |item|
   require "action_view/helpers/form_#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.camelcase }Helper".constantize
 end

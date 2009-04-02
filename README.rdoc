@@ -29,7 +29,7 @@ ActiveRecord::Stage:: a model that defines an Authorization framework for Agents
 ActiveRecord::CategoriesDomain:: a model which instances define Ontology domains
 ActiveRecord::Categorizable:: a model that can be classified in any Category
 ActiveRecord::Taggable:: a model that can be tagged
-ActiveRecord::Logotypable:: a model with Logotype
+ActiveRecord::Logoable:: a model with Logo
 ActiveRecord::Sortable:: a model with a sortable list
 
 
@@ -42,7 +42,7 @@ ActiveRecord::Sortable:: a model with a sortable list
 * AtomPub protocol, {RFC 5023}[http://tools.ietf.org/html/rfc5023]
 * Taxonomies: Categories, Categories Domains
 * Folksonomies: Tags, Taggable models
-* Logotypes for models
+* Logos for models
 * Sortable lists for models
 
 == Requirements

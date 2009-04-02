@@ -1,8 +1,8 @@
-class Logotypables < ActiveRecord::Migration
+class Logoables < ActiveRecord::Migration
   def self.up
-    create_table :logotypes do |t|
-      t.integer  :logotypable_id
-      t.string   :logotypable_type
+    create_table :logos do |t|
+      t.integer  :logoable_id
+      t.string   :logoable_type
       t.integer  :size
       t.string   :content_type
       t.string   :filename
@@ -17,6 +17,6 @@ class Logotypables < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :logotypes
+    drop_table :logos
   end
 end

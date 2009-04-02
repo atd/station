@@ -50,10 +50,10 @@ resources(*(ActiveRecord::Container.symbols) - Array(:sites)) do |container|
   container.resources :entries, :categories
 end
 
-resources :logotypes
+resources :logos
 
-resources(*(ActiveRecord::Logotypable.symbols - Array(:sites))) do |logotypable|
-  logotypable.resource :logotype
+resources(*(ActiveRecord::Logoable.symbols - Array(:sites))) do |logoable|
+  logoable.resource :logo
 end
 
 resources :roles

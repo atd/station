@@ -12,7 +12,7 @@ en:
     description: "Description"
     domain: "Domain"
     email: "Email"
-    logotype: "Logotipo"
+    logo: "Logo"
     ssl: "SSL"
 
   login: "Log in"
@@ -171,9 +171,9 @@ en:
     new: "New Invitation"
     not_found: "Invitation not found"
 
-  logotype:
-    one: "Logotype"
-    preview_current: "Preview current Logotype"
+  logo:
+    one: "Logo"
+    preview_current: "Preview current Logo"
 
   detail:
     other: "Details"

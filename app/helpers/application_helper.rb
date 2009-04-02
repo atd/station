@@ -92,7 +92,7 @@ module ApplicationHelper
 
   # The path to the icon image for the object.
   #
-  # If the object is a Logotype, returns the path for the Logotype data.
+  # If the object is a Logo, returns the path for the Logo data.
   #
   # If the object is an image, and it's already saved, it returns the path 
   # to the icon thumbnail. 
@@ -111,7 +111,7 @@ module ApplicationHelper
   def icon_image(object, options = {})
     options[:size] ||= 16
 
-    if object.is_a?(Logotype)
+    if object.is_a?(Logo)
       "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=#{ options[:size] }"
     elsif ! object.new_record? &&
           object.respond_to?(:format) &&
@@ -119,8 +119,8 @@ module ApplicationHelper
           object.attachment_options[:thumbnails].keys.include?(:icon) &&
           object.thumbnails.find_by_thumbnail('icon')
       "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=icon"
-    elsif object.respond_to?(:logotype) && object.logotype
-      icon_image object.logotype, options
+    elsif object.respond_to?(:logo) && object.logo
+      icon_image object.logo, options
     else
       file = object.respond_to?(:mime_type) && object.mime_type ?
         object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
@@ -135,12 +135,14 @@ module ApplicationHelper
 
   # Show a preview of content if it's not null and it's not a new record. 
   # Preview consists of icon_image and a link to the content
-  def preview(content)
+  def preview(content, options = {})
     return "" unless content && ! content.new_record?
+
+    options[:size] ||= 64
 
     returning "" do |html|
       html << '<p>'
-      html << link_to(image_tag(icon_image(content), :site => 64), formatted_polymorphic_path([ content, content.format ]))
+      html << link_to(image_tag(icon_image(content, options.dup)), formatted_polymorphic_path([ content, content.format ]))
       html << '<br />'
       html << '<i>' + link_to(t(:preview_current, :scope => content.class.to_s.underscore), formatted_polymorphic_path([ content, content.format ])) + '</i>'
       html << '</p>'

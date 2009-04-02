@@ -9,7 +9,7 @@ es:
     description: "Descripción"
     domain: "Dominio"
     email: "Correo electrónico"
-    logotype: "Logotipo"
+    logo: "Logo"
     ssl: "SSL"
 
   login: "Entrar"
@@ -169,9 +169,9 @@ es:
     new: "Nueva Invitación"
     not_found: "Invitación no encontrada"
 
-  logotype:
-    one: "Logotipo"
-    preview_current: "Previsualizar Logotipo actual"
+  logo:
+    one: "Logo"
+    preview_current: "Previsualizar Logo actual"
 
   detail:
     other: "Detalles"

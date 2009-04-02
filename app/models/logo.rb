@@ -1,4 +1,4 @@
-class Logotype < ActiveRecord::Base
+class Logo < ActiveRecord::Base
   has_attachment :max_size => 2.megabyte,
                  :content_type => :image, 
                  :thumbnails => { 
@@ -14,14 +14,11 @@ class Logotype < ActiveRecord::Base
                  }
                  
   alias_attribute :media, :uploaded_data
-  attr_accessible :media
 
   belongs_to :db_file
-  belongs_to :logotypable , :polymorphic => true
+  belongs_to :logoable , :polymorphic => true
 
   validates_as_attachment
 
-  def format
-    Mime::Type.lookup(content_type).to_sym
-  end
+  acts_as_resource :disposition => :inline
 end
