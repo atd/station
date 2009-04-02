@@ -56,11 +56,11 @@ module ApplicationHelper
   end
 
   # Prints link_icon_and_name of the resource author. If the resource hasn't author, uses Anonymous user.
-  def link_author(resource)
+  def link_author(resource, options = {})
     author = resource.respond_to?(:author) && resource.author ?
                resource.author :
                Anonymous.current
-    link_icon_and_name(author)
+    link_icon_and_name(author, options)
   end
 
   # Prints the icon and name for the resource. If the resource is a SingularAgent, no link is printed.
