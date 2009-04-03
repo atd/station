@@ -49,6 +49,7 @@ es:
   index: "Índice"
   create: "Crear"
   create_: "Crear..."
+  upload: "Subir"
   show: "Ver"
   read: "Ver"
   edit: "Editar"
@@ -299,8 +300,8 @@ es:
     errors:
       template:
         header:
-          one:   "no se pudo guardar este {{model}} porque se encontró 1 error" 
-          other:  "no se pudo guardar este {{model}} porque se encontraron {{count}} errores" 
+          one:   "No se pudo guardar {{model}} porque se encontró 1 error" 
+          other:  "No se pudo guardar {{model}} porque se encontraron {{count}} errores" 
         # The variable :count is also available
         body: "Se encontraron problemas con los siguientes campos:" 
 
