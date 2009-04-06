@@ -1,5 +1,5 @@
-.valid_action {
-    background: #adf69e url('../images/notification_area/valid.png') no-repeat top left;
+.success_action {
+    background: #adf69e url('../images/notification_area/success.png') no-repeat top left;
     padding: 5px 10px 5px 24px;
     border: 1px solid #5bf43c;
 }

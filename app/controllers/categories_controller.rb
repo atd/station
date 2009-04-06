@@ -59,7 +59,7 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
-        flash[:valid] = t('category.created')
+        flash[:success] = t('category.created')
         format.html { redirect_to(@category) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
         format.js
@@ -78,7 +78,7 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update_attributes(params[:category])
-        flash[:valid] = t('category.updated')
+        flash[:success] = t('category.updated')
         format.html { redirect_to(@category) }
         format.xml  { head :ok }
       else

@@ -44,10 +44,10 @@ module ApplicationHelper
   end
 
   # Renders notification_area div if there is a flash entry for types: 
-  # <tt>:valid</tt>, <tt>:error</tt>, <tt>:warning</tt> and <tt>:info</tt>
+  # <tt>:valid</tt>, <tt>:error</tt>, <tt>:warning</tt>, <tt>:info</tt>, <tt>:notice</tt> and <tt>:success</tt>
   def notification_area
     returning '<div id="notification_area">' do |html|
-      for type in %w{ valid error warning info notice}
+      for type in %w{ valid error warning info notice success}
         next if flash[type.to_sym].blank?
         html << "<div class=\"#{ type }\">#{ flash[type.to_sym] }</div>"
       end

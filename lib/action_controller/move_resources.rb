@@ -118,7 +118,7 @@ module ActionController #:nodoc:
 
       respond_to do |format|
         if @resource.save
-          flash[:valid] = t(:created, :scope => @resource.class.to_s.underscore)
+          flash[:success] = t(:created, :scope => @resource.class.to_s.underscore)
           format.html { 
             redirect_to resource_or_content_path_args
           }
@@ -166,7 +166,7 @@ module ActionController #:nodoc:
 
         format.html {
           if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
-            flash[:valid] = t(:updated, :scope => @resource.class.to_s.underscore)
+            flash[:success] = t(:updated, :scope => @resource.class.to_s.underscore)
             redirect_to resource_or_content_path_args
           else
             render :action => 'edit'
