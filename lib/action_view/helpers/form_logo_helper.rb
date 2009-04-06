@@ -8,7 +8,7 @@ module ActionView #:nodoc:
       #
       # Options:
       # title:: Title of the form
-      def logo(object, options = {})
+      def logo_form(object, options = {})
         InstanceTag.new(object, :logo, self, options.delete(:object)).to_logo_tag(options)
       end
     end
@@ -31,7 +31,7 @@ module ActionView #:nodoc:
 
     class FormBuilder #:nodoc:
       def logo(options = {})
-        @template.logo(@object_name, options.merge(:object => @object))
+        @template.logo_form(@object_name, options.merge(:object => @object))
       end
     end
   end
