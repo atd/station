@@ -23,7 +23,7 @@ module ApplicationHelper
               @title
             elsif @contents
               container ?
-                t(:other_in_container, :scope => controller.controller_name.singularize) :
+                t(:other_in_container, :scope => controller.controller_name.singularize, :container => container.name) :
                 t(:other, :scope => controller.controller_name.singularize)
             elsif @resources
                 t(:other, :scope => controller.controller_name.singularize)
