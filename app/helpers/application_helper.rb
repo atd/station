@@ -6,6 +6,7 @@ module ApplicationHelper
   include SortableHelper
   include StagesHelper
   include TagsHelper
+  include LogosHelper
 
   # Get title in this order:
   # 1. string argument 
@@ -53,105 +54,6 @@ module ApplicationHelper
       end
       html << "</div>"
     end 
-  end
-
-  # Prints link_icon_and_name of the resource author. If the resource hasn't author, uses Anonymous user.
-  def link_author(resource, options = {})
-    author = resource.respond_to?(:author) && resource.author ?
-               resource.author :
-               Anonymous.current
-    link_icon_and_name(author, options)
-  end
-
-  # Prints the icon and name for the resource. If the resource is a SingularAgent, no link is printed.
-  def link_icon_and_name(resource, options = {})
-    returning "" do |html|
-      if resource.is_a?(SingularAgent)
-        html << image_tag(icon_image(resource, options), 
-                                     :alt => "[ #{ sanitize resource.name } icon ]",
-                                     :title => sanitize(resource.name),
-                                     :class => 'icon')
-        html << resource.name
-      else
-        html << link_to(image_tag(icon_image(resource, options), 
-                                  :alt => "[ #{ sanitize resource.name } icon ]",
-                                  :title => sanitize(resource.name),
-                                  :class => 'icon'), polymorphic_path(resource))
-        html << link_to(sanitize(resource.name), polymorphic_path(resource))
-      end
-    end
-  end
-
-  # Prints the icon_image for resource, linking it to the resource path.
-  #
-  # Options:
-  # url:: The URL that will be used in the link. Defaults to the resource.
-  def link_icon(resource, options = {})
-    url = options.delete(:url) || resource
-
-    link_to(image_tag(icon_image(resource, options),
-                      :alt => "#{ resource.respond_to?(:name) ? sanitize(resource.name) : resource.class } icon",
-                      :title => (resource.respond_to?(:title) ? sanitize(resource.title) : resource.class.to_s),
-                      :class => 'icon'), url)
-  end
-
-  # The path to the icon image for the object.
-  #
-  # If the object is a Logo, returns the path for the Logo data.
-  #
-  # If the object is an image, and it's already saved, it returns the path 
-  # to the icon thumbnail. 
-  #
-  # Else, it builds the file name based on mime type or, if the object 
-  # hasn't mime type, the class name tableized.
-  #
-  #   icon_image(attachment) #=> .../application-pdf.png
-  #   icon_image(xhtml_text) #=> .../xhtml_text.png
-  #
-  # Finally, it looks for the icon file in /public/images/models, 
-  # and at last in /public_assets/cmsplugin/images/models
-  #
-  # Options:
-  # size:: Size of the icon. Defaults to 16 pixels.
-  def icon_image(object, options = {})
-    options[:size] ||= 16
-
-    if object.is_a?(Logo)
-      "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=#{ options[:size] }"
-    elsif ! object.new_record? &&
-          object.respond_to?(:format) &&
-          object.respond_to?(:attachment_options) && 
-          object.attachment_options[:thumbnails].keys.include?(:icon) &&
-          object.thumbnails.find_by_thumbnail('icon')
-      "#{ formatted_polymorphic_path([object, object.format]) }?thumbnail=icon"
-    elsif object.respond_to?(:logo) && object.logo
-      icon_image object.logo, options
-    else
-      file = object.respond_to?(:mime_type) && object.mime_type ?
-        object.mime_type.to_s.gsub(/[\/\+]/, '-') : 
-        object.class.to_s.underscore
-      file = "models/#{ options[:size] }/#{ file }.png"
-
-      File.exists?("#{ RAILS_ROOT }/public/images/#{ file }") ?
-        image_path(file) :
-        image_path(file, :plugin => 'cmsplugin')
-    end
-  end
-
-  # Show a preview of content if it's not null and it's not a new record. 
-  # Preview consists of icon_image and a link to the content
-  def preview(content, options = {})
-    return "" unless content && ! content.new_record?
-
-    options[:size] ||= 64
-
-    returning "" do |html|
-      html << '<p>'
-      html << link_to(image_tag(icon_image(content, options.dup)), formatted_polymorphic_path([ content, content.format ]))
-      html << '<br />'
-      html << '<i>' + link_to(t(:preview_current, :scope => content.class.to_s.underscore), formatted_polymorphic_path([ content, content.format ])) + '</i>'
-      html << '</p>'
-    end
   end
 
   # Prints an atom <tt>link</tt> header for feed autodiscovery.
