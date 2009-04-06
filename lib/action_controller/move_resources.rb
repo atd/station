@@ -109,7 +109,14 @@ module ActionController #:nodoc:
       # Fill params when POSTing raw data
       set_params_from_raw_post
 
-      @resource = model_class.new(params[model_class.to_s.underscore.to_sym])
+      resource_params = params[model_class.to_s.underscore.to_sym]
+      resource_class =
+        model_class.resource_options[:delegate_content_types] &&
+        resource_params[:media] && resource_params[:media].present? &&
+        ActiveRecord::Resource.class_supporting(resource_params[:media].content_type) ||
+        model_class
+
+      @resource = resource_class.new(resource_params)
       instance_variable_set "@#{ model_class.to_s.underscore }", @resource
       @content = @resource if @resource.class.acts_as?(:content)
 

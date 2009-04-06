@@ -40,6 +40,7 @@ module ActiveRecord #:nodoc:
       # * <tt>:param</tt> - used to find and build the URLs. Defaults to <tt>:id</tt>
       # * <tt>:disposition</tt> - specifies whether the Resource will be shown inline or as attachment (see Rails send_file method). Defaults to :attachment
       # * <tt>:per_page</tt> - number of Resources shown per page, using will_pagination plugin. Defaults to 9
+      # * <tt>:delegate_content_types</tt> - allow using ActiveRecord::Resource.class_supporting for finding the class most suitable for some media. This is useful if you have a generic model for Attachments, but specific files like images or audios should be managed by other classes. Defaults to <tt>false</tt>
       #
       def acts_as_resource(options = {})
         ActiveRecord::Resource.register_class(self)
@@ -47,6 +48,7 @@ module ActiveRecord #:nodoc:
         options[:param]       ||= :id
         options[:disposition] ||= :attachment
         options[:per_page]    ||= 9
+        options[:delegate_content_types] ||= false
 
         if options[:has_media] == :attachment_fu
           alias_attribute :media, :uploaded_data
