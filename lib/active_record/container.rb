@@ -22,9 +22,6 @@ module ActiveRecord #:nodoc:
 
         acts_as_categories_domain
 
-        # All Containers are Stages by default:
-        send(:acts_as_stage) unless respond_to?(:stage_options)
-
         extend  ClassMethods
         include InstanceMethods
       end

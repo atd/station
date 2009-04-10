@@ -12,6 +12,9 @@ config.gem 'atd-calendar_date_select', :lib => 'calendar_date_select',
 require 'move/core_ext'
 
 # ActiveRecord
+require 'active_record/authorization'
+ActiveRecord::Base.send :include, ActiveRecord::Authorization
+
 require 'active_record/acts_as'
 ActiveRecord::Base.extend ActiveRecord::ActsAs
 

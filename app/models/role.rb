@@ -21,4 +21,8 @@ class Role < ActiveRecord::Base
   def <=>(other)
     (permissions - other.permissions ).size - (other.permissions - permissions).size
   end
+
+  def actions
+    permissions.map{ |p| ActiveRecord::Authorization::Action.new(p.action, p.objective) }
+  end
 end

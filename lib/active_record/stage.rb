@@ -24,6 +24,8 @@ module ActiveRecord #:nodoc:
                  :dependent => :destroy,
                  :as => :stage
 
+        reflection_affordances :stage
+
         has_many :stage_invitations,
                  :class_name => "Invitation",
                  :dependent => :destroy,
@@ -46,40 +48,6 @@ module ActiveRecord #:nodoc:
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
-      # agent is authorized in the Stage if its Role has a Permission
-      # matching action_objective
-      #
-      # If the Stage is also a Content, it has entries, authorizes? looks for authorization
-      # in those entries' Containers.
-      #
-      # action_objective can be:
-      # Symbol or String:: describes the action of the Permission. Objective will be :self
-      #   stage.authorizes?(agent, :update)
-      # Array:: pair of :action, :objective
-      #   stage.authorizes?(agent, [ :create, :Attachment ])
-      #
-      def authorizes?(agent, action_objective)
-        if respond_to?(:content_entries) && 
-           (action_objective.is_a?(Symbol) || action_objective.is_a?(String))
-          content_entries.map(&:container).map{ |c| 
-            if c.authorizes?(agent, [ action_objective, :Content ]) || 
-               c.authorizes?(agent, [ action_objective, self.class.to_s ]) 
-              return true
-            end
-          }
-        end
-
-        action_objective = Array(action_objective)
-        action_objective << :self unless action_objective.size > 1
-
-        permission = action_objective.is_a?(Permission) ?
-          action_objective :
-          Permission.find_by_action_and_objective(*action_objective.map(&:to_s))
-
-        role_for(agent) && role_for(agent).permissions.include?(permission) ||
-          role_for(Anyone.current) && role_for(Anyone.current).permissions.include?(permission)
-      end
-
       # True if agent has a Performance in this Stage.
       #
       # Options:
@@ -111,6 +79,10 @@ module ActiveRecord #:nodoc:
       # TODO: conditions (roles, etc...)
       def actors
         stage_performances.map(&:agent)
+      end
+
+      def stage_affordances
+        stage_performances.map(&:affordances).flatten
       end
 
       private

@@ -65,9 +65,11 @@ module ActiveRecord #:nodoc:
           { :conditions => conditions }
         }
 
-        acts_as_stage
         acts_as_sortable
         acts_as_categorizable
+
+        reflection_affordances :container,
+                               :objective => :content
 
         extend  ClassMethods
         include InstanceMethods
@@ -86,6 +88,10 @@ module ActiveRecord #:nodoc:
       # Obsolete?  
       def posted_in?(container)
         container == self.container
+      end
+
+      def container_affordances
+        container.affordances
       end
     end
 
