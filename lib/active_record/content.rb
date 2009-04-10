@@ -135,7 +135,7 @@ module ActiveRecord #:nodoc:
         end
 
         def count(options = {})
-          count_by_sql "SELECT COUNT(*) FROM (#{ query(options) })"
+          count_by_sql "SELECT COUNT(*) FROM (#{ query(options) }) AS all_contents"
         end
       end
     end
