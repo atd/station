@@ -5,6 +5,9 @@ module ActionController #:nodoc:
     class << self
       def included(base) #:nodoc:
         base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
+        base.class_eval do                              # class Article
+          alias_method controller_name.singularize, :resource  #   alias_method :article, :resource
+        end                                             # end
         base.send :include, ActionController::Authorization unless base.ancestors.include?(ActionController::Authorization)
       end
     end
@@ -30,7 +33,9 @@ module ActionController #:nodoc:
         params[:order], params[:direction] = "updated_at", "DESC"
       end
 
-      @resources = model_class.parents.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+      @conditions ||= nil
+
+      @resources = model_class.parents.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
       @contents = @resources if model_class.acts_as?(:content)
 
@@ -160,10 +165,8 @@ module ActionController #:nodoc:
       resource
 
       respond_to do |format| 
-        xml_formats = [ :atom, :all ]
-        xml_formats << resource.format if resource.format
-
-        format.any(*xml_formats) {
+        #FIXME: DRY
+        format.all {
           if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
             head :ok
           else
@@ -179,6 +182,23 @@ module ActionController #:nodoc:
             render :action => 'edit'
           end
         }
+
+        format.atom {
+          if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
+            head :ok
+          else
+            render :xml => @resource.errors.to_xml, :status => :not_acceptable
+          end
+        }
+
+        format.send(resource.format) {
+          if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
+            head :ok
+          else
+            render :xml => @resource.errors.to_xml, :status => :not_acceptable
+          end
+        } if resource.format
+
       end
     end
 
