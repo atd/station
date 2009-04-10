@@ -19,7 +19,7 @@ module ApplicationHelper
   #
   def title(new_title = "", options = {})
     title = if new_title.present?
-              new_title
+              new_title.dup
             elsif @title
               @title
             elsif @contents
