@@ -51,18 +51,7 @@ module ActiveRecord #:nodoc:
         attr_protected :container, :container_id, :container_type
 
         named_scope :in_container, lambda { |container|
-          conditions = HashWithIndifferentAccess.new
-
-          if container && container.class.acts_as?(:container)
-            conditions["#{ table_name }.#{ container_reflection.primary_key_name }"] =
-              container.id
-            if container_reflection.options[:polymorphic]
-              conditions["#{ table_name }.#{ container_reflection.options[:foreign_type] }"] =
-              container.class.base_class.to_s
-            end
-          end
-
-          { :conditions => conditions }
+          { :conditions => container_conditions(container) }
         }
 
         acts_as_sortable
@@ -80,6 +69,25 @@ module ActiveRecord #:nodoc:
       # The ActiveRecord reflection that represents the Container for this model
       def container_reflection
         reflections[content_options[:reflection]]
+      end
+
+      def container_conditions(container)
+        case container
+        when NilClass
+          ""
+        when Array
+          container.map{ |c| container_conditions(c) }.join(" OR ")
+        else
+          if container.class.acts_as?(:container)
+            c = "#{ table_name }.#{ container_reflection.primary_key_name } = '#{ container.id }'"
+            if container_reflection.options[:polymorphic]
+              c << " AND #{ table_name }.#{ container_reflection.options[:foreign_type] } = '#{ container.class.base_class }'"
+            end
+            "(#{ c })"
+          else
+            ""
+          end
+        end
       end
     end
 
@@ -102,11 +110,19 @@ module ActiveRecord #:nodoc:
       class << self
         def query(options = {})
           options[:select]   ||= "id, title, created_at, updated_at"
-          container = options.delete(:container)
+          containers = options.delete(:container)
 
-          content_classes = container ?
-                             container.class.contents.map(&:to_class) :
-                             ActiveRecord::Content.classes
+          containers.blank? ?
+          container_query(nil, options) :
+          Array(containers).map{ |c| container_query(c, options) }.join(" UNION ")
+        end
+
+        def container_query(container, options = {})
+          content_classes = ( container ?  
+            container.class.contents.map{ |c|
+              c.to_class }.flatten.uniq :
+            ActiveRecord::Content.symbols.map(&:to_class) )
+
 
           content_classes.map { |content|
             params = Hash.new.replace options
