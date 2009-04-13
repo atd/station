@@ -4,6 +4,10 @@ module ActionController #:nodoc:
   #
   # For permissions issues in your Controllers, see ActionController::Authorization
   #
+  # == Authentication Filters
+  # You can define authentication filters in the following way:
+  #   authentication_filter, :except => [ :index ]
+  #
   # == Current Agent
   # There are some methods available to access the Agent
   # that is requesting some action
@@ -37,26 +41,11 @@ module ActionController #:nodoc:
     def self.included(base) # :nodoc:
       base.send :helper_method, :current_agent, :authenticated?, :logged_in?
 
-      # Fix method_missing handling in ActionController::Base#perform_action
-      # 
-      # method_missing is not defined in ActionController::Base. 
-      # When adding alias_method_chains on method_missing
-      # we have to define first method_missing 
-      # so it is called at the end of the chain
-      # FIXME:
-      # there is a bug when the method is called from the Helper,
-      # it renders the template over and over again
-      # so this is now disabled
-      #
-#        base.class_eval do
-#          def method_missing(method, *args, &block)
-#            if template_exists? && template_public?
-#              default_render
-#            else
-#              raise ActionController::UnknownAction, "No action responded to #{method}", caller
-#            end
-#          end
-#        end unless base.instance_methods.include?('method_missing')
+      class << base
+        def authentication_filter(options = {})
+          before_filter :authentication_required, options
+        end
+      end
 
       # Add "current_#{ agent_type}" methods..
       current_polymorphic_agent_proc = lambda do
