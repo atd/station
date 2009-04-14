@@ -78,22 +78,24 @@ module ActiveRecord #:nodoc:
         case column
         when Symbol
           @content = column
-          @name = I18n.t(column).is_a?(String) ? 
-                    I18n.t(column) :
-                    I18n.t("#{ column }.one")
+          @name = column
           @order = column.to_s
           @sortable = true
         when Hash
           @content = column[:content]
-          @name = column[:name] || 
-                  column[:content] && column[:content].is_a?(Symbol) && 
-                  ( I18n.t(column[:content]).is_a?(String) ?
-                      I18n.t(column[:content]) :
-                      I18n.t("#{ column[:content] }.one") )
-
+          @name = column[:name] || column[:content]
           @order = column[:order] || column[:content] && column[:content].is_a?(Symbol) && column[:content].to_s || ""
           @sortable = column[:sortable] || true
           @render = column[:render]
+        end
+      end
+
+      def name
+        case @name
+        when Symbol
+          I18n.t("#{ @name }.one")
+        else
+          @name
         end
       end
 
