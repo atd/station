@@ -80,6 +80,8 @@ class Init < ActiveRecord::Migration
       t.text   :description
       t.string :domain, :default => 'cms.example.org'
       t.string :email, :default => 'admin@example.org'
+      t.boolean :exception_notifications, :default => false
+      t.string :exception_notifications_email
       t.timestamps
     end
 

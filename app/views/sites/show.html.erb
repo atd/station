@@ -30,4 +30,14 @@
     <%= sanitize site.email %>
   </p>
 
+  <p>
+    <b><%= t('site.exception_notifications') %></b>:
+    <%= site.exception_notifications? %>
+  </p>
+
+  <p>
+    <b><%= t('site.exception_notifications_email') %></b>:
+    <%= sanitize site.exception_notifications_email %>
+  </p>
+
   <%= link_to t(:edit), edit_site_path %>

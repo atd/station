@@ -4,34 +4,44 @@
 
 <% form_for(:site, :url => site_path, :html => { :method => :put, :multipart => true }) do |f| %>
   <p>
-    <b><%= t('site.name') %></b><br />
+    <%= f.label :name, t('site.name') %><br />
     <%= f.text_field :name %>
   </p>
 
   <p>
-    <b><%= t('site.description') %></b><br />
+    <%= f.label :description, t('site.description') %><br />
     <%= f.text_area :description %>
   </p>
 
   <p>
-    <b><%= t('site.logo') %></b><br />
+    <%= f.label :logo, t('site.logo') %><br />
     <%= file_field_tag "site[_logo][media]" %>
     <%= preview site.logo %>
   </p>
 
   <p>
-    <b><%= t('site.domain') %></b><br />
+    <%= f.label :domain, t('site.domain') %><br />
     <%= f.text_field :domain %>
   </p>
 
   <p>
-    <b><%= t('site.ssl') %></b><br />
+    <%= f.label :ssl, t('site.ssl') %><br />
     <%= f.check_box :ssl %>
   </p>
 
   <p>
-    <b><%= t('site.email') %></b><br />
+    <%= f.label :email, t('site.email') %><br />
     <%= f.text_field :email %>
+  </p>
+
+  <p>
+    <%= f.label :exception_notifications, t('site.exception_notifications') %><br />
+    <%= f.check_box :exception_notifications %>
+  </p>
+
+  <p>
+    <%= f.label :exception_notifications_email, t('site.exception_notifications_email') %><br />
+    <%= f.text_field :exception_notifications_email %>
   </p>
 
   <p>

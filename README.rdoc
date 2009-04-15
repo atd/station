@@ -44,6 +44,7 @@ ActiveRecord::Sortable:: a model with a sortable list
 * Folksonomies: Tags, Taggable models
 * Logos for models
 * Sortable lists for models
+* Integration with exception_notification plugin
 
 == Requirements
 
@@ -68,6 +69,9 @@ see vendor/plugins/engines/README to finish the instalation (don't forget to mod
 
 To install CMSplugin, run:
   script/plugin install git://github.com/atd/cmsplugin.git
+
+Install exception_notification plugin if you want to receive debug emails
+  script/plugin install git://github.com/rails/exception_notification.git
 
 === Gems
 

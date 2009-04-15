@@ -66,3 +66,22 @@ file_patterns.each do |file_pattern|
     end
   end
 end
+
+# ExceptionNotifier Integration
+begin
+  def ExceptionNotifier.set_from_site(site)
+    if site.respond_to?(:exception_notifications) && site.exception_notifications
+      self.exception_recipients = Array(site.exception_notifications_email)
+      self.sender_address = %("#{ site.name }" <#{ site.email }>)
+    end
+  end
+
+  if Site.table_exists?
+    ExceptionNotifier.set_from_site(Site.current)
+  end
+
+  ActionController::Base.send :include, ExceptionNotifiable
+rescue NameError => e
+  #TODO: print message when Site.current.exception_notifications is true but
+  # exception_notification plugin is missing
+end

@@ -11,6 +11,8 @@ es:
     email: "Correo electrónico"
     logo: "Logo"
     ssl: "SSL"
+    exception_notifications: "Enviar correos de depuración"
+    exception_notifications_email: "Dirección destinataria de los correos de depuración"
 
   login: "Entrar"
   login_to: "Entrar en {{site}}"

@@ -14,6 +14,8 @@ en:
     email: "Email"
     logo: "Logo"
     ssl: "SSL"
+    exception_notifications: "Send debug emails"
+    exception_notifications_email: "Debug emails recipient"
 
   login: "Log in"
   login_to: "Log in {{site}}"
