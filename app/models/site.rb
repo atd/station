@@ -5,6 +5,7 @@
 #
 # You must have the plugin installed
 class Site < ActiveRecord::Base
+  acts_as_stage
   acts_as_container
   has_logo
 
