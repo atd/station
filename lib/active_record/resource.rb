@@ -50,13 +50,16 @@ module ActiveRecord #:nodoc:
         options[:per_page]    ||= 9
         options[:delegate_content_types] ||= false
 
+        named_scope :parents, lambda {
+          column_names.include?('parent_id') ?
+          { :conditions => { :parent_id => nil } } :
+          {}
+        }
+
         if options[:has_media] == :attachment_fu
           alias_attribute :media, :uploaded_data
-
-          named_scope :parents, lambda {
-            { :conditions => { :parent_id => nil } }
-          } if column_names.include?('parent_id')
         end
+
         attr_protected :author, :author_id, :author_type
 
         cattr_reader :resource_options
