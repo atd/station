@@ -5,9 +5,9 @@ module ActionController #:nodoc:
     class << self
       def included(base) #:nodoc:
         base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
-        base.class_eval do                              # class Article
+        base.class_eval do                                     # class Article
           alias_method controller_name.singularize, :resource  #   alias_method :article, :resource
-        end                                             # end
+        end                                                    # end
         base.send :include, ActionController::Authorization unless base.ancestors.include?(ActionController::Authorization)
       end
     end
