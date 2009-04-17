@@ -5,7 +5,9 @@ module TagsHelper
       if taggable.tags.any?
         html << "<strong>#{ t('tag.other') }</strong>: "
         html << taggable.tags.map { |t| 
-          link_to(t.name, tag_path(t), :rel => "tag") }.join(", ")
+#          link_to(t.name, tag_path(t), :rel => "tag") 
+                  sanitize t.name
+                }.join(", ")
       end
       html << '</div>'
     end
