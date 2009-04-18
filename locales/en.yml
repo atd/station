@@ -86,6 +86,8 @@ en:
       name: "Anonymous"
     anyone:
       name: "Anyone"
+    authenticated:
+      name: "Authenticated"
   container:
     one: "Container"
     other: "Containers"

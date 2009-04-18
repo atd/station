@@ -18,4 +18,4 @@ end
 
 class Anonymous < SingularAgent ; end
 class Anyone < SingularAgent ; end
-
+class Authenticated < SingularAgent ; end

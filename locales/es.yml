@@ -84,6 +84,8 @@ es:
       name: "Anónimo"
     anyone:
       name: "Cualquiera"
+    authenticated:
+      name: "Registrado"
   container:
     one: "Contenedor"
     other: "Contenedores"

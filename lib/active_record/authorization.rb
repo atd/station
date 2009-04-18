@@ -53,6 +53,9 @@ module ActiveRecord #:nodoc:
           candidates |= affordances.select{ |a| a.agent == options[:agent] }
         end
 
+        unless options[:agent].is_a?(SingularAgent)
+          candidates |= affordances.select{ |a| a.agent?(Authenticated.current) }
+        end
         candidates |= affordances.select{ |a| a.anyone? }
 
         if options[:action]

@@ -23,6 +23,7 @@ if SingularAgent.table_exists?
   SingularAgent
   Anonymous.current
   Anyone.current
+  Authenticated.current
 end
 
 # Mime Types
