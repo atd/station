@@ -31,10 +31,11 @@ class ContentGenerator < ScaffoldGenerator
 
       m.template 'index.html.erb', File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
       m.template 'show.html.erb', File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
-      m.template 'show.erb', File.join('app/views', controller_class_path, controller_file_name, "_#{ singular_name }.erb")
+      m.template 'show.erb', File.join('app/views', controller_class_path, controller_file_name, "_#{ controller_singular_name }.html.erb")
       m.template 'new.html.erb', File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
-      m.template 'form.erb', File.join('app/views', controller_class_path, controller_file_name, "_form.erb")
-      m.template 'atom_entry.builder', File.join('app/views', controller_class_path, controller_file_name, "_atom_entry.builder")
+      m.template 'form.erb', File.join('app/views', controller_class_path, controller_file_name, "_form.html.erb")
+      m.template 'index.atom.builder', File.join('app/views', controller_class_path, controller_file_name, "index.atom.builder")
+      m.template 'partial.atom.builder', File.join('app/views', controller_class_path, controller_file_name, "_#{ controller_singular_name }.atom.builder")
 
       m.dependency 'model', [name] + @args, :collision => :skip
       #FIXME: we should reopen the file and add acts_as_content method
