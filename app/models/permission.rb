@@ -4,9 +4,9 @@ class Permission < ActiveRecord::Base
   validates_presence_of :action
 
   def title
-    objective == 'self' ?
-      I18n.t(action) :
-      I18n.t(action, :scope => objective.underscore, :count => :other)
+    objective ?
+      I18n.t(action, :scope => objective.underscore, :count => :other) :
+      I18n.t(action)
   end
 
   def <=>(other)
