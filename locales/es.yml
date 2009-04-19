@@ -16,7 +16,7 @@ es:
 
   login: "Entrar"
   login_to: "Entrar en {{site}}"
-  logged_in_successfully: "Identificado satisfactoriamente"
+  logged_in_successfully: "Credenciales válidas"
   logout: "Salir"
   logged_out: "Has salido de la aplicación"
   join: "Unirse"
