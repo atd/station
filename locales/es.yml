@@ -57,6 +57,7 @@ es:
   edit: "Editar"
   update: "Actualizar"
   back: "Atrás"
+  save: "Guardar"
   send: "Enviar"
   delete: "Borrar"
   action:
@@ -75,6 +76,7 @@ es:
     authentication:
       login: "Login"
       password: "Contraseña"
+      change_password: "Cambiar la contraseña"
       confirm_password: "Confirme la Contraseña"
       forgotten_password: "¡Olvidé la contraseña!"
     select:

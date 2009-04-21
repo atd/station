@@ -59,6 +59,7 @@ en:
   edit: "Edit"
   update: "Update"
   back: "Back"
+  save: "Save"
   send: "Send"
   delete: "Delete"
   action:
@@ -77,6 +78,7 @@ en:
     authentication:
       login: "Login"
       password: "Password"
+      change_password: "Change Password"
       confirm_password: "Confirm Password"
       forgotten_password: "I forgot the password!"
     select:
