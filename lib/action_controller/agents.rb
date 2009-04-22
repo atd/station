@@ -100,7 +100,7 @@ module ActionController #:nodoc:
       end
     end
   
-    def forgot_password
+    def lost_password
       if params[:email]
         @agent = model_class.find_by_email(params[:email])
         unless @agent
@@ -108,9 +108,9 @@ module ActionController #:nodoc:
           return
         end
   
-        @agent.forgot_password
-        flash[:info] = t(:password_reset_link_sent_to_email_address)
-        redirect_to("/")
+        @agent.lost_password
+        flash[:notice] = t(:password_reset_link_sent_to_email_address)
+        redirect_to root_path
       end
     end
   

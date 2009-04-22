@@ -16,9 +16,9 @@ if ActiveRecord::Agent.activation_class
            :controller => ActiveRecord::Agent.activation_class.to_s.tableize, 
            :action => 'activate', 
            :activation_code => nil
-  forgot_password 'forgot_password', 
+  lost_password 'lost_password', 
                   :controller => ActiveRecord::Agent.activation_class.to_s.tableize,
-                  :action => 'forgot_password'
+                  :action => 'lost_password'
   reset_password 'reset_password/:reset_password_code', 
                  :controller => ActiveRecord::Agent.activation_class.to_s.tableize,
                  :action => 'reset_password',

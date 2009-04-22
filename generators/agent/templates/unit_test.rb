@@ -21,7 +21,7 @@ class <%= class_name %>Test < Test::Unit::TestCase
 
   def test_should_initialize_reset_password_code
     u = <%= table_name %>(:quentin)
-    u.forgot_password
+    u.lost_password
     assert_not_nil u.reset_password_code
   end
 

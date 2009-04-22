@@ -33,8 +33,8 @@ module ActiveRecord #:nodoc:
 
       # Activate agent recovery password mechanism. 
       # Generates password reset code
-      def forgot_password
-        @forgotten_password = true
+      def lost_password
+        @lost_password = true
         self.make_reset_password_code
         save(false)
       end
@@ -52,8 +52,8 @@ module ActiveRecord #:nodoc:
       end
 
       # Did the agent recently asked for password reset?
-      def recently_forgot_password?
-        @forgotten_password
+      def recently_lost_password?
+        @lost_password
       end
 
 

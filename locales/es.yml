@@ -39,9 +39,9 @@ es:
   reset_password: "Cambiar Contraseña"
   request_change_password: "Petición de cambio de contraseña"
   follow_reset_password: "{{agent}}, siga el enlace para cambiar su contraseña"
-  password_reset_link_sent_to_email_address: "Un enlace para cambiar la contraseña se ha enviado a la dirección de correo"
-  password_has_been_reset: "Su contraseña ha sido cambiada"
-  password_has_been_reset_with_agent: "{{agent}}, su contraseña ha sido cambiada"
+  password_reset_link_sent_to_email_address: "Se ha enviado a la dirección de correo un enlace para cambiar la contraseña"
+  password_has_been_reset: "La contraseña se ha cambiado"
+  password_has_been_reset_with_agent: "{{agent}}, su contraseña se ha cambiado"
   invalid_password_reset_code: "Código de cambio inválido. Por favor, compruebe en enlace e inténtelo otra vez. (Consejo: ¿Quizá su cliente de correo rompió el enlace?)"
 
   user:
@@ -78,7 +78,7 @@ es:
       password: "Contraseña"
       change_password: "Cambiar la contraseña"
       confirm_password: "Confirme la Contraseña"
-      forgotten_password: "¡Olvidé la contraseña!"
+      lost_password: "¡Olvidé la contraseña!"
     select:
       one: "Seleccionar Agente"
   singular_agent:

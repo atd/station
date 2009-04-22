@@ -161,12 +161,12 @@ class AgentGenerator < Rails::Generator::NamedBase
       end
 
       if options[:include_activation]
-        for action in %w( forgot_password.html.erb reset_password.html.erb ) do
+        for action in %w( lost_password.html.erb reset_password.html.erb ) do
           m.template action, File.join('app/views', model_controller_class_path, model_controller_file_name, action)
         end
 
         # Mailer templates
-        for action in %w( activation signup_notification forgot_password reset_password )
+        for action in %w( activation signup_notification lost_password reset_password )
           m.template "mailer_#{action}.text.plain.erb",
                      File.join('app/views', "#{file_name}_mailer", "#{action}.html.erb")
         end
@@ -193,7 +193,7 @@ class AgentGenerator < Rails::Generator::NamedBase
         puts %(map.logout '/logout', :controller => '#{controller_file_name}', :action => 'destroy')
         if options[:include_activation]
           puts %(map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate')
-          puts %(map.forgot_password '/forgot_password', :controller => '#{model_controller_file_name}', :action => 'forgot_password')
+          puts %(map.lost_password '/lost_password', :controller => '#{model_controller_file_name}', :action => 'lost_password')
           puts %(map.reset_password '/reset_password/:reset_password_code', :controller => '#{model_controller_file_name}', :action => 'reset_password')
           puts
           puts "Don't forget to:"

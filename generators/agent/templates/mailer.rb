@@ -6,6 +6,7 @@ class <%= class_name %>Mailer < ActionMailer::Base
     @body[:url]  = "http://#{ Site.current.domain }/activate/#{<%= file_name %>.activation_code}"
   <% else %>
     @body[:url]  = "http://#{ Site.current.domain}/login/" <% end %>
+  <% end %>
   end
   
   def activation(<%= file_name %>)
@@ -14,7 +15,7 @@ class <%= class_name %>Mailer < ActionMailer::Base
     @body[:url]  = "http://#{ Site.current.domain }/"
   end
 
-  def forgot_password(<%= file_name %>)
+  def lost_password(<%= file_name %>)
     setup_email(<%= file_name %>)
     @subject    += I18n.t(:request_change_password)
     @body[:url]  = "http://#{ Site.current.domain }/reset_password/#{ <%= file_name %>.reset_password_code }"
@@ -23,13 +24,14 @@ class <%= class_name %>Mailer < ActionMailer::Base
   def reset_password(<%= file_name %>)
     setup_email(<%= file_name %>)
     @subject    += I18n.t(:password_has_been_reset)
+    @body[:url]  = "http://#{ Site.current.domain }/"
   end
   
   protected
     def setup_email(<%= file_name %>)
       @recipients  = "#{<%= file_name %>.email}"
       @from        = Site.current.email
-      @subject     = "[YOURSITE] "
+      @subject     = "[#{ Site.current.name }] "
       @sent_on     = Time.now
       @body[:<%= file_name %>] = <%= file_name %>
     end

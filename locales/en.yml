@@ -80,7 +80,7 @@ en:
       password: "Password"
       change_password: "Change Password"
       confirm_password: "Confirm Password"
-      forgotten_password: "I forgot the password!"
+      lost_password: "I lost the password!"
     select:
       one: "Select Agent"
   singular_agent:
