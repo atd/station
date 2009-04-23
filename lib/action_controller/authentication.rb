@@ -25,7 +25,7 @@ module ActionController #:nodoc:
   #
   # == Filters
   # authentication_required:: The action requires to be performed by an 
-  #                           authenticated Agent. Calls access_denied 
+  #                           authenticated Agent. Calls not_authenticated 
   #                           if there is none
   #
   # == State Information
@@ -130,7 +130,7 @@ module ActionController #:nodoc:
       #   skip_before_filter :authentication_required
       #
       def authentication_required
-        authenticated? || access_denied
+        authenticated? || not_authenticated
       end
 
       # Redirect as appropriate when an access request fails.
@@ -143,11 +143,11 @@ module ActionController #:nodoc:
       # behavior in case the Agent is not authorized
       # to access the requested action.  For example, a popup window might
       # simply close itself.
-      def access_denied
+      def not_authenticated
         case request.format 
         when Mime::HTML
           store_location
-          redirect_to new_session_path
+          redirect_to(site.ssl? ? new_session_url(:protocol => 'https') : new_session_path)
         else
           request_http_basic_authentication 'Web Password'
         end

@@ -72,8 +72,11 @@ module ActionController #:nodoc:
       auth_object.authorizes?(auth_action, :to => current_agent)
     end
 
-    # Set HTTP Forbidden (403) response for actions not authorized
+    # If user is not authenticated, return not_authenticated to allow identification. 
+    # Else, set HTTP Forbidden (403) response.
     def not_authorized
+      return not_authenticated unless authenticated?
+
       respond_to do |format|
         format.all do
           render :text => 'Forbidden',
@@ -81,8 +84,8 @@ module ActionController #:nodoc:
         end
 
         format.html do
-          render :file => "#{RAILS_ROOT}/public/403.html", 
-                 :status => 403
+          render(:file => "#{RAILS_ROOT}/public/403.html", 
+                 :status => 403)
         end
       end
     end
