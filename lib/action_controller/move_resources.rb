@@ -219,14 +219,22 @@ module ActionController #:nodoc:
 
     protected
 
+    # Finds the current Resource using model_class and sets <tt>@content>/tt> and 
+    # <tt>@container</tt> if the resource acts_as_content
     def resource
       @resource ||= instance_variable_set("@#{ model_class.to_s.underscore }", 
                                           model_class.in_container(container).find_with_param(params[:id]))
 
-      @content  ||= @resource if @resource.class.acts_as?(:content)
+      if @resource.class.acts_as?(:content)
+        @content   ||= @resource 
+        @container ||= @resource.container
+      end
+
       @resource
     end
 
+    # If Resource acts_as_content, redirect paths include the Container. 
+    # This function returns the suitable arguments
     def resource_or_content_path_args
       resource.class.acts_as?(:content) ? [ container, resource ] : Array(resource)
     end
