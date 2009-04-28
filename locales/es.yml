@@ -175,6 +175,17 @@ es:
     other: "Invitaciones"
     new: "Nueva Invitación"
     not_found: "Invitación no encontrada"
+    email: "Correo electrónico"
+    role: "Rol"
+    show: "Unirse a {{group}}"
+    accept: "Aceptar invitación"
+    discard: "Descartar invitación"
+  join_request:
+    one: "Petición de incorporación"
+    other: "Peticiones de incorporación"
+    created: "Petición enviada"
+    updated: "Petición actualizada"
+    accepted: "Petición aceptada"
 
   logo:
     one: "Logo"

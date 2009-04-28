@@ -4,4 +4,4 @@
 
 <br />
 
-<%= link_to t('invitation.new'), polymorphic_path([ @stage, Invitation.new ]) %>
+<%= link_to t('invitation.new'), polymorphic_path([ @stage, Invitation.new ], :action => :new) %>

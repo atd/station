@@ -62,6 +62,7 @@ resources :invitations, :member => { :accept => :get }
 resources(*ActiveRecord::Stage.symbols - Array(:sites)) do |stage|
   stage.resources :performances
   stage.resources :invitations
+  stage.resources :join_requests
 end
 
 resources :performances

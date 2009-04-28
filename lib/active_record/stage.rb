@@ -26,10 +26,15 @@ module ActiveRecord #:nodoc:
 
         reflection_affordances :stage
 
-        has_many :stage_invitations,
-                 :class_name => "Invitation",
+        has_many :admissions,
                  :dependent => :destroy,
-                 :as => :stage
+                 :as => :group
+        has_many :invitations,
+                 :dependent => :destroy,
+                 :as => :group
+        has_many :join_requests,
+                 :dependent => :destroy,
+                 :as => :group
 
         extend  ClassMethods
         include InstanceMethods
