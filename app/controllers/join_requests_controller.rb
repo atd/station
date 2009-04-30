@@ -1,6 +1,4 @@
 class JoinRequestsController < ApplicationController
-  authentication_filter
-
   def create
     @join_request = group.join_requests.build params[:join_request]
     @join_request.candidate = current_agent
