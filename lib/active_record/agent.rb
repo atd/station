@@ -94,11 +94,6 @@ module ActiveRecord #:nodoc:
                  :dependent => :destroy,
                  :as => :agent
 
-        has_many :agent_invitations,
-                 :class_name => "Invitation",
-                 :dependent => :destroy,
-                 :as => :agent
-
         extend  ClassMethods
         include InstanceMethods
       end
