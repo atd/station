@@ -56,7 +56,10 @@ class InvitationsController < ApplicationController
 
     respond_to do |format|
       if invitation.update_attributes(params[:invitation])
-        format.html { redirect_to(invitation.group || root_path) }
+        format.html {
+          format[:notice] = t('invitation.accepted', :group => invitation.group.name) if invitation.recently_accepted?
+          redirect_to(invitation.group || root_path)
+        }
       else
         format.html { render :action => :show }
       end

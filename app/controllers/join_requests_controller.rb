@@ -17,8 +17,11 @@ class JoinRequestsController < ApplicationController
   end
 
   def update
+    join_request.attributes = params[:join_request]
+    join_request.introducer = current_agent if join_request.recently_accepted?
+
     respond_to do |format|
-      if join_request.update_attributes(params[:join_request])
+      if join_request.save
         format.html {
           flash[:notice] = (join_request.accepted? ? t('join_request.accepted') : t('join_request.updated'))
           redirect_to request.referer

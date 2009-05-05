@@ -7,6 +7,7 @@ class Admission < ActiveRecord::Base
 
   belongs_to :candidate, :polymorphic => true
   belongs_to :group, :polymorphic => true
+  belongs_to :introducer, :polymorphic => true
   belongs_to :role
 
   acts_as_sortable :columns => [ :candidate,
@@ -20,6 +21,11 @@ class Admission < ActiveRecord::Base
   # Has this Admission been accepted?
   def accepted?
     accepted_at.present?
+  end
+
+  # Has this Admission been recently accepted? (typically in this request)
+  def recently_accepted?
+    @accepted.present?
   end
 
   private
