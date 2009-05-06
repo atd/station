@@ -1,5 +1,5 @@
 <% form_tag session_path do -%>
-<div id="login_by_user">
+<div id="login_and_password">
   <p>
   <label for="login"><%= t('agent.authentication.login') %></label><br/>
     <%= text_field_tag 'login', params[:login] %>
@@ -8,31 +8,42 @@
   <label for="password"><%= t('agent.authentication.password') %></label><br/>
     <%= password_field_tag 'password' %>
   </p>
-  
-</div>
-<!-- Uncomment this if you want this functionality
-<p><label for="remember_me">Remember me:</label>
-<%= check_box_tag 'remember_me' %></p>
--->
 
-<div id="login_by_openid" style="display: none;">
+ <% if ActiveRecord::Agent.activation_class -%>
+  <div id="help">
+    <%= link_to t('agent.authentication.lost_password'), lost_password_path, :class => "action info" %>
+  </div>
+<% end -%>
+
+</div>
+
+<hr/>
+
+<div id="openid">
   <p>
-    <label for="openid_identifier"><%= t(:"openid.title") %></label>
+    <label for="openid_identifier"><%= t(:"openid.title") %></label><br />
     <%= text_field_tag "openid_identifier", params[:openid_identifier], :size => 30 %>
   </p>
 </div>
 
-<div id="new" style="display: none;">
-  <p>
-    <%= link_to t(:join_to_site, :site => site.name), new_user_path, :class => "action add" %>
-  </p>
+
+<hr/>
+
+<div id="remember_me">
+  <label for="remember_me">Remember me:</label>
+  <%= check_box_tag 'remember_me' %></p>
 </div>
 
+<hr/>
 
-<% if ActiveRecord::Agent.activation_class -%>
-
-<div id="help"  style="display: none;">
-  <%= link_to t('agent.authentication.lost_password'), lost_password_path, :class => "action info" %>
+<% if ActiveRecord::Agent.authentication_classes.any? -%>
+<div id="signup">
+  <p>
+  <%= link_to t(:join_to_site, :site => site.name),
+                polymorphic_path(ActiveRecord::Agent.authentication_classes.first.new,
+                :action => :new),
+                :class => "action add" %>
+  </p>
 </div>
 
 <% end -%>
@@ -42,5 +53,3 @@
 </div>
 
 <% end -%>
-
-

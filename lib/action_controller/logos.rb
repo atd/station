@@ -2,7 +2,7 @@ module ActionController #:nodoc:
   module Logos
     class << self
       def included(base) #:nodoc:
-        base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
+        base.send :include, ActionController::Station unless base.ancestors.include?(ActionController::Station)
       end
     end
 

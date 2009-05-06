@@ -77,6 +77,10 @@ module ActiveRecord #:nodoc:
           include OpenidServer
         end
 
+        if options[:authentication].include?(:login_and_password)
+          include PasswordReset
+        end
+
         # Loads agent email verification
         if options[:activation]
           include Activation

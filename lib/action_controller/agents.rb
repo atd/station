@@ -3,8 +3,16 @@ module ActionController #:nodoc:
   module Agents
     class << self
       def included(base) #:nodoc:
-        base.send :include, ActionController::Move unless base.ancestors.include?(ActionController::Move)
+        base.send :include, ActionController::Station unless base.ancestors.include?(ActionController::Station)
         base.send :include, ActionController::Authentication unless base.ancestors.include?(ActionController::Authentication)
+        if base.model_class.agent_options[:activation] &&
+           ! base.ancestors.include?(ActionController::Agents::Activation)
+          base.send :include, ActionController::Agents::Activation
+        end
+        if base.model_class.agent_options[:authentication].include?(:login_and_password) &&
+           ! base.ancestors.include?(ActionController::Agents::PasswordReset)
+          base.send :include, ActionController::Agents::PasswordReset
+        end
       end
     end
 
@@ -33,9 +41,9 @@ module ActionController #:nodoc:
     def show
       respond_to do |format|
         format.html {
-          if @agent.agent_options[:openid_server]
-            headers['X-XRDS-Location'] = formatted_polymorphic_url([ @agent, :xrds ])
-            @openid_server_agent = @agent
+          if agent.agent_options[:openid_server]
+            headers['X-XRDS-Location'] = formatted_polymorphic_url([ agent, :xrds ])
+            @openid_server_agent = agent
           end
         }
         format.atomsvc
@@ -65,16 +73,16 @@ module ActionController #:nodoc:
 
       if authenticated?
         redirect_to polymorphic_path(model_class.new)
-        flash[:info] = t(:created, :scope => @agent.class.to_s.underscore)
+        flash[:success] = t(:created, :scope => @agent.class.to_s.underscore)
       else
         self.current_agent = @agent
         redirect_to @agent
-        flash[:info] = t(:account_created)
+        flash[:success] = t(:account_created)
       end
 
       if model_class.agent_options[:activation]
-        flash[:info] << '<br />'
-        flash[:info] << ( @agent.active? ?
+        flash[:success] << '<br />'
+        flash[:success] << ( @agent.active? ?
           t(:activation_email_sent, :scope => @agent.class.to_s.underscore) :
           t(:should_check_email_to_activate_account))
       end
@@ -83,55 +91,9 @@ module ActionController #:nodoc:
     end
 
     def destroy
-      @agent.destroy
-      flash[:info] = t(:deleted, :scope => @agent.class.to_s.underscore)
+      agent.destroy
+      flash[:success] = t(:deleted, :scope => agent.class.to_s.underscore)
       redirect_to polymorphic_path(model_class.new)
-    end
-  
-    # Activate Agent from email
-    def activate
-      self.current_agent = params[:activation_code].blank? ? Anonymous.current : model_class.find_by_activation_code(params[:activation_code])
-      if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
-        current_agent.activate
-        flash[:info] = t(:account_activated)
-        redirect_back_or_default(after_activate_path)
-      else
-        redirect_back_or_default(after_not_activate_path)
-      end
-    end
-  
-    def lost_password
-      if params[:email]
-        @agent = model_class.find_by_email(params[:email])
-        unless @agent
-          flash[:error] = t(:could_not_find_anybody_with_that_email_address)
-          return
-        end
-  
-        @agent.lost_password
-        flash[:notice] = t(:password_reset_link_sent_to_email_address)
-        redirect_to root_path
-      end
-    end
-  
-    # Resets Agent password via email
-    def reset_password
-      @agent = model_class.find_by_reset_password_code(params[:reset_password_code])
-      raise unless @agent
-      return if params[:password].blank?
-      
-      @agent.update_attributes(:password => params[:password], 
-                               :password_confirmation => params[:password_confirmation])
-      if @agent.valid?
-        @agent.reset_password
-        current_agent = @agent
-        flash[:info] = t(:password_has_been_reset)
-        redirect_to("/")
-      end
-  
-      rescue
-        flash[:error] = t(:invalid_password_reset_code)
-        redirect_to("/")
     end
   
     protected
@@ -140,19 +102,10 @@ module ActionController #:nodoc:
     # Gets Agent instance by id or login
     #
     # Example GET /users/1 or GET /users/quentin
-    def get_agent
-      @agent = ( params[:id].match(/^\d+$/) ? model_class.find(params[:id]) : model_class.find_by_login(params[:id]) )
+    def agent
+      @agent ||= ( params[:id].match(/^\d+$/) ? model_class.find(params[:id]) : model_class.find_by_login(params[:id]) )
+      raise ActiveRecord::RecordNotFound, "Agent not found" unless @agent
       instance_variable_set "@#{ model_class.to_s.underscore }", @agent
-    end
-  
-    # Filter for activation methods
-    def activation_required
-      redirect_back_or_default('/') unless model_class.agent_options[:activation]
-    end
-  
-    # Filter for methods that require login_and_password authentication, like reset_password
-    def login_and_pass_auth_required
-      redirect_back_or_default('/') unless model_class.agent_options[:authentication].include?(:login_and_password)
     end
 
     private

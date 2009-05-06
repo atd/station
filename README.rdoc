@@ -1,42 +1,21 @@
-= Content Management System plugin
+= Station
 
-CMSplugin is to {Rails}[http://rubyonrails.org/] in Content Management like 
+Station is to {Rails}[http://rubyonrails.org/] in Content Management System like 
 {Rails}[http://rubyonrails.org/] is to {Ruby}[http://www.ruby-lang.org/] in Web Development.
 
-  Rails     = Ruby  + Web Development
-  CMSplugin = Rails + Content Management
+  Rails   = Ruby  + Web Development
+  Station = Rails + Content Management
 
-CMSplugin provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
+Station provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
 
-CMSplugin follows the SIOC ontology model, http://sioc-project.org/ontology
+Station follows the SIOC ontology model, http://sioc-project.org/ontology
 
-Project page: http://rubyforge.org/projects/cmsplugin
-
-Documentation: http://cmsplugin.rubyforge.org/
-
-== Architecture
-
-You can add this functionality to any of your ActiveRecord models:
-
-=== Basic
-ActiveRecord::Resource:: a model that have, at least, {CRUD}[http://en.wikipedia.org/wiki/Create,_read,_update_and_delete] operations and can be imported/exported in different formats.
-ActiveRecord::Content:: a Resource that belongs to a Container.
-ActiveRecord::Container:: a model that have many Contents.
-ActiveRecord::Agent:: a model with authentication, authorization and potencial to perform actions over Resources.
-ActiveRecord::Stage:: a model that defines an Authorization framework for Agents.
-
-=== Complements
-ActiveRecord::CategoriesDomain:: a model which instances define Ontology domains
-ActiveRecord::Categorizable:: a model that can be classified in any Category
-ActiveRecord::Taggable:: a model that can be tagged
-ActiveRecord::Logoable:: a model with Logo
-ActiveRecord::Sortable:: a model with a sortable list
-
+http://github.com/atd/station
 
 == Features
 
 * Authentication: Login/Password, {OpenID}[http://openid.net/], {Central Authentication Service (CAS)}[http://www.ja-sig.org/products/cas/], CookieToken
-* Authorization: Roles and Permissions
+* Authorization: Affordances, Roles and Permissions
 * Activation: Email validation, Password reset
 * Atom feeds, {RFC 4287}[http://tools.ietf.org/html/rfc4287]
 * AtomPub protocol, {RFC 5023}[http://tools.ietf.org/html/rfc5023]
@@ -48,64 +27,69 @@ ActiveRecord::Sortable:: a model with a sortable list
 
 == Requirements
 
-* Rails 2.2.2
+* Rails 2.3.2
 * RubyGems: 
   * ruby-openid
   * atom-tools
   * hpricot
   * mislav-will_paginate
-  * atd-calendar_date_select
 * Rails Plugins:
-  * engines
   * attachment_fu
+  * exception_notification (optional)
 
 == Installation
 
 === Plugins
 
-You need Rails Engines first:
-  script/plugin install git://github.com/atd/engines.git
-see vendor/plugins/engines/README to finish the instalation (don't forget to modify config/environment.rb)
+You need attachment_fu for Logos and Attachments:
+  script/plugin install git://github.com/atd/attachment_fu.git
 
-To install CMSplugin, run:
-  script/plugin install git://github.com/atd/cmsplugin.git
+To install Station, run:
+  script/plugin install git://github.com/atd/station.git
 
-Install exception_notification plugin if you want to receive debug emails
+Install exception_notification plugin if you want to receive debugging emails from your application
   script/plugin install git://github.com/rails/exception_notification.git
 
 === Gems
 
 Run rake gems:install to install the required gems
 
-=== CMS
+== Architecture
 
-Generate the CMS infraestructure:
-  script/generate cms
+You can add this functionality to any of your ActiveRecord models:
 
-And generate and run the migration:
-  script/generate plugin_migration
+=== Basic
+ActiveRecord::Resource:: a model that have, at least, {CRUD}[http://en.wikipedia.org/wiki/Create,_read,_update_and_delete] operations and can be imported/exported in different formats.
+ActiveRecord::Content:: a Resource that belongs to a Container, e.g. a Post
+ActiveRecord::Container:: a model that have many Contents, e.g. a Space
+ActiveRecord::Agent:: a model with authentication, authorization and potencial to perform actions over Resources, e.g. a User
+ActiveRecord::Stage:: a model that defines an Authorization framework for Agents, e.g. a Group
 
-Now you can generate Agents and Contents.
+=== Complements
+ActiveRecord::CategoriesDomain:: a model which instances define Ontology domains
+ActiveRecord::Categorizable:: a model that can be classified in any Category
+ActiveRecord::Taggable:: a model that can be tagged
+ActiveRecord::Logoable:: a model with Logo
+ActiveRecord::Sortable:: a model with a sortable list
 
 == Generators
 
 === Agents
 An Agent has the capability to post Contents to Containers. An User is the example of Agent
 
-  script/generate agent Model
+  script/generate station_agent Model
 
-=== Contents
-A Content is a piece of information suitable to be posted to some Container by some Agent
+=== Resources
 
-  script/generate content Model attributes
+  script/generate station_scaffold Model attributes
 
 == Example
 
 === Blog
 Create personal blogs with a pair of commands:
 
-  script/generate agent User
-  script/generate content Article body:text
+  script/generate station_agent User
+  script/generate station_resource Article content:text
 
 Users now can entry their own Articles
 

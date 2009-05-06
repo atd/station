@@ -1,1 +1,1 @@
-puts IO.read(File.join(File.dirname(__FILE__), 'README'))
+system "script/generate station"

@@ -1,8 +1,0 @@
-<% for attribute in attributes -%>
-  <p>
-    <b><%= attribute.column.human_name %></b><br />
-    <%%= <%= attribute.field_type %>_tag "content[<%= attribute.name %>]", @content.<%= attribute.name %> %>
-    </p>
-
-<% end -%>
-

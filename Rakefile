@@ -15,7 +15,7 @@ end
 desc 'Generate documentation for the cms plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'CMSplugin'
+  rdoc.title    = 'Station'
   rdoc.template = 'doc/template/horo.rb'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')

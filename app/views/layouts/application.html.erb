@@ -2,104 +2,54 @@
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-  <title><%= title "", :append_site_name => true %></title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <meta name="description" content="<%= @description %>" />
-  <meta name="keywords" content="red,social" />
-  <meta name="author" content="atd, nogates / Design: Gnoyxs - http://www.gnoxys.net/" />
-<% if @openid_server_agent -%>
-  <meta http-equiv="X-XRDS-Location" content="<%= formatted_polymorphic_url([ @openid_server_agent, :xrds ]) -%>" />
-  <link rel="openid.server" href="<%= openid_server_url -%>" />
-  <link rel="openid2.provider" href="<%= openid_server_url -%>" />
-<% end -%>
+  <title><%= yield(:title_header) || title("", :append_site_name => true) %></title>
+  <meta name="description" content="<%= yield :description_header %>" />
+  <meta name="keywords" content="<%= yield :keywords_header %>" />
+  <meta name="author" content="<%= yield :author_header %>" />
 
-<%= stylesheet_link_tag "move", :media => 'all', :plugin => 'cmsplugin' %>
+  <%= stylesheet_link_tag "screen", :media => "screen, projection" %>
+  <%= stylesheet_link_tag "style", :media => "screen, projection" %>
+  <%= stylesheet_link_tag "print", :media => "print" %>
+  <!--[if IE]>
+    <%= stylesheet_link_tag "ie", :media => "screen, projection" %>
+  <![endif]-->
 
-<%= javascript_include_tag :defaults %>
-<%= javascript_include_tag "move", :plugin => 'cmsplugin' %>
-<%= javascript_include_tag "fckeditor/fckeditor" if @uses_fckeditor %>
-<%= calendar_date_select_includes %>
+  <%= javascript_include_tag :defaults %>
 
-<% if @collection_path -%>
-<link href="<%= @collection_path + '.atom' %>" rel="alternate" title="<%= @title %>" type="application/atom+xml" />
-<% end -%>
-
-<% if false # @space %>
-<link rel="icon" href="<%= @space.logo.public_filename('icon') %>" type="image/x-icon">
-<% end -%>
-
-<% if false -%>
-<link rel="service" type="application/atomsvc+xml" href="<%= url_for :controller => :users, :action => :show, :id => current_user.id, :format => "atomsvc", :only_path => false %>" />
-<% end -%>
+  <%= yield :headers %>
 </head>
 
-<body onload="onLoadPage();">
-  <!-- open wrap -->
-  <div id="wrap">
-    <!-- logo -->
-    <div id="meta">
-      <div id="meta_top">
-        <span class="site_title"><%= site.name %></span>
+<body>
+  <div id="site" class="container ">
+    <div id="header" class="span-24 last">
+      <div id="header_logo" class="prepend-1 span-3">
+        <%= link_logo(current_site, :size => 96, :url => root_path) %>
       </div>
-      <div id="meta_center">
-        <%= 
-          #image_tag 'move_static.png', :plugin => 'cmsplugin', :alt => "[move static logo]", :id => "move_logo", :onclick => "this.src='#{ image_path('move_dynamic.gif', :plugin => 'cmsplugin') }';"
-         %>
-      </div>
-      <div id="meta_bottom">
-         <% if authenticated? -%>
-           <%= link_to(t(:logout), logout_path, {:id => "logout"} ) %>
-           <% if authorized?(:site, :update) -%>
-           <%= link_to(t(:"site.config"), site_path, {:id => "site_config"}) %>
-           <% end -%>
-         <% else -%>
-           <%= link_to(t(:login), login_path) %>
-           <%= link_to(t(:join), new_user_path) %>
-         <% end -%>
+      <div id="header_title" class="prepend-1 span-8">
+        <%= link_to current_site.name, root_path %>
       </div>
     </div>
-
-    <!-- open menu content div -->
-    <div id="contents">
-       <!-- top menu content decoration, close it -->
-      <div id="contents_top"></div>
-      <!-- menu content center -->
-      <div id="contents_center">
-        <!-- menu content inside wrapper -->
-        <div id="contents_center_inside">
-	  <%= yield :contents_menu %>
-        <!-- close menu content inside -->
-        </div>
-      <!-- cloose menu content center -->
+    <hr class="site">
+    <div id="content" class="prepend-1 span-22 append-1 last">
+      <div id="notification" class="span-22 last">
+        <%= notification_area %>
       </div>
-      <!-- bottom menu content decoration, close it -->
-      <div id="contents_bottom"></div>
-    <!-- close menu content -->
+      <div id="main" class="span-16">
+        <%= yield %>
+      </div>
+      <div id="sidebar" class="span-6 last">
+        <%= yield :sidebar %>
+      </div>
+      <div id="pagination_container" class="prepend-16 span-7 last">
+        <%= yield :pagination %>
+      </div>
     </div>
-    <!-- open the interaction_screen -->
-    <div id="interaction_screen">
-       <!-- top interaction screen decoration, close it -->
-      <div id="interaction_screen_top"></div>
-        <!-- interaction screen center -->
-        <div id="interaction_screen_center">
-          <!-- interaction screen wrapper -->
-          <div id="interaction_screen_center_inside">
-          <%= notification_area %>
-          <%= yield %>
-          <!-- close interaction screen wrapper -->
-          </div>
-        <!-- cloose interaction screen center -->
-        </div>
-        <!-- bottom interaction screen decoration, close it -->
-        <div id="interaction_screen_bottom"></div>
-    <!-- cloose interaction screen -->
+    <hr class="site">
+    <div id="footer">
+      <div id="footer-copy" class="prepend-10">
+        <p><%= link_to "Station", 'http://github.com/atd/station' %> &copy; 2009 atd</p>
+      </div>
     </div>
-    <!-- open footer -->
-     <div id="footer">
-       <%= t(:layout_footnote, :site => link_to(site.name, root_path), :plugin => link_to('CMSplugin','http://rubyforge.org/projects/cmsplugin/'), :designer => link_to('Gnoxys','http://www.gnoxys.net/')) %>
-     <!-- cloose footer -->
-    </div>
-  <!-- close wrap -->
   </div>
 </body>
 </html>
