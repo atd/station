@@ -41,7 +41,7 @@ end
   ActionView::Base.send :include, "ActionView::Helpers::#{ item.camelcase }Helper".constantize
 end
 # FormHelpers
-%w( categories logo performances tags ).each do |item|
+%w( categories logo tags ).each do |item|
   require "action_view/helpers/form_#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.camelcase }Helper".constantize
 end

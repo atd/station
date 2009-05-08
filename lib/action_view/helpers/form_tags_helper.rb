@@ -6,7 +6,7 @@ module ActionView #:nodoc:
       #
       # Object must be Taggable
       #
-      def tags(object, options = {})
+      def tags_tag(object, options = {})
         InstanceTag.new(object, :tags, self, options.delete(:object)).to_tags_tag(options)
       end
     end
@@ -18,7 +18,7 @@ module ActionView #:nodoc:
         # TODO
         # raise "#{ object } isn't Taggable" unless object.acts_as_taggable?
 
-        @template_object.render :partial => "taggables/tags_form", 
+        @template_object.render :partial => "taggables/tags_tag", 
                                 :locals => { :taggable => object,
                                              :taggable_name => object_name }
       end
@@ -26,7 +26,7 @@ module ActionView #:nodoc:
 
     class FormBuilder #:nodoc:
       def tags(options = {})
-        @template.tags(@object_name, options.merge(:object => @object))
+        @template.tags_tag(@object_name, options.merge(:object => @object))
       end
     end
   end

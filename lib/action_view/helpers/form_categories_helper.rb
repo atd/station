@@ -8,7 +8,7 @@ module ActionView #:nodoc:
       #
       # Options:
       # domain:: The CategoriesDomain for Categories list. Defaults tu current_container || Site.current
-      def categories(object, options = {})
+      def categories_tag(object, options = {})
         InstanceTag.new(object, :categories, self, options.delete(:object)).to_categories_tag(options)
       end
     end
@@ -22,7 +22,7 @@ module ActionView #:nodoc:
         # TODO
         # raise "#{ object } isn't Categorizable" unless object.acts_as_categorizable?
 
-        @template_object.render :partial => "categorizables/categories_form", 
+        @template_object.render :partial => "categorizables/categories_tag", 
                                 :locals => { :categorizable => object,
                                              :categorizable_name => object_name, 
                                              :domain => options[:domain] }
@@ -30,7 +30,7 @@ module ActionView #:nodoc:
     end
 
     class FormBuilder #:nodoc:
-      def categories(options = {})
+      def categories_tag(options = {})
         @template.categories(@object_name, options.merge(:object => @object))
       end
     end

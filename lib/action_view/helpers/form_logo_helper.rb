@@ -8,7 +8,7 @@ module ActionView #:nodoc:
       #
       # Options:
       # title:: Title of the form
-      def logo_form(object, options = {})
+      def logo_tag(object, options = {})
         InstanceTag.new(object, :logo, self, options.delete(:object)).to_logo_tag(options)
       end
     end
@@ -22,7 +22,7 @@ module ActionView #:nodoc:
         # TODO
         # raise "#{ object } isn't Logoable" unless object.acts_as_logoable?
 
-        @template_object.render :partial => "logoables/logo_form", 
+        @template_object.render :partial => "logoables/logo_tag", 
                                 :locals => { :logoable => object,
                                              :logoable_name => object_name, 
                                              :title => options[:title] }
@@ -31,7 +31,7 @@ module ActionView #:nodoc:
 
     class FormBuilder #:nodoc:
       def logo(options = {})
-        @template.logo_form(@object_name, options.merge(:object => @object))
+        @template.logo_tag(@object_name, options.merge(:object => @object))
       end
     end
   end
