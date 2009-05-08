@@ -64,3 +64,16 @@ unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
   end
 end
 
+require 'will_paginate'
+
+module WillPaginate::ViewHelpers #:nodoc:
+  def will_paginate_with_translation(collection = nil, options = {})
+    options[:prev_label] ||= I18n.t('pagination.prev_label')
+    options[:next_label] ||= I18n.t('pagination.next_label')
+
+    will_paginate_without_translation(collection, options)
+  end
+
+  alias_method_chain :will_paginate, :translation
+end
+

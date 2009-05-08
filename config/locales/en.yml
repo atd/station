@@ -221,4 +221,7 @@ en:
       required_information_by: "Required information requested by {{server}}"
       optional_information_by: "Optional information requested by {{server}}"
 
+  pagination:
+    prev_label: "&laquo; Previous"
+    next_label: "Next &raquo;"
 
