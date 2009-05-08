@@ -22,13 +22,13 @@ module ActionView #:nodoc:
         options[:size] ||= 16
 
         if resource.is_a?(Logo)
-          "#{ formatted_polymorphic_path([resource, resource.format]) }?thumbnail=#{ options[:size] }"
+          polymorphic_path(resource, :format => resource.format, :thumbnail=> options[:size])
         elsif ! resource.new_record? &&
               resource.respond_to?(:format) &&
               resource.respond_to?(:attachment_options) && 
               resource.attachment_options[:thumbnails].keys.include?(options[:size].to_s) &&
               resource.thumbnails.find_by_thumbnail(options[:size].to_s)
-          "#{ formatted_polymorphic_path([resource, resource.format]) }?thumbnail=#{ options[:size] }"
+          polymorphic_path(resource, :format => resource.format, :thumbnail => options[:size])
         elsif resource.respond_to?(:logo) && resource.logo
           logo_image_path(resource.logo, options)
         else

@@ -143,7 +143,7 @@ module ActionController #:nodoc:
           format.atom {
             render :action => 'show',
                    :status => :created,
-                   :location => formatted_polymorphic_url(resource_or_content_path_args << :atom)
+                   :location => polymorphic_url(resource_or_content_path_args, :format => :atom)
           }
         else
           format.html { 
