@@ -163,12 +163,13 @@ module ActionController #:nodoc:
       # Fill params when POSTing raw data
       set_params_from_raw_post
 
-      resource
+      resource.attributes = params[model_class.to_s.underscore.to_sym]
+      resource.author = current_agent if resource.respond_to?(:author=)
 
       respond_to do |format| 
         #FIXME: DRY
         format.all {
-          if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
+          if resource.save
             head :ok
           else
             render :xml => @resource.errors.to_xml, :status => :not_acceptable
@@ -176,7 +177,7 @@ module ActionController #:nodoc:
         }
 
         format.html {
-          if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
+          if resource.save
             flash[:success] = t(:updated, :scope => @resource.class.to_s.underscore)
             redirect_to resource_or_content_path_args
           else
@@ -185,7 +186,7 @@ module ActionController #:nodoc:
         }
 
         format.atom {
-          if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
+          if resource.save
             head :ok
           else
             render :xml => @resource.errors.to_xml, :status => :not_acceptable
@@ -193,7 +194,7 @@ module ActionController #:nodoc:
         }
 
         format.send(resource.format) {
-          if resource.update_attributes(params[model_class.to_s.underscore.to_sym])
+          if resource.save
             head :ok
           else
             render :xml => @resource.errors.to_xml, :status => :not_acceptable
