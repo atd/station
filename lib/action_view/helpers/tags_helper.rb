@@ -7,8 +7,7 @@ module ActionView #:nodoc:
           if taggable.tags.any?
             html << "<strong>#{ t('tag.other') }</strong>: "
             html << taggable.tags.map { |t| 
-#                     link_to(t.name, tag_path(t), :rel => "tag") 
-                      sanitize t.name
+                     link_to(t.name, tag_path(t), :rel => "tag") 
                     }.join(", ")
           end
           html << '</div>'

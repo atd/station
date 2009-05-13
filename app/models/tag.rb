@@ -1,5 +1,4 @@
 class Tag < ActiveRecord::Base
-
   DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
 
   # If database speed becomes an issue, you could remove these validations and rescue the ActiveRecord database constraint errors instead.
@@ -26,5 +25,9 @@ class Tag < ActiveRecord::Base
   # Callback to strip extra spaces from the tagname before saving it. If you allow tags to be renamed later, you might want to use the <tt>before_save</tt> callback instead.
   def before_create 
     self.name = name.downcase.strip.squeeze(" ")
+  end
+
+  def to_param
+    name
   end
 end

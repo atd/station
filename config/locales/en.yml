@@ -129,6 +129,7 @@ en:
   tag:
     one: "Tag"
     other: "Tags"
+    show_title: "Tagged with {{tag}}"
 
   performance:
     other: "Performances"
