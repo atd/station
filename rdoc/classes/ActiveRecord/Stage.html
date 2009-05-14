@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Stage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Stage</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/active_record/stage_rb.html">lib/active_record/stage.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Each <a href="Stage.html">Stage</a> defines an <a
+href="Authorization.html">Authorization</a> framework in your application.
+</p>
+<p>
+Stages have many Performances. A <a
+href="../Performance.html">Performance</a> defines the <a
+href="../Role.html">Role</a> an <a href="Agent.html">Agent</a> plays in the
+<a href="Stage.html">Stage</a>
+</p>
+<p>
+Include <a href="Stage.html">Stage</a> functionality in your models using
+<a href="Stage/ActsAsMethods.html#M000212">ActsAsMethods#acts_as_stage</a>
+</p>
+</div>
+
+
+
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Stage/ActsAsMethods.html" class="link">ActiveRecord::Stage::ActsAsMethods</a><br />
+Module <a href="Stage/ClassMethods.html" class="link">ActiveRecord::Stage::ClassMethods</a><br />
+Module <a href="Stage/InstanceMethods.html" class="link">ActiveRecord::Stage::InstanceMethods</a><br />
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

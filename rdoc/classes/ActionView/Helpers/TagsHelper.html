@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionView::Helpers::TagsHelper</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionView::Helpers::TagsHelper</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/action_view/helpers/tags_helper_rb.html">lib/action_view/helpers/tags_helper.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000213">tags</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000213"></a><b>tags</b>(taggable)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000213_source')" id="l_M000213_source">show source</a> ]</p>
+  <div id="M000213_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_view/helpers/tags_helper.rb, line 4</span>
+ 4:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tags</span>(<span class="ruby-identifier">taggable</span>)
+ 5:         <span class="ruby-identifier">returning</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">html</span><span class="ruby-operator">|</span>
+ 6:           <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&lt;div id=\&quot;#{ dom_id(taggable) }_tags\&quot; class=\&quot;tags\&quot;&gt;&quot;</span>
+ 7:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">taggable</span>.<span class="ruby-identifier">tags</span>.<span class="ruby-identifier">any?</span>
+ 8:             <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&lt;strong&gt;#{ t('tag.other') }&lt;/strong&gt;: &quot;</span>
+ 9:             <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">taggable</span>.<span class="ruby-identifier">tags</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> 
+10:                      <span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">t</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">tag_path</span>(<span class="ruby-identifier">t</span>), <span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;tag&quot;</span>) 
+11:                     }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>)
+12:           <span class="ruby-keyword kw">end</span>
+13:           <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&lt;/div&gt;'</span>
+14:         <span class="ruby-keyword kw">end</span>
+15:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

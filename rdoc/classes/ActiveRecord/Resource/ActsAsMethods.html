@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Resource::ActsAsMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Resource::ActsAsMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/resource_rb.html">lib/active_record/resource.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000163">acts_as_resource</a></li>
+  <li><a href="#M000164">find_with_param</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="InstanceMethods.html">InstanceMethods</a></li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000163"></a><b>acts_as_resource</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Provides an ActiveRecord model with <a href="../Resource.html">Resource</a>
+capabilities
+</p>
+<p>
+Options:
+</p>
+<ul>
+<li><tt>:mime_types</tt> - array of Mime::Type supported by this <a
+href="../Resource.html">Resource</a>.
+
+</li>
+<li><tt>:has_media</tt> - this <a href="../Content.html">Content</a> has
+attachment data. Supported plugins: AttachmentFu (<tt>:attachment_fu</tt>)
+
+</li>
+<li><tt>:param</tt> - used to find and build the URLs. Defaults to <tt>:id</tt>
+
+</li>
+<li><tt>:disposition</tt> - specifies whether the <a
+href="../Resource.html">Resource</a> will be shown inline or as attachment
+(see Rails send_file method). Defaults to :attachment
+
+</li>
+<li><tt>:per_page</tt> - number of Resources shown per page, using
+will_pagination plugin. Defaults to 9
+
+</li>
+<li><tt>:delegate_content_types</tt> - allow using <a
+href="../Resource.html#M000156">ActiveRecord::Resource.class_supporting</a>
+for finding the class most suitable for some media. This is useful if you
+have a generic model for Attachments, but specific files like images or
+audios should be managed by other classes. Defaults to <tt>false</tt>
+
+</li>
+</ul>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000163_source')" id="l_M000163_source">show source</a> ]</p>
+  <div id="M000163_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 45</span>
+45:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_resource</span>(<span class="ruby-identifier">options</span> = {})
+46:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
+47: 
+48:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:param</span>]       <span class="ruby-operator">||=</span> <span class="ruby-identifier">:id</span>
+49:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:disposition</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">:attachment</span>
+50:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]    <span class="ruby-operator">||=</span> <span class="ruby-value">9</span>
+51:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:delegate_content_types</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>
+52: 
+53:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:parents</span>, <span class="ruby-identifier">lambda</span> {
+54:           <span class="ruby-identifier">column_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'parent_id'</span>) <span class="ruby-operator">?</span>
+55:           { <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:parent_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span> } } <span class="ruby-operator">:</span>
+56:           {}
+57:         }
+58: 
+59:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:has_media</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:attachment_fu</span>
+60:           <span class="ruby-identifier">alias_attribute</span> <span class="ruby-identifier">:media</span>, <span class="ruby-identifier">:uploaded_data</span>
+61:         <span class="ruby-keyword kw">end</span>
+62: 
+63:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">acts_as?</span>(<span class="ruby-identifier">:agent</span>)
+64:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">:author</span>, <span class="ruby-identifier">:author_id</span>, <span class="ruby-identifier">:author_type</span>
+65:         <span class="ruby-keyword kw">end</span>
+66: 
+67:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:resource_options</span>
+68:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@resource_options&quot;</span>, <span class="ruby-identifier">options</span>
+69: 
+70:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:per_page</span>
+71:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@per_page&quot;</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]
+72: 
+73:         <span class="ruby-identifier">acts_as_sortable</span>
+74: 
+75:         <span class="ruby-identifier">extend</span>  <span class="ruby-constant">ClassMethods</span>
+76:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
+77:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000164"></a><b>find_with_param</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Find with params
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000164_source')" id="l_M000164_source">show source</a> ]</p>
+  <div id="M000164_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 80</span>
+80:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_with_param</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+81:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:resource_options</span>)
+82:           <span class="ruby-identifier">send</span> <span class="ruby-node">&quot;find_by_#{ resource_options[:param] }&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+83:         <span class="ruby-keyword kw">else</span>
+84:           <span class="ruby-identifier">find</span> <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+85:         <span class="ruby-keyword kw">end</span>
+86:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

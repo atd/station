@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Resource::InstanceMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Resource::InstanceMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/resource_rb.html">lib/active_record/resource.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000160">format</a></li>
+  <li><a href="#M000159">mime_type</a></li>
+  <li><a href="#M000161">mime_type_or_class_name</a></li>
+  <li><a href="#M000162">to_param</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000160"></a><b>format</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the Mime::Type symbol for this content
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000160_source')" id="l_M000160_source">show source</a> ]</p>
+  <div id="M000160_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 117</span>
+117:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format</span>
+118:         <span class="ruby-identifier">mime_type</span> <span class="ruby-value">? </span><span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+119:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000159"></a><b>mime_type</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the mime type for this <a href="../Content.html">Content</a>
+instance. Example: Mime::XML
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000159_source')" id="l_M000159_source">show source</a> ]</p>
+  <div id="M000159_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 106</span>
+106:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type</span>
+107:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:content_type</span>)
+108: 
+109:         <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">content_type</span>)
+110:         <span class="ruby-comment cmt"># mime_type must be a registered Mime::Type</span>
+111:         <span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">&quot;@symbol&quot;</span>) <span class="ruby-operator">?</span>
+112:           <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">:</span>
+113:           <span class="ruby-keyword kw">nil</span>
+114:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000161"></a><b>mime_type_or_class_name</b>()
+  </div>
+  <div class="description">
+  <p>
+Method useful for icon files
+</p>
+<p>
+If the <a href="../Content.html">Content</a> has a Mime Type, return it
+scaped with &#8217;-&#8217;
+</p>
+<pre>
+  application/jpg =&gt; application-jpg
+</pre>
+<p>
+else, return the underscored class name:
+</p>
+<pre>
+  photo
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000161_source')" id="l_M000161_source">show source</a> ]</p>
+  <div id="M000161_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 127</span>
+127:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type_or_class_name</span>
+128:         <span class="ruby-identifier">mime_type</span> <span class="ruby-value">? </span><span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[\/\+]/</span>, <span class="ruby-value str">'-'</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>
+129:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000162"></a><b>to_param</b>()
+  </div>
+  <div class="description">
+  <p>
+Define <a href="InstanceMethods.html#M000162">to_param</a> method with
+acts_as_resource param option
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000162_source')" id="l_M000162_source">show source</a> ]</p>
+  <div id="M000162_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 132</span>
+132:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_param</span>
+133:         <span class="ruby-identifier">send</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:param</span>]).<span class="ruby-identifier">to_s</span>
+134:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

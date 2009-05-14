@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: SessionsController</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />SessionsController</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/app/controllers/sessions_controller_rb.html">app/controllers/sessions_controller.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+ApplicationController
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+This controller handles the login/logout function of the site.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000034">create</a></li>
+  <li><a href="#M000035">destroy</a></li>
+  <li><a href="#M000033">new</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="ActionController/Sessions.html">ActionController::Sessions</a></li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000034"></a><b>create</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000034_source')" id="l_M000034_source">show source</a> ]</p>
+  <div id="M000034_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/sessions_controller.rb, line 10</span>
+10:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+11:     <span class="ruby-identifier">authentication_methods_chain</span>(<span class="ruby-identifier">:create</span>)
+12: 
+13:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">performed?</span>
+14:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:invalid_credentials</span>)
+15:       <span class="ruby-identifier">render</span>(<span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span>)
+16:     <span class="ruby-keyword kw">end</span>
+17:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000035"></a><b>destroy</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000035_source')" id="l_M000035_source">show source</a> ]</p>
+  <div id="M000035_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/sessions_controller.rb, line 19</span>
+19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
+20:     <span class="ruby-identifier">authentication_methods_chain</span>(<span class="ruby-identifier">:destroy</span>)
+21:     <span class="ruby-identifier">reset_session</span>
+22: 
+23:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">performed?</span>
+24: 
+25:     <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:logged_out</span>)
+26:     <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">after_destroy_path</span>)
+27:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000033"></a><b>new</b>()
+  </div>
+  <div class="description">
+  <p>
+render new.rhtml
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000033_source')" id="l_M000033_source">show source</a> ]</p>
+  <div id="M000033_source" class="dyn-source">
+<pre>
+   <span class="ruby-comment cmt"># File app/controllers/sessions_controller.rb, line 6</span>
+6:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
+7:     <span class="ruby-identifier">authentication_methods_chain</span>(<span class="ruby-identifier">:new</span>)
+8:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionController::Sessions::CookieToken</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionController::Sessions::CookieToken</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/action_controller/sessions/cookie_token_rb.html">lib/action_controller/sessions/cookie_token.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Methods for <a href="../Sessions.html">Sessions</a> based on <a
+href="CookieToken.html">CookieToken</a> <a
+href="../Authentication.html">Authentication</a>
+</p>
+<p>
+<a href="CookieToken.html">CookieToken</a> remembers the Autnentication in
+the browser for certain amount of time
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000105">destroy_with_cookie_token</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000105"></a><b>destroy_with_cookie_token</b>()
+  </div>
+  <div class="description">
+  <p>
+Destroy <a href="CookieToken.html">CookieToken</a> Session data
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000105_source')" id="l_M000105_source">show source</a> ]</p>
+  <div id="M000105_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/sessions/cookie_token.rb, line 8</span>
+ 8:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy_with_cookie_token</span>
+ 9:         <span class="ruby-identifier">current_agent</span>.<span class="ruby-identifier">forget_me</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authenticated?</span>
+10:         <span class="ruby-identifier">cookies</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">:auth_token</span>
+11:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

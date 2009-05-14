@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: PerformancesController</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />PerformancesController</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/app/controllers/performances_controller_rb.html">app/controllers/performances_controller.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+ApplicationController
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000020">create</a></li>
+  <li><a href="#M000022">destroy</a></li>
+  <li><a href="#M000019">index</a></li>
+  <li><a href="#M000021">update</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000020"></a><b>create</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000020_source')" id="l_M000020_source">show source</a> ]</p>
+  <div id="M000020_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/performances_controller.rb, line 10</span>
+10:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+11:     <span class="ruby-ivar">@performance</span> = <span class="ruby-constant">Performance</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:performance</span>])
+12:     <span class="ruby-ivar">@performance</span>.<span class="ruby-identifier">stage</span> = <span class="ruby-identifier">stage</span>
+13: 
+14:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@performance</span>.<span class="ruby-identifier">save</span>
+15:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+16:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> {
+17:           <span class="ruby-identifier">index_data</span>
+18:         }
+19:       <span class="ruby-keyword kw">end</span>
+20:     <span class="ruby-keyword kw">else</span>
+21:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+22:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+23:       <span class="ruby-keyword kw">end</span>
+24:     <span class="ruby-keyword kw">end</span>
+25:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000022"></a><b>destroy</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000022_source')" id="l_M000022_source">show source</a> ]</p>
+  <div id="M000022_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/performances_controller.rb, line 49</span>
+49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
+50:     <span class="ruby-ivar">@performance</span>.<span class="ruby-identifier">destroy</span>
+51: 
+52:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+53:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { 
+54:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">polymorphic_path</span>([ <span class="ruby-ivar">@stage</span>, <span class="ruby-constant">Performance</span>.<span class="ruby-identifier">new</span> ])
+55:       }
+56: 
+57:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> {
+58:         <span class="ruby-identifier">index_data</span>
+59:       }
+60:     <span class="ruby-keyword kw">end</span>
+61:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000019"></a><b>index</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show source</a> ]</p>
+  <div id="M000019_source" class="dyn-source">
+<pre>
+   <span class="ruby-comment cmt"># File app/controllers/performances_controller.rb, line 6</span>
+6:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
+7:     <span class="ruby-identifier">index_data</span>
+8:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000021"></a><b>update</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show source</a> ]</p>
+  <div id="M000021_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/performances_controller.rb, line 27</span>
+27:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
+28:     <span class="ruby-comment cmt"># Prevent Performance forge</span>
+29:     <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:performance</span>].<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:stage_id</span>)
+30:     <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:performance</span>].<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:stage_type</span>)
+31: 
+32:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@performance</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:performance</span>])
+33:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+34:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+35:           <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">polymorphic_path</span>([ <span class="ruby-ivar">@stage</span>, <span class="ruby-constant">Performance</span>.<span class="ruby-identifier">new</span> ])
+36:         }
+37:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> {
+38:           <span class="ruby-identifier">index_data</span>
+39:         }
+40:       <span class="ruby-keyword kw">end</span>
+41:     <span class="ruby-keyword kw">else</span>
+42:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+43:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'edit'</span> }
+44:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> 
+45:       <span class="ruby-keyword kw">end</span>
+46:     <span class="ruby-keyword kw">end</span>
+47:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -5,26 +5,27 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>atd/station @ GitHub</title>
+	<title>Station - Rails Content Management System Engine @ GitHub</title>
 	
 	<style type="text/css">
 		body {
   		margin-top: 1.0em;
-  		background-color: #551115;
+  		background-color: #FFF;
 		  font-family: "helvetica"; 
-  		color: #ffffff;
+  		color: #000;
     }
     #container {
       margin: 0 auto;
       width: 700px;
     }
-		h1 { font-size: 3.8em; color: #aaeeea; margin-bottom: 3px; }
+		h1 { font-size: 3.8em; color: #000; margin-bottom: 3px; }
 		h1 .small { font-size: 0.4em; }
 		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #aaeeea; }
-    h3 { text-align: center; color: #aaeeea; }
-    a { color: #aaeeea; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+		h2 { font-size: 1.5em; color: #000; }
+    h3 { color: #000; }
+    a { color: #000; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic; color: #999999; }
+    .station-description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic; color: #999999; text-align: center; }
     .download { float: right; }
 		pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
@@ -45,66 +46,61 @@
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
       
-    <h1><a href="http://github.com/atd/station">station</a> 
-      <span class="small">by <a href="http://github.com/atd">atd</a></span></h1>
+    <h1><a href="http://github.com/atd/station">Station</a></h1>
 
     <div class="description">
       Rails Content Management System plugin
     </div>
 
-    <p>Station is to Rails in Content Management System like Rails is to Ruby in Web Development.
+    <p>Station is to Rails in Content Management System like Rails is to Ruby in Web Development.</p>
+    <div class="station-description small">
+	    Rails   = Ruby  + Web Development<br >
+	  Station = Rails + Content Management
+    </div>
+    <p>Station provides your Rails application with a "CMS framework".<br />
+    This means authentication, authorization, roles, permissions, categories, tags, etc… but from a very flexible scope. </p>
 
-  Rails   = Ruby  + Web Development
-  Station = Rails + Content Management
+    <h2>Dependencies</h2>
+    <ul>
+	    <li>Rails 2.3.2</li>
+	    <li>RubyGems</li>
+	    <ul>
+		    <li>ruby-openid</li>
+		    <li>atom-tools</li>
+		    <li>hpricot</li>
+		    <li>mislav-will_paginate</li>
+            </ul>
+	    <li>Rails Plugins</li>
+	    <ul>
+		    <li>attachment_fu</li>
+		    <li>exception_notification (optional)</li>
+	    </ul>
+    </ul>
 
-Station provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc… but from a very flexible scope. </p><h2>Dependencies</h2>
-<p>    * Rails 2.3.2
-    * RubyGems:
-          o ruby-openid
-          o atom-tools
-          o hpricot
-          o mislav-will_paginate
-    * Rails Plugins:
-          o attachment_fu
-          o exception_notification (optional)
-</p>
-<h2>Install</h2>
-<p>Plugins
+    <h2>Installation</h2>
 
-You need attachment_fu for Logos and Attachments:
+    <h3>Plugins</h3>
 
-  script/plugin install git://github.com/atd/attachment_fu.git
+    You need <a href="http://github.com/technoweenie/attachment_fu/">attachment_fu</a> for Logos and Attachments. Install <a href="http://github.com/atd/attachment_fu/">this version</a> for better stability:
+	<pre>script/plugin install git://github.com/atd/attachment_fu.git</pre>
 
-To install Station, run:
+	Install <a href="/">station</a> with:
+	<pre>script/plugin install git://github.com/atd/station.git</pre>
 
-  script/plugin install git://github.com/atd/station.git
+	Install <a href="http://github.com/rails/exception_notification/tree/master">exception_notification</a> plugin if you want to receive debugging emails from your application
+	<pre>script/plugin install git://github.com/rails/exception_notification.git</pre>
 
-Install exception_notification plugin if you want to receive debugging emails from your application
+	<h3>Gems</h3>
 
-  script/plugin install git://github.com/rails/exception_notification.git
-
-Gems
-
-Run rake gems:install to install the required gems </p>
-<h2>License</h2>
-<p>Copyright © 2008-2009 Antonio Tapiador, released under the LGPL license </p>
-<h2>Authors</h2>
-<p>Antonio Tapiador del Dujo (atapiador@dit.upm.es)<br/>atd (atd@percolador.dit.upm.es)<br/>David (david.tapiador@gnoxys.net)<br/>volomir (volomir@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Antonio Tapiador (atapiador@dit.upm.es)<br/>      </p>
+	Run <pre>rake gems:install</pre> to install the required gems 
+	<h2>Documentation</h2>
+	See <a href ="rdoc/">Station Engine Documentation</a> for details.
+	<h2>License</h2>
+	<p>Copyright © 2008-2009 Antonio Tapiador, released under the LGPL license </p>
+	<h2>Contact</h2>
+	<p>Antonio Tapiador (atapiador@dit.upm.es)</p>
 
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/atd/station/zipball/master">zip</a> or
-      <a href="http://github.com/atd/station/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/atd/station</pre>
-    </p>
-      
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/atd/station">atd/station</a>
     </div>

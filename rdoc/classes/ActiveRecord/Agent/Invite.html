@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Agent::Invite</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Agent::Invite</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/agent/invite_rb.html">lib/active_record/agent/invite.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Support for <a href="../Agent.html">Agent</a> for being invited.
+</p>
+<p>
+Invitations can be made to the Application, or/and to a particular <a
+href="../Stage.html">Stage</a> and <a href="../../Role.html">Role</a>
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000195">classes</a></li>
+  <li><a href="#M000196">find_all</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000195"></a><b>classes</b>()
+  </div>
+  <div class="description">
+  <p>
+All <a href="Invite.html#M000195">classes</a> supporting <a
+href="../../Invitation.html">Invitation</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000195_source')" id="l_M000195_source">show source</a> ]</p>
+  <div id="M000195_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent/invite.rb, line 10</span>
+10:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">classes</span>
+11:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">classes</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:invite</span>] }
+12:         <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000196"></a><b>find_all</b>(key)
+  </div>
+  <div class="description">
+  <p>
+Find all <a href="../Agent.html">Agent</a> instances by invitation key
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000196_source')" id="l_M000196_source">show source</a> ]</p>
+  <div id="M000196_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent/invite.rb, line 15</span>
+15:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_all</span>(<span class="ruby-identifier">key</span>)
+16:           <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+17:             <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span> <span class="ruby-node">&quot;find_all_by_#{ klass.agent_options[:invite] }&quot;</span>, <span class="ruby-identifier">key</span>
+18:           }.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>
+19:         <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>
