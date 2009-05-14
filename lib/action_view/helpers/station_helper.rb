@@ -28,7 +28,7 @@ module ActionView #:nodoc:
                   elsif controller.action_name == 'edit' || @resource.errors.any?
                     t(:editing, :scope => @resource.class.to_s.underscore)
                   else
-                    @resource.title
+                    @resource.respond_to?(:title) ? @resource.title : "#{ @resource.class.to_s } #{ @resource.id }"
                   end
                 else
                   controller.controller_name.titleize
