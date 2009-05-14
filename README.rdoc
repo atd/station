@@ -8,9 +8,7 @@ Station is to {Rails}[http://rubyonrails.org/] in Content Management System like
 
 Station provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
 
-Station follows the SIOC ontology model, http://sioc-project.org/ontology
-
-http://github.com/atd/station
+{Webpage}[http://atd.github.com/station/] - {Code}[http://github.com/atd/station] - {Documentation}[http://atd.github.com/station/rdoc/]
 
 == Features
 
@@ -89,7 +87,9 @@ An Agent has the capability to post Contents to Containers. An User is the examp
 Create personal blogs with a pair of commands:
 
   script/generate station_agent User
-  script/generate station_resource Article content:text
+  script/generate station_scaffold Article content:text
+
+  rake db:migrate
 
 Users now can entry their own Articles
 

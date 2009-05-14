@@ -12,17 +12,13 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-desc 'Generate documentation for the cms plugin.'
+desc 'Generate documentation for Station.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Station'
+  rdoc.title    = 'Station Engine Documentation'
   rdoc.template = 'doc/template/horo.rb'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb', 'app/**/*.rb')
 end
 
-desc 'Publish documentation in RubyForge site'
-task :publish_rdoc => [ :rdoc ] do
-  `scp -r rdoc/* atd@rubyforge.org:/var/www/gforge-projects/cmsplugin`
-end
