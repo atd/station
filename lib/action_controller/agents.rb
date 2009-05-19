@@ -93,7 +93,7 @@ module ActionController #:nodoc:
       self.current_agent = params[:activation_code].blank? ? Anonymous.current : model_class.find_by_activation_code(params[:activation_code])
       if authenticated? && current_agent.respond_to?("active?") && !current_agent.active?
         current_agent.activate
-        flash[:info] = t(:account_activated)
+        flash[:success] = t(:account_activated)
         redirect_back_or_default(after_activate_path)
       else
         redirect_back_or_default(after_not_activate_path)
