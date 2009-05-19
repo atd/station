@@ -1,6 +1,6 @@
 class Invitation < Admission
-  before_create :set_candidate
-  before_create :set_code
+  before_validation :find_candidate
+  before_create :generate_code
 
   def to_param
     code
@@ -8,11 +8,11 @@ class Invitation < Admission
 
   private
 
-  def set_candidate #:nodoc:
+  def find_candidate #:nodoc:
     self.candidate = ActiveRecord::Agent::Invite.find_all(email).first
   end
 
-  def set_code #:nodoc:
+  def generate_code #:nodoc:
     self.code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
   end
 end

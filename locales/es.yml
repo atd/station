@@ -180,12 +180,15 @@ es:
     show: "Unirse a {{group}}"
     accept: "Aceptar invitación"
     discard: "Descartar invitación"
+    accepted: "Invitación aceptada"
+    discarded: "Invitación descartada"
   join_request:
     one: "Petición de incorporación"
     other: "Peticiones de incorporación"
     created: "Petición enviada"
     updated: "Petición actualizada"
     accepted: "Petición aceptada"
+    discarded: "Petición descartada"
 
   logo:
     one: "Logo"

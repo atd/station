@@ -57,7 +57,11 @@ class InvitationsController < ApplicationController
     respond_to do |format|
       if invitation.update_attributes(params[:invitation])
         format.html {
-          format[:notice] = t('invitation.accepted', :group => invitation.group.name) if invitation.recently_accepted?
+          flash[:notice] = ( invitation.recently_processed? ?
+                              ( invitation.accepted? ?
+                                t('invitation.accepted') :
+                                t('invitation.discarded') ) :
+                              t('invitation.updated') )
           redirect_to(invitation.group || root_path)
         }
       else
@@ -84,7 +88,7 @@ class InvitationsController < ApplicationController
   end
 
   def invitation
-    @invitation ||= Invitation.find_by_code(params[:id])
+    @invitation ||= Invitation.find_by_code(params[:id]) || raise(ActiveRecord::RecordNotFound, "Invitation not found")
   end
 
   def candidate_authenticated

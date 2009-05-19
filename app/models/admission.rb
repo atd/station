@@ -1,6 +1,14 @@
 class Admission < ActiveRecord::Base
-  attr_writer :accepted
-  before_save :accepted
+  validates_uniqueness_of :candidate_id,   :scope => [ :candidate_type, :group_id, :group_type ]
+  validates_uniqueness_of :candidate_type, :scope => [ :candidate_id,   :group_id, :group_type ]
+  validates_uniqueness_of :email, :scope => [ :group_id, :group_type ]
+
+  before_validation :fill_candidate_email
+
+  attr_writer :processed
+  before_save :processed
+
+  after_save :to_performance!
 
   attr_protected :candidate_id, :candidate_type, :candidate 
   attr_protected :group_id, :group_type, :group
@@ -15,31 +23,33 @@ class Admission < ActiveRecord::Base
                                  :group,
                                  :role ]
   named_scope :pending, lambda { 
-    { :conditions => { :accepted_at => nil } }
+    { :conditions => { :processed_at => nil } }
   }
 
-  # Has this Admission been accepted?
-  def accepted?
-    accepted_at.present?
+  # Has this Admission been processed?
+  def processed?
+    processed_at.present?
   end
 
-  # Has this Admission been recently accepted? (typically in this request)
-  def recently_accepted?
-    @accepted.present?
+  # Has this Admission been recently processed? (typically in this request)
+  def recently_processed?
+    @processed.present?
   end
 
   private
 
-  def accepted
-    return unless @accepted
+  def fill_candidate_email
+    if email.blank? && candidate && candidate.respond_to?(:email)
+      self.email = candidate.email
+    end
+  end
 
-    to_performance!
-
-    self.accepted_at = Time.now.utc
+  def processed
+    @processed && self.processed_at = Time.now.utc
   end
 
   def to_performance!
-    return unless group && role
+    return unless recently_processed? && accepted? && group && role
 
     Performance.create! :agent => candidate,
                         :stage => group,

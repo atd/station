@@ -1,6 +1,7 @@
 <h1><%= t 'invitation.show', :group => @invitation.group.name %></h1>
 
 <% form_for @invitation do |f| %>
+  <%= f.hidden_field :processed, :value => true %>
   <%= f.hidden_field :accepted, :value => true %>
 
   <% unless authenticated? %>
@@ -26,9 +27,13 @@
 
   <p>
     <%= f.submit t('invitation.accept') %>
-    <% if authenticated? %>
-      <%= link_to t('invitation.discard'), @invitation, :method => :delete %>
-    <% end %>
+  </p>
+<% end %>
+
+<% form_for @invitation do |f| %>
+  <%= f.hidden_field :processed, :value => true %>
+  <p>
+    <%= f.submit t('invitation.discard') %>
   </p>
 
 <% end %>
