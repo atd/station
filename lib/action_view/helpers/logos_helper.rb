@@ -124,7 +124,7 @@ module ActionView #:nodoc:
         return "" unless content && ! content.new_record?
 
         options[:size] ||= 64
-        options[:text] ||= t(:preview_current, :scope => content.class.to_s.underscore)
+        options[:text] ||= t(:current, :scope => content.class.to_s.underscore)
 
         link_logotype(content, options)
       end

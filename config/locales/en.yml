@@ -183,7 +183,7 @@ en:
 
   logo:
     one: "Logo"
-    preview_current: "Preview current Logo"
+    current: "Current Logo"
 
   detail:
     other: "Details"
