@@ -21,7 +21,9 @@ module LogosHelper
     options[:size] ||= 16
 
     if resource.is_a?(Logo)
-      "#{ formatted_polymorphic_path([resource, resource.format]) }?thumbnail=#{ options[:size] }"
+      resource.respond_to?(:public_filename) ?
+        resource.public_filename(options[:size]) :
+        "#{ formatted_polymorphic_path([resource, resource.format]) }?thumbnail=#{ options[:size] }"
     elsif ! resource.new_record? &&
           resource.respond_to?(:format) &&
           resource.respond_to?(:attachment_options) && 
