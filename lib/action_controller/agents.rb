@@ -65,16 +65,16 @@ module ActionController #:nodoc:
 
       if authenticated?
         redirect_to polymorphic_path(model_class.new)
-        flash[:info] = t(:created, :scope => @agent.class.to_s.underscore)
+        flash[:notice] = t(:created, :scope => @agent.class.to_s.underscore)
       else
         self.current_agent = @agent
         redirect_to @agent
-        flash[:info] = t(:account_created)
+        flash[:notice] = t(:account_created)
       end
 
       if model_class.agent_options[:activation]
-        flash[:info] << '<br />'
-        flash[:info] << ( @agent.active? ?
+        flash[:notice] << '<br />'
+        flash[:notice] << ( @agent.active? ?
           t(:activation_email_sent, :scope => @agent.class.to_s.underscore) :
           t(:should_check_email_to_activate_account))
       end
@@ -84,7 +84,7 @@ module ActionController #:nodoc:
 
     def destroy
       @agent.destroy
-      flash[:info] = t(:deleted, :scope => @agent.class.to_s.underscore)
+      flash[:notice] = t(:deleted, :scope => @agent.class.to_s.underscore)
       redirect_to polymorphic_path(model_class.new)
     end
   
@@ -125,7 +125,7 @@ module ActionController #:nodoc:
       if @agent.valid?
         @agent.reset_password
         current_agent = @agent
-        flash[:info] = t(:password_has_been_reset)
+        flash[:notice] = t(:password_has_been_reset)
         redirect_to("/")
       end
   
