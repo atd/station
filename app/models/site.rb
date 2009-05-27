@@ -13,6 +13,10 @@ class Site < ActiveRecord::Base
     first || new
   end
 
+  def email_with_name
+    "#{ name } <#{ email }>"
+  end
+
   #TODO: validate exception_notifications attribute and 
   # exception_notification plugin installation
   after_save do |site|
