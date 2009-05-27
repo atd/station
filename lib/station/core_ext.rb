@@ -8,6 +8,11 @@ end
 
 unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
   ActionView::Helpers::AtomFeedHelper.module_eval do
+    # Helper function for describing Atom Service documents. See RFC 5023
+    #
+    # Default XML namespace is 'http://www.w3.org/2007/app'
+    # 'atom' namespace corresponds to 'http://www.w3.org/2005/Atom',
+    #
     def atom_service(record, current_agent, options = {}, &block)
       xml = options[:xml] || eval("xml", block.binding)
       xml.instruct!
@@ -31,6 +36,11 @@ unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
       end
     end
 
+    # Helper function for describing Atom Entry documents. See RFC 5023
+    #
+    # Default XML namespace is 'http://www.w3.org/2005/Atom',
+    # 'app' namespace corresponds to 'http://www.w3.org/2007/app'
+    #
     def atom_entry(record, options = {}, &block)
       if options[:schema_date]
         options[:schema_date] = options[:schema_date].strftime("%Y-%m-%d") if options[:schema_date].respond_to?(:strftime)
@@ -41,7 +51,10 @@ unless ActionView::Helpers::AtomFeedHelper.respond_to?(:atom_entry)
       xml = options[:xml] || eval("xml", block.binding)
       xml.instruct!
 
-      entry_opts = {"xml:lang" => options[:language] || "en-US", "xmlns" => 'http://www.w3.org/2005/Atom'}
+      entry_opts = { "xml:lang" => options[:language] || "en-US",
+                      "xmlns" => 'http://www.w3.org/2005/Atom',
+                      "xmlns:app" => 'http://www.w3.org/2007/app'
+      }
       entry_opts.merge!(options).reject!{|k,v| !k.to_s.match(/^xml/)}
 
       xml.entry(entry_opts) do
