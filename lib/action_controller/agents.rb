@@ -125,7 +125,7 @@ module ActionController #:nodoc:
       if @agent.valid?
         @agent.reset_password
         current_agent = @agent
-        flash[:notice] = t(:password_has_been_reset)
+        flash[:success] = t(:password_has_been_reset)
         redirect_to("/")
       end
   
