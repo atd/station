@@ -43,7 +43,11 @@ module ActiveRecord #:nodoc:
       def reset_password
         @reset_password = true
         self.reset_password_code = nil
-        save(false)
+
+        # Active agent if pending, since she has verified her email
+        ! active? ?
+          activate :
+          save(false)
       end
 
       # Did the agent recently reset the passowrd?
