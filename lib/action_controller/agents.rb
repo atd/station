@@ -124,7 +124,7 @@ module ActionController #:nodoc:
                                :password_confirmation => params[:password_confirmation])
       if @agent.valid?
         @agent.reset_password
-        current_agent = @agent
+        self.current_agent = @agent
         flash[:success] = t(:password_has_been_reset)
         redirect_to("/")
       end
