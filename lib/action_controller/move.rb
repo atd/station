@@ -109,16 +109,13 @@ module ActionController
     deprecated_method :current_container, :container
     deprecated_method :get_container, :container
 
-    # Tries to find a Container suitable for this Content
+    # Must find a Container
     # 
     # Calls container to figure out from params. If unsuccesful, 
-    # it tries with site
+    # raises ActiveRecord::RecordNotFound
     # 
-    # Renders Forbidden if no Container is found
     def container!
-      @container = container || site
-
-      render(:text => "Container not present", :status => :precondition_failed) unless @container.respond_to?("container_options")
+      container || raise(ActiveRecord::RecordNotFound)
     end
 
     deprecated_method :needs_container, :container!
