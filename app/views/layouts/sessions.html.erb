@@ -19,10 +19,10 @@
   <div id="site" class="container ">
     <div id="header" class="span-24 last">
       <div id="header_logo" class="prepend-1 span-3">
-        <%= link_logo(site, :size => 96, :url => root_path) %>
+        <%= link_logo(current_site, :size => 96, :url => root_path) %>
       </div>
       <div id="header_title" class="prepend-1 span-8">
-        <%= link_to site.name, root_path %>
+        <%= link_to current_site.name, root_path %>
       </div>
     </div>
     <hr class="site">
