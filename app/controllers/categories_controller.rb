@@ -2,10 +2,6 @@
 class CategoriesController < ApplicationController
   before_filter :categories_domain!, :only => [ :index, :new, :create ]
 
-  before_filter :get_category, :only => [ :show, :edit, :update, :destroy ]
-
-  before_filter :categories_domains_and_agents
-
   # List categories belonging to a Container
   #
   # GET /:categories_domain_type/:categories_domain_id/categories
@@ -25,6 +21,8 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.xml
   def show
+    @categorizables = category.categorizables
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @category }
@@ -48,6 +46,7 @@ class CategoriesController < ApplicationController
   #
   # GET /categories/1/edit
   def edit
+    category
   end
 
   # Create new category
@@ -77,7 +76,7 @@ class CategoriesController < ApplicationController
   # PUT /categories/1.xml
   def update
     respond_to do |format|
-      if @category.update_attributes(params[:category])
+      if category.update_attributes(params[:category])
         flash[:success] = t('category.updated')
         format.html { redirect_to(@category) }
         format.xml  { head :ok }
@@ -93,7 +92,7 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1
   # DELETE /categories/1.xml
   def destroy
-    @category.destroy
+    category.destroy
 
     respond_to do |format|
       format.html { redirect_to(polymorphic_path([ @categories_domain, Category.new ])) }
@@ -111,18 +110,11 @@ class CategoriesController < ApplicationController
   # Find Category using params[:id]
   #
   # Sets @category and @categories_domain variables
-  def get_category
-    @category = Category.find(params[:id])
-    @categories_domain = @category.domain
-  end
-
-  # Set @container and @agents variables from @categories_domain
-  #
-  # @categories_domain variable is set either in :categories_domain! or :get_category
-  def categories_domains_and_agents #:nodoc:
-    #TODO return unless @categories_domain && @categories_domain.acts_as_container?
-    @containers = Array(@categories_domain)
-    @agents = @categories_domain.actors
+  def category
+    @category ||= Category.find(params[:id])
+    raise ActiveRecord::RecordNotFound, "Category not found" unless @category
+    @categories_domain ||= @category.domain
+    @category
   end
 end
 

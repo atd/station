@@ -122,6 +122,7 @@ en:
     created: "Category created"
     editing: "Editing Category"
     name: "Category name"
+    description: "Description"
     domain:
       one: "Domain"
       other: "Domains"

@@ -120,6 +120,7 @@ es:
     created: "Categoría creada"
     editing: "Editando Categoría"
     name: "Nombre de la Categoría"
+    description: "Descripción"
     domain:
       one: "Dominio"
       other: "Dominios"

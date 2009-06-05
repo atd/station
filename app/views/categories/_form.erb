@@ -1,10 +1,10 @@
 <p>
-  <b><%= t(:name) %>: </b><br />
+  <%= form.label :name, t('category.name') %><br />
   <%= form.text_field :name %>
 </p>
 
 <p>
-  <b><%= t(:description) %>:</b><br />
+  <%= form.label :description, t('category.description') %><br />
   <%= form.text_area :description %>
 </p>
 

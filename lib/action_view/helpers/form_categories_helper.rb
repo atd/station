@@ -30,8 +30,8 @@ module ActionView #:nodoc:
     end
 
     class FormBuilder #:nodoc:
-      def categories_tag(options = {})
-        @template.categories(@object_name, options.merge(:object => @object))
+      def categories(options = {})
+        @template.categories_tag(@object_name, options.merge(:object => @object))
       end
     end
   end

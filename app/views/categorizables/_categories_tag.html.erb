@@ -1,20 +1,19 @@
-<div id="categories_form_<%= dom_id categorizable %>" class="form_entry">
-  <div class="form_label"><%= t('category.other') %></div>
-  <div class="form_data categories_form">
+<p>
+  <%= label categorizable_name, :category_ids, t('category.other') %><br />
+  <div id="categories_list_<%= dom_id domain %>">
   <% if domain.domain_categories.blank? %>
-  <%= t('category.domain.without_categories', :domain => sanitize(domain.name)) %>
+    <%= t('category.domain.without_categories', :domain => sanitize(domain.name)) %>
   <% else %>
-    <p id="categories_list_<%= dom_id domain %>">
     <% domain.domain_categories.each do |c| %>
       <%= check_box_tag("#{ categorizable_name }[category_ids][]", c.id, categorizable.categories.include?(c)) + sanitize(c.name) %><br />
     <% end %>
-    </p>
   <% end %>
-  <%= link_to_remote(t('category.new'), 
-                      :url => polymorphic_path([ domain, Category.new ]),
-                      :condition => "(category_name = window.prompt('#{ t('category.name') }')) != '' && category_name != null",
-                      :with => "'categorizable_name=#{ categorizable_name }&category[name]=' + category_name",
-                      :html => { :id => "new_category", 
-                      :class => "action add" } ) %>
   </div>
-</div>
+
+  <%= link_to_remote(t('category.new'), 
+                     :url => polymorphic_path([ domain, Category.new ]),
+                     :condition => "(category_name = window.prompt('#{ t('category.name') }')) != '' && category_name != null",
+                     :with => "'categorizable_name=#{ categorizable_name }&category[name]=' + category_name",
+                     :html => { :id => "new_category", 
+                     :class => "action add" } ) %>
+</p>

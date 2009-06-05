@@ -1,0 +1,8 @@
+if error_messages_for(:category).blank?
+  page.insert_html :bottom, 
+                   "categories_list_#{ dom_id @category.domain }", 
+                   check_box_tag("#{ params[:categorizable_name] }[category_ids][]", @category.id, true) + 
+                   sanitize(@category.name) + '<br />'
+else
+ page.alert(error_messages_for(:category))
+end
