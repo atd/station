@@ -66,13 +66,16 @@ if locale_files.present?
   I18n.load_path.insert(app_index, *locale_files)
 end
 
-# Preload Models
+# Models Preload
 file_patterns = [ File.dirname(__FILE__), RAILS_ROOT ].map{ |f| f + '/app/models/**/*.rb' }
 file_exclusions = ['svn', 'CVS', 'bzr']
 file_patterns.reject{ |f| f =~ /#{file_exclusions.join("|")}/ }
 
 preloaded_files = []
+# # Lazy files need other files to be loaded first
+lazy_files = [ "category.rb" ]
 
+# # Find all source files that need preloading
 file_patterns.each do |file_pattern|
   Dir[file_pattern].each do |filename|
     open filename do |file|
@@ -81,12 +84,28 @@ file_patterns.each do |file_pattern|
   end
 end
 
-# Ensure application modified model files are loaded when autoloading plugin models
+# # If there are overwritten engine files in the application, load them 
+# # instead of the engine ones.
+#
+# If you only want to add functionality, you should use:
+#   require_dependency "#{ RAILS_ROOT }/path/to/the/engine/file"
+# on the top of the application file and then reopen the class
+#
 preloaded_files.select{ |f| f =~ /^#{ directory }/ }.each do |f|
   app_f = f.gsub(directory, RAILS_ROOT)
-  preloaded_files |= [ app_f ] if File.exists?(app_f)
+  if File.exists?(app_f)
+    preloaded_files |= [ app_f ] 
+    preloaded_files.delete(f)
+  end
 end
 
+# # Move lazy files to the end
+lazy_files.each do |lf|
+  f = preloaded_files.find{ |pf| pf =~ /#{ lf }$/ }
+  preloaded_files << preloaded_files.delete(f)
+end
+
+# # Finally, preload files
 preloaded_files.each do |f|
   begin
     require_dependency(f)
