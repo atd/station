@@ -378,7 +378,7 @@ es:
       sentence_connector: "y" 
 
   pagination:
-    prev_label: "&laquo; Anterior"
+    previous_label: "&laquo; Anterior"
     next_label: "Siguiente &raquo;"
 
    

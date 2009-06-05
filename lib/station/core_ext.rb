@@ -81,7 +81,7 @@ require 'will_paginate'
 
 module WillPaginate::ViewHelpers #:nodoc:
   def will_paginate_with_translation(collection = nil, options = {})
-    options[:prev_label] ||= I18n.t('pagination.prev_label')
+    options[:previous_label] ||= I18n.t('pagination.previous_label')
     options[:next_label] ||= I18n.t('pagination.next_label')
 
     will_paginate_without_translation(collection, options)

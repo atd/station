@@ -223,6 +223,6 @@ en:
       optional_information_by: "Optional information requested by {{server}}"
 
   pagination:
-    prev_label: "&laquo; Previous"
+    previous_label: "&laquo; Previous"
     next_label: "Next &raquo;"
 
