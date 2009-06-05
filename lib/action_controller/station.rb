@@ -118,7 +118,7 @@ module ActionController
     # raises ActiveRecord::RecordNotFound
     # 
     def current_container!
-      container || raise(ActiveRecord::RecordNotFound)
+      current_container || raise(ActiveRecord::RecordNotFound)
     end
 
     deprecated_method :container!, :current_container!
