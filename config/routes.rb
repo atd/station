@@ -64,6 +64,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources(*ActiveRecord::Stage.symbols - Array(:sites)) do |stage|
     stage.resources :performances
     stage.resources :invitations
+    stage.resources :join_requests
   end
 
   map.resources :performances

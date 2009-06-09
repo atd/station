@@ -22,7 +22,9 @@ module ActionView #:nodoc:
         options[:size] ||= 16
 
         if resource.is_a?(Logo)
-          polymorphic_path(resource, :format => resource.format, :thumbnail=> options[:size])
+          resource.respond_to?(:public_filename) ?
+            resource.public_filename(options[:size]) :
+            polymorphic_path(resource, :format => resource.format, :thumbnail=> options[:size])
         elsif ! resource.new_record? &&
               resource.respond_to?(:format) &&
               resource.respond_to?(:attachment_options) && 
@@ -42,16 +44,21 @@ module ActionView #:nodoc:
       end
 
       # Prints an image_tag with the logo_image_path for the resource inside a div
+      # Options:
+      # title:: <tt>title</tt> attribute of the <tt>image_tag</tt>
+      # alt:: <tt>alt</tt> attribute of the <tt>image_tag</tt>
       def logo(resource, options = {})
         options[:size] ||= 16
         url = options.delete(:url)
+        alt = options.delete(:alt) || "[ #{ resource.respond_to?(:name) ? sanitize(resource.name) : resource.class } logo ]"
+        title = options.delete(:title) || (resource.respond_to?(:title) ? sanitize(resource.title) : resource.class.to_s)
 
         returning "" do |html|
     #      html << "<div class=\"logo logo-#{ options[:size] }\">"
 
           image = image_tag(logo_image_path(resource, options),
-                            :alt => "[ #{ resource.respond_to?(:name) ? sanitize(resource.name) : resource.class } logo ]",
-                            :title => (resource.respond_to?(:title) ? sanitize(resource.title) : resource.class.to_s),
+                            :alt => alt,
+                            :title => title,
                             :class => 'logo')
 
           html << link_to_if(url, image, url, :class => 'logo')

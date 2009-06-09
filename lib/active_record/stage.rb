@@ -26,10 +26,15 @@ module ActiveRecord #:nodoc:
 
         reflection_affordances :stage
 
-        has_many :stage_invitations,
-                 :class_name => "Invitation",
+        has_many :admissions,
                  :dependent => :destroy,
-                 :as => :stage
+                 :as => :group
+        has_many :invitations,
+                 :dependent => :destroy,
+                 :as => :group
+        has_many :join_requests,
+                 :dependent => :destroy,
+                 :as => :group
 
         extend  ClassMethods
         include InstanceMethods
@@ -40,6 +45,11 @@ module ActiveRecord #:nodoc:
     end
 
     module ClassMethods
+      # The role name of this class
+      def role(name)
+        roles.find{ |r| r.name == name }
+      end
+
       # All Roles defined for this class
       def roles
         Role.find_all_by_stage_type self.to_s

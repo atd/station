@@ -20,19 +20,22 @@ module ActiveRecord #:nodoc:
 
         def included(base) #:nodoc:
           base.class_eval do
-            after_create "invitations_to_performances"
+            has_many :pending_invitations,
+                     :class_name => "Invitation",
+                     :as => :candidate
+
+            after_create "assign_pending_invitations"
           end
         end
       end
 
       private
 
-      # Create a Performance for each Invitation of this Agent
-      def invitations_to_performances #:nodoc:
+      # Update Invitations with this candidate
+      def assign_pending_invitations #:nodoc:
         key = send(agent_options[:invite])
 
-        # FIXME: Probably Agent doesn't want to accept all invitations
-        Invitation.find_all_by_email(key).map(&:accept!)
+        Invitation.find_all_by_email(key).map{ |i| i.update_attribute(:candidate, self) }
       end
     end
   end

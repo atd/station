@@ -181,6 +181,20 @@ en:
     other: "Invitations"
     new: "New Invitation"
     not_found: "Invitation not found"
+    email: "Email"
+    role: "Role"
+    show: "Join {{group}}"
+    accept: "Accept invitation"
+    discard: "Discard invitation"
+    accepted: "Invitation accepted"
+    discarded: "Invitation discarded"
+  join_request:
+    one: "Join Request"
+    other: "Join Requests"
+    created: "Join Request sent"
+    updated: "Join Request updated"
+    accepted: "Join Request accepted"
+    discarded: "Join Request discarded"
 
   logo:
     one: "Logo"
