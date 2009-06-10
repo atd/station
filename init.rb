@@ -112,6 +112,13 @@ preloaded_files.each do |f|
   end
 end
 
+# ActionMailer default host
+
+if Site.table_exists?
+  ActionMailer::Base.default_url_options[:host] = Site.current.domain
+end
+
+
 # ExceptionNotifier Integration
 begin
   def ExceptionNotifier.set_from_site(site)
