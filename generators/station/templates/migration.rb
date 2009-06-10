@@ -95,6 +95,8 @@ class StationMigration < ActiveRecord::Migration
     create_table :performances do |t|
       t.integer :agent_id
       t.string  :agent_type
+      t.integer :stage_id
+      t.string  :stage_type
       t.integer :role_id
     end
 
