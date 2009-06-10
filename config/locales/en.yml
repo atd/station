@@ -162,6 +162,7 @@ en:
     confirm_delete: "Delete Role?"
     select:
       one: "Select Role"
+    name: "Name"
     stage_type: "Stage Type"
     go_to_manage: "Go to manage roles"
     name_permissions: "{{name}} permissions"
