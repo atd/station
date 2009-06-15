@@ -39,7 +39,7 @@
 <% if ActiveRecord::Agent.authentication_classes.any? -%>
 <div id="signup">
   <p>
-  <%= link_to t(:join_to_site, :site => site.name),
+  <%= link_to t(:join_to_site, :site => current_site.name),
                 polymorphic_path(ActiveRecord::Agent.authentication_classes.first.new,
                 :action => :new),
                 :class => "action add" %>

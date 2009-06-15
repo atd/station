@@ -162,6 +162,7 @@ es:
     confirm_delete: "¿Borrar Rol?"
     select:
       one: "Seleccionar Rol"
+    name: "Nombre"
     stage_type: "Tipo de escenario"
     go_to_manage: "Ir a gestionar roles"
     name_permissions: "Permisos de {{name}}"
