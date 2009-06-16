@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>Station - Rails Content Management System Engine @ GitHub</title>
+	<title>Rails Station - Content Management System Engine</title>
 	
 	<style type="text/css">
 		body {
@@ -31,6 +31,8 @@
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
 	</style>
+
+	<link rel="alternate" type="application/atom+xml" title="Rails Station Atom Feed" href="http://rstation.wordpress.com/feed/atom/" />
 	
 </head>
 
@@ -46,10 +48,10 @@
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
       
-    <h1><a href="http://github.com/atd/station">Station</a></h1>
+    <h1><a href="http://github.com/atd/station">Rails Station</a></h1>
 
     <div class="description">
-      Rails Content Management System plugin
+      Content Management System Engine
     </div>
 
     <p>Station is to Rails in Content Management System like Rails is to Ruby in Web Development.</p>
@@ -65,10 +67,10 @@
 	    <li>Rails 2.3.2</li>
 	    <li>RubyGems</li>
 	    <ul>
-		    <li>ruby-openid</li>
-		    <li>atom-tools</li>
-		    <li>hpricot</li>
 		    <li>mislav-will_paginate</li>
+		    <li>ruby-openid (optional)</li>
+		    <li>atom-tools (optional)</li>
+		    <li>hpricot (optional)</li>
             </ul>
 	    <li>Rails Plugins</li>
 	    <ul>
@@ -92,9 +94,31 @@
 
 	<h3>Gems</h3>
 
-	Run <pre>rake gems:install</pre> to install the required gems 
+	<p>
+	Run <pre>rake gems:install</pre> to install the required gem
+	</p>
+
+	<p>
+	You can install this aditional gems:
+	</p>
+	<ul>
+		<li>ruby-openid, for OpenID authentication support
+
+		</li>
+		<li>atom-tools, for AtomPub support
+
+		</li>
+		<li>hpricot, for HTML discovery
+
+		</li>
+	</ul>
+
+
 	<h2>Documentation</h2>
 	See <a href ="rdoc/">Station Engine Documentation</a> for details.
+
+	<h2>Blog</h2>
+	Find posts about <a href="/">Station</a> development and Rails at <a href="http://rstation.wordpress.com/">Rails Station Blog</a>
 	<h2>License</h2>
 	<p>Copyright © 2008-2009 Antonio Tapiador, released under the LGPL license </p>
 	<h2>Contact</h2>

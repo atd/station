@@ -92,6 +92,7 @@ You must have the plugin installed
   <div class="sectiontitle">Methods</div>
   <ul>
   <li><a href="#M000062">current</a></li>
+  <li><a href="#M000063">email_with_name</a></li>
   </ul>
 
 
@@ -112,6 +113,23 @@ You must have the plugin installed
 12:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">current</span>
 13:     <span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">new</span>
 14:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000063"></a><b>email_with_name</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000063_source')" id="l_M000063_source">show source</a> ]</p>
+  <div id="M000063_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/site.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">email_with_name</span>
+17:     <span class="ruby-node">&quot;#{ name } &lt;#{ email }&gt;&quot;</span>
+18:   <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

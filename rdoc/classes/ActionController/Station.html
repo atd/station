@@ -78,14 +78,14 @@ Base methods for ActionController
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000090">current_categories_domain</a></li>
-  <li><a href="#M000088">current_container</a></li>
-  <li><a href="#M000089">current_container!</a></li>
-  <li><a href="#M000087">current_site</a></li>
-  <li><a href="#M000084">deprecated_method</a></li>
-  <li><a href="#M000085">model_class</a></li>
-  <li><a href="#M000086">record_from_path</a></li>
-  <li><a href="#M000091">set_params_from_raw_post</a></li>
+  <li><a href="#M000091">current_categories_domain</a></li>
+  <li><a href="#M000089">current_container</a></li>
+  <li><a href="#M000090">current_container!</a></li>
+  <li><a href="#M000088">current_site</a></li>
+  <li><a href="#M000085">deprecated_method</a></li>
+  <li><a href="#M000086">model_class</a></li>
+  <li><a href="#M000087">record_from_path</a></li>
+  <li><a href="#M000092">set_params_from_raw_post</a></li>
   </ul>
 
 
@@ -96,11 +96,11 @@ Base methods for ActionController
 <div class="sectiontitle">Public Class methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000084"></a><b>deprecated_method</b>(old_method, new_method)
+    <a name="M000085"></a><b>deprecated_method</b>(old_method, new_method)
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000084_source')" id="l_M000084_source">show source</a> ]</p>
-  <div id="M000084_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000085_source')" id="l_M000085_source">show source</a> ]</p>
+  <div id="M000085_source" class="dyn-source">
 <pre>
    <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 7</span>
 7:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">deprecated_method</span>(<span class="ruby-identifier">old_method</span>, <span class="ruby-identifier">new_method</span>)
@@ -113,11 +113,11 @@ Base methods for ActionController
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000090"></a><b>current_categories_domain</b>()
+    <a name="M000091"></a><b>current_categories_domain</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000090_source')" id="l_M000090_source">show source</a> ]</p>
-  <div id="M000090_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000091_source')" id="l_M000091_source">show source</a> ]</p>
+  <div id="M000091_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 131</span>
 131:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_categories_domain</span>
@@ -129,7 +129,7 @@ Base methods for ActionController
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000088"></a><b>current_container</b>()
+    <a name="M000089"></a><b>current_container</b>()
   </div>
   <div class="description">
   <p>
@@ -137,8 +137,8 @@ Find current Container using path from the request
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000088_source')" id="l_M000088_source">show source</a> ]</p>
-  <div id="M000088_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000089_source')" id="l_M000089_source">show source</a> ]</p>
+  <div id="M000089_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 109</span>
 109:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_container</span>
@@ -150,7 +150,7 @@ Find current Container using path from the request
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000089"></a><b>current_container!</b>()
+    <a name="M000090"></a><b>current_container!</b>()
   </div>
   <div class="description">
   <p>
@@ -165,8 +165,8 @@ Renders Forbidden if no Container is found
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000089_source')" id="l_M000089_source">show source</a> ]</p>
-  <div id="M000089_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000090_source')" id="l_M000090_source">show source</a> ]</p>
+  <div id="M000090_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 122</span>
 122:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_container!</span>
@@ -180,11 +180,11 @@ Renders Forbidden if no Container is found
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000087"></a><b>current_site</b>()
+    <a name="M000088"></a><b>current_site</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000087_source')" id="l_M000087_source">show source</a> ]</p>
-  <div id="M000087_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000088_source')" id="l_M000088_source">show source</a> ]</p>
+  <div id="M000088_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 102</span>
 102:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_site</span>
@@ -196,7 +196,7 @@ Renders Forbidden if no Container is found
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000085"></a><b>model_class</b>()
+    <a name="M000086"></a><b>model_class</b>()
   </div>
   <div class="description">
   <p>
@@ -210,8 +210,8 @@ Useful for Controller inheritance
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000085_source')" id="l_M000085_source">show source</a> ]</p>
-  <div id="M000085_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000086_source')" id="l_M000086_source">show source</a> ]</p>
+  <div id="M000086_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 60</span>
 60:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">model_class</span>
@@ -223,7 +223,7 @@ Useful for Controller inheritance
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000086"></a><b>record_from_path</b>(options = {})
+    <a name="M000087"></a><b>record_from_path</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -237,8 +237,8 @@ Obtains a given ActiveRecord from parameters. Options:
 </ul>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000086_source')" id="l_M000086_source">show source</a> ]</p>
-  <div id="M000086_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000087_source')" id="l_M000087_source">show source</a> ]</p>
+  <div id="M000087_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 68</span>
  68:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">record_from_path</span>(<span class="ruby-identifier">options</span> = {})
@@ -281,7 +281,7 @@ Obtains a given ActiveRecord from parameters. Options:
 <div class="sectiontitle">Protected Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000091"></a><b>set_params_from_raw_post</b>(content = controller_name.singularize.to_sym)
+    <a name="M000092"></a><b>set_params_from_raw_post</b>(content = controller_name.singularize.to_sym)
   </div>
   <div class="description">
   <p>
@@ -289,8 +289,8 @@ Extract request parameters when posting raw data
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000091_source')" id="l_M000091_source">show source</a> ]</p>
-  <div id="M000091_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000092_source')" id="l_M000092_source">show source</a> ]</p>
+  <div id="M000092_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 140</span>
 140:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_params_from_raw_post</span>(<span class="ruby-identifier">content</span> = <span class="ruby-identifier">controller_name</span>.<span class="ruby-identifier">singularize</span>.<span class="ruby-identifier">to_sym</span>)

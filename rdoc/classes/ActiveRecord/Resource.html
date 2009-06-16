@@ -93,7 +93,7 @@ multipart/form-data
 </table>
 <p>
 Include this functionality in your models using <a
-href="Resource/ActsAsMethods.html#M000163">ActsAsMethods#acts_as_resource</a>
+href="Resource/ActsAsMethods.html#M000164">ActsAsMethods#acts_as_resource</a>
 </p>
 </div>
 
@@ -101,7 +101,7 @@ href="Resource/ActsAsMethods.html#M000163">ActsAsMethods#acts_as_resource</a>
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000156">class_supporting</a></li>
+  <li><a href="#M000157">class_supporting</a></li>
   </ul>
 
 
@@ -117,7 +117,7 @@ Module <a href="Resource/InstanceMethods.html" class="link">ActiveRecord::Resour
 <div class="sectiontitle">Public Class methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000156"></a><b>class_supporting</b>(content_type)
+    <a name="M000157"></a><b>class_supporting</b>(content_type)
   </div>
   <div class="description">
   <p>
@@ -126,20 +126,20 @@ Return the first <a href="Resource.html">Resource</a> class supporting this
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000156_source')" id="l_M000156_source">show source</a> ]</p>
-  <div id="M000156_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000157_source')" id="l_M000157_source">show source</a> ]</p>
+  <div id="M000157_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 16</span>
-16:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_supporting</span>(<span class="ruby-identifier">content_type</span>)
-17:         <span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">content_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>) <span class="ruby-operator">?</span>
-18:           <span class="ruby-identifier">content_type</span> <span class="ruby-operator">:</span>
-19:           <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">content_type</span>)
-20:         
-21:         <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
-22:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">klass</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">mime_types</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">mime_type</span>)
-23:         <span class="ruby-keyword kw">end</span>
-24:         <span class="ruby-keyword kw">nil</span>
-25:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 20</span>
+20:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_supporting</span>(<span class="ruby-identifier">content_type</span>)
+21:         <span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">content_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>) <span class="ruby-operator">?</span>
+22:           <span class="ruby-identifier">content_type</span> <span class="ruby-operator">:</span>
+23:           <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">content_type</span>)
+24:         
+25:         <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+26:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">klass</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">mime_types</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">mime_type</span>)
+27:         <span class="ruby-keyword kw">end</span>
+28:         <span class="ruby-keyword kw">nil</span>
+29:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

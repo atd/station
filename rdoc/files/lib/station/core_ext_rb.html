@@ -63,7 +63,7 @@
           </tr>
           <tr>
             <td>Modified:</td>
-            <td>Thu May 14 16:17:41 +0200 2009</td>
+            <td>Tue Jun 16 12:27:33 +0200 2009</td>
           </tr>
         </table>
       </td></tr>
@@ -99,41 +99,55 @@
   <div class="title">
     <a name="M000003"></a><b>atom_entry</b>(record, options = {}) {|ActionView::Helpers::AtomFeedHelper::AtomFeedBuilder.new(xml, self, options)| ...}
   </div>
+  <div class="description">
+  <p>
+Helper function for describing Atom Entry documents. See RFC 5023
+</p>
+<p>
+Default XML namespace is &#8216;<a
+href="http://www.w3.org/2005/Atom">www.w3.org/2005/Atom</a>&#8217;,
+&#8216;app&#8217; namespace corresponds to &#8216;<a
+href="http://www.w3.org/2007/app">www.w3.org/2007/app</a>&#8216;
+</p>
+  </div>
 <div class="sourcecode">
   <p class="source-link">[ <a href="javascript:toggleSource('M000003_source')" id="l_M000003_source">show source</a> ]</p>
   <div id="M000003_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 34</span>
-34:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atom_entry</span>(<span class="ruby-identifier">record</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-35:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>]
-36:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>].<span class="ruby-identifier">strftime</span>(<span class="ruby-value str">&quot;%Y-%m-%d&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>].<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:strftime</span>)
-37:       <span class="ruby-keyword kw">else</span>
-38:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>] = <span class="ruby-value str">&quot;2005&quot;</span> <span class="ruby-comment cmt"># The Atom spec copyright date</span>
-39:       <span class="ruby-keyword kw">end</span>
-40: 
-41:       <span class="ruby-identifier">xml</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xml</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;xml&quot;</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>)
-42:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">instruct!</span>
-43: 
-44:       <span class="ruby-identifier">entry_opts</span> = {<span class="ruby-value str">&quot;xml:lang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:language</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;en-US&quot;</span>, <span class="ruby-value str">&quot;xmlns&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'http://www.w3.org/2005/Atom'</span>}
-45:       <span class="ruby-identifier">entry_opts</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">reject!</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^xml/</span>)}
-46: 
-47:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">entry</span>(<span class="ruby-identifier">entry_opts</span>) <span class="ruby-keyword kw">do</span>
-48:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">id</span>(<span class="ruby-node">&quot;tag:#{request.host},#{options[:schema_date]}:#{record.class}/#{record.id}&quot;</span>)
-49: 
-50:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:published</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:created_at</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">created_at</span>)
-51:           <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">published</span>((<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:published</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">created_at</span>).<span class="ruby-identifier">xmlschema</span>)
-52:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 44</span>
+44:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atom_entry</span>(<span class="ruby-identifier">record</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+45:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>]
+46:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>].<span class="ruby-identifier">strftime</span>(<span class="ruby-value str">&quot;%Y-%m-%d&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>].<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:strftime</span>)
+47:       <span class="ruby-keyword kw">else</span>
+48:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:schema_date</span>] = <span class="ruby-value str">&quot;2005&quot;</span> <span class="ruby-comment cmt"># The Atom spec copyright date</span>
+49:       <span class="ruby-keyword kw">end</span>
+50: 
+51:       <span class="ruby-identifier">xml</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xml</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;xml&quot;</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>)
+52:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">instruct!</span>
 53: 
-54:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:updated</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:updated_at</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">updated_at</span>)
-55:           <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">updated</span>((<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:updated</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">updated_at</span>).<span class="ruby-identifier">xmlschema</span>)
-56:         <span class="ruby-keyword kw">end</span>
-57: 
-58:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">link</span>(<span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'alternate'</span>, <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/html'</span>, <span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:root_url</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">polymorphic_url</span>(<span class="ruby-identifier">record</span>))
-59:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">link</span>(<span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'self'</span>, <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'application/atom+xml'</span>, <span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">url</span>)
-60: 
-61:         <span class="ruby-keyword kw">yield</span> <span class="ruby-constant">ActionView</span><span class="ruby-operator">::</span><span class="ruby-constant">Helpers</span><span class="ruby-operator">::</span><span class="ruby-constant">AtomFeedHelper</span><span class="ruby-operator">::</span><span class="ruby-constant">AtomFeedBuilder</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">options</span>)
-62:       <span class="ruby-keyword kw">end</span>
-63:     <span class="ruby-keyword kw">end</span>
+54:       <span class="ruby-identifier">entry_opts</span> = { <span class="ruby-value str">&quot;xml:lang&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:language</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;en-US&quot;</span>,
+55:                       <span class="ruby-value str">&quot;xmlns&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'http://www.w3.org/2005/Atom'</span>,
+56:                       <span class="ruby-value str">&quot;xmlns:app&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'http://www.w3.org/2007/app'</span>
+57:       }
+58:       <span class="ruby-identifier">entry_opts</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">reject!</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^xml/</span>)}
+59: 
+60:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">entry</span>(<span class="ruby-identifier">entry_opts</span>) <span class="ruby-keyword kw">do</span>
+61:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">id</span>(<span class="ruby-node">&quot;tag:#{request.host},#{options[:schema_date]}:#{record.class}/#{record.id}&quot;</span>)
+62: 
+63:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:published</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:created_at</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">created_at</span>)
+64:           <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">published</span>((<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:published</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">created_at</span>).<span class="ruby-identifier">xmlschema</span>)
+65:         <span class="ruby-keyword kw">end</span>
+66: 
+67:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:updated</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">record</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:updated_at</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">updated_at</span>)
+68:           <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">updated</span>((<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:updated</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">updated_at</span>).<span class="ruby-identifier">xmlschema</span>)
+69:         <span class="ruby-keyword kw">end</span>
+70: 
+71:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">link</span>(<span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'alternate'</span>, <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/html'</span>, <span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:root_url</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">polymorphic_url</span>(<span class="ruby-identifier">record</span>))
+72:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">link</span>(<span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'self'</span>, <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'application/atom+xml'</span>, <span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">url</span>)
+73: 
+74:         <span class="ruby-keyword kw">yield</span> <span class="ruby-constant">ActionView</span><span class="ruby-operator">::</span><span class="ruby-constant">Helpers</span><span class="ruby-operator">::</span><span class="ruby-constant">AtomFeedHelper</span><span class="ruby-operator">::</span><span class="ruby-constant">AtomFeedBuilder</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">options</span>)
+75:       <span class="ruby-keyword kw">end</span>
+76:     <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>
@@ -142,33 +156,44 @@
   <div class="title">
     <a name="M000002"></a><b>atom_service</b>(record, current_agent, options = {}, &amp;block)
   </div>
+  <div class="description">
+  <p>
+Helper function for describing Atom Service documents. See RFC 5023
+</p>
+<p>
+Default XML namespace is &#8216;<a
+href="http://www.w3.org/2007/app">www.w3.org/2007/app</a>&#8217;
+&#8216;atom&#8217; namespace corresponds to &#8216;<a
+href="http://www.w3.org/2005/Atom">www.w3.org/2005/Atom</a>&#8217;,
+</p>
+  </div>
 <div class="sourcecode">
   <p class="source-link">[ <a href="javascript:toggleSource('M000002_source')" id="l_M000002_source">show source</a> ]</p>
   <div id="M000002_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 11</span>
-11:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atom_service</span>(<span class="ruby-identifier">record</span>, <span class="ruby-identifier">current_agent</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-12:       <span class="ruby-identifier">xml</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xml</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;xml&quot;</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>)
-13:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">instruct!</span>
-14: 
-15:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">service</span> <span class="ruby-value str">&quot;xmlns&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;http://www.w3.org/2007/app&quot;</span>, <span class="ruby-value str">&quot;xmlns:atom&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'http://www.w3.org/2005/Atom'</span> <span class="ruby-keyword kw">do</span>
-16:       <span class="ruby-comment cmt"># Workspaces are Containers current_agent can post to:</span>
-17:       <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">container</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">stages</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">authorizes?</span>(<span class="ruby-identifier">:read</span>, <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_agent</span>) }
-18:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">workspace</span> <span class="ruby-keyword kw">do</span>
-19:           <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">tag!</span>( <span class="ruby-value str">&quot;atom:title&quot;</span>, <span class="ruby-identifier">container</span>.<span class="ruby-identifier">name</span> )
-20:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">authorizes?</span>([ <span class="ruby-identifier">:read</span>, <span class="ruby-identifier">:Content</span> ], <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_agent</span>)
-21:               <span class="ruby-comment cmt"># Collections are different type of Contents</span>
-22:               <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">content</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">accepted_content_types</span>
-23:                 <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">collection</span>(<span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">polymorphic_path</span>([ <span class="ruby-identifier">container</span>, <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_class</span>.<span class="ruby-identifier">new</span> ]) <span class="ruby-operator">+</span> <span class="ruby-value str">'.atom'</span>) <span class="ruby-keyword kw">do</span>
-24:                   <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">tag!</span>(<span class="ruby-value str">&quot;atom:title&quot;</span>, <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'other_in_container'</span>, <span class="ruby-identifier">:container</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>))
-25:                   <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">accept</span>(<span class="ruby-identifier">container</span>.<span class="ruby-identifier">authorizes?</span>([ <span class="ruby-identifier">:create</span>, <span class="ruby-identifier">:Content</span> ], <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_agent</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_class</span>.<span class="ruby-identifier">accepts</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>)
-26:                 <span class="ruby-keyword kw">end</span>
-27:               <span class="ruby-keyword kw">end</span>
-28:             <span class="ruby-keyword kw">end</span>
-29:           <span class="ruby-keyword kw">end</span>
-30:         <span class="ruby-keyword kw">end</span>
-31:       <span class="ruby-keyword kw">end</span>
-32:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 16</span>
+16:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atom_service</span>(<span class="ruby-identifier">record</span>, <span class="ruby-identifier">current_agent</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+17:       <span class="ruby-identifier">xml</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xml</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;xml&quot;</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>)
+18:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">instruct!</span>
+19: 
+20:       <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">service</span> <span class="ruby-value str">&quot;xmlns&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;http://www.w3.org/2007/app&quot;</span>, <span class="ruby-value str">&quot;xmlns:atom&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'http://www.w3.org/2005/Atom'</span> <span class="ruby-keyword kw">do</span>
+21:       <span class="ruby-comment cmt"># Workspaces are Containers current_agent can post to:</span>
+22:       <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">container</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">record</span>.<span class="ruby-identifier">stages</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">authorizes?</span>(<span class="ruby-identifier">:read</span>, <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_agent</span>) }
+23:         <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">workspace</span> <span class="ruby-keyword kw">do</span>
+24:           <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">tag!</span>( <span class="ruby-value str">&quot;atom:title&quot;</span>, <span class="ruby-identifier">container</span>.<span class="ruby-identifier">name</span> )
+25:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">authorizes?</span>([ <span class="ruby-identifier">:read</span>, <span class="ruby-identifier">:Content</span> ], <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_agent</span>)
+26:               <span class="ruby-comment cmt"># Collections are different type of Contents</span>
+27:               <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">content</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">accepted_content_types</span>
+28:                 <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">collection</span>(<span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">polymorphic_path</span>([ <span class="ruby-identifier">container</span>, <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_class</span>.<span class="ruby-identifier">new</span> ]) <span class="ruby-operator">+</span> <span class="ruby-value str">'.atom'</span>) <span class="ruby-keyword kw">do</span>
+29:                   <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">tag!</span>(<span class="ruby-value str">&quot;atom:title&quot;</span>, <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'other_in_container'</span>, <span class="ruby-identifier">:container</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>))
+30:                   <span class="ruby-identifier">xml</span>.<span class="ruby-identifier">accept</span>(<span class="ruby-identifier">container</span>.<span class="ruby-identifier">authorizes?</span>([ <span class="ruby-identifier">:create</span>, <span class="ruby-identifier">:Content</span> ], <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">current_agent</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_class</span>.<span class="ruby-identifier">accepts</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>)
+31:                 <span class="ruby-keyword kw">end</span>
+32:               <span class="ruby-keyword kw">end</span>
+33:             <span class="ruby-keyword kw">end</span>
+34:           <span class="ruby-keyword kw">end</span>
+35:         <span class="ruby-keyword kw">end</span>
+36:       <span class="ruby-keyword kw">end</span>
+37:     <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

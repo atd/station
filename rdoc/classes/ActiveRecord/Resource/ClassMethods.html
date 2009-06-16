@@ -74,8 +74,8 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000158">accepts</a></li>
-  <li><a href="#M000157">mime_types</a></li>
+  <li><a href="#M000159">accepts</a></li>
+  <li><a href="#M000158">mime_types</a></li>
   </ul>
 
 
@@ -86,7 +86,7 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000158"></a><b>accepts</b>()
+    <a name="M000159"></a><b>accepts</b>()
   </div>
   <div class="description">
   <p>
@@ -95,22 +95,22 @@ href="../Content.html">Content</a>
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000158_source')" id="l_M000158_source">show source</a> ]</p>
-  <div id="M000158_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000159_source')" id="l_M000159_source">show source</a> ]</p>
+  <div id="M000159_source" class="dyn-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 96</span>
- 96:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">accepts</span>
- 97:         <span class="ruby-identifier">list</span> = <span class="ruby-identifier">mime_types</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-constant">Array</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">&quot;@synonyms&quot;</span>) }.<span class="ruby-identifier">flatten</span>
- 98:         <span class="ruby-identifier">list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;application/atom+xml;type=entry&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:from_atom</span>)
- 99:         <span class="ruby-identifier">list</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>)
-100:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 100</span>
+100:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">accepts</span>
+101:         <span class="ruby-identifier">list</span> = <span class="ruby-identifier">mime_types</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-constant">Array</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">&quot;@synonyms&quot;</span>) }.<span class="ruby-identifier">flatten</span>
+102:         <span class="ruby-identifier">list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;application/atom+xml;type=entry&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:from_atom</span>)
+103:         <span class="ruby-identifier">list</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>)
+104:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000157"></a><b>mime_types</b>()
+    <a name="M000158"></a><b>mime_types</b>()
   </div>
   <div class="description">
   <p>
@@ -119,13 +119,13 @@ href="../Content.html">Content</a>
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000157_source')" id="l_M000157_source">show source</a> ]</p>
-  <div id="M000157_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000158_source')" id="l_M000158_source">show source</a> ]</p>
+  <div id="M000158_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 91</span>
-91:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_types</span>
-92:         <span class="ruby-constant">Array</span>(<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:mime_types</span>]).<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-constant">Mime</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>) }
-93:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 95</span>
+95:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_types</span>
+96:         <span class="ruby-constant">Array</span>(<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:mime_types</span>]).<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-constant">Mime</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>) }
+97:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

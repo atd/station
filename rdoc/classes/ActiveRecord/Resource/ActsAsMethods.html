@@ -74,8 +74,8 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000163">acts_as_resource</a></li>
-  <li><a href="#M000164">find_with_param</a></li>
+  <li><a href="#M000164">acts_as_resource</a></li>
+  <li><a href="#M000165">find_with_param</a></li>
   </ul>
 
 <div class="sectiontitle">Included Modules</div>
@@ -90,7 +90,7 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000163"></a><b>acts_as_resource</b>(options = {})
+    <a name="M000164"></a><b>acts_as_resource</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -122,7 +122,7 @@ will_pagination plugin. Defaults to 9
 
 </li>
 <li><tt>:delegate_content_types</tt> - allow using <a
-href="../Resource.html#M000156">ActiveRecord::Resource.class_supporting</a>
+href="../Resource.html#M000157">ActiveRecord::Resource.class_supporting</a>
 for finding the class most suitable for some media. This is useful if you
 have a generic model for Attachments, but specific files like images or
 audios should be managed by other classes. Defaults to <tt>false</tt>
@@ -131,50 +131,50 @@ audios should be managed by other classes. Defaults to <tt>false</tt>
 </ul>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000163_source')" id="l_M000163_source">show source</a> ]</p>
-  <div id="M000163_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000164_source')" id="l_M000164_source">show source</a> ]</p>
+  <div id="M000164_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 45</span>
-45:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_resource</span>(<span class="ruby-identifier">options</span> = {})
-46:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
-47: 
-48:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:param</span>]       <span class="ruby-operator">||=</span> <span class="ruby-identifier">:id</span>
-49:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:disposition</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">:attachment</span>
-50:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]    <span class="ruby-operator">||=</span> <span class="ruby-value">9</span>
-51:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:delegate_content_types</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>
-52: 
-53:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:parents</span>, <span class="ruby-identifier">lambda</span> {
-54:           <span class="ruby-identifier">column_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'parent_id'</span>) <span class="ruby-operator">?</span>
-55:           { <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:parent_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span> } } <span class="ruby-operator">:</span>
-56:           {}
-57:         }
-58: 
-59:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:has_media</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:attachment_fu</span>
-60:           <span class="ruby-identifier">alias_attribute</span> <span class="ruby-identifier">:media</span>, <span class="ruby-identifier">:uploaded_data</span>
-61:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 49</span>
+49:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_resource</span>(<span class="ruby-identifier">options</span> = {})
+50:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
+51: 
+52:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:param</span>]       <span class="ruby-operator">||=</span> <span class="ruby-identifier">:id</span>
+53:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:disposition</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">:attachment</span>
+54:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]    <span class="ruby-operator">||=</span> <span class="ruby-value">9</span>
+55:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:delegate_content_types</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>
+56: 
+57:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:parents</span>, <span class="ruby-identifier">lambda</span> {
+58:           <span class="ruby-identifier">column_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'parent_id'</span>) <span class="ruby-operator">?</span>
+59:           { <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:parent_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span> } } <span class="ruby-operator">:</span>
+60:           {}
+61:         }
 62: 
-63:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">acts_as?</span>(<span class="ruby-identifier">:agent</span>)
-64:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">:author</span>, <span class="ruby-identifier">:author_id</span>, <span class="ruby-identifier">:author_type</span>
+63:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:has_media</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:attachment_fu</span>
+64:           <span class="ruby-identifier">alias_attribute</span> <span class="ruby-identifier">:media</span>, <span class="ruby-identifier">:uploaded_data</span>
 65:         <span class="ruby-keyword kw">end</span>
 66: 
-67:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:resource_options</span>
-68:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@resource_options&quot;</span>, <span class="ruby-identifier">options</span>
-69: 
-70:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:per_page</span>
-71:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@per_page&quot;</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]
-72: 
-73:         <span class="ruby-identifier">acts_as_sortable</span>
-74: 
-75:         <span class="ruby-identifier">extend</span>  <span class="ruby-constant">ClassMethods</span>
-76:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
-77:       <span class="ruby-keyword kw">end</span>
+67:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">acts_as?</span>(<span class="ruby-identifier">:agent</span>)
+68:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">:author</span>, <span class="ruby-identifier">:author_id</span>, <span class="ruby-identifier">:author_type</span>
+69:         <span class="ruby-keyword kw">end</span>
+70: 
+71:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:resource_options</span>
+72:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@resource_options&quot;</span>, <span class="ruby-identifier">options</span>
+73: 
+74:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:per_page</span>
+75:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@per_page&quot;</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]
+76: 
+77:         <span class="ruby-identifier">acts_as_sortable</span>
+78: 
+79:         <span class="ruby-identifier">extend</span>  <span class="ruby-constant">ClassMethods</span>
+80:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
+81:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000164"></a><b>find_with_param</b>(*args)
+    <a name="M000165"></a><b>find_with_param</b>(*args)
   </div>
   <div class="description">
   <p>
@@ -182,17 +182,17 @@ Find with params
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000164_source')" id="l_M000164_source">show source</a> ]</p>
-  <div id="M000164_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000165_source')" id="l_M000165_source">show source</a> ]</p>
+  <div id="M000165_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 80</span>
-80:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_with_param</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-81:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:resource_options</span>)
-82:           <span class="ruby-identifier">send</span> <span class="ruby-node">&quot;find_by_#{ resource_options[:param] }&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
-83:         <span class="ruby-keyword kw">else</span>
-84:           <span class="ruby-identifier">find</span> <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
-85:         <span class="ruby-keyword kw">end</span>
-86:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 84</span>
+84:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_with_param</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+85:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:resource_options</span>)
+86:           <span class="ruby-identifier">send</span> <span class="ruby-node">&quot;find_by_#{ resource_options[:param] }&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+87:         <span class="ruby-keyword kw">else</span>
+88:           <span class="ruby-identifier">find</span> <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+89:         <span class="ruby-keyword kw">end</span>
+90:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

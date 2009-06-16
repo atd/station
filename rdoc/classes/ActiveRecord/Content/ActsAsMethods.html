@@ -74,7 +74,7 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000153">acts_as_content</a></li>
+  <li><a href="#M000154">acts_as_content</a></li>
   </ul>
 
 <div class="sectiontitle">Included Modules</div>
@@ -89,7 +89,7 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000153"></a><b>acts_as_content</b>(options = {})
+    <a name="M000154"></a><b>acts_as_content</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -106,41 +106,41 @@ model with its <a href="../Container.html">Container</a>. Defaults to
 </table>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000153_source')" id="l_M000153_source">show source</a> ]</p>
-  <div id="M000153_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000154_source')" id="l_M000154_source">show source</a> ]</p>
+  <div id="M000154_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 35</span>
-35:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_content</span>(<span class="ruby-identifier">options</span> = {})
-36:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Content</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
+    <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 33</span>
+33:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_content</span>(<span class="ruby-identifier">options</span> = {})
+34:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Content</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
+35: 
+36:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">:container</span>
 37: 
-38:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">:container</span>
-39: 
-40:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:content_options</span>
-41:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@content_options&quot;</span>, <span class="ruby-identifier">options</span>
-42: 
-43:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">:container</span>
-44:           <span class="ruby-identifier">alias_attribute</span> <span class="ruby-identifier">:container</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]
-45:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]
-46:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]].<span class="ruby-identifier">primary_key_name</span>
-47:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]].<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:polymorphic</span>]
-48:             <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]].<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:foreign_type</span>]
-49:           <span class="ruby-keyword kw">end</span>
-50:         <span class="ruby-keyword kw">end</span>
-51:         <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">:container</span>, <span class="ruby-identifier">:container_id</span>, <span class="ruby-identifier">:container_type</span>
-52: 
-53:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:in_container</span>, <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">container</span><span class="ruby-operator">|</span>
-54:           { <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">container</span>) }
-55:         }
-56: 
-57:         <span class="ruby-identifier">acts_as_sortable</span>
-58:         <span class="ruby-identifier">acts_as_categorizable</span>
-59: 
-60:         <span class="ruby-identifier">reflection_affordances</span> <span class="ruby-identifier">:container</span>,
-61:                                <span class="ruby-identifier">:objective</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:content</span>
-62: 
-63:         <span class="ruby-identifier">extend</span>  <span class="ruby-constant">ClassMethods</span>
-64:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
-65:       <span class="ruby-keyword kw">end</span>
+38:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:content_options</span>
+39:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@content_options&quot;</span>, <span class="ruby-identifier">options</span>
+40: 
+41:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">:container</span>
+42:           <span class="ruby-identifier">alias_attribute</span> <span class="ruby-identifier">:container</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]
+43:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]
+44:           <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]].<span class="ruby-identifier">primary_key_name</span>
+45:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]].<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:polymorphic</span>]
+46:             <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reflection</span>]].<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:foreign_type</span>]
+47:           <span class="ruby-keyword kw">end</span>
+48:         <span class="ruby-keyword kw">end</span>
+49:         <span class="ruby-identifier">attr_protected</span> <span class="ruby-identifier">:container</span>, <span class="ruby-identifier">:container_id</span>, <span class="ruby-identifier">:container_type</span>
+50: 
+51:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:in_container</span>, <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">container</span><span class="ruby-operator">|</span>
+52:           { <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">container</span>) }
+53:         }
+54: 
+55:         <span class="ruby-identifier">acts_as_sortable</span>
+56:         <span class="ruby-identifier">acts_as_categorizable</span>
+57: 
+58:         <span class="ruby-identifier">reflection_affordances</span> <span class="ruby-identifier">:container</span>,
+59:                                <span class="ruby-identifier">:objective</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:content</span>
+60: 
+61:         <span class="ruby-identifier">extend</span>  <span class="ruby-constant">ClassMethods</span>
+62:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
+63:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

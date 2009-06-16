@@ -78,13 +78,13 @@ Instance methods can be redefined in each Model for custom features
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000133">affordance?</a></li>
-  <li><a href="#M000132">affordances</a></li>
-  <li><a href="#M000137">affordances_from_hash</a></li>
-  <li><a href="#M000136">affordances_hash</a></li>
-  <li><a href="#M000131">authorizes?</a></li>
-  <li><a href="#M000134">import_affordances</a></li>
-  <li><a href="#M000135">local_affordances</a></li>
+  <li><a href="#M000134">affordance?</a></li>
+  <li><a href="#M000133">affordances</a></li>
+  <li><a href="#M000138">affordances_from_hash</a></li>
+  <li><a href="#M000137">affordances_hash</a></li>
+  <li><a href="#M000132">authorizes?</a></li>
+  <li><a href="#M000135">import_affordances</a></li>
+  <li><a href="#M000136">local_affordances</a></li>
   </ul>
 
 
@@ -95,11 +95,11 @@ Instance methods can be redefined in each Model for custom features
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000133"></a><b>affordance?</b>(options = {})
+    <a name="M000134"></a><b>affordance?</b>(options = {})
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000133_source')" id="l_M000133_source">show source</a> ]</p>
-  <div id="M000133_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000134_source')" id="l_M000134_source">show source</a> ]</p>
+  <div id="M000134_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 49</span>
 49:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">affordance?</span>(<span class="ruby-identifier">options</span> = {})
@@ -126,11 +126,11 @@ Instance methods can be redefined in each Model for custom features
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000132"></a><b>affordances</b>()
+    <a name="M000133"></a><b>affordances</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000132_source')" id="l_M000132_source">show source</a> ]</p>
-  <div id="M000132_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000133_source')" id="l_M000133_source">show source</a> ]</p>
+  <div id="M000133_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 45</span>
 45:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">affordances</span>
@@ -142,11 +142,11 @@ Instance methods can be redefined in each Model for custom features
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000137"></a><b>affordances_from_hash</b>()
+    <a name="M000138"></a><b>affordances_from_hash</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000137_source')" id="l_M000137_source">show source</a> ]</p>
-  <div id="M000137_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000138_source')" id="l_M000138_source">show source</a> ]</p>
+  <div id="M000138_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 97</span>
  97:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">affordances_from_hash</span>
@@ -162,11 +162,11 @@ Instance methods can be redefined in each Model for custom features
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000136"></a><b>affordances_hash</b>()
+    <a name="M000137"></a><b>affordances_hash</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000136_source')" id="l_M000136_source">show source</a> ]</p>
-  <div id="M000136_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000137_source')" id="l_M000137_source">show source</a> ]</p>
+  <div id="M000137_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 93</span>
 93:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">affordances_hash</span>
@@ -178,12 +178,12 @@ Instance methods can be redefined in each Model for custom features
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000131"></a><b>authorizes?</b>(action, options = {})
+    <a name="M000132"></a><b>authorizes?</b>(action, options = {})
   </div>
   <div class="description">
   <p>
 There is authorization if there are any <a
-href="InstanceMethods.html#M000132">affordances</a> that match the action
+href="InstanceMethods.html#M000133">affordances</a> that match the action
 </p>
 <p>
 action can be: <a
@@ -217,8 +217,8 @@ href="../../Anyone.html">Anyone</a>
 </table>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000131_source')" id="l_M000131_source">show source</a> ]</p>
-  <div id="M000131_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000132_source')" id="l_M000132_source">show source</a> ]</p>
+  <div id="M000132_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 38</span>
 38:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorizes?</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">options</span> = {})
@@ -233,7 +233,7 @@ href="../../Anyone.html">Anyone</a>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000134"></a><b>import_affordances</b>()
+    <a name="M000135"></a><b>import_affordances</b>()
   </div>
   <div class="description">
   <p>
@@ -241,8 +241,8 @@ Options: agent::
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000134_source')" id="l_M000134_source">show source</a> ]</p>
-  <div id="M000134_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000135_source')" id="l_M000135_source">show source</a> ]</p>
+  <div id="M000135_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 70</span>
 70:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import_affordances</span>
@@ -269,11 +269,11 @@ Options: agent::
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000135"></a><b>local_affordances</b>()
+    <a name="M000136"></a><b>local_affordances</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000135_source')" id="l_M000135_source">show source</a> ]</p>
-  <div id="M000135_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000136_source')" id="l_M000136_source">show source</a> ]</p>
+  <div id="M000136_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 89</span>
 89:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">local_affordances</span>

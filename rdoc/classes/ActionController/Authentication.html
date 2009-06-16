@@ -90,13 +90,13 @@ There are some methods available to access the Agent that is requesting
 some action
 </p>
 <table>
-<tr><td valign="top"><a href="Authentication.html#M000074">authenticated?</a>:</td><td>Is there any Agent authenticated in this request?
+<tr><td valign="top"><a href="Authentication.html#M000075">authenticated?</a>:</td><td>Is there any Agent authenticated in this request?
 
 </td></tr>
-<tr><td valign="top"><a href="Authentication.html#M000076">current_agent</a>:</td><td>Agent currently authenticated. Defaults to <tt>Anonymous.current</tt>
+<tr><td valign="top"><a href="Authentication.html#M000077">current_agent</a>:</td><td>Agent currently authenticated. Defaults to <tt>Anonymous.current</tt>
 
 </td></tr>
-<tr><td valign="top"><a href="Authentication.html#M000077">current_agent=</a>:</td><td>Set <a href="Authentication.html#M000076">current_agent</a>
+<tr><td valign="top"><a href="Authentication.html#M000078">current_agent=</a>:</td><td>Set <a href="Authentication.html#M000077">current_agent</a>
 
 </td></tr>
 </table>
@@ -112,8 +112,8 @@ You can also use the name of a model that acts_as_agent
 </pre>
 <h2>Filters</h2>
 <table>
-<tr><td valign="top"><a href="Authentication.html#M000078">authentication_required</a>:</td><td>The action requires to be performed by an authenticated Agent. Calls <a
-href="Authentication.html#M000079">not_authenticated</a> if there is none
+<tr><td valign="top"><a href="Authentication.html#M000079">authentication_required</a>:</td><td>The action requires to be performed by an authenticated Agent. Calls <a
+href="Authentication.html#M000080">not_authenticated</a> if there is none
 
 </td></tr>
 </table>
@@ -140,14 +140,14 @@ href="http://api.rubyonrails.org/classes/ActionController/Integration/Session.ht
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000074">authenticated?</a></li>
-  <li><a href="#M000078">authentication_required</a></li>
-  <li><a href="#M000076">current_agent</a></li>
-  <li><a href="#M000077">current_agent=</a></li>
-  <li><a href="#M000075">logged_in?</a></li>
-  <li><a href="#M000079">not_authenticated</a></li>
-  <li><a href="#M000081">redirect_back_or_default</a></li>
-  <li><a href="#M000080">store_location</a></li>
+  <li><a href="#M000075">authenticated?</a></li>
+  <li><a href="#M000079">authentication_required</a></li>
+  <li><a href="#M000077">current_agent</a></li>
+  <li><a href="#M000078">current_agent=</a></li>
+  <li><a href="#M000076">logged_in?</a></li>
+  <li><a href="#M000080">not_authenticated</a></li>
+  <li><a href="#M000082">redirect_back_or_default</a></li>
+  <li><a href="#M000081">store_location</a></li>
   </ul>
 
 
@@ -158,22 +158,22 @@ href="http://api.rubyonrails.org/classes/ActionController/Integration/Session.ht
 <div class="sectiontitle">Protected Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000074"></a><b>authenticated?</b>()
+    <a name="M000075"></a><b>authenticated?</b>()
   </div>
   <div class="description">
   <p>
 Returns true or false if an Agent is authenticated Preloads @<a
-href="Authentication.html#M000076">current_agent</a> with the Agent&#8216;s
+href="Authentication.html#M000077">current_agent</a> with the Agent&#8216;s
 model if they&#8216;re authenticated
 </p>
   </div>
 <div class="aka">
   This method is also aliased as
-  <a href="Authentication.html#M000075">logged_in?</a>
+  <a href="Authentication.html#M000076">logged_in?</a>
 </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000074_source')" id="l_M000074_source">show source</a> ]</p>
-  <div id="M000074_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000075_source')" id="l_M000075_source">show source</a> ]</p>
+  <div id="M000075_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 66</span>
 66:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authenticated?</span>
@@ -185,7 +185,7 @@ model if they&#8216;re authenticated
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000078"></a><b>authentication_required</b>()
+    <a name="M000079"></a><b>authentication_required</b>()
   </div>
   <div class="description">
   <p>
@@ -212,8 +212,8 @@ To skip this in a subclassed controller:
 </pre>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000078_source')" id="l_M000078_source">show source</a> ]</p>
-  <div id="M000078_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000079_source')" id="l_M000079_source">show source</a> ]</p>
+  <div id="M000079_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 132</span>
 132:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authentication_required</span>
@@ -225,7 +225,7 @@ To skip this in a subclassed controller:
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000076"></a><b>current_agent</b>()
+    <a name="M000077"></a><b>current_agent</b>()
   </div>
   <div class="description">
   <p>
@@ -234,8 +234,8 @@ authentication fails so that future calls do not hit the database.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000076_source')" id="l_M000076_source">show source</a> ]</p>
-  <div id="M000076_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000077_source')" id="l_M000077_source">show source</a> ]</p>
+  <div id="M000077_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 88</span>
 88:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_agent</span>
@@ -247,7 +247,7 @@ authentication fails so that future calls do not hit the database.
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000077"></a><b>current_agent=</b>(new_agent)
+    <a name="M000078"></a><b>current_agent=</b>(new_agent)
   </div>
   <div class="description">
   <p>
@@ -255,8 +255,8 @@ Store the given agent id and agent_type in the session.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000077_source')" id="l_M000077_source">show source</a> ]</p>
-  <div id="M000077_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000078_source')" id="l_M000078_source">show source</a> ]</p>
+  <div id="M000078_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 97</span>
  97:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_agent=</span>(<span class="ruby-identifier">new_agent</span>)
@@ -285,7 +285,7 @@ Store the given agent id and agent_type in the session.
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000075"></a><b>logged_in?</b>()
+    <a name="M000076"></a><b>logged_in?</b>()
   </div>
   <div class="description">
   <p>
@@ -295,7 +295,7 @@ Alias for authenticated?
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000079"></a><b>not_authenticated</b>()
+    <a name="M000080"></a><b>not_authenticated</b>()
   </div>
   <div class="description">
   <p>
@@ -313,8 +313,8 @@ action. For example, a popup window might simply close itself.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000079_source')" id="l_M000079_source">show source</a> ]</p>
-  <div id="M000079_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000080_source')" id="l_M000080_source">show source</a> ]</p>
+  <div id="M000080_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 146</span>
 146:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_authenticated</span>
@@ -332,18 +332,18 @@ action. For example, a popup window might simply close itself.
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000081"></a><b>redirect_back_or_default</b>(default)
+    <a name="M000082"></a><b>redirect_back_or_default</b>(default)
   </div>
   <div class="description">
   <p>
 Redirect to the URI stored by the most recent <a
-href="Authentication.html#M000080">store_location</a> call or to the passed
+href="Authentication.html#M000081">store_location</a> call or to the passed
 default.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000081_source')" id="l_M000081_source">show source</a> ]</p>
-  <div id="M000081_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000082_source')" id="l_M000082_source">show source</a> ]</p>
+  <div id="M000082_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 165</span>
 165:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">default</span>)
@@ -356,7 +356,7 @@ default.
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000080"></a><b>store_location</b>()
+    <a name="M000081"></a><b>store_location</b>()
   </div>
   <div class="description">
   <p>
@@ -364,12 +364,12 @@ Store the URI of the current request in the session.
 </p>
 <p>
 We can return to this location by calling <a
-href="Authentication.html#M000081">redirect_back_or_default</a>.
+href="Authentication.html#M000082">redirect_back_or_default</a>.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000080_source')" id="l_M000080_source">show source</a> ]</p>
-  <div id="M000080_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000081_source')" id="l_M000081_source">show source</a> ]</p>
+  <div id="M000081_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_controller/authentication.rb, line 159</span>
 159:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_location</span>

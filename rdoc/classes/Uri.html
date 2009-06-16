@@ -117,38 +117,38 @@ URIs are supported:
   <p class="source-link">[ <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show source</a> ]</p>
   <div id="M000017_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/models/uri.rb, line 27</span>
-27:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atompub_service_document</span>(<span class="ruby-identifier">limit</span> = <span class="ruby-value">10</span>)
-28:     <span class="ruby-comment cmt"># Limit too many redirects</span>
-29:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">limit</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-30: 
-31:     <span class="ruby-comment cmt"># TODO: non http(s) URIs</span>
-32:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^(http|https)$/</span>
-33: 
-34:     <span class="ruby-identifier">http</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">port</span>)
-35:     <span class="ruby-identifier">http</span>.<span class="ruby-identifier">use_ssl</span> = <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;https&quot;</span>
-36:     <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">path</span>, <span class="ruby-value str">'Accept'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'application/atomsvc+xml, text/html'</span>)
-37:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">response</span>
-38:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
-39:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">content_type</span>.<span class="ruby-identifier">to_s</span>
-40:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;application/atomsvc+xml&quot;</span>
-41:         <span class="ruby-keyword kw">begin</span>
-42:           <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Service</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
-43:         <span class="ruby-keyword kw">rescue</span>
-44:           <span class="ruby-keyword kw">nil</span>
-45:         <span class="ruby-keyword kw">end</span>
-46:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;text/html&quot;</span>
-47:         <span class="ruby-identifier">link_uri</span> = <span class="ruby-identifier">parse_atompub_service_link</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
-48:         <span class="ruby-identifier">link_uri</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">link_uri</span>).<span class="ruby-identifier">atompub_service_document</span>(<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
-49:       <span class="ruby-keyword kw">else</span>
-50:         <span class="ruby-keyword kw">nil</span>
-51:       <span class="ruby-keyword kw">end</span>
-52:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPRedirection</span>
-53:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value str">'location'</span>]).<span class="ruby-identifier">atompub_service_document</span>(<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
-54:     <span class="ruby-keyword kw">else</span>
-55:       <span class="ruby-keyword kw">nil</span>
-56:     <span class="ruby-keyword kw">end</span>
-57:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 31</span>
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atompub_service_document</span>(<span class="ruby-identifier">limit</span> = <span class="ruby-value">10</span>)
+32:     <span class="ruby-comment cmt"># Limit too many redirects</span>
+33:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">limit</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+34: 
+35:     <span class="ruby-comment cmt"># TODO: non http(s) URIs</span>
+36:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^(http|https)$/</span>
+37: 
+38:     <span class="ruby-identifier">http</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">port</span>)
+39:     <span class="ruby-identifier">http</span>.<span class="ruby-identifier">use_ssl</span> = <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;https&quot;</span>
+40:     <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">path</span>, <span class="ruby-value str">'Accept'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'application/atomsvc+xml, text/html'</span>)
+41:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">response</span>
+42:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+43:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">content_type</span>.<span class="ruby-identifier">to_s</span>
+44:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;application/atomsvc+xml&quot;</span>
+45:         <span class="ruby-keyword kw">begin</span>
+46:           <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Service</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
+47:         <span class="ruby-keyword kw">rescue</span>
+48:           <span class="ruby-keyword kw">nil</span>
+49:         <span class="ruby-keyword kw">end</span>
+50:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;text/html&quot;</span>
+51:         <span class="ruby-identifier">link_uri</span> = <span class="ruby-identifier">parse_atompub_service_link</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
+52:         <span class="ruby-identifier">link_uri</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">link_uri</span>).<span class="ruby-identifier">atompub_service_document</span>(<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
+53:       <span class="ruby-keyword kw">else</span>
+54:         <span class="ruby-keyword kw">nil</span>
+55:       <span class="ruby-keyword kw">end</span>
+56:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPRedirection</span>
+57:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value str">'location'</span>]).<span class="ruby-identifier">atompub_service_document</span>(<span class="ruby-identifier">limit</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
+58:     <span class="ruby-keyword kw">else</span>
+59:       <span class="ruby-keyword kw">nil</span>
+60:     <span class="ruby-keyword kw">end</span>
+61:   <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>
@@ -166,10 +166,10 @@ Return this URI string
   <p class="source-link">[ <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show source</a> ]</p>
   <div id="M000015_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/models/uri.rb, line 15</span>
-15:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
-16:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>
-17:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 19</span>
+19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+20:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>
+21:   <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>
@@ -182,10 +182,10 @@ Return this URI string
   <p class="source-link">[ <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show source</a> ]</p>
   <div id="M000016_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/models/uri.rb, line 19</span>
-19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_uri</span>
-20:     <span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>)
-21:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 23</span>
+23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_uri</span>
+24:     <span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>)
+25:   <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

@@ -63,7 +63,7 @@
           </tr>
           <tr>
             <td>Modified:</td>
-            <td>Thu May 14 16:22:28 +0200 2009</td>
+            <td>Tue Jun 16 12:28:07 +0200 2009</td>
           </tr>
         </table>
       </td></tr>
@@ -92,6 +92,7 @@ tags, etc&#8230; but from a very flexible scope.
 </p>
 <p>
 <a href="http://atd.github.com/station/">Webpage</a> - <a
+href="http://rstation.wordpress.com/">Blog</a> - <a
 href="http://github.com/atd/station">Code</a> - <a
 href="http://atd.github.com/station/rdoc/">Documentation</a>
 </p>
@@ -138,16 +139,16 @@ href="http://www.ja-sig.org/products/cas/">Central Authentication Service
 <li>RubyGems:
 
 <ul>
-<li>ruby-openid
-
-</li>
-<li>atom-tools
-
-</li>
-<li>hpricot
-
-</li>
 <li>mislav-will_paginate
+
+</li>
+<li>ruby-openid (optional)
+
+</li>
+<li>atom-tools (optional)
+
+</li>
+<li>hpricot (optional)
 
 </li>
 </ul>
@@ -187,8 +188,22 @@ emails from your application
 </pre>
 <h3>Gems</h3>
 <p>
-Run rake gems:install to install the required gems
+Run rake gems:install to install the required gem, mislav-will_paginate
 </p>
+<p>
+You can install this aditional gems:
+</p>
+<ul>
+<li>ruby-openid, for OpenID authentication support
+
+</li>
+<li>atom-tools, for AtomPub support
+
+</li>
+<li>hpricot, for HTML discovery
+
+</li>
+</ul>
 <h2>Architecture</h2>
 <p>
 You can add this functionality to any of your ActiveRecord models:
@@ -254,7 +269,9 @@ Create personal blogs with a pair of commands:
 </p>
 <pre>
   script/generate station_agent User
-  script/generate station_resource Article content:text
+  script/generate station_scaffold Article content:text
+
+  rake db:migrate
 </pre>
 <p>
 Users now can entry their own Articles
