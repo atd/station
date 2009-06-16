@@ -8,7 +8,7 @@ Station is to {Rails}[http://rubyonrails.org/] in Content Management System like
 
 Station provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
 
-{Webpage}[http://atd.github.com/station/] - {Code}[http://github.com/atd/station] - {Documentation}[http://atd.github.com/station/rdoc/]
+{Webpage}[http://atd.github.com/station/] - {Blog}[http://rstation.wordpress.com/] - {Code}[http://github.com/atd/station] - {Documentation}[http://atd.github.com/station/rdoc/]
 
 == Features
 
