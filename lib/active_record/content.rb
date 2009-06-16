@@ -1,5 +1,3 @@
-require 'atom/entry'
-
 module ActiveRecord #:nodoc:
   # A Content is a Resource that belongs to a Container.
   # 

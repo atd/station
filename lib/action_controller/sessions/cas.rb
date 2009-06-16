@@ -1,5 +1,9 @@
-require 'casclient'
-require 'casclient/frameworks/rails/filter'
+begin
+  require 'casclient'
+  require 'casclient/frameworks/rails/filter'
+rescue MissingSourceFile
+  raise "Station: You need 'rubycas-client' gem for CAS authentication support"
+end
 
 module ActionController #:nodoc:
   module Sessions

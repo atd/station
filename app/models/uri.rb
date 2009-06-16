@@ -2,7 +2,11 @@
 # same source file name
 URI
 
-require 'atom/service'
+begin
+  require 'atom/service'
+rescue MissingSourceFile
+  Rails.logger.info "Station Info: You need 'atom-tools' gem for AtomPub service document support"
+end
 
 # URI storage in the database
 class Uri < ActiveRecord::Base

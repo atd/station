@@ -8,7 +8,7 @@ Station is to {Rails}[http://rubyonrails.org/] in Content Management System like
 
 Station provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
 
-{Webpage}[http://atd.github.com/station/] - {Code}[http://github.com/atd/station] - {Documentation}[http://atd.github.com/station/rdoc/]
+{Webpage}[http://atd.github.com/station/] - {Blog}[http://rstation.wordpress.com/] - {Code}[http://github.com/atd/station] - {Documentation}[http://atd.github.com/station/rdoc/]
 
 == Features
 
@@ -27,10 +27,10 @@ Station provides your Rails application with a "CMS framework". That means authe
 
 * Rails 2.3.2
 * RubyGems: 
-  * ruby-openid
-  * atom-tools
-  * hpricot
   * mislav-will_paginate
+  * ruby-openid (optional)
+  * atom-tools (optional)
+  * hpricot (optional)
 * Rails Plugins:
   * attachment_fu
   * exception_notification (optional)
@@ -50,7 +50,13 @@ Install exception_notification plugin if you want to receive debugging emails fr
 
 === Gems
 
-Run rake gems:install to install the required gems
+Run rake gems:install to install the required gem, mislav-will_paginate
+
+You can install this aditional gems:
+
+* ruby-openid, for OpenID authentication support
+* atom-tools, for AtomPub support
+* hpricot, for HTML discovery
 
 == Architecture
 
