@@ -43,7 +43,7 @@ You need attachment_fu for Logos and Attachments:
   script/plugin install git://github.com/atd/attachment_fu.git
 
 To install Station, run:
-  script/plugin install git://github.com/atd/station.git
+  script/plugin install -r stable git://github.com/atd/station.git
 
 Install exception_notification plugin if you want to receive debugging emails from your application
   script/plugin install git://github.com/rails/exception_notification.git
