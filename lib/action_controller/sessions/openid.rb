@@ -1,5 +1,9 @@
-require 'openid'
-require 'openid/extensions/sreg'
+begin
+  require 'openid'
+  require 'openid/extensions/sreg'
+rescue MissingSourceFile
+  raise "Station: You need 'ruby-openid' gem for OpenID authentication support"
+end
 
 module ActionController #:nodoc:
   module Sessions

@@ -1,4 +1,8 @@
-require 'atom/entry'
+begin
+  require 'atom/entry'
+rescue MissingSourceFile
+  Rails.logger.info "Station Info: You need 'atom-tools' gem for AtomPub support"
+end
 
 module ActiveRecord #:nodoc:
   # A Resource is a model that supports, at least, CRUD operations. 

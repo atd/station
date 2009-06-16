@@ -1,4 +1,8 @@
-require 'casclient'
+begin
+  require 'casclient'
+rescue MissingSourceFile
+  raise "Station: You need 'rubycas-client' gem for CAS authentication support"
+end
 
 module ActiveRecord #:nodoc:
   module Agent
