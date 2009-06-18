@@ -130,7 +130,7 @@ module ActiveRecord #:nodoc:
                                else
                                  ", ( SELECT NULL ) AS content_type"
                                end
-            content.parents.in_container(container).construct_finder_sql(params)
+            content.parent_scoped.in_container(container).construct_finder_sql(params)
           }.join(" UNION ")
         end
 

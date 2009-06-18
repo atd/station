@@ -23,7 +23,7 @@ module ActionController #:nodoc:
         params[:order], params[:direction] = "updated_at", "DESC"
       end
 
-      @resources = model_class.parents.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+      @resources = model_class.parent_scoped.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
       @agents = @resources
 
