@@ -36,7 +36,7 @@ module ActionController #:nodoc:
 
       @conditions ||= nil
 
-      @resources = model_class.parents.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
+      @resources = model_class.parent_scoped.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
       @contents = @resources if model_class.acts_as?(:content)
 
