@@ -39,14 +39,13 @@ module ActionController #:nodoc:
             flash[:notice] = t(:logged_in_successfully)
             redirect_back_or_default(after_create_path)
           else
-            render_component :controller => ActiveRecord::Agent.authentication_classes(:cas).first.to_s.tableize,
-                             :action => "create",
-                             :params => { 
-                               ActiveRecord::Agent.authentication_classes(:cas).first.to_s.underscore.to_sym => {
-                                 :login => session[:cas_user]
-                               }
-                             }
-
+            redirect_to :controller => ActiveRecord::Agent.authentication_classes(:cas).first.to_s.tableize,
+                        :action => "new",
+                        :params => { 
+                          ActiveRecord::Agent.authentication_classes(:cas).first.to_s.underscore.to_sym => {
+                            :login => session[:cas_user]
+                          }
+                        }
           end
         end
       end
