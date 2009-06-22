@@ -69,14 +69,14 @@ module ActionController #:nodoc:
               redirect_back_or_default after_create_path
               flash[:notice] = t(:logged_in_successfully)
             else
-              # TODO if already authenticated, add URI to Agent.openid_ownings
-              # else
-              # We create new OpenidUser
+              # We create new local Agent with OpenID data
               session[:openid_identifier] = openid_response.display_identifier
               sreg_response = ::OpenID::SReg::Response.from_success_response(openid_response)
-              render_component :controller => ActiveRecord::Agent.authentication_classes(:openid).first.to_s.tableize,
-                               :action => "create",
-                               :params => { :openid_user => sreg_response.data }
+              redirect_to :controller => ActiveRecord::Agent.authentication_classes(:openid).first.to_s.tableize,
+                          :action => "new",
+                          :params => {
+                            ActiveRecord::Agent.authentication_classes(:openid).first.to_s.tableize => sreg_response.data
+                          }
             end
           when ::OpenID::Consumer::FAILURE
             flash[:error] = openid_response.display_identifier ?
