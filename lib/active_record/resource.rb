@@ -1,9 +1,3 @@
-begin
-  require 'atom/entry'
-rescue MissingSourceFile
-  Rails.logger.info "Station Info: You need 'atom-tools' gem for AtomPub support"
-end
-
 module ActiveRecord #:nodoc:
   # A Resource is a model that supports, at least, CRUD operations. 
   # As consecuence, it can be imported/exported in several Content Types, which include:
@@ -96,6 +90,20 @@ module ActiveRecord #:nodoc:
         Array(resource_options[:mime_types]).map{ |m| Mime.const_get(m.to_sym.to_s.upcase) }
       end
 
+      def atom_parser(data)
+        begin
+          require 'atom/entry'
+        rescue
+          raise "Station: You need 'atom-tools' gem for AtomPub support"
+        end
+
+        unless respond_to?(:from_atom)
+          raise "Station: You must implement #{ self.to_s }#from_atom method to parse Atom entries"
+        end
+
+        from_atom Atom::Entry.new(data)
+      end
+
       # List of comma separated content types accepted for this Content
       def accepts
         list = mime_types.map{ |m| Array(m.to_s) + m.instance_variable_get("@synonyms") }.flatten
@@ -135,6 +143,40 @@ module ActiveRecord #:nodoc:
       # Define to_param method with acts_as_resource param option
       def to_param
         send(self.class.resource_options[:param]).to_s
+      end
+
+      # Update attributes from Atom Entry or Source entry
+      #
+      # You must implement from_atom class method
+      def from_atom(entry)
+        unless self.class.respond_to?(:from_atom)
+          raise "Station: You must implement #{ self.to_s }#from_atom method to parse Atom entries"
+        end
+
+        self.attributes = self.class.from_atom(entry)
+
+        if respond_to?(:guid)
+          self.guid = entry.id
+        end
+
+        if respond_to?(:created_at)
+          self.created_at = entry.published
+        end
+
+        if respond_to?(:updated_at)
+          self.updated_at = entry.updated
+        end
+      end
+
+      # Update attributes using from_atom and save the Resource
+      #
+      # Saves the record without timestamps, so created_at and updated_at are the original from the feed entry
+      def from_atom!(entry)
+        class_timestamps_cache = self.class.record_timestamps
+        self.class.record_timestamps = false
+        from_atom(entry)
+        save!
+        self.class.record_timestamps = class_timestamps_cache
       end
     end
   end

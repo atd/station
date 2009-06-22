@@ -111,6 +111,16 @@ es:
     delete:
       one: "Borrar Contenido"
       other: "Borrar Contenidos"
+  source:
+    one: "Fuente"
+    other: "Fuentes"
+    uri: "URL"
+    target: "Objetivo"
+    imported_at: "Importada"
+    errors:
+      multiple_feeds: "La dirección tiene varias fuentes"
+      content_type:
+        invalid: "es inválido: {{content_type}}"
 
   category:
     one: "Categoría"

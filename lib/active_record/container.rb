@@ -20,6 +20,9 @@ module ActiveRecord #:nodoc:
         cattr_reader :container_options
         class_variable_set "@@container_options", options
 
+        has_many :sources, :as => :container,
+                           :dependent => :destroy
+
         acts_as_categories_domain
 
         extend  ClassMethods

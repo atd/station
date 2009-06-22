@@ -113,6 +113,16 @@ en:
     delete: 
       one: "Delete Content"
       other: "Delete Contents"
+  source:
+    one: "Source"
+    other: "Sources"
+    uri: "URL"
+    target: "Target"
+    imported_at: "Imported at"
+    errors:
+      multiple_feeds: "Source has multiple feeds"
+      content_type:
+        invalid: "is invalid: {{content_type}}"
 
   category:
     one: "Category"

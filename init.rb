@@ -33,7 +33,7 @@ end
 
 # ActionView
 # Helpers
-%w( categories logos sortable station tags ).each do |item|
+%w( categories logos sortable sources station tags ).each do |item|
   require "action_view/helpers/#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::#{ item.camelcase }Helper".constantize
 end

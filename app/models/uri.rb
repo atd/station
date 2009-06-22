@@ -21,43 +21,43 @@ class Uri < ActiveRecord::Base
   end
 
   def to_uri
-    ::URI.parse(self.uri)
+    @to_uri ||= ::URI.parse(self.uri)
   end
 
-  # Returns the AtomPub Service Document associated with this URI.
-  # Only HTTP(S) URIs are supported:
-  # * Dereference URI asking for +application/atomsvc+xml+ content type
-  # * Search in the HTML document for "service" link
-  def atompub_service_document(limit = 10)
-    # Limit too many redirects
-    return nil if limit == 0
+  # Dereference URI and return HTML document
+  def html
+    @html ||= Station::Html.new(dereference(:accept => 'text/html').body)
+  end
 
-    # TODO: non http(s) URIs
+  def dereference(options = {})
+    # TODO?: non http(s) URIs
     return nil unless to_uri.scheme =~ /^(http|https)$/
+
+    # Limit too many redirects
+    options[:redirect] ||= 0
+    return nil if options[:redirect] > 10
 
     http = Net::HTTP.new(to_uri.host, to_uri.port)
     http.use_ssl = to_uri.scheme == "https"
-    response = http.get(to_uri.path, 'Accept' => 'application/atomsvc+xml, text/html')
+    path = to_uri.path.present? && to_uri.path || '/'
+    headers = {}
+    headers['Accept'] = options[:accept] if options[:accept].present?
+    response = http.get(path, headers)
+
     case response
     when Net::HTTPSuccess
-      case response.content_type.to_s
-      when "application/atomsvc+xml"
-        begin
-          Atom::Service.parse(response.body)
-        rescue
-          nil
-        end
-      when "text/html"
-        link_uri = parse_atompub_service_link(response.body)
-        link_uri.blank? ? nil : self.class.new(:uri => link_uri).atompub_service_document(limit - 1)
-      else
-        nil
-      end
+      response
     when Net::HTTPRedirection
-      self.class.new(:uri => response['location']).atompub_service_document(limit - 1)
+      options[:redirect] += 1
+      self.class.new(:uri => response['location']).dereference(options)
     else
       nil
     end
+  end
+
+  # Returns the AtomPub Service Document associated with this URI.
+  def atompub_service_document
+    Atom::Service.discover self.uri
   end
 
   private

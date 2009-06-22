@@ -50,7 +50,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources(*(ActiveRecord::Container.symbols) - Array(:sites)) do |container|
     container.resources(*ActiveRecord::Content.symbols)
     container.resources :categories
+    container.resources :sources, :member => { :import => :get }
   end
+  map.resources :sources, :member => { :import => :get }
 
   map.resources :logos
 

@@ -170,7 +170,12 @@ module ActionController #:nodoc:
       # Attempt to login by the agent id and type stored in the session.
       def login_from_session #:nodoc:
         if session[:agent_id] && session[:agent_type] && ActiveRecord::Agent.symbols.include?(session[:agent_type].tableize.to_sym)
-          self.current_agent = session[:agent_type].constantize.find(session[:agent_id])
+          begin
+            self.current_agent = session[:agent_type].constantize.find(session[:agent_id])
+          rescue ActiveRecord::RecordNotFound
+            # The agent may be deleted. Exit in this case
+            return
+          end
         end
       end
 
