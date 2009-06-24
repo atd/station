@@ -150,6 +150,7 @@ en:
       other: "Delete Performances"
     confirm_delete: "Delete Performance?"
     without_roles_available: "The aren't any Roles avaible. Performances can't be set."
+    change: "Change"
 
   role:
     one: "Role"
@@ -177,6 +178,9 @@ en:
     one: "Stage"
     all: "All"
 
+  admission:
+    errors:
+      candidate_has_role: "already has a role"
   invitation:
     one: "Invitation"
     other: "Invitations"
@@ -184,16 +188,27 @@ en:
     not_found: "Invitation not found"
     email: "Email"
     role: "Role"
+    comment: "Comment"
     show: "Join {{group}}"
     accept: "Accept invitation"
     discard: "Discard invitation"
+    created: "Invitation sent"
+    not_processed: "Invitation not processed"
     accepted: "Invitation accepted"
+    accepted_by: "{{candidate}} accepted the invitation"
     discarded: "Invitation discarded"
+    discarded_by: "{{candidate}} discarded the invitation"
+    pending:
+      other: "Pending invitations"
+    send:
+      one: "Send invitation"
+    confirm_delete: "Delete invitation?"
   join_request:
     one: "Join Request"
     other: "Join Requests"
     created: "Join Request sent"
     updated: "Join Request updated"
+    not_processed: "Join Request not processed"
     accepted: "Join Request accepted"
     discarded: "Join Request discarded"
 
