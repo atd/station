@@ -32,7 +32,7 @@ class PerformancesController < ApplicationController
     if @performance.update_attributes(params[:performance])
       respond_to do |format|
         format.html {
-          redirect_to polymorphic_path([ @stage, Performance.new ])
+          redirect_to [ stage, Performance.new ]
         }
         format.js {
           index_data
