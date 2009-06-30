@@ -15,10 +15,3 @@ class SingularAgent < ActiveRecord::Base
 
   alias login name
 end
-
-# Not authenticated Agent
-class Anonymous < SingularAgent ; end
-# All Agents, including Anonymous
-class Anyone < SingularAgent ; end
-# Every Agent authenticated
-class Authenticated < SingularAgent ; end

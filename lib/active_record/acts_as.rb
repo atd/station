@@ -17,7 +17,7 @@ module ActiveRecord #:nodoc:
     class << self
       def extended(base)
         Features.each do |feature|
-          require "active_record/#{ feature }"
+          require_dependency "active_record/#{ feature }"
           feature_const = "ActiveRecord::#{ feature.to_s.classify }".constantize
           feature_const.send :include, Feature
           base.send :include, feature_const

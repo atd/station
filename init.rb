@@ -1,14 +1,18 @@
 config.gem "mislav-will_paginate", :lib => 'will_paginate', 
                                    :version => '>= 2.3.2',
                                    :source => 'http://gems.github.com/'
+
+# Make Station app/ paths reloadable
+ActiveSupport::Dependencies.load_once_paths.delete_if { |p| p =~ /^#{ directory }\/app/ }
+
 # Core Extensions
-require 'station/core_ext'
+require_dependency 'station/core_ext'
 
 # ActiveRecord
-require 'active_record/authorization'
+require_dependency 'active_record/authorization'
 ActiveRecord::Base.send :include, ActiveRecord::Authorization
 
-require 'active_record/acts_as'
+require_dependency 'active_record/acts_as'
 ActiveRecord::Base.extend ActiveRecord::ActsAs
 
 # Singular Agents
@@ -34,12 +38,12 @@ end
 # ActionView
 # Helpers
 %w( categories logos sortable sources station tags ).each do |item|
-  require "action_view/helpers/#{ item }_helper"
+  require_dependency "action_view/helpers/#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::#{ item.camelcase }Helper".constantize
 end
 # FormHelpers
 %w( categories logo tags ).each do |item|
-  require "action_view/helpers/form_#{ item }_helper"
+  require_dependency "action_view/helpers/form_#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.camelcase }Helper".constantize
 end
 
