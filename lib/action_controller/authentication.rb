@@ -153,11 +153,11 @@ module ActionController #:nodoc:
         end
       end
 
-      # Store the URI of the current request in the session.
+      # Store the uri of the request in the session.
       #
       # We can return to this location by calling #redirect_back_or_default.
-      def store_location
-        session[:return_to] = request.request_uri
+      def store_location(uri = nil)
+        session[:return_to] = uri || request.request_uri
       end
 
       # Redirect to the URI stored by the most recent store_location call or

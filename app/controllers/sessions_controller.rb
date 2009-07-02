@@ -4,6 +4,10 @@ class SessionsController < ApplicationController
 
   # render new.rhtml
   def new
+    store_location(params[:redirect_to]) if params[:redirect_to].present? &&
+      # Prevent redirecting to other host
+      params[:redirect_to] =~ /^\//
+
     authentication_methods_chain(:new)
   end
 

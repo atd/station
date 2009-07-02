@@ -159,6 +159,7 @@ es:
       other: "Borrar Integrantes"
     confirm_delete: "¿Borrar el Integrante?"
     without_roles_available: "No hay ningún Rol disponible. Los Integrantes no se pueden establecer."
+    change: "Cambiar"
 
   role:
     one: "Rol"
@@ -186,6 +187,10 @@ es:
     one: "Escenario"
     all: "Todos"
 
+  admission:
+    errors:
+      candidate_has_role: "ya tiene un rol"
+
   invitation:
     one: "Invitación"
     other: "Invitaciones"
@@ -193,16 +198,27 @@ es:
     not_found: "Invitación no encontrada"
     email: "Correo electrónico"
     role: "Rol"
+    comment: "Comentario"
     show: "Unirse a {{group}}"
     accept: "Aceptar invitación"
     discard: "Descartar invitación"
+    created: "Invitación enviada"
+    not_processed: "Invitación sin responder"
     accepted: "Invitación aceptada"
+    accepted_by: "{{candidate}} aceptó la invitación"
     discarded: "Invitación descartada"
+    discarded_by: "{{candidate}} descartó la invitación"
+    pending:
+      other: "Invitaciones pendientes"
+    send: 
+      one: "Enviar invitación"
+    confirm_delete: "¿Borrar invitación?"
   join_request:
     one: "Petición de incorporación"
     other: "Peticiones de incorporación"
     created: "Petición enviada"
     updated: "Petición actualizada"
+    not_processed: "Petición sin responder"
     accepted: "Petición aceptada"
     discarded: "Petición descartada"
 

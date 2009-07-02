@@ -1,22 +1,28 @@
 class Admission < ActiveRecord::Base
-  validates_uniqueness_of :candidate_id,   :scope => [ :candidate_type, :group_id, :group_type ]
-  validates_uniqueness_of :candidate_type, :scope => [ :candidate_id,   :group_id, :group_type ]
-  validates_uniqueness_of :email, :scope => [ :group_id, :group_type ]
-
-  before_validation :fill_candidate_email
-
   attr_writer :processed
   before_save :processed
-
-  after_save :to_performance!
-
-  attr_protected :candidate_id, :candidate_type, :candidate 
-  attr_protected :group_id, :group_type, :group
 
   belongs_to :candidate, :polymorphic => true
   belongs_to :group, :polymorphic => true
   belongs_to :introducer, :polymorphic => true
   belongs_to :role
+
+  attr_protected :candidate_id, :candidate_type, :candidate 
+  attr_protected :group_id, :group_type, :group
+
+
+  before_validation :sync_candidate_email
+
+  validates_uniqueness_of :candidate_id,
+                          :scope => [ :candidate_type, :group_id, :group_type ]
+  validates_uniqueness_of :candidate_type,
+                          :scope => [ :candidate_id,   :group_id, :group_type ]
+  validates_uniqueness_of :email,
+                          :scope => [ :group_id, :group_type ]
+
+  validate_on_create :candidate_without_role
+
+  after_save :to_performance!
 
   acts_as_sortable :columns => [ :candidate,
                                  :email,
@@ -36,16 +42,46 @@ class Admission < ActiveRecord::Base
     @processed.present?
   end
 
-  private
-
-  def fill_candidate_email
-    if email.blank? && candidate && candidate.respond_to?(:email)
-      self.email = candidate.email
-    end
+  # State of this Admission. Values are :not_processed, :accepted or :discarded
+  def state
+    processed? ? 
+      accepted? ? 
+       :accepted :
+       :discarded :
+      :not_processed
   end
+
+  # A message according to Admission state, using I18n
+  def state_message
+    I18n.t "#{ self.class.to_s.underscore }.#{ state }"
+  end
+
+  def candidate_name
+    candidate.try(:name) || email.split('@').first
+  end
+
+  private
 
   def processed
     @processed && self.processed_at = Time.now.utc
+  end
+
+  def sync_candidate_email
+    if email.blank? && candidate && candidate.respond_to?(:email)
+      self.email = candidate.email
+    end
+
+    if candidate.blank?
+      self.candidate = ActiveRecord::Agent::Invite.find_all(email).first
+    end
+  end
+
+  def candidate_without_role
+    return if group.blank? || candidate.blank?
+
+    if group.role_for? candidate
+      errors.add :candidate, I18n.t('admission.errors.candidate_has_role')
+    end
   end
 
   def to_performance!

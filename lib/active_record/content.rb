@@ -125,7 +125,8 @@ module ActiveRecord #:nodoc:
           content_classes.map { |content|
             params = Hash.new.replace options
             params[:select] += ", ( SELECT \"#{ content }\" ) AS type"
-            params[:select] += if content.resource_options[:has_media]
+            params[:select] += if content.acts_as?(:resource) &&
+                                 content.resource_options[:has_media]
                                  ", content_type"
                                else
                                  ", ( SELECT NULL ) AS content_type"
