@@ -113,7 +113,7 @@ begin
 
     module Entry
       def id
-        respond_to?(:guid) ? guid.content : nil
+        respond_to?(:guid) && guid.present? ? guid.content : nil
       end
 
       def content
