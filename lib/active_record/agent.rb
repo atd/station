@@ -126,13 +126,14 @@ module ActiveRecord #:nodoc:
       # Can pass options to the list:
       # type:: the class of the Stage requested (Doesn't work with STI!)
       #
+      # Uses +compact+ to remove nil instances, which may appear because of default_scopes
       def stages(options = {})
-        agent_performances.stage_type(options[:type]).map(&:stage)
+        agent_performances.stage_type(options[:type]).map(&:stage).compact
       end
 
       # Agents that have at least one Role in stages
       def fellows
-        stages.map(&:actors).flatten.uniq.sort{ |x, y| x.name <=> y.name }
+        stages.map(&:actors).flatten.compact.uniq.sort{ |x, y| x.name <=> y.name }
       end
 
       def service_documents
