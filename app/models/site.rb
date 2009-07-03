@@ -13,8 +13,14 @@ class Site < ActiveRecord::Base
     first || create
   end
 
+  # Nice format email address for the Site
   def email_with_name
     "#{ name } <#{ email }>"
+  end
+
+  # Domain http url considering ssl setting value
+  def domain_with_protocol
+    "http#{ ssl? ? 's' : nil }://#{ domain }"
   end
 
   #TODO: validate exception_notifications attribute and 
