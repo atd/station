@@ -10,7 +10,7 @@ class Site < ActiveRecord::Base
   has_logo
 
   def self.current
-    first || new
+    first || create
   end
 
   def email_with_name
