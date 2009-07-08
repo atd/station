@@ -52,10 +52,34 @@ module ActionView #:nodoc:
 
       # Prints an atom <tt>link</tt> header for feed autodiscovery.
       # Use it in partials:
+      #   atom_link
+      # will link to current request_uri + .atom
+      #
+      # You can pass url arguments
       #   atom_link(container, Content.new)
-      # You must have <tt>yield(:headers)</tt> in your layout
+      #
+      # You must have <tt>yield(:headers)</tt> in your layout for using this helper method
       def atom_link_header(*args)
-        content_for :headers, "<link href=\"#{ polymorphic_url(args) }.atom\" rel=\"alternate\" title=\"#{ title }\" type=\"application/atom+xml\" />"
+        options = ( args.last.is_a?(Hash) ? args.pop : Hash.new )
+
+        url = case args.size
+              when 0
+                # Without arguments, link to current request uri
+                "#{ current_site.domain_with_protocol }#{ request.request_uri }"
+              when 1
+                case args.first
+                when String
+                  args.first
+                else
+                  polymorphic_url(args)
+                end
+              else
+                polymorphic_url(args)
+              end
+        
+        title = options[:title] || self.title
+
+        content_for :headers, "<link href=\"#{ url }.atom\" rel=\"alternate\" title=\"#{ title }\" type=\"application/atom+xml\" />"
       end
     end
   end
