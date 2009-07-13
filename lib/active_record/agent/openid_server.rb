@@ -25,6 +25,10 @@ module ActiveRecord #:nodoc:
             after_create :create_openid_server_ownings
           end
         end
+
+        def classes
+          ActiveRecord::Agent.classes.select{ |k| k.agent_options[:openid_server] }
+        end
       end
 
       module InstanceMethods

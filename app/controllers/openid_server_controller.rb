@@ -40,7 +40,7 @@ class OpenidServerController < ApplicationController
         # TODO: claimed_id
         @identity = Uri.find_by_uri(openid_request.identity)
         unless @identity && current_agent.openid_uris.include?(@identity)
-          render :text => t(:invalid_uri, :uri => openid_request.identity), :status => :forbidden
+          render :text => t('openid.server.invalid_uri', :uri => openid_request.identity), :status => :forbidden
           return
         end
       end

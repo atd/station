@@ -15,7 +15,7 @@ module ActionController #:nodoc:
           begin
             openid_request = openid_consumer.begin params[:openid_identifier]
           rescue ::OpenID::OpenIDError => e
-            flash[:error] = t(:discovery_failed, :id => params[:openid_identifier], :error => e)
+            flash[:error] = t('openid.client.discovery_failed', :id => params[:openid_identifier], :error => e)
             render :action => "new"
             return
           end
