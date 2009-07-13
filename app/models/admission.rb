@@ -14,9 +14,11 @@ class Admission < ActiveRecord::Base
   before_validation :sync_candidate_email
 
   validates_uniqueness_of :candidate_id,
-                          :scope => [ :candidate_type, :group_id, :group_type ]
+                          :scope => [ :candidate_type, :group_id, :group_type ],
+                          :allow_nil => true
   validates_uniqueness_of :candidate_type,
-                          :scope => [ :candidate_id,   :group_id, :group_type ]
+                          :scope => [ :candidate_id,   :group_id, :group_type ],
+                          :allow_nil => true
   validates_uniqueness_of :email,
                           :scope => [ :group_id, :group_type ]
 
