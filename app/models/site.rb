@@ -18,9 +18,14 @@ class Site < ActiveRecord::Base
     "#{ name } <#{ email }>"
   end
 
-  # Domain http url considering ssl setting value
+  # HTTP protocol based on SSL setting
+  def protocol
+    "http#{ ssl? ? 's' : nil }"
+  end
+
+  # Domain http url considering protocol
   def domain_with_protocol
-    "http#{ ssl? ? 's' : nil }://#{ domain }"
+    "#{ protocol }://#{ domain }"
   end
 
   #TODO: validate exception_notifications attribute and 
