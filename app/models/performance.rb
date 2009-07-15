@@ -26,6 +26,8 @@ class Performance < ActiveRecord::Base
   validates_uniqueness_of :agent_type, :scope => [ :agent_id, :stage_id, :stage_type ]
 
   def affordances
+    raise "Performance #{ id } hasn't any Role!" if role.blank?
+
     role.actions.inject([]) do |affordances, action|
       affordances << ActiveRecord::Authorization::Affordance.new(agent, action)
     end
