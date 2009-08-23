@@ -131,8 +131,10 @@ en:
     new: "New Category"
     created: "Category created"
     editing: "Editing Category"
+    updated: "Category updated"
     name: "Category name"
     description: "Description"
+    confirm_delete: "Delete Category?"
     domain:
       one: "Domain"
       other: "Domains"

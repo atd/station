@@ -129,8 +129,10 @@ es:
     new: "Nueva Categoría"
     created: "Categoría creada"
     editing: "Editando Categoría"
+    updated: "Categoría actualizada"
     name: "Nombre de la Categoría"
     description: "Descripción"
+    confirm_delete: "¿Borrar la Categoría?"
     domain:
       one: "Dominio"
       other: "Dominios"

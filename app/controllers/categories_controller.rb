@@ -1,14 +1,14 @@
 # Categories methods and filters for Category
 class CategoriesController < ApplicationController
-  before_filter :categories_domain!, :only => [ :index, :new, :create ]
+  before_filter :current_categories_domain!, :only => [ :index, :new, :create ]
 
   # List categories belonging to a Container
   #
   # GET /:categories_domain_type/:categories_domain_id/categories
   # GET /categories_domain_type/:categories_domain_id/categories.xml
   def index
-    @categories = @categories_domain.domain_categories.column_sort(params[:order], params[:direction])
-    @title = t('category.other_in_domain', :domain => @categories_domain.name)
+    @categories = current_categories_domain.domain_categories.column_sort(params[:order], params[:direction])
+    @title = t('category.other_in_domain', :domain => current_categories_domain.name)
     
     respond_to do |format|
       format.html # index.html.erb
@@ -34,7 +34,7 @@ class CategoriesController < ApplicationController
   # GET /:categories_domain_type/:categories_domain_id/categories/new
   # GET /:categories_domain_type/:categories_domain_id/categories/new.xml
   def new
-    @category = @categories_domain.domain_categories.new
+    @category = current_categories_domain.domain_categories.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -54,12 +54,12 @@ class CategoriesController < ApplicationController
   # POST /:categories_domain_type/:categories_domain_id/categories
   # POST /:categories_domain_type/:categories_domain_id/categories.xml
   def create
-    @category = @categories_domain.domain_categories.new(params[:category])
+    @category = current_categories_domain.domain_categories.new(params[:category])
 
     respond_to do |format|
       if @category.save
         flash[:success] = t('category.created')
-        format.html { redirect_to(@category) }
+        format.html { redirect_to([ @category.domain, @category ]) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
         format.js
       else
@@ -78,7 +78,7 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       if category.update_attributes(params[:category])
         flash[:success] = t('category.updated')
-        format.html { redirect_to(@category) }
+        format.html { redirect_to([@category.domain, @category]) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -95,25 +95,30 @@ class CategoriesController < ApplicationController
     category.destroy
 
     respond_to do |format|
-      format.html { redirect_to(polymorphic_path([ @categories_domain, Category.new ])) }
+      format.html { redirect_to(polymorphic_path([ category.domain, Category.new ])) }
       format.xml  { head :ok }
     end
   end
 
   protected
 
-  # Sets @categories_domain, getting a CategoriesDomain from path (using record_from_path) or site
-  def categories_domain!
-    @categories_domain = record_from_path(:acts_as => :categories_domain) || site
+  # Sets @current_categories_domain, getting a CategoriesDomain from path (using record_from_path)
+  def current_categories_domain
+    @current_categories_domain ||= record_from_path(:acts_as => :categories_domain)
+  end
+
+  # Like current_categories_domain but raises error if nil
+  def current_categories_domain!
+    current_categories_domain || raise(ActiveRecord::RecordNotFound, "Categories Domain not found")
   end
 
   # Find Category using params[:id]
   #
-  # Sets @category and @categories_domain variables
+  # Sets @category and @current_categories_domain variables
   def category
     @category ||= Category.find(params[:id])
     raise ActiveRecord::RecordNotFound, "Category not found" unless @category
-    @categories_domain ||= @category.domain
+    @current_categories_domain ||= @category.domain
     @category
   end
 end

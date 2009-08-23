@@ -2,7 +2,7 @@
 
 <%= error_messages_for :category %>
 
-<% form_for(@category) do |f| %>
+<% form_for([ current_categories_domain, @category ]) do |f| %>
   <%= render :partial => 'form', :object => f %>
   <p>
     <%= f.submit t(:update) %>
