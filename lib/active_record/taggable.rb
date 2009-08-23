@@ -90,7 +90,7 @@ module ActiveRecord #:nodoc:
           when Array
             obj.map! do |item|
               case item
-                when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
+                when Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
                 when Tag then item.name
                 when String then item
                 else
