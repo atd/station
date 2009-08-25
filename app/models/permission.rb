@@ -12,4 +12,10 @@ class Permission < ActiveRecord::Base
   def <=>(other)
     title <=> other.title
   end
+
+  # Return the equivalent ACEPermission for this database Permission
+  def to_ace_permission
+    ActiveRecord::Authorization::ACEPermission.new action, objective
+  end
+
 end

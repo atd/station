@@ -6,10 +6,10 @@ module ActionController #:nodoc:
   #
   # == Authorization Filters
   # You can define authorization filters in the following way:
-  #   authorization_filter auth_action, auth_object, filter_options
+  #   authorization_filter ace_permission, acl_object, filter_options
   #
-  # auth_action:: Argument defining the Permission. It's passed to @@auth_object.authorizes?@. See ActiveRecord::Stage#authorizes? method.
-  # auth_object:: the instance variable of the controller that will respond to <tt>authorizes?(auth_action, :to => current_agent)</tt>
+  # ace_permission:: Argument defining the ACEPermission.
+  # acl_object:: a Symbol representing a controller's instance variable name or method. This variable or method gives an object owning the ACL that will be called with <tt>authorize?(ace_permission, :to => current_agent)</tt>
   # options:: Available options are:
   #   if:: A Proc proc{ |controller| ... } or Symbol to be executed as condition of the filter
   #   
@@ -27,15 +27,19 @@ module ActionController #:nodoc:
   #    authorization_filter :delete, :attachment, :only => [ :destroy ]
   #
   #  end
+  #
   module Authorization
     # Inclusion hook to add ActionController::Authentication
     def self.included(base) #:nodoc:
       base.send :include, ActionController::Authentication unless base.ancestors.include?(ActionController::Authentication)
 
-      base.helper_method :authorized?
+      base.helper_method :authorize?, :authorized?
+      # Deprecated
+      base.helper_method :authorizes?
+
       class << base
         # Calls not_authorized unless stage allows current_agent to perform actions
-        def authorization_filter(auth_action, auth_object, options = {})
+        def authorization_filter(ace_permission, acl_object, options = {})
           if_condition = options.delete(:if)
           filter_condition = case if_condition
                              when Proc
@@ -48,28 +52,25 @@ module ActionController #:nodoc:
 
           before_filter options do |controller|
             if filter_condition.call(controller)
-              controller.not_authorized unless controller.authorized?(auth_action, auth_object)
+              controller.not_authorized unless controller.authorized?(ace_permission, acl_object)
             end
           end
         end
       end
     end
 
-    # Is current_agent authorized to perform auth_action over auth_object?
-    #
-    # auth_action:: defined in ActiveRecord::Stage#authorizes?
-    # auth_object_name:: if it's a Symbol, the name of an instance variable,
-      # or the name of a method that returns the Stage asked auth_action. If
-      # it's in nil, Site.current
-    def authorized?(auth_action, auth_object_name)
-      auth_object = if auth_object_name.is_a?(Symbol)
-                      self.instance_variable_get("@#{ auth_object_name }") ||
-                      send(auth_object_name)
-                    else
-                      auth_object_name || site
-                    end
+    # Object that resolves default authorization queries. Defaults to current_site
+    def default_authorization_instance
+      current_site
+    end
 
-      auth_object.authorizes?(auth_action, :to => current_agent)
+    # Calls authorize? on default_authorization_instance with current_agent
+    #
+    # ace_permission defaults to controller's action_name
+    def authorize?(ace_permission = nil)
+      ace_permission ||= action_name
+
+      default_authorization_instance.authorize?(ace_permission, :to => current_agent)
     end
 
     # If user is not authenticated, return not_authenticated to allow identification. 
@@ -88,6 +89,23 @@ module ActionController #:nodoc:
                  :status => 403)
         end
       end
+    end
+
+    def authorized?(ace_permission = nil, acl_object_name = nil) #:nodoc:
+      ace_permission ||= action_name
+      acl_object = case acl_object_name
+                   when Symbol
+                     begin
+                      self.instance_variable_get("@#{ acl_object_name }")
+                     rescue NameError
+                     end || send(acl_object_name)
+                   when NilClass
+                     default_authorization_instance
+                   else
+                     acl_object_name
+                   end
+
+      acl_object.authorize?(ace_permission, :to => current_agent)
     end
   end
 end

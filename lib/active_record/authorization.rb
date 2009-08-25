@@ -12,12 +12,15 @@ module ActiveRecord #:nodoc:
     end
 
     module ClassMethods
-      def reflection_affordances_list
-        @reflection_affordances_list ||= {}
+      def acl_sets
+        @acl_sets ||= []
       end
 
-      def reflection_affordances(reflection, options = {})
-        reflection_affordances_list[reflection] = options
+      protected
+
+      def acl_set(method = nil, &block)
+        #FIXME
+        @acl_sets = ( acl_sets << (method || block)).flatten.uniq
       end
     end
 
@@ -28,133 +31,39 @@ module ActiveRecord #:nodoc:
       # action can be:
       # ActiveRecord::Authorization::Agent instance
       # Symbol or String:: describes the action name. Objective will be nil
-      #   resource.authorizes?(:update, :to => user)
+      #   resource.authorize?(:update, :to => user)
       # Array:: pair of action_name, :objective
-      #   resource.authorizes?([ :create, :attachment ], :to => user)
+      #   resource.authorize?([ :create, :attachment ], :to => user)
       #
       # Options:
       # to:: Agent of the Affordance. Defaults to Anyone
       #
-      def authorizes?(action, options = {})
-        options[:action] = action
-        options[:agent] = options.delete(:to) || Anyone.current
-
-        affordance?(options)
+      def authorize?(permission, options = {})
+        acl.authorize?(permission, options)
       end
 
-      def affordances
-        @affordances ||= local_affordances | import_affordances
+      #FIXME: DRY:
+      def authorizes?(permission, options = {})
+        logger.debug "Station: DEPRECATION WARNING \"authorizes?\". Please use \"authorize?\" instead."
+        line = caller.select{ |l| l =~ /^#{ RAILS_ROOT }/ }.first
+        logger.debug "           in: #{ line }"
+
+        authorize?(permission, options)
       end
 
-      def affordance?(options = {})
-        candidates = []
-
-        if options[:agent]
-          candidates |= affordances.select{ |a| a.agent == options[:agent] }
-        end
-
-        unless options[:agent].is_a?(SingularAgent)
-          candidates |= affordances.select{ |a| a.agent?(Authenticated.current) }
-        end
-        candidates |= affordances.select{ |a| a.anyone? }
-
-        if options[:action]
-          candidates.delete_if{ |a| !a.action?(options[:action]) }
-        end
-
-        candidates.any?
-      end
-
-      # Options:
-      # agent:: 
-      def import_affordances
-        self.class.reflection_affordances_list.inject([]) do |affordances, r|
-          reflection, reflection_options = r.first, r.last
-
-          affs = send("#{ reflection }_affordances")
-
-          if reflection_options[:objective]
-            affs = affs.select{ |a| 
-              a.action.objective?(reflection_options[:objective]) 
-            }.map{ |a|
-             a.action.objective = nil
-             a
-            }
+      def acl
+        returning(ACL.new(self)) do |acl|
+          self.class.acl_sets.each do |set|
+            case set
+            when Symbol, String
+              send(set, acl)
+            when Proc
+              set.call(acl, self)
+            else
+              raise "Invalid ACL Set: #{ set.inspect }"
+            end
           end
-
-          affordances | affs
         end
-      end
-
-      def local_affordances
-        affordances_from_hash
-      end
-
-      def affordances_hash
-        {}
-      end
-
-      def affordances_from_hash
-        affordances_hash.inject([]) do |affordances, e|
-          agent, actions = e.first, e.last
-
-          affordances | actions.map{ |action| Affordance.new(agent, action) }
-        end
-      end
-    end
-
-    class Action
-      attr_reader :name
-      attr_accessor :objective
-
-      def initialize(name, objective = nil)
-        @name, @objective = name.to_s, objective
-      end
-
-      def ==(a)
-        self.name == a.name && objective?(a.objective)
-      end
-
-      def objective?(o)
-        objective.to_s == o.to_s
-      end
-
-      def inspect
-        "#<Action:#{ object_id } @name:#{ @name.inspect } @objective:#{ @objective.inspect }>"
-      end
-    end
-
-    class Affordance
-      attr_reader :agent, :action
-
-      def initialize(agent, action)
-        raise "Invalid Affordance: agent: #{ agent }, action: #{ action }" unless 
-        agent && action
-        @agent, @action = agent, (action.is_a?(Action) ? action : Action.new(*action))
-      end
-
-      # Two affordances are equivalent when their agents and actions are the same
-      def ==(a)
-        self.agent == a.agent && self.action == a.action
-      end
-
-      # Is this action equal to the Affordance action?
-      def action?(action)
-        @action == Action.new(*action)
-      end
-
-      # Is agent equal to the Affordance agent?
-      def agent?(agent)
-        @agent == agent
-      end
-
-      # Is agent Anyone?
-      def anyone?
-        agent?(Anyone.current)
-      end
-
-      def inspect
-        "#<Affordance:#{ object_id } @agent: #{ agent }, @action: #{ action.inspect }>"
       end
     end
   end

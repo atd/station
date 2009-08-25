@@ -24,7 +24,14 @@ module ActiveRecord #:nodoc:
                  :dependent => :destroy,
                  :as => :stage
 
-        reflection_affordances :stage
+        acl_set do |acl, stage|
+          stage.stage_performances.inject(acl) do |acl, p|
+            p.to_acl.entries.each do |e|
+              acl << e
+            end
+            acl
+          end
+        end
 
         has_many :admissions,
                  :dependent => :destroy,
@@ -90,10 +97,6 @@ module ActiveRecord #:nodoc:
       def actors
         # Compact the array, the agent may not be found because of default scopes.
         stage_performances.map(&:agent).compact
-      end
-
-      def stage_affordances
-        stage_performances.map(&:affordances).flatten
       end
 
       private

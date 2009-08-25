@@ -6,6 +6,10 @@ module ActiveRecord #:nodoc:
   # == Named Scope
   # You can use the named_scope +in_container+ to get all Contents in some Container.
   #   Content.in_container(some_container) #=> Array of contents in the container
+  #
+  # == Authorization
+  # A Content will incorporate to its ACL all the Container ACEs that have as ACEObjective 'content' or the Content class name
+  #
   module Content
     class << self
       def included(base) # :nodoc:
@@ -55,8 +59,14 @@ module ActiveRecord #:nodoc:
         acts_as_sortable
         acts_as_categorizable
 
-        reflection_affordances :container,
-                               :objective => :content
+        # Import all ACE from its container having 'content' or this class as ACEObjective
+        acl_set do |acl, content|
+          content.container.acl.entries.select{ |ace|
+            ace.objective?(:content) || ace.objective?(content.class)
+          }.each { |ace|
+            acl << [ ace.agent, ace.action ]
+          } if content.container.present?
+        end
 
         extend  ClassMethods
         include InstanceMethods
@@ -94,10 +104,6 @@ module ActiveRecord #:nodoc:
       # Obsolete?  
       def posted_in?(container)
         container == self.container
-      end
-
-      def container_affordances
-        container.affordances
       end
     end
 

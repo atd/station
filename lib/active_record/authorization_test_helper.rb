@@ -21,7 +21,7 @@ module ActiveRecord #:nodoc:
         agent = ( agent_name.is_a?(Symbol) ?
                   instance_variable_get("@#{ agent_name }") :
                   agent_name )
-        assert auth_object.authorizes?(action, :to => agent)
+        assert auth_object.authorize?(action, :to => agent)
       end
     end
 
@@ -31,7 +31,7 @@ module ActiveRecord #:nodoc:
         agent = ( agent_name.is_a?(Symbol) ?
                   instance_variable_get("@#{ agent_name }") :
                   agent_name )
-        assert ! auth_object.authorizes?(action, :to => agent)
+        assert ! auth_object.authorize?(action, :to => agent)
       end
     end
   end

@@ -25,11 +25,13 @@ class Performance < ActiveRecord::Base
   validates_uniqueness_of :agent_id, :scope => [ :agent_type, :stage_id, :stage_type ]
   validates_uniqueness_of :agent_type, :scope => [ :agent_id, :stage_id, :stage_type ]
 
-  def affordances
+  def to_acl
     raise "Performance #{ id } hasn't any Role!" if role.blank?
 
-    role.actions.inject([]) do |affordances, action|
-      affordances << ActiveRecord::Authorization::Affordance.new(agent, action)
+    to_acl = ActiveRecord::Authorization::ACL.new(stage)
+
+    role.ace_permissions.inject(to_acl) do |acl, p|
+      acl << [ agent, p]
     end
   end
 end
