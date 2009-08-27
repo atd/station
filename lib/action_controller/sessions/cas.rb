@@ -36,7 +36,7 @@ module ActionController #:nodoc:
           end
 
           if authenticated?
-            flash[:notice] = t(:logged_in_successfully)
+            flash[:success] = t(:logged_in_successfully)
             redirect_back_or_default(after_create_path)
           else
             redirect_to :controller => ActiveRecord::Agent.authentication_classes(:cas).first.to_s.tableize,

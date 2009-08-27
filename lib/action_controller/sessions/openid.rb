@@ -49,7 +49,7 @@ module ActionController #:nodoc:
 
           case openid_response.status
           when ::OpenID::Consumer::SUCCESS
-            flash[:notice] = t('openid.client.verification_succeeded_with_id', :id => openid_response.display_identifier)
+            flash[:success] = t('openid.client.verification_succeeded_with_id', :id => openid_response.display_identifier)
             uri = Uri.find_or_create_by_uri(openid_response.display_identifier)
 
             # If already authenticated, add URI to Agent.openid_ownings
@@ -67,7 +67,7 @@ module ActionController #:nodoc:
 
             if authenticated?
               redirect_back_or_default after_create_path
-              flash[:notice] = t(:logged_in_successfully)
+              flash[:success] = t(:logged_in_successfully)
             else
               # We create new local Agent with OpenID data
               session[:openid_identifier] = openid_response.display_identifier
