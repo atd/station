@@ -47,10 +47,13 @@ ActionController::Routing::Routes.draw do |map|
                 ActiveRecord::Container.symbols 
              )
 
-  map.resources(*(ActiveRecord::Container.symbols) - Array(:sites)) do |container|
-    container.resources(*ActiveRecord::Content.symbols)
-    container.resources :categories
-    container.resources :sources, :member => { :import => :get }
+  ActiveRecord::Container.symbols.each do |container_sym|
+    next if container_sym == :sites
+    map.resources(container_sym) do |container|
+      container.resources(*container_sym.to_class.contents)
+      container.resources :categories
+      container.resources :sources, :member => { :import => :get }
+    end
   end
   map.resources :sources, :member => { :import => :get }
 
