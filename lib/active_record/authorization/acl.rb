@@ -16,7 +16,8 @@ module ActiveRecord #:nodoc:
         self
       end
 
-      def +(acl)
+      # Appends acl.entries to this ACL
+      def concat(acl)
         acl_entries = case acl
                       when ACL
                         acl.entries
@@ -26,11 +27,14 @@ module ActiveRecord #:nodoc:
                         raise "Argument must be ACL or Array: #{ acl.inspect }"
                       end
 
-        returning self.dup do |r|
-          acl_entries.each do |e|
-            r << e
-          end
+        acl_entries.each do |ace|
+          self << ace
         end
+      end
+
+      # Returns a new ACL which entries are the sum
+      def +(acl)
+        dup.concat(acl)
       end
 
       def authorize?(permission, options = {})
