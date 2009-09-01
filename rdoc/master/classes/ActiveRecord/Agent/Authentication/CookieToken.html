@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Agent::Authentication::CookieToken</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Agent::Authentication::CookieToken</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../../files/lib/active_record/agent/authentication/cookie_token_rb.html">lib/active_record/agent/authentication/cookie_token.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Remember <a href="../../Agent.html">Agent</a> in browser beyond Rails
+Session using <tt>auth_token</tt> cookie
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000182">forget_me</a></li>
+  <li><a href="#M000181">remember_me</a></li>
+  <li><a href="#M000180">remember_token?</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000182"></a><b>forget_me</b>()
+  </div>
+  <div class="description">
+  <p>
+Remove Remember information
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000182_source')" id="l_M000182_source">show source</a> ]</p>
+  <div id="M000182_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent/authentication/cookie_token.rb, line 27</span>
+27:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">forget_me</span>
+28:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">remember_token_expires_at</span> = <span class="ruby-keyword kw">nil</span>
+29:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">remember_token</span>            = <span class="ruby-keyword kw">nil</span>
+30:           <span class="ruby-identifier">save</span>(<span class="ruby-keyword kw">false</span>)
+31:         <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000181"></a><b>remember_me</b>()
+  </div>
+  <div class="description">
+  <p>
+Remember <a href="../../Agent.html">Agent</a> in this browser for 2 weeks
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000181_source')" id="l_M000181_source">show source</a> ]</p>
+  <div id="M000181_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent/authentication/cookie_token.rb, line 12</span>
+12:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remember_me</span>
+13:           <span class="ruby-identifier">remember_me_for</span> <span class="ruby-value">2</span>.<span class="ruby-identifier">weeks</span>
+14:         <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000180"></a><b>remember_token?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000180_source')" id="l_M000180_source">show source</a> ]</p>
+  <div id="M000180_source" class="dyn-source">
+<pre>
+   <span class="ruby-comment cmt"># File lib/active_record/agent/authentication/cookie_token.rb, line 6</span>
+6:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remember_token?</span>
+7:           (<span class="ruby-operator">!</span><span class="ruby-identifier">remember_token</span>.<span class="ruby-identifier">blank?</span>) <span class="ruby-operator">&amp;&amp;</span>
+8:             <span class="ruby-identifier">remember_token_expires_at</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">remember_token_expires_at</span>.<span class="ruby-identifier">utc</span>)
+9:         <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Logoable::ActsAsClassMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Logoable::ActsAsClassMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/logoable_rb.html">lib/active_record/logoable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000213">acts_as_logoable</a></li>
+  <li><a href="#M000212">has_logo</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="InstanceMethods.html">InstanceMethods</a></li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000213"></a><b>acts_as_logoable</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="ActsAsClassMethods.html#M000212">has_logo</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000212"></a><b>has_logo</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Provides an ActiveRecord model with Logos
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">class_name:</td><td>The model associated with this <a href="../Logoable.html">Logoable</a>.
+Defaults to <a href="../../Logo.html">Logo</a>.
+
+</td></tr>
+</table>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="ActsAsClassMethods.html#M000213">acts_as_logoable</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000212_source')" id="l_M000212_source">show source</a> ]</p>
+  <div id="M000212_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/logoable.rb, line 17</span>
+17:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_logo</span>(<span class="ruby-identifier">options</span> = {})
+18:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Logoable</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
+19: 
+20:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:class_name</span>] <span class="ruby-operator">||=</span> <span class="ruby-value str">&quot;Logo&quot;</span>
+21: 
+22:         <span class="ruby-identifier">has_one</span> <span class="ruby-identifier">:logo</span>, <span class="ruby-identifier">:as</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:logoable</span>,
+23:                            <span class="ruby-identifier">:class_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:class_name</span>]
+24: 
+25:         <span class="ruby-identifier">send</span> <span class="ruby-identifier">:attr_accessor</span>, <span class="ruby-identifier">:_logo</span>
+26:         <span class="ruby-identifier">before_validation</span> <span class="ruby-identifier">:_create_or_update_logo</span>
+27:         <span class="ruby-identifier">validates_associated</span> <span class="ruby-identifier">:logo</span>
+28:         <span class="ruby-identifier">after_save</span> <span class="ruby-identifier">:_save_logo!</span>
+29: 
+30:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
+31: 
+32:         <span class="ruby-identifier">alias_method_chain</span> <span class="ruby-identifier">:logo_image_path</span>, <span class="ruby-identifier">:logo</span>
+33:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

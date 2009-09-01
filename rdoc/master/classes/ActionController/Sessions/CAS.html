@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionController::Sessions::CAS</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionController::Sessions::CAS</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/action_controller/sessions/cas_rb.html">lib/action_controller/sessions/cas.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Central <a href="../Authentication.html">Authentication</a> Service (<a
+href="CAS.html">CAS</a>) session support
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000132">create_with_cas</a></li>
+  <li><a href="#M000133">destroy_with_cas</a></li>
+  <li><a href="#M000131">new_with_cas</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000132"></a><b>create_with_cas</b>()
+  </div>
+  <div class="description">
+  <p>
+Create session using <a href="CAS.html">CAS</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000132_source')" id="l_M000132_source">show source</a> ]</p>
+  <div id="M000132_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/sessions/cas.rb, line 26</span>
+26:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_with_cas</span>
+27:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:ticket</span>]
+28:         <span class="ruby-identifier">initialize_cas_filter</span>
+29: 
+30:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">CASClient</span><span class="ruby-operator">::</span><span class="ruby-constant">Frameworks</span><span class="ruby-operator">::</span><span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">Filter</span>.<span class="ruby-identifier">filter</span>(<span class="ruby-keyword kw">self</span>)
+31:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">:cas</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+32:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">current_agent</span> = 
+33:               <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">authenticate_with_cas</span>(<span class="ruby-identifier">session</span>[<span class="ruby-identifier">:cas_user</span>])
+34: 
+35:             <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authenticated?</span>
+36:           <span class="ruby-keyword kw">end</span>
+37: 
+38:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authenticated?</span>
+39:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:logged_in_successfully</span>)
+40:             <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">after_create_path</span>)
+41:           <span class="ruby-keyword kw">else</span>
+42:             <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">:cas</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">tableize</span>,
+43:                         <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span>,
+44:                         <span class="ruby-identifier">:params</span> =<span class="ruby-operator">&gt;</span> { 
+45:                           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">:cas</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> {
+46:                             <span class="ruby-identifier">:login</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:cas_user</span>]
+47:                           }
+48:                         }
+49:           <span class="ruby-keyword kw">end</span>
+50:         <span class="ruby-keyword kw">end</span>
+51:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000133"></a><b>destroy_with_cas</b>()
+  </div>
+  <div class="description">
+  <p>
+Logout on <a href="CAS.html">CAS</a> Server
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000133_source')" id="l_M000133_source">show source</a> ]</p>
+  <div id="M000133_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/sessions/cas.rb, line 54</span>
+54:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy_with_cas</span>
+55:         <span class="ruby-identifier">initialize_cas_filter</span>
+56: 
+57:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-operator">::</span><span class="ruby-constant">CASClient</span><span class="ruby-operator">::</span><span class="ruby-constant">Frameworks</span><span class="ruby-operator">::</span><span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">Filter</span>.<span class="ruby-identifier">client</span>.<span class="ruby-identifier">logout_url</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>)
+58:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000131"></a><b>new_with_cas</b>()
+  </div>
+  <div class="description">
+  <p>
+Initialize <a href="CAS.html">CAS</a> session
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000131_source')" id="l_M000131_source">show source</a> ]</p>
+  <div id="M000131_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/sessions/cas.rb, line 13</span>
+13:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_with_cas</span>
+14:         <span class="ruby-identifier">initialize_cas_filter</span>
+15: 
+16:         <span class="ruby-identifier">cas_filter_result</span> = <span class="ruby-operator">::</span><span class="ruby-constant">CASClient</span><span class="ruby-operator">::</span><span class="ruby-constant">Frameworks</span><span class="ruby-operator">::</span><span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">Filter</span>.<span class="ruby-identifier">filter</span>(<span class="ruby-keyword kw">self</span>)
+17: 
+18:         <span class="ruby-comment cmt"># CAS Filter just returns true if the Agent is already authenticated</span>
+19:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cas_filter_result</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span> <span class="ruby-identifier">performed?</span>
+20:           <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'create'</span>,
+21:                       <span class="ruby-identifier">:ticket</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:cas_last_valid_ticket</span>].<span class="ruby-identifier">ticket</span>
+22:         <span class="ruby-keyword kw">end</span>
+23:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

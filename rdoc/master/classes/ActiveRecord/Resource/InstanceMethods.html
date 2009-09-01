@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Resource::InstanceMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Resource::InstanceMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/resource_rb.html">lib/active_record/resource.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000168">format</a></li>
+  <li><a href="#M000171">from_atom</a></li>
+  <li><a href="#M000172">from_atom!</a></li>
+  <li><a href="#M000173">logo_image_path_with_thumbnails</a></li>
+  <li><a href="#M000167">mime_type</a></li>
+  <li><a href="#M000169">mime_type_or_class_name</a></li>
+  <li><a href="#M000170">to_param</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000168"></a><b>format</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the Mime::Type symbol for this content
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000168_source')" id="l_M000168_source">show source</a> ]</p>
+  <div id="M000168_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 136</span>
+136:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format</span>
+137:         <span class="ruby-identifier">mime_type</span> <span class="ruby-value">? </span><span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+138:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000171"></a><b>from_atom</b>(entry)
+  </div>
+  <div class="description">
+  <p>
+Update attributes from Atom Entry or <a href="../../Source.html">Source</a>
+entry
+</p>
+<p>
+You must implement params_from_atom class method
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000171_source')" id="l_M000171_source">show source</a> ]</p>
+  <div id="M000171_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 158</span>
+158:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_atom</span>(<span class="ruby-identifier">entry</span>)
+159:         <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:params_from_atom</span>)
+160:           <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Station: You must implement #{ self.to_s }#params_from_atom method to parse Atom entries&quot;</span>
+161:         <span class="ruby-keyword kw">end</span>
+162: 
+163:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">params_from_atom</span>(<span class="ruby-identifier">entry</span>)
+164: 
+165:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:guid</span>)
+166:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">guid</span> = <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">id</span>
+167:         <span class="ruby-keyword kw">end</span>
+168: 
+169:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:created_at</span>)
+170:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">created_at</span> = <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">published</span>
+171:         <span class="ruby-keyword kw">end</span>
+172: 
+173:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:updated_at</span>)
+174:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">updated_at</span> = <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">updated</span>
+175:         <span class="ruby-keyword kw">end</span>
+176:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000172"></a><b>from_atom!</b>(entry)
+  </div>
+  <div class="description">
+  <p>
+Update attributes using params_from_atom and save the <a
+href="../Resource.html">Resource</a>
+</p>
+<p>
+Saves the record without timestamps, so created_at and updated_at are the
+original from the feed entry
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000172_source')" id="l_M000172_source">show source</a> ]</p>
+  <div id="M000172_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 181</span>
+181:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_atom!</span>(<span class="ruby-identifier">entry</span>)
+182:         <span class="ruby-identifier">class_timestamps_cache</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">record_timestamps</span>
+183:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">record_timestamps</span> = <span class="ruby-keyword kw">false</span>
+184:         <span class="ruby-identifier">from_atom</span>(<span class="ruby-identifier">entry</span>)
+185:         <span class="ruby-identifier">save!</span>
+186:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">record_timestamps</span> = <span class="ruby-identifier">class_timestamps_cache</span>
+187:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000173"></a><b>logo_image_path_with_thumbnails</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+The arguments to polymorphic_path to build the path for this resource <a
+href="../../Logo.html">Logo</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000173_source')" id="l_M000173_source">show source</a> ]</p>
+  <div id="M000173_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 190</span>
+190:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logo_image_path_with_thumbnails</span>(<span class="ruby-identifier">options</span> = {})
+191:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:size</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">16</span>
+192: 
+193:         <span class="ruby-identifier">thumbnail_logo_image?</span>(<span class="ruby-identifier">options</span>) <span class="ruby-operator">?</span>
+194:           [ <span class="ruby-keyword kw">self</span>, { <span class="ruby-identifier">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">format</span>, <span class="ruby-identifier">:thumbnail</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:size</span>] } ] <span class="ruby-operator">:</span>
+195:           <span class="ruby-identifier">logo_image_path_without_thumbnails</span>(<span class="ruby-identifier">options</span>)
+196:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000167"></a><b>mime_type</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the mime type for this <a href="../Content.html">Content</a>
+instance. Example: Mime::XML
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000167_source')" id="l_M000167_source">show source</a> ]</p>
+  <div id="M000167_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 125</span>
+125:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type</span>
+126:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:content_type</span>)
+127: 
+128:         <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">content_type</span>)
+129:         <span class="ruby-comment cmt"># mime_type must be a registered Mime::Type</span>
+130:         <span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">&quot;@symbol&quot;</span>) <span class="ruby-operator">?</span>
+131:           <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">:</span>
+132:           <span class="ruby-keyword kw">nil</span>
+133:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000169"></a><b>mime_type_or_class_name</b>()
+  </div>
+  <div class="description">
+  <p>
+Method useful for icon files
+</p>
+<p>
+If the <a href="../Content.html">Content</a> has a Mime Type, return it
+scaped with &#8217;-&#8217;
+</p>
+<pre>
+  application/jpg =&gt; application-jpg
+</pre>
+<p>
+else, return the underscored class name:
+</p>
+<pre>
+  photo
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000169_source')" id="l_M000169_source">show source</a> ]</p>
+  <div id="M000169_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 146</span>
+146:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type_or_class_name</span>
+147:         <span class="ruby-identifier">mime_type</span> <span class="ruby-value">? </span><span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[\/\+]/</span>, <span class="ruby-value str">'-'</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>
+148:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000170"></a><b>to_param</b>()
+  </div>
+  <div class="description">
+  <p>
+Define <a href="InstanceMethods.html#M000170">to_param</a> method with
+acts_as_resource param option
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000170_source')" id="l_M000170_source">show source</a> ]</p>
+  <div id="M000170_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 151</span>
+151:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_param</span>
+152:         <span class="ruby-identifier">send</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:param</span>]).<span class="ruby-identifier">to_s</span>
+153:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

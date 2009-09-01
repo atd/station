@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Agent::InstanceMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Agent::InstanceMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/agent_rb.html">lib/active_record/agent.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000203">authorization_cache</a></li>
+  <li><a href="#M000201">fellows</a></li>
+  <li><a href="#M000199">needs_password?</a></li>
+  <li><a href="#M000202">service_documents</a></li>
+  <li><a href="#M000200">stages</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000203"></a><b>authorization_cache</b>()
+  </div>
+  <div class="description">
+  <p>
+<a href="../Agent.html">Agent</a> <a
+href="../Authorization.html">Authorization</a> Cache
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000203_source')" id="l_M000203_source">show source</a> ]</p>
+  <div id="M000203_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 150</span>
+150:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorization_cache</span>
+151:         <span class="ruby-ivar">@authorization_cache</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
+152:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000201"></a><b>fellows</b>()
+  </div>
+  <div class="description">
+  <p>
+Agents that have at least one <a href="../../Role.html">Role</a> in <a
+href="InstanceMethods.html#M000200">stages</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000201_source')" id="l_M000201_source">show source</a> ]</p>
+  <div id="M000201_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 137</span>
+137:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fellows</span>
+138:         <span class="ruby-identifier">stages</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:actors</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">name</span> }
+139:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000199"></a><b>needs_password?</b>()
+  </div>
+  <div class="description">
+  <p>
+Does this <a href="../Agent.html">Agent</a> needs to set a local password?
+True if it supports <tt>:login_and_password</tt> authentication method and
+it hasn&#8216;t any OpenID Owning
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000199_source')" id="l_M000199_source">show source</a> ]</p>
+  <div id="M000199_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 119</span>
+119:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">needs_password?</span>
+120:         <span class="ruby-comment cmt"># False is Login/Password is not supported by this Agent</span>
+121:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:login_and_password</span>)
+122:         <span class="ruby-comment cmt"># False if OpenID is suported and there is already an OpenID Owning associated</span>
+123:         <span class="ruby-operator">!</span> (<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:openid</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">openid_identifier</span>.<span class="ruby-identifier">blank?</span>)
+124:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000202"></a><b>service_documents</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000202_source')" id="l_M000202_source">show source</a> ]</p>
+  <div id="M000202_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 141</span>
+141:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">service_documents</span>
+142:         <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:openid</span>)
+143:           <span class="ruby-identifier">openid_uris</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:atompub_service_document</span>)
+144:         <span class="ruby-keyword kw">else</span>
+145:           <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+146:         <span class="ruby-keyword kw">end</span>
+147:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000200"></a><b>stages</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+All Stages in which this <a href="../Agent.html">Agent</a> has a <a
+href="../../Performance.html">Performance</a>
+</p>
+<p>
+Can pass options to the list:
+</p>
+<table>
+<tr><td valign="top">type:</td><td>the class of the <a href="../Stage.html">Stage</a> requested (Doesn&#8216;t
+work with STI!)
+
+</td></tr>
+</table>
+<p>
+Uses <tt>compact</tt> to remove nil instances, which may appear because of
+default_scopes
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000200_source')" id="l_M000200_source">show source</a> ]</p>
+  <div id="M000200_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 132</span>
+132:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stages</span>(<span class="ruby-identifier">options</span> = {})
+133:         <span class="ruby-identifier">agent_performances</span>.<span class="ruby-identifier">stage_type</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:type</span>]).<span class="ruby-identifier">all</span>(<span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:stage</span>).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:stage</span>).<span class="ruby-identifier">compact</span>
+134:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: RSS::AtomTools::Entry</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />RSS::AtomTools::Entry</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/station/core_ext_rb.html">lib/station/core_ext.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000254">content</a></li>
+  <li><a href="#M000253">id</a></li>
+  <li><a href="#M000255">links</a></li>
+  <li><a href="#M000257">published</a></li>
+  <li><a href="#M000256">updated</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000254"></a><b>content</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000254_source')" id="l_M000254_source">show source</a> ]</p>
+  <div id="M000254_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 119</span>
+119:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content</span>
+120:         <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@content</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@content</span>
+121: 
+122:         <span class="ruby-ivar">@content</span> = <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Text</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">description</span>
+123:         <span class="ruby-ivar">@content</span>.<span class="ruby-identifier">type</span> = <span class="ruby-value str">'html'</span>
+124:         <span class="ruby-ivar">@content</span>
+125:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000253"></a><b>id</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000253_source')" id="l_M000253_source">show source</a> ]</p>
+  <div id="M000253_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 115</span>
+115:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">id</span>
+116:         <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:guid</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">guid</span>.<span class="ruby-identifier">present?</span> <span class="ruby-value">? </span><span class="ruby-identifier">guid</span>.<span class="ruby-identifier">content</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+117:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000255"></a><b>links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000255_source')" id="l_M000255_source">show source</a> ]</p>
+  <div id="M000255_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 127</span>
+127:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">links</span>
+128:         <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@link</span>
+129: 
+130:         <span class="ruby-constant">Array</span>(<span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Link</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/html'</span>, <span class="ruby-identifier">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'alternate'</span>, <span class="ruby-identifier">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@link</span>)
+131:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000257"></a><b>published</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000257_source')" id="l_M000257_source">show source</a> ]</p>
+  <div id="M000257_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 138</span>
+138:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">published</span>
+139:         <span class="ruby-comment cmt"># Get rid of bug: https://rails.lighthouseapp.com/projects/8994/tickets/1701-argumenterror-in-time_with_zonerb146</span>
+140:         <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:pubDate</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">pubDate</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+141:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000256"></a><b>updated</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000256_source')" id="l_M000256_source">show source</a> ]</p>
+  <div id="M000256_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/station/core_ext.rb, line 133</span>
+133:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">updated</span>
+134:         <span class="ruby-comment cmt"># Get rid of bug: https://rails.lighthouseapp.com/projects/8994/tickets/1701-argumenterror-in-time_with_zonerb146</span>
+135:         <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:pubDate</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">pubDate</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+136:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>
