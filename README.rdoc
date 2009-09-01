@@ -99,9 +99,9 @@ Create personal blogs with a pair of commands:
 
 Users now can entry their own Articles
 
-You can add AtomPub support for Articles creation. You must implement from_atom method in Article model:
+You can add AtomPub support for Articles creation. You must implement params_from_atom method in Article model:
 
-  def self.from_atom(entry)
+  def self.params_from_atom(entry)
     { :body => entry.content.xml.to_s }
   end
 

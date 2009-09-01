@@ -52,8 +52,8 @@ class Source < ActiveRecord::Base
   def validate
     return if target.blank?
 
-    raise "Target model #{ self.target } must implement 'from_atom' class method" unless
-      self.target.constantize.respond_to?(:from_atom)
+    raise "Target model #{ self.target } must implement 'params_from_atom' class method" unless
+      self.target.constantize.respond_to?(:params_from_atom)
   end
 
   def validate_on_create

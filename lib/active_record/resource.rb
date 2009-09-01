@@ -97,17 +97,22 @@ module ActiveRecord #:nodoc:
           raise "Station: You need 'atom-tools' gem for AtomPub support"
         end
 
-        unless respond_to?(:from_atom)
-          raise "Station: You must implement #{ self.to_s }#from_atom method to parse Atom entries"
+        unless respond_to?(:params_from_atom)
+          raise "Station: You must implement #{ self.to_s }#params_from_atom method to parse Atom entries"
         end
 
-        from_atom Atom::Entry.new(data)
+        params_from_atom Atom::Entry.new(data)
+      end
+
+      # Create a new instance of this Resource from Atom Entry
+      def from_atom(entry)
+        self.new(params_from_atom(entry))
       end
 
       # List of comma separated content types accepted for this Content
       def accepts
         list = mime_types.map{ |m| Array(m.to_s) + m.instance_variable_get("@synonyms") }.flatten
-        list << "application/atom+xml;type=entry" if self.respond_to?(:from_atom)
+        list << "application/atom+xml;type=entry" if self.respond_to?(:params_from_atom)
         list.uniq.join(", ")
       end
     end
@@ -147,13 +152,13 @@ module ActiveRecord #:nodoc:
 
       # Update attributes from Atom Entry or Source entry
       #
-      # You must implement from_atom class method
+      # You must implement params_from_atom class method
       def from_atom(entry)
-        unless self.class.respond_to?(:from_atom)
-          raise "Station: You must implement #{ self.to_s }#from_atom method to parse Atom entries"
+        unless self.class.respond_to?(:params_from_atom)
+          raise "Station: You must implement #{ self.to_s }#params_from_atom method to parse Atom entries"
         end
 
-        self.attributes = self.class.from_atom(entry)
+        self.attributes = self.class.params_from_atom(entry)
 
         if respond_to?(:guid)
           self.guid = entry.id
@@ -168,7 +173,7 @@ module ActiveRecord #:nodoc:
         end
       end
 
-      # Update attributes using from_atom and save the Resource
+      # Update attributes using params_from_atom and save the Resource
       #
       # Saves the record without timestamps, so created_at and updated_at are the original from the feed entry
       def from_atom!(entry)
