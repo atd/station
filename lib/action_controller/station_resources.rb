@@ -91,7 +91,7 @@ module ActionController #:nodoc:
     #   GET /resources/new.xml
     #   GET /:container_type/:container_id/contents/new
     def new
-      @resource = model_class.new
+      @resource = model_class.new params[model_class.to_s.underscore.to_sym]
       instance_variable_set "@#{ model_class.to_s.underscore }", @resource
       @content = @resource if model_class.acts_as?(:content)
 
