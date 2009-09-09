@@ -4,11 +4,11 @@ end
 
 entry.summary(:type => "xhtml") do
   entry.div(sanitize(<%= singular_name %>.description), :xmlns => "http://www.w3.org/1999/xhtml")
-end if <%= singular_name %>.description.present?
+end if <%= singular_name %>.respond_to?(:description.) && <%= singular_name %>.description.present?
 
 entry.tag!("app:edited", <%= singular_name %>.updated_at.xmlschema)
 
-entry.link(:rel => 'edit', :href => polymorphic_url([ <%= singular_name %>.container, <%= singular_name %>], :format => :atom ]))
+entry.link(:rel => 'edit', :href => polymorphic_url([ <%= singular_name %>.container, <%= singular_name %>], :format => :atom ))
   
 url_args = ( <%= singular_name %>.respond_to?(:container) && <%= singular_name %>.container ? [ <%= singular_name %>.container, <%= singular_name %> ] : <%= singular_name %> )
 
