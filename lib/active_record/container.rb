@@ -14,14 +14,17 @@ module ActiveRecord #:nodoc:
       #
       # Options:
       # <tt>contents</tt>:: an Array of Contents that can be posted to this Container. Ex: [ :article, :image ]. Defaults to all available Content models.
+      # <tt>sources</tt>:: The container has remote sources. It will import Atom/RSS feeds as contents. See Source. Defaults to false
       def acts_as_container(options = {})
         ActiveRecord::Container.register_class(self)
 
         cattr_reader :container_options
         class_variable_set "@@container_options", options
 
-        has_many :sources, :as => :container,
-                           :dependent => :destroy
+        if options[:sources]
+          has_many :sources, :as => :container,
+                             :dependent => :destroy
+        end
 
         acts_as_categories_domain
 
