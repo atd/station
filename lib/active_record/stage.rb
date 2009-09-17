@@ -96,7 +96,7 @@ module ActiveRecord #:nodoc:
       # TODO: conditions (roles, etc...)
       def actors
         # Compact the array, the agent may not be found because of default scopes.
-        stage_performances.map(&:agent).compact
+        stage_performances.all(:include => :agent).map(&:agent).compact
       end
 
       private

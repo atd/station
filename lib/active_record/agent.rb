@@ -128,7 +128,7 @@ module ActiveRecord #:nodoc:
       #
       # Uses +compact+ to remove nil instances, which may appear because of default_scopes
       def stages(options = {})
-        agent_performances.stage_type(options[:type]).map(&:stage).compact
+        agent_performances.stage_type(options[:type]).all(:include => :stage).map(&:stage).compact
       end
 
       # Agents that have at least one Role in stages
