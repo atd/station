@@ -59,13 +59,12 @@ module ActiveRecord #:nodoc:
         acts_as_sortable
         acts_as_categorizable
 
-        # Import all ACE from its container having 'content' or this class as ACEObjective
+        # Import all ACE from its container having 'content' or this class as ACLObjective
         acl_set do |acl, content|
-          content.container.acl.entries.select{ |ace|
-            ace.objective?(:content) || ace.objective?(content.class)
-          }.each { |ace|
-            acl << [ ace.agent, ace.action ]
-          } if content.container.present?
+          return if content.container.blank?
+
+          acl.import_reflection_acl content.container.acl
+          acl.import_reflection_acl content.container.acl, :content
         end
 
         extend  ClassMethods

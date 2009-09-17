@@ -1,8 +1,8 @@
 module ActiveRecord #:nodoc:
   module Authorization #:nodoc:
-    class ACEAction < String
+    class ACLAction < String
       def initialize(value)
-        raise "Invalid ACE, Action missing" unless value.present?
+        raise "Invalid ACL, Action missing" unless value.present?
 
         super(value.to_s)
       end

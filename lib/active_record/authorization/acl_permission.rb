@@ -1,10 +1,10 @@
 module ActiveRecord #:nodoc:
   module Authorization #:nodoc:
-    class ACEPermission
+    class ACLPermission
       attr_reader :action, :objective
 
       def initialize(action, objective = nil)
-        @action, @objective = ACEAction.new(action), ACEObjective.new(objective)
+        @action, @objective = ACLAction.new(action), ACLObjective.new(objective)
       end
 
       def ==(p)
@@ -12,15 +12,15 @@ module ActiveRecord #:nodoc:
       end
 
       def action?(a)
-        self.action == ACEAction.new(a)
+        self.action == ACLAction.new(a)
       end
 
       def objective?(o)
-        self.objective == ACEObjective.new(o)
+        self.objective == ACLObjective.new(o)
       end
 
       def inspect
-        "#<ACEPermission: @action:#{ @action.inspect } @objective:#{ @objective.inspect }>"
+        "#<ACLPermission: @action:#{ @action.inspect } @objective:#{ @objective.inspect }>"
       end
     end
   end

@@ -26,8 +26,8 @@ module ActiveRecord #:nodoc:
 
         acl_set do |acl, stage|
           stage.stage_performances.inject(acl) do |acl, p|
-            p.to_acl.entries.each do |e|
-              acl << e
+            p.role.permissions.each do |perm|
+              acl << [ p.agent, perm.action, perm.objective ]
             end
             acl
           end

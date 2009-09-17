@@ -51,8 +51,13 @@ module ActiveRecord #:nodoc:
         authorize?(permission, options)
       end
 
+      # Return the ACL for this object
       def acl
-        returning(ACL.new(self)) do |acl|
+        @acl || build_acl
+      end
+
+      def build_acl
+        @acl = returning(ACL.new(self)) do |acl|
           self.class.acl_sets.each do |set|
             case set
             when Symbol, String

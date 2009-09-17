@@ -1,6 +1,6 @@
 module ActiveRecord #:nodoc:
   module Authorization #:nodoc:
-    class ACEObjective
+    class ACLObjective
       attr_reader :value
 
       class << self
@@ -8,7 +8,7 @@ module ActiveRecord #:nodoc:
           case value
           when NilClass
             nil
-          when ACEObjective
+          when ACLObjective
             value.value
           else
             value.to_s.singularize.underscore
