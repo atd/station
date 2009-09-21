@@ -12,15 +12,25 @@ module ActiveRecord #:nodoc:
     end
 
     module ClassMethods
+      # Available authorization methods for this class
+      #
+      # When asking for some permission, all the authorization_methods are
+      # evaluated until one of them returns true. If none of them is true,
+      # false is returned for the permission
       def authorization_methods
         @authorization_methods ||= []
       end
 
       protected
 
-      # Define new authorization method
+      # Define a new authorization method.
       #
-      # ToDoc
+      #   class User
+      #     # Grants all permissions to self
+      #     authorizing do |agent, permission|
+      #       agent == self
+      #     end
+      #   end
       def authorizing(method = nil, &block)
         @authorization_methods = authorization_methods | Array(method || block)
       end
@@ -28,32 +38,35 @@ module ActiveRecord #:nodoc:
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
-      # There is authorization if there are any affordances that match the action
+      # There is authorization if there is any authorization_method that validates 
+      # the pair agent, permission
       #
-      # action can be:
+      # Permission can be:
       # ActiveRecord::Authorization::Agent instance
-      # Symbol or String:: describes the action name. Objective will be nil
+      # Symbol:: describes the action name. Objective will be nil
       #   resource.authorize?(:update, :to => user)
-      # Array:: pair of action_name, :objective
+      # Array:: pair of :action, :objective
       #   resource.authorize?([ :create, :attachment ], :to => user)
       #
       # Options:
-      # to:: Agent of the Affordance. Defaults to Anyone
+      # to:: Agent that performs the operation. Defaults to Anyone
+      #
+      # === Agent Cache
+      # Evalutation of authorization_methods are cached by every Agent per request
       #
       def authorize?(permission, options = {})
-        agent = options[:to] || Anonymous.current
-        cached_auth = agent.cached_authorized?(self, permission)
-        if cached_auth.present?
-          cached_auth
+        agent = options[:to] || Anyone.current
+
+        if agent.authorization_cache[self][permission].nil?
+          agent.authorization_cache[self][permission] =
+            authorization_methods_eval(agent, permission)
         else
-          val = authorization_methods_chain(agent, permission)
-          agent.add_cached_authorization(self, permission, val)
-          val
-        end    
+          agent.authorization_cache[self][permission]
+        end
       end
 
       #FIXME: DRY:
-      def authorizes?(permission, options = {})
+      def authorizes?(permission, options = {}) #:nodoc:
         logger.debug "Station: DEPRECATION WARNING \"authorizes?\". Please use \"authorize?\" instead."
         line = caller.select{ |l| l =~ /^#{ RAILS_ROOT }/ }.first
         logger.debug "           in: #{ line }"
@@ -61,8 +74,9 @@ module ActiveRecord #:nodoc:
         authorize?(permission, options)
       end
       
-      def authorization_methods_chain(agent, permission)
-        
+      private
+
+      def authorization_methods_eval(agent, permission) #:nodoc:
         self.class.authorization_methods.each do |m|
           case m
           when Symbol

@@ -99,6 +99,7 @@ module ActiveRecord #:nodoc:
                  :dependent => :destroy,
                  :as => :agent
 
+
         extend  ClassMethods
         include InstanceMethods
       end
@@ -145,18 +146,10 @@ module ActiveRecord #:nodoc:
         end
       end
       
-      def cached_authorizations
-        @cached_authorizations ||= Hash.new(Hash.new)
+      # Agent Authorization Cache
+      def authorization_cache
+        @authorization_cache ||= Hash.new(Hash.new)
       end
-      
-      def cached_authorized?(resource, permission)
-         cached_authorizations[resource][permission]  
-      end
-      
-      def add_cached_authorization(resource, permission, value)
-        cached_authorizations[resource][permission] = value
-      end
-      
     end
   end
 end
