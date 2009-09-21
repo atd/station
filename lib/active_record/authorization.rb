@@ -42,7 +42,27 @@ module ActiveRecord #:nodoc:
       #
       def authorize?(permission, options = {})
         agent = options[:to] || Anonymous.current
+        cached_auth = agent.cached_authorized?(self, permission)
+        if cached_auth.present?
+          cached_auth
+        else
+          val = authorization_methods_chain(agent, permission)
+          agent.add_cached_authorization(self, permission, val)
+          val
+        end    
+      end
 
+      #FIXME: DRY:
+      def authorizes?(permission, options = {})
+        logger.debug "Station: DEPRECATION WARNING \"authorizes?\". Please use \"authorize?\" instead."
+        line = caller.select{ |l| l =~ /^#{ RAILS_ROOT }/ }.first
+        logger.debug "           in: #{ line }"
+
+        authorize?(permission, options)
+      end
+      
+      def authorization_methods_chain(agent, permission)
+        
         self.class.authorization_methods.each do |m|
           case m
           when Symbol
@@ -55,15 +75,6 @@ module ActiveRecord #:nodoc:
         end
 
         false
-      end
-
-      #FIXME: DRY:
-      def authorizes?(permission, options = {})
-        logger.debug "Station: DEPRECATION WARNING \"authorizes?\". Please use \"authorize?\" instead."
-        line = caller.select{ |l| l =~ /^#{ RAILS_ROOT }/ }.first
-        logger.debug "           in: #{ line }"
-
-        authorize?(permission, options)
       end
     end
   end

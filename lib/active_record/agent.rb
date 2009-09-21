@@ -13,6 +13,7 @@ module ActiveRecord #:nodoc:
   # Include Agent functionality in your models using ActsAsMethods#acts_as_agent
   module Agent
     class << self
+      
       # Returns the first model that acts as Agent, has activation enabled and 
       # login and password
       def activation_class
@@ -143,6 +144,19 @@ module ActiveRecord #:nodoc:
           Array.new
         end
       end
+      
+      def cached_authorizations
+        @cached_authorizations ||= Hash.new(Hash.new)
+      end
+      
+      def cached_authorized?(resource, permission)
+         cached_authorizations[resource][permission]  
+      end
+      
+      def add_cached_authorization(resource, permission, value)
+        cached_authorizations[resource][permission] = value
+      end
+      
     end
   end
 end
