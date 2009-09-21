@@ -6,10 +6,10 @@ module ActionController #:nodoc:
   #
   # == Authorization Filters
   # You can define authorization filters in the following way:
-  #   authorization_filter ace_permission, acl_object, filter_options
+  #   authorization_filter permission, object, filter_options
   #
-  # ace_permission:: Argument defining the ACEPermission.
-  # acl_object:: a Symbol representing a controller's instance variable name or method. This variable or method gives an object owning the ACL that will be called with <tt>authorize?(ace_permission, :to => current_agent)</tt>
+  # permission:: Argument defining the Permission, ex. :read, [ :update, :task ]
+  # object:: a Symbol representing a controller's instance variable name or method. This variable or method gives the object which will be called <tt>authorize?(permission, :to => current_agent)</tt>
   # options:: Available options are:
   #   if:: A Proc proc{ |controller| ... } or Symbol to be executed as condition of the filter
   #   
@@ -19,8 +19,8 @@ module ActionController #:nodoc:
   # === Examples
   #
   #  class AttachmentsController < ActionController::Base
-  #    authorization_filter [ :read, :Attachment ], :space, { :only => [ :index ] }
-  #    authorization_filter [ :create, :Attachment ], :space, { :only => [ :new, :create ] }
+  #    authorization_filter [ :read, :attachment ], :space, { :only => [ :index ] }
+  #    authorization_filter [ :create, :attachment ], :space, { :only => [ :new, :create ] }
   #
   #    authorization_filter :read, :attachment, :only => [ :show ]
   #    authorization_filter :update, :attachment, :only => [ :edit, :update ]
@@ -39,7 +39,7 @@ module ActionController #:nodoc:
 
       class << base
         # Calls not_authorized unless stage allows current_agent to perform actions
-        def authorization_filter(ace_permission, acl_object, options = {})
+        def authorization_filter(permission, auth_object, options = {})
           if_condition = options.delete(:if)
           filter_condition = case if_condition
                              when Proc
@@ -52,7 +52,7 @@ module ActionController #:nodoc:
 
           before_filter options do |controller|
             if filter_condition.call(controller)
-              controller.not_authorized unless controller.authorized?(ace_permission, acl_object)
+              controller.not_authorized unless controller.authorized?(permission, auth_object)
             end
           end
         end
@@ -66,11 +66,11 @@ module ActionController #:nodoc:
 
     # Calls authorize? on default_authorization_instance with current_agent
     #
-    # ace_permission defaults to controller's action_name
-    def authorize?(ace_permission = nil)
-      ace_permission ||= action_name
+    # permission defaults to controller's action_name
+    def authorize?(permission = nil)
+      permission ||= action_name
 
-      default_authorization_instance.authorize?(ace_permission, :to => current_agent)
+      default_authorization_instance.authorize?(permission, :to => current_agent)
     end
 
     # If user is not authenticated, return not_authenticated to allow identification. 
@@ -91,21 +91,21 @@ module ActionController #:nodoc:
       end
     end
 
-    def authorized?(ace_permission = nil, acl_object_name = nil) #:nodoc:
-      ace_permission ||= action_name
-      acl_object = case acl_object_name
+    def authorized?(permission = nil, auth_object_name = nil) #:nodoc:
+      permission ||= action_name
+      auth_object = case auth_object_name
                    when Symbol
                      begin
-                      self.instance_variable_get("@#{ acl_object_name }")
+                      self.instance_variable_get("@#{ auth_object_name }")
                      rescue NameError
-                     end || send(acl_object_name)
+                     end || send(auth_object_name)
                    when NilClass
                      default_authorization_instance
                    else
-                     acl_object_name
+                     auth_object_name
                    end
 
-      acl_object.authorize?(ace_permission, :to => current_agent)
+      auth_object.authorize?(permission, :to => current_agent)
     end
   end
 end

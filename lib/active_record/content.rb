@@ -8,7 +8,7 @@ module ActiveRecord #:nodoc:
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
   # == Authorization
-  # A Content will incorporate to its ACL all the Container ACEs that have as ACEObjective 'content' or the Content class name
+  # A Content will incorporate an authorization_method asking to its Container single permissions. 
   #
   module Content
     class << self
@@ -59,12 +59,13 @@ module ActiveRecord #:nodoc:
         acts_as_sortable
         acts_as_categorizable
 
-        # Import all ACE from its container having 'content' or this class as ACLObjective
-        acl_set do |acl, content|
-          return if content.container.blank?
+        authorizing do |agent, permission|
+          return false unless container.present?
 
-          acl.import_reflection_acl content.container.acl
-          acl.import_reflection_acl content.container.acl, :content
+          return false unless permission.is_a?(String) || permission.is_a?(Symbol)
+
+          container.authorize?([permission, :content], :to => agent) ||
+            container.authorize?([permission, self.class.to_s.tableize], :to => agent)
         end
 
         extend  ClassMethods

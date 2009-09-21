@@ -13,9 +13,7 @@ class Permission < ActiveRecord::Base
     title <=> other.title
   end
 
-  # Return the equivalent ACEPermission for this database Permission
-  def to_ace_permission
-    ActiveRecord::Authorization::ACEPermission.new action, objective
+  def to_array
+    [action, objective].compact.map(&:to_sym)
   end
-
 end

@@ -27,16 +27,6 @@ class Performance < ActiveRecord::Base
 
   validate_on_update :avoid_uniq_first_role_downgrade
 
-  def to_acl
-    raise "Performance #{ id } hasn't any Role!" if role.blank?
-
-    to_acl = ActiveRecord::Authorization::ACL.new(stage)
-
-    role.ace_permissions.inject(to_acl) do |acl, p|
-      acl << [ agent, p]
-    end
-  end
-
   def avoid_uniq_first_role_downgrade
     if role_id_changed? &&
        role_id_was == stage.class.roles.sort.last.id &&

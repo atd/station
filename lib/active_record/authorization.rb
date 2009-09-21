@@ -12,15 +12,17 @@ module ActiveRecord #:nodoc:
     end
 
     module ClassMethods
-      def acl_sets
-        @acl_sets ||= []
+      def authorization_methods
+        @authorization_methods ||= []
       end
 
       protected
 
-      def acl_set(method = nil, &block)
-        #FIXME
-        @acl_sets = ( acl_sets << (method || block)).flatten.uniq
+      # Define new authorization method
+      #
+      # ToDoc
+      def authorizing(method = nil, &block)
+        @authorization_methods = authorization_methods | Array(method || block)
       end
     end
 
@@ -39,7 +41,20 @@ module ActiveRecord #:nodoc:
       # to:: Agent of the Affordance. Defaults to Anyone
       #
       def authorize?(permission, options = {})
-        acl.authorize?(permission, options)
+        agent = options[:to] || Anonymous.current
+
+        self.class.authorization_methods.each do |m|
+          case m
+          when Symbol
+            return true if send(m, agent, permission)
+          when Proc
+            return true if m.bind(self).call(agent, permission)
+          else
+            raise "Invalid Authorization method #{ m }"
+          end
+        end
+
+        false
       end
 
       #FIXME: DRY:
@@ -49,26 +64,6 @@ module ActiveRecord #:nodoc:
         logger.debug "           in: #{ line }"
 
         authorize?(permission, options)
-      end
-
-      # Return the ACL for this object
-      def acl
-        @acl || build_acl
-      end
-
-      def build_acl
-        @acl = returning(ACL.new(self)) do |acl|
-          self.class.acl_sets.each do |set|
-            case set
-            when Symbol, String
-              send(set, acl)
-            when Proc
-              set.call(acl, self)
-            else
-              raise "Invalid ACL Set: #{ set.inspect }"
-            end
-          end
-        end
       end
     end
   end

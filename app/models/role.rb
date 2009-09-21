@@ -21,8 +21,4 @@ class Role < ActiveRecord::Base
   def <=>(other)
     (permissions - other.permissions ).size - (other.permissions - permissions).size
   end
-
-  def ace_permissions
-    permissions.map(&:to_ace_permission)
-  end
 end

@@ -24,15 +24,6 @@ module ActiveRecord #:nodoc:
                  :dependent => :destroy,
                  :as => :stage
 
-        acl_set do |acl, stage|
-          stage.stage_performances.inject(acl) do |acl, p|
-            p.role.permissions.each do |perm|
-              acl << [ p.agent, perm.action, perm.objective ]
-            end
-            acl
-          end
-        end
-
         has_many :admissions,
                  :dependent => :destroy,
                  :as => :group
@@ -45,6 +36,14 @@ module ActiveRecord #:nodoc:
 
         extend  ClassMethods
         include InstanceMethods
+
+        authorizing do |agent, permission|
+          p = stage_performances.find_by_agent_id_and_agent_type(agent.id, agent.class.base_class.to_s, :include => { :role => :permissions })
+
+          return false unless p.present?
+
+          p.role.permissions.map(&:to_array).include?(Array(permission))
+        end
 
         send :attr_accessor, :_stage_performances
         after_save :_save_stage_performances!
