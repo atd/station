@@ -30,7 +30,7 @@ class Performance < ActiveRecord::Base
   def avoid_uniq_first_role_downgrade
     if role_id_changed? &&
        role_id_was == stage.class.roles.sort.last.id &&
-       Performance.find_all_by_stage_id_and_stage_type_and_role_id(stage.id, stage.class.base_class.to_s, role_id_was).count < 2
+       Performance.find_all_by_stage_id_and_stage_type_and_role_id(stage.id, stage.class.base_class.to_s, role_id_was).size < 2
 
       errors.add(:role_id, I18n.t('performance.errors.stage_should_not_run_out_of_performances_with_first_role',
                              :role => stage.class.roles.sort.last.name))
