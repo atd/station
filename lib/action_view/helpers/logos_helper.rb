@@ -1,45 +1,56 @@
 module ActionView #:nodoc:
   module Helpers #:nodoc:
     module LogosHelper
-      # The path to the logo image for the resource.
+      def logo_image_path(resource, options = {})
+        options[:routing_type] = :path
+        logo_image_url(resource, options)
+      end
+
+      # The url to the logo image for the resource.
       #
-      # If the resource is a Logo, returns the path for the Logo data.
+      # If the resource responds to logo_image_path method, take the arguments from it.
       #
-      # If the resource is an image, and it's already saved, it looks for a thumbnail
-      # of the same size of the logo. If it exists, it returns the path of the thumbnail. 
-      #
+      # Else, if the resource acts_as_logoable, returns the path for its Logo.
+     #
       # Else, it builds the file name based on mime type or, if the object 
       # hasn't mime type, the class name tableized.
       #
       #   logo_image_path(attachment) #=> .../application-pdf.png
-      #   logo_image_path(xhtml_text) #=> .../xhtml_text.png
+      #   logo_image_path(private_message) #=> .../private_message.png
       #
       # Finally, it looks for the image file in /public/images/models/:size/:mime-or-class.png
       #
       # Options:
+      # routing_type:: The same as Rails polymorphic_url. When :path, it returns the relative path. When :url, the absolute url with host and protocol
       # size:: Size of the logo. Defaults to 16 pixels.
-      def logo_image_path(resource, options = {})
+
+      def logo_image_url(resource, options = {})
+        routing_type = options.delete(:routing_type) || :url
         options[:size] ||= 16
 
-        if resource.is_a?(Logo)
-          resource.respond_to?(:public_filename) ?
-            resource.public_filename(options[:size]) :
-            polymorphic_path(resource, :format => resource.format, :thumbnail=> options[:size])
-        elsif ! resource.new_record? &&
-              resource.respond_to?(:format) &&
-              resource.respond_to?(:attachment_options) && 
-              resource.attachment_options[:thumbnails].keys.include?(options[:size].to_s) &&
-              resource.thumbnails.find_by_thumbnail(options[:size].to_s)
-          polymorphic_path(resource, :format => resource.format, :thumbnail => options[:size])
-        elsif resource.respond_to?(:logo) && resource.logo
-          logo_image_path(resource.logo, options)
-        else
-          file = resource.respond_to?(:mime_type) && resource.mime_type ?
-            resource.mime_type.to_s.gsub(/[\/\+]/, '-') : 
-            resource.class.to_s.underscore
-          file = "models/#{ options[:size] }/#{ file }.png"
+        args = 
+          if resource.respond_to?(:logo_image_path) && resource.logo_image_path(options).present?
+            resource.logo_image_path(options)
+          elsif resource.respond_to?(:logo) && resource.logo
+            logo_image_path(resource.logo, options)
+          else
+            file = resource.respond_to?(:mime_type) && resource.mime_type ?
+              resource.mime_type.to_s.gsub(/[\/\+]/, '-') : 
+              resource.class.to_s.underscore
+            "models/#{ options[:size] }/#{ file }.png"
+          end
 
-          image_path(file)
+        case args
+        when Array
+          with_options :routing_type => routing_type do
+            polymorphic_url *args
+          end
+        when String
+          returning image_path(args) do |path|
+            path.replace(request.protocol + request.host_with_port + path) if routing_type == :url
+          end
+        else
+          raise "Invalid arguments from logo_image_path: #{ args.inspect }"
         end
       end
 

@@ -21,4 +21,11 @@ class Logo < ActiveRecord::Base
   validates_as_attachment
 
   acts_as_resource :disposition => :inline
+
+  # Returns the image path for this resource
+  def logo_image_path(options)
+    respond_to?(:public_filename) ?
+      public_filename(options[:size]) :
+      [ resource, { :format => self.format, :thumbnail => options[:size] } ]
+  end
 end
