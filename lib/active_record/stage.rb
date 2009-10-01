@@ -92,10 +92,26 @@ module ActiveRecord #:nodoc:
       
       # Return all agents that play one role at least in this stage
       # 
-      # TODO: conditions (roles, etc...)
-      def actors
+      # Options:
+      # role:: The Role actors are performing in this Stage
+      def actors(options = {})
+        conditions = {}
+
+        if options[:role].present?
+          conditions[:role_id] =
+            case options[:role]
+            when Role
+              options[:role].id
+            when String
+              self.class.role(options[:role]).try(:id)
+            when Fixnum
+              options[:role]
+            end
+        end
+
+        # Uses eager loading.
         # Compact the array, the agent may not be found because of default scopes.
-        stage_performances.all(:include => :agent).map(&:agent).compact
+        stage_performances.all(:conditions => conditions, :include => :agent).map(&:agent).compact
       end
 
       private
