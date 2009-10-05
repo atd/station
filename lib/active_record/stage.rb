@@ -21,7 +21,8 @@ module ActiveRecord #:nodoc:
 
         has_many :stage_performances,
                  :class_name => "Performance",
-                 :dependent => :destroy,
+                 # Use delete_all to avoid Performance#avoid_destroying_only_one_with_highest_role callback
+                 :dependent => :delete_all,
                  :as => :stage
 
         has_many :admissions,
