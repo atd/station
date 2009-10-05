@@ -38,7 +38,6 @@ module ActionController #:nodoc:
 
       @resources = model_class.parent_scoped.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
-      @contents = @resources if model_class.acts_as?(:content)
 
       if block
         yield
@@ -57,6 +56,10 @@ module ActionController #:nodoc:
     #   GET /resources/1
     #   GET /resources/1.xml
     def show
+      if params[:version] && resource.respond_to?(:versions)
+        resource.revert_to(params[:version].to_i)
+      end
+
       if params[:thumbnail] && resource.respond_to?(:thumbnails)
         @resource = resource.thumbnails.find_by_thumbnail(params[:thumbnail]) 
       end
@@ -91,9 +94,7 @@ module ActionController #:nodoc:
     #   GET /resources/new.xml
     #   GET /:container_type/:container_id/contents/new
     def new
-      @resource = model_class.new params[model_class.to_s.underscore.to_sym]
-      instance_variable_set "@#{ model_class.to_s.underscore }", @resource
-      @content = @resource if model_class.acts_as?(:content)
+      resource
 
       respond_to do |format|
         format.html # new.html.erb
@@ -221,20 +222,19 @@ module ActionController #:nodoc:
 
     protected
 
-    # Finds the current Resource using model_class and sets <tt>@content>/tt> and 
-    # <tt>@container</tt> if the resource acts_as_content
+    # Finds the current Resource using model_class
+    #
+    # If params[:id] isn't present, build a new Resource
     def resource
-      @resource ||= instance_variable_set("@#{ model_class.to_s.underscore }", 
-                                          model_class.in_container(current_container).find_with_param(params[:id]))
-
-      raise ActiveRecord::RecordNotFound, "Resource not found" unless @resource
-
-      if @resource.class.acts_as?(:content)
-        @content   ||= @resource 
-        @container ||= @resource.container
-      end
-
-      @resource
+      @resource ||= if params[:id].present?
+                      instance_variable_set("@#{ model_class.to_s.underscore }", 
+                        model_class.in_container(current_container).find_with_param(params[:id]) ||
+                        raise(ActiveRecord::RecordNotFound, "Resource not found"))
+                    else
+                      r = model_class.new
+                      r.container = current_container if r.respond_to?(:container=) && current_container.present?
+                      r
+                    end
     end
 
     # If Resource acts_as_content, redirect paths include the Container. 
