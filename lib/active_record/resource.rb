@@ -72,6 +72,8 @@ module ActiveRecord #:nodoc:
 
         extend  ClassMethods
         include InstanceMethods
+
+        alias_method_chain :logo_image_path, :thumbnails
       end
 
       # Find with params
@@ -185,20 +187,22 @@ module ActiveRecord #:nodoc:
       end
 
       # The arguments to polymorphic_path to build the path for this resource Logo
-      def logo_image_path(options)
-        logo_image_path?(options) ?
-          [ resource, { :format => resource.format, :thumbnail => options[:size] } ] :
-          nil
+      def logo_image_path_with_thumbnails(options = {})
+        options[:size] ||= 16
+
+        thumbnail_logo_image?(options) ?
+          [ self, { :format => format, :thumbnail => options[:size] } ] :
+          logo_image_path_without_thumbnails(options)
       end
 
       private
 
       # Is there a logo_image_path available?
-      def logo_image_path?(options)
+      def thumbnail_logo_image?(options)
         # FIXME: this is only for AttachmentFu
         ! new_record? &&
           respond_to?(:attachment_options) &&
-          attachment_options[:thumbnails].keys.include?(options[:size].to_s) &&
+          attachment_options[:thumbnails].keys.map(&:to_s).include?(options[:size].to_s) &&
           thumbnails.find_by_thumbnail(options[:size].to_s).present?
       end
     end

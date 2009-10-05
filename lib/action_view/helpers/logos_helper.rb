@@ -12,11 +12,6 @@ module ActionView #:nodoc:
       #
       # Else, if the resource acts_as_logoable, returns the path for its Logo.
      #
-      # Else, it builds the file name based on mime type or, if the object 
-      # hasn't mime type, the class name tableized.
-      #
-      #   logo_image_path(attachment) #=> .../application-pdf.png
-      #   logo_image_path(private_message) #=> .../private_message.png
       #
       # Finally, it looks for the image file in /public/images/models/:size/:mime-or-class.png
       #
@@ -28,17 +23,7 @@ module ActionView #:nodoc:
         routing_type = options.delete(:routing_type) || :url
         options[:size] ||= 16
 
-        args = 
-          if resource.respond_to?(:logo_image_path) && resource.logo_image_path(options).present?
-            resource.logo_image_path(options)
-          elsif resource.respond_to?(:logo) && resource.logo
-            logo_image_path(resource.logo, options)
-          else
-            file = resource.respond_to?(:mime_type) && resource.mime_type ?
-              resource.mime_type.to_s.gsub(/[\/\+]/, '-') : 
-              resource.class.to_s.underscore
-            "models/#{ options[:size] }/#{ file }.png"
-          end
+        args = resource.logo_image_path(options)
 
         case args
         when Array
