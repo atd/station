@@ -15,7 +15,7 @@ end
 desc 'Generate documentation for Station.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Station Engine Documentation'
+  rdoc.title    = 'Rails Station Engine Documentation'
   rdoc.template = 'doc/template/horo.rb'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')

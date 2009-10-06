@@ -6,14 +6,14 @@ Station is to {Rails}[http://rubyonrails.org/] in Content Management System like
   Rails   = Ruby  + Web Development
   Station = Rails + Content Management
 
-Station provides your Rails application with a "CMS framework". That means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
+Station provides your Rails application with a "CMS framework". This means authentication, authorization, roles, permissions, categories, tags, etc... but from a very flexible scope.
 
 {Webpage}[http://atd.github.com/station/] - {Blog}[http://rstation.wordpress.com/] - {Code}[http://github.com/atd/station] - {Documentation}[http://atd.github.com/station/rdoc/]
 
 == Features
 
 * Authentication: Login/Password, {OpenID}[http://openid.net/], {Central Authentication Service (CAS)}[http://www.ja-sig.org/products/cas/], CookieToken
-* Authorization: Affordances, Roles and Permissions
+* Authorization: Access Control, Roles and Permissions (RBAC)
 * Activation: Email validation, Password reset
 * Atom feeds, {RFC 4287}[http://tools.ietf.org/html/rfc4287]
 * AtomPub protocol, {RFC 5023}[http://tools.ietf.org/html/rfc5023]
@@ -39,7 +39,7 @@ Station provides your Rails application with a "CMS framework". That means authe
 
 === Plugins
 
-You need attachment_fu for Logos and Attachments:
+You need attachment_fu for Logos and Attachments support:
   script/plugin install git://github.com/atd/attachment_fu.git
 
 To install Station, run:
@@ -67,7 +67,7 @@ ActiveRecord::Resource:: a model that have, at least, {CRUD}[http://en.wikipedia
 ActiveRecord::Content:: a Resource that belongs to a Container, e.g. a Post
 ActiveRecord::Container:: a model that have many Contents, e.g. a Space
 ActiveRecord::Agent:: a model with authentication, authorization and potencial to perform actions over Resources, e.g. a User
-ActiveRecord::Stage:: a model that defines an Authorization framework for Agents, e.g. a Group
+ActiveRecord::Stage:: a model that defines an RBAC Authorization framework for Agents, e.g. a Group
 
 === Complements
 ActiveRecord::CategoriesDomain:: a model which instances define Ontology domains
