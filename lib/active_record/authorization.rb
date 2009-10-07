@@ -1,8 +1,16 @@
 module ActiveRecord #:nodoc:
   # Authorization module provide ActiveRecord models with authorization features.
   #
+  # Every ActiveRecord::Base descendant has an authorize? method.
   #
-  # Include Authorization functionality in your models using ActsAsMethods#
+  # authorization_methods are defined using authorizing
+  #
+  # When asking for some permission, all the authorization_methods are
+  # evaluated in sequence. Evaluation continues while the methods are returning nil.
+  # When one of them returns true or false, this is the authorization result.
+  #
+  # By default, if there are no more methods, false is returned for the permission
+  #
   module Authorization
     class << self
       def included(base) #:nodoc:
@@ -14,9 +22,6 @@ module ActiveRecord #:nodoc:
     module ClassMethods
       # Available authorization methods for this class
       #
-      # When asking for some permission, all the authorization_methods are
-      # evaluated until one of them returns true. If none of them is true,
-      # false is returned for the permission
       def authorization_methods
         @authorization_methods ||= []
       end
@@ -78,14 +83,17 @@ module ActiveRecord #:nodoc:
 
       def authorization_methods_eval(agent, permission) #:nodoc:
         self.class.authorization_methods.each do |m|
-          case m
-          when Symbol
-            return true if send(m, agent, permission)
-          when Proc
-            return true if m.bind(self).call(agent, permission)
-          else
-            raise "Invalid Authorization method #{ m }"
-          end
+          auth_method_eval = 
+            case m
+            when Symbol
+              send(m, agent, permission)
+            when Proc
+              m.bind(self).call(agent, permission)
+            else
+              raise "Invalid Authorization method #{ m }"
+            end
+
+          return auth_method_eval unless auth_method_eval.nil?
         end
 
         false

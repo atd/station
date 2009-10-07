@@ -60,12 +60,13 @@ module ActiveRecord #:nodoc:
         acts_as_categorizable
 
         authorizing do |agent, permission|
-          return false unless container.present?
+          return nil unless container.present?
 
-          return false unless permission.is_a?(String) || permission.is_a?(Symbol)
+          return nil unless permission.is_a?(String) || permission.is_a?(Symbol)
 
           container.authorize?([permission, :content], :to => agent) ||
-            container.authorize?([permission, self.class.to_s.tableize], :to => agent)
+            container.authorize?([permission, self.class.to_s.tableize], :to => agent) ||
+            nil
         end
 
         extend  ClassMethods

@@ -41,9 +41,9 @@ module ActiveRecord #:nodoc:
         authorizing do |agent, permission|
           p = stage_performances.find_by_agent_id_and_agent_type(agent.id, agent.class.base_class.to_s, :include => { :role => :permissions })
 
-          return false unless p.present?
+          return nil unless p.present?
 
-          p.role.permissions.map(&:to_array).include?(Array(permission))
+          p.role.permissions.map(&:to_array).include?(Array(permission)) || nil
         end
 
         send :attr_accessor, :_stage_performances
