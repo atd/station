@@ -233,7 +233,7 @@ module ActionController #:nodoc:
                     else
                       r = model_class.new
                       r.container = current_container if r.respond_to?(:container=) && current_container.present?
-                      r
+                      instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
     end
 
