@@ -24,7 +24,7 @@ module ActiveRecord #:nodoc:
 
       def included(base) # :nodoc:
         # Fake named_scope to ActiveRecord instances that haven't children
-        base.named_scope :parent_scoped, lambda  { {} }
+        base.named_scope :roots, lambda  { {} } unless base.respond_to?(:roots)
         base.extend ActsAsMethods
       end
     end
@@ -48,7 +48,7 @@ module ActiveRecord #:nodoc:
         options[:per_page]    ||= 9
         options[:delegate_content_types] ||= false
 
-        named_scope :parent_scoped, lambda {
+        named_scope :roots, lambda {
           column_names.include?('parent_id') ?
           { :conditions => { :parent_id => nil } } :
           {}

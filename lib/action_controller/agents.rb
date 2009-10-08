@@ -23,14 +23,13 @@ module ActionController #:nodoc:
         params[:order], params[:direction] = "updated_at", "DESC"
       end
 
-      @resources = model_class.parent_scoped.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
-      instance_variable_set "@#{ model_class.to_s.tableize }", @resources
-      @agents = @resources
+      @agents = model_class.roots.in_container(container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page])
+      instance_variable_set "@#{ model_class.to_s.tableize }", @agents
 
       respond_to do |format|
         format.html # index.html.erb
         format.js
-        format.xml  { render :xml => @resources }
+        format.xml  { render :xml => @agents }
         format.atom
       end
     end
