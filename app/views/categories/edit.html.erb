@@ -10,4 +10,4 @@
 <% end %>
 
 <%= link_to t(:show), @category %> |
-<%= link_to t(:index), polymorphic_path([@container, Category.new]) %>
+<%= link_to t(:index), polymorphic_path([current_categories_domain, Category.new]) %>

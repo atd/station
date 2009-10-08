@@ -48,12 +48,12 @@ class SourcesController < ApplicationController
   # POST /sources.xml
   def create
     @source = Source.new(params[:source])
-    @source.container = container
+    @source.container = current_container
 
     respond_to do |format|
       if @source.save
         flash[:notice] = 'Source was successfully created.'
-        format.html { redirect_to([ @source.container, @source ]) }
+        format.html { redirect_to( @source) }
         format.xml  { render :xml => @source, :status => :created, :location => @source }
       else
         format.html { render :action => "new" }
@@ -70,7 +70,7 @@ class SourcesController < ApplicationController
     respond_to do |format|
       if @source.update_attributes(params[:source])
         flash[:notice] = 'Source was successfully updated.'
-        format.html { redirect_to([ @source.container, @source ]) }
+        format.html { redirect_to(@source) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

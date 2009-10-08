@@ -65,7 +65,6 @@ module ActionController #:nodoc:
       end
 
       instance_variable_set "@#{ model_class.to_s.underscore }", resource
-      @title = resource.title if resource.respond_to?(:title)
 
       respond_to do |format|
         format.all {
@@ -125,7 +124,6 @@ module ActionController #:nodoc:
 
       @resource = resource_class.new(resource_params)
       instance_variable_set "@#{ model_class.to_s.underscore }", @resource
-      @content = @resource if @resource.class.acts_as?(:content)
 
       @resource.author = current_agent if @resource.respond_to?(:author=)
       @resource.container = current_container  if @resource.respond_to?(:container=)
@@ -134,7 +132,7 @@ module ActionController #:nodoc:
         if @resource.save
           flash[:success] = t(:created, :scope => @resource.class.to_s.underscore)
           format.html { 
-            redirect_to resource_or_content_path_args
+            redirect_to @resource
           }
           format.xml  { 
             render :xml      => @resource, 
@@ -144,7 +142,7 @@ module ActionController #:nodoc:
           format.atom {
             render :action => 'show',
                    :status => :created,
-                   :location => polymorphic_url(resource_or_content_path_args, :format => :atom)
+                   :location => polymorphic_url(@resource, :format => :atom)
           }
         else
           format.html { 
@@ -180,7 +178,7 @@ module ActionController #:nodoc:
         format.html {
           if resource.save
             flash[:success] = t(:updated, :scope => @resource.class.to_s.underscore)
-            redirect_to resource_or_content_path_args
+            redirect_to @resource
           else
             render :action => 'edit'
           end
@@ -243,12 +241,6 @@ module ActionController #:nodoc:
                       r.container = current_container if r.respond_to?(:container=) && current_container.present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
-    end
-
-    # If Resource acts_as_content, redirect paths include the Container. 
-    # This function returns the suitable arguments
-    def resource_or_content_path_args
-      resource.class.acts_as?(:content) ? [ current_container, resource ] : Array(resource)
     end
   end
 end
