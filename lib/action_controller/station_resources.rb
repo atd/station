@@ -208,15 +208,23 @@ module ActionController #:nodoc:
     # DELETE /resources/1
     # DELETE /resources/1.xml
     def destroy
-      resource.destroy
-
       respond_to do |format|
-        format.html { redirect_to(polymorphic_path(model_class.acts_as?(:content) ? 
-                                                   [ current_container, model_class.new ] :
-                                                   model_class.new))
-        }
-        format.xml  { head :ok }
-        format.atom { head :ok }
+        if resource.destroy
+          format.html {
+            flash[:success] = t(:deleted, :scope => @resource.class.to_s.underscore)
+            redirect_to(request.referer || [ current_container, model_class.new ])
+          }
+          format.xml  { head :ok }
+          format.atom { head :ok }
+        else
+          format.html {
+            flash[:error] = t(:not_deleted, :scope => resource.class.to_s.underscore)
+            flash[:error] << resource.errors.to_xml
+            redirect_to(request.referer || [ current_container, model_class.new ])
+          }
+          format.xml  { render :xml => @resource.errors.to_xml }
+          format.atom { render :xml => @resource.errors.to_xml }
+        end
       end
     end
 
