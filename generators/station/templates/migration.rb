@@ -151,6 +151,19 @@ class StationMigration < ActiveRecord::Migration
       t.timestamps
     end
 
+    create_table :taggings do |t|
+      t.integer :tag_id
+      t.integer :taggable_id
+      t.string  :taggable_type
+    end
+    add_index :taggings, ["tag_id", "taggable_id", "taggable_type"],
+              :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type"
+
+    create_table :tags do |t|
+      t.string :name
+    end
+    add_index :tags, :name
+
     create_table :uris do |t|
       t.string :uri
     end
@@ -176,6 +189,8 @@ class StationMigration < ActiveRecord::Migration
     drop_table :roles
     drop_table :singular_agents
     drop_table :sites
+    drop_table :taggings
+    drop_table :tags
     drop_table :uris
   end
 end

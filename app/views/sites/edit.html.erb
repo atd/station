@@ -16,7 +16,7 @@
   <p>
     <%= f.label :logo, t('site.logo') %><br />
     <%= file_field_tag "site[_logo][media]" %>
-    <%= preview site.logo %>
+    <%= preview current_site.logo %>
   </p>
 
   <p>
