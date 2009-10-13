@@ -11,6 +11,13 @@ module ActiveRecord #:nodoc:
   #
   # By default, if there are no more methods, false is returned for the permission
   #
+  # == Authorization Cache
+  # Permissions are cached for each ActiveRecord instance during the request.
+  #
+  # The cache consist on a Hash of Hashes, like:
+  #   post.authorization_cache #=> { User.first => { :read => true, :update => false },
+  #                           Anonymous.current => { :read => false } }
+  #
   module Authorization
     class << self
       def included(base) #:nodoc:
@@ -56,17 +63,14 @@ module ActiveRecord #:nodoc:
       # Options:
       # to:: Agent that performs the operation. Defaults to Anyone
       #
-      # === Agent Cache
-      # Evalutation of authorization_methods are cached by every Agent per request
-      #
       def authorize?(permission, options = {})
         agent = options[:to] || Anyone.current
 
-        if agent.authorization_cache[self][permission].nil?
-          agent.authorization_cache[self][permission] =
+        if authorization_cache[agent][permission].nil?
+          authorization_cache[agent][permission] =
             authorization_methods_eval(agent, permission)
         else
-          agent.authorization_cache[self][permission]
+          authorization_cache[agent][permission]
         end
       end
 
@@ -78,7 +82,12 @@ module ActiveRecord #:nodoc:
 
         authorize?(permission, options)
       end
-      
+
+      # Authorization Cache
+      def authorization_cache
+        @authorization_cache ||= Hash.new{ |agent, permission| agent[permission] = Hash.new }
+      end
+
       private
 
       def authorization_methods_eval(agent, permission) #:nodoc:

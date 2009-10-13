@@ -145,11 +145,6 @@ module ActiveRecord #:nodoc:
           Array.new
         end
       end
-      
-      # Agent Authorization Cache
-      def authorization_cache
-        @authorization_cache ||= Hash.new(Hash.new)
-      end
     end
   end
 end
