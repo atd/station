@@ -92,7 +92,7 @@ You can define authorization filters in the following way:
 </td></tr>
 <tr><td valign="top">object:</td><td>a Symbol representing a controller&#8216;s instance variable name or
 method. This variable or method gives the object which will be called
-<tt><a href="Authorization.html#M000104">authorize?</a>(permission, :to
+<tt><a href="Authorization.html#M000106">authorize?</a>(permission, :to
 =&gt; current_agent)</tt>
 
 </td></tr>
@@ -123,9 +123,9 @@ method. This variable or method gives the object which will be called
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000104">authorize?</a></li>
-  <li><a href="#M000103">default_authorization_instance</a></li>
-  <li><a href="#M000105">not_authorized</a></li>
+  <li><a href="#M000106">authorize?</a></li>
+  <li><a href="#M000105">default_authorization_instance</a></li>
+  <li><a href="#M000107">not_authorized</a></li>
   </ul>
 
 
@@ -136,12 +136,12 @@ method. This variable or method gives the object which will be called
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000104"></a><b>authorize?</b>(permission = nil)
+    <a name="M000106"></a><b>authorize?</b>(permission = nil)
   </div>
   <div class="description">
   <p>
-Calls <a href="Authorization.html#M000104">authorize?</a> on <a
-href="Authorization.html#M000103">default_authorization_instance</a> with
+Calls <a href="Authorization.html#M000106">authorize?</a> on <a
+href="Authorization.html#M000105">default_authorization_instance</a> with
 current_agent
 </p>
 <p>
@@ -149,8 +149,8 @@ permission defaults to controller&#8216;s action_name
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000104_source')" id="l_M000104_source">show source</a> ]</p>
-  <div id="M000104_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000106_source')" id="l_M000106_source">show source</a> ]</p>
+  <div id="M000106_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_controller/authorization.rb, line 70</span>
 70:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorize?</span>(<span class="ruby-identifier">permission</span> = <span class="ruby-keyword kw">nil</span>)
@@ -164,7 +164,7 @@ permission defaults to controller&#8216;s action_name
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000103"></a><b>default_authorization_instance</b>()
+    <a name="M000105"></a><b>default_authorization_instance</b>()
   </div>
   <div class="description">
   <p>
@@ -173,8 +173,8 @@ current_site
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000103_source')" id="l_M000103_source">show source</a> ]</p>
-  <div id="M000103_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000105_source')" id="l_M000105_source">show source</a> ]</p>
+  <div id="M000105_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_controller/authorization.rb, line 63</span>
 63:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_authorization_instance</span>
@@ -186,7 +186,7 @@ current_site
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000105"></a><b>not_authorized</b>()
+    <a name="M000107"></a><b>not_authorized</b>()
   </div>
   <div class="description">
   <p>
@@ -195,8 +195,8 @@ identification. Else, set HTTP Forbidden (403) response.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000105_source')" id="l_M000105_source">show source</a> ]</p>
-  <div id="M000105_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000107_source')" id="l_M000107_source">show source</a> ]</p>
+  <div id="M000107_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_controller/authorization.rb, line 78</span>
 78:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_authorized</span>

@@ -84,16 +84,16 @@ Categories methods and filters for <a href="Category.html">Category</a>
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000038">category</a></li>
-  <li><a href="#M000033">create</a></li>
-  <li><a href="#M000036">current_categories_domain</a></li>
-  <li><a href="#M000037">current_categories_domain!</a></li>
-  <li><a href="#M000035">destroy</a></li>
-  <li><a href="#M000032">edit</a></li>
-  <li><a href="#M000029">index</a></li>
-  <li><a href="#M000031">new</a></li>
-  <li><a href="#M000030">show</a></li>
-  <li><a href="#M000034">update</a></li>
+  <li><a href="#M000040">category</a></li>
+  <li><a href="#M000035">create</a></li>
+  <li><a href="#M000038">current_categories_domain</a></li>
+  <li><a href="#M000039">current_categories_domain!</a></li>
+  <li><a href="#M000037">destroy</a></li>
+  <li><a href="#M000034">edit</a></li>
+  <li><a href="#M000031">index</a></li>
+  <li><a href="#M000033">new</a></li>
+  <li><a href="#M000032">show</a></li>
+  <li><a href="#M000036">update</a></li>
   </ul>
 
 
@@ -104,12 +104,12 @@ Categories methods and filters for <a href="Category.html">Category</a>
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000033"></a><b>create</b>()
+    <a name="M000035"></a><b>create</b>()
   </div>
   <div class="description">
   <p>
-Create <a href="CategoriesController.html#M000031">new</a> <a
-href="CategoriesController.html#M000038">category</a>
+Create <a href="CategoriesController.html#M000033">new</a> <a
+href="CategoriesController.html#M000040">category</a>
 </p>
 <p>
 POST /:categories_domain_type/:categories_domain_id/categories POST
@@ -117,8 +117,8 @@ POST /:categories_domain_type/:categories_domain_id/categories POST
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000033_source')" id="l_M000033_source">show source</a> ]</p>
-  <div id="M000033_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000035_source')" id="l_M000035_source">show source</a> ]</p>
+  <div id="M000035_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 56</span>
 56:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
@@ -143,19 +143,19 @@ POST /:categories_domain_type/:categories_domain_id/categories POST
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000035"></a><b>destroy</b>()
+    <a name="M000037"></a><b>destroy</b>()
   </div>
   <div class="description">
   <p>
-Destroy <a href="CategoriesController.html#M000038">category</a>
+Destroy <a href="CategoriesController.html#M000040">category</a>
 </p>
 <p>
 DELETE /categories/1 DELETE /categories/1.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000035_source')" id="l_M000035_source">show source</a> ]</p>
-  <div id="M000035_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000037_source')" id="l_M000037_source">show source</a> ]</p>
+  <div id="M000037_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 94</span>
  94:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
@@ -172,19 +172,19 @@ DELETE /categories/1 DELETE /categories/1.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000032"></a><b>edit</b>()
+    <a name="M000034"></a><b>edit</b>()
   </div>
   <div class="description">
   <p>
-Edit <a href="CategoriesController.html#M000038">category</a> form
+Edit <a href="CategoriesController.html#M000040">category</a> form
 </p>
 <p>
 GET /categories/1/edit
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000032_source')" id="l_M000032_source">show source</a> ]</p>
-  <div id="M000032_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000034_source')" id="l_M000034_source">show source</a> ]</p>
+  <div id="M000034_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 48</span>
 48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
@@ -196,7 +196,7 @@ GET /categories/1/edit
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000029"></a><b>index</b>()
+    <a name="M000031"></a><b>index</b>()
   </div>
   <div class="description">
   <p>
@@ -208,8 +208,8 @@ GET /:categories_domain_type/:categories_domain_id/categories GET
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000029_source')" id="l_M000029_source">show source</a> ]</p>
-  <div id="M000029_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000031_source')" id="l_M000031_source">show source</a> ]</p>
+  <div id="M000031_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 9</span>
  9:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
@@ -227,7 +227,7 @@ GET /:categories_domain_type/:categories_domain_id/categories GET
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000031"></a><b>new</b>()
+    <a name="M000033"></a><b>new</b>()
   </div>
   <div class="description">
   <p>
@@ -239,8 +239,8 @@ GET /:categories_domain_type/:categories_domain_id/categories/new GET
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000031_source')" id="l_M000031_source">show source</a> ]</p>
-  <div id="M000031_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000033_source')" id="l_M000033_source">show source</a> ]</p>
+  <div id="M000033_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 36</span>
 36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
@@ -257,19 +257,19 @@ GET /:categories_domain_type/:categories_domain_id/categories/new GET
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000030"></a><b>show</b>()
+    <a name="M000032"></a><b>show</b>()
   </div>
   <div class="description">
   <p>
-Show <a href="CategoriesController.html#M000038">category</a>
+Show <a href="CategoriesController.html#M000040">category</a>
 </p>
 <p>
 GET /categories/1 GET /categories/1.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000030_source')" id="l_M000030_source">show source</a> ]</p>
-  <div id="M000030_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000032_source')" id="l_M000032_source">show source</a> ]</p>
+  <div id="M000032_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 23</span>
 23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
@@ -286,19 +286,19 @@ GET /categories/1 GET /categories/1.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000034"></a><b>update</b>()
+    <a name="M000036"></a><b>update</b>()
   </div>
   <div class="description">
   <p>
-Update <a href="CategoriesController.html#M000038">category</a>
+Update <a href="CategoriesController.html#M000040">category</a>
 </p>
 <p>
 PUT /categories/1 PUT /categories/1.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000034_source')" id="l_M000034_source">show source</a> ]</p>
-  <div id="M000034_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000036_source')" id="l_M000036_source">show source</a> ]</p>
+  <div id="M000036_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 77</span>
 77:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
@@ -320,21 +320,21 @@ PUT /categories/1 PUT /categories/1.xml
 <div class="sectiontitle">Protected Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000038"></a><b>category</b>()
+    <a name="M000040"></a><b>category</b>()
   </div>
   <div class="description">
   <p>
 Find <a href="Category.html">Category</a> using params[:id]
 </p>
 <p>
-Sets @<a href="CategoriesController.html#M000038">category</a> and @<a
-href="CategoriesController.html#M000036">current_categories_domain</a>
+Sets @<a href="CategoriesController.html#M000040">category</a> and @<a
+href="CategoriesController.html#M000038">current_categories_domain</a>
 variables
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000038_source')" id="l_M000038_source">show source</a> ]</p>
-  <div id="M000038_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000040_source')" id="l_M000040_source">show source</a> ]</p>
+  <div id="M000040_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 118</span>
 118:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">category</span>
@@ -349,18 +349,18 @@ variables
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000036"></a><b>current_categories_domain</b>()
+    <a name="M000038"></a><b>current_categories_domain</b>()
   </div>
   <div class="description">
   <p>
 Sets @<a
-href="CategoriesController.html#M000036">current_categories_domain</a>,
+href="CategoriesController.html#M000038">current_categories_domain</a>,
 getting a CategoriesDomain from path (using record_from_path)
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000036_source')" id="l_M000036_source">show source</a> ]</p>
-  <div id="M000036_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000038_source')" id="l_M000038_source">show source</a> ]</p>
+  <div id="M000038_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 106</span>
 106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_categories_domain</span>
@@ -372,18 +372,18 @@ getting a CategoriesDomain from path (using record_from_path)
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000037"></a><b>current_categories_domain!</b>()
+    <a name="M000039"></a><b>current_categories_domain!</b>()
   </div>
   <div class="description">
   <p>
 Like <a
-href="CategoriesController.html#M000036">current_categories_domain</a> but
+href="CategoriesController.html#M000038">current_categories_domain</a> but
 raises error if nil
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000037_source')" id="l_M000037_source">show source</a> ]</p>
-  <div id="M000037_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000039_source')" id="l_M000039_source">show source</a> ]</p>
+  <div id="M000039_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File app/controllers/categories_controller.rb, line 111</span>
 111:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_categories_domain!</span>

@@ -74,13 +74,13 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000168">format</a></li>
-  <li><a href="#M000171">from_atom</a></li>
-  <li><a href="#M000172">from_atom!</a></li>
-  <li><a href="#M000173">logo_image_path_with_thumbnails</a></li>
-  <li><a href="#M000167">mime_type</a></li>
-  <li><a href="#M000169">mime_type_or_class_name</a></li>
-  <li><a href="#M000170">to_param</a></li>
+  <li><a href="#M000170">format</a></li>
+  <li><a href="#M000173">from_atom</a></li>
+  <li><a href="#M000174">from_atom!</a></li>
+  <li><a href="#M000175">logo_image_path_with_thumbnails</a></li>
+  <li><a href="#M000169">mime_type</a></li>
+  <li><a href="#M000171">mime_type_or_class_name</a></li>
+  <li><a href="#M000172">to_param</a></li>
   </ul>
 
 
@@ -91,7 +91,7 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000168"></a><b>format</b>()
+    <a name="M000170"></a><b>format</b>()
   </div>
   <div class="description">
   <p>
@@ -99,8 +99,8 @@ Returns the Mime::Type symbol for this content
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000168_source')" id="l_M000168_source">show source</a> ]</p>
-  <div id="M000168_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000170_source')" id="l_M000170_source">show source</a> ]</p>
+  <div id="M000170_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 136</span>
 136:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format</span>
@@ -112,7 +112,7 @@ Returns the Mime::Type symbol for this content
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000171"></a><b>from_atom</b>(entry)
+    <a name="M000173"></a><b>from_atom</b>(entry)
   </div>
   <div class="description">
   <p>
@@ -124,8 +124,8 @@ You must implement params_from_atom class method
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000171_source')" id="l_M000171_source">show source</a> ]</p>
-  <div id="M000171_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000173_source')" id="l_M000173_source">show source</a> ]</p>
+  <div id="M000173_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 158</span>
 158:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_atom</span>(<span class="ruby-identifier">entry</span>)
@@ -153,7 +153,7 @@ You must implement params_from_atom class method
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000172"></a><b>from_atom!</b>(entry)
+    <a name="M000174"></a><b>from_atom!</b>(entry)
   </div>
   <div class="description">
   <p>
@@ -166,8 +166,8 @@ original from the feed entry
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000172_source')" id="l_M000172_source">show source</a> ]</p>
-  <div id="M000172_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000174_source')" id="l_M000174_source">show source</a> ]</p>
+  <div id="M000174_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 181</span>
 181:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_atom!</span>(<span class="ruby-identifier">entry</span>)
@@ -183,7 +183,7 @@ original from the feed entry
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000173"></a><b>logo_image_path_with_thumbnails</b>(options = {})
+    <a name="M000175"></a><b>logo_image_path_with_thumbnails</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -192,8 +192,8 @@ href="../../Logo.html">Logo</a>
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000173_source')" id="l_M000173_source">show source</a> ]</p>
-  <div id="M000173_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000175_source')" id="l_M000175_source">show source</a> ]</p>
+  <div id="M000175_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 190</span>
 190:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logo_image_path_with_thumbnails</span>(<span class="ruby-identifier">options</span> = {})
@@ -209,7 +209,7 @@ href="../../Logo.html">Logo</a>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000167"></a><b>mime_type</b>()
+    <a name="M000169"></a><b>mime_type</b>()
   </div>
   <div class="description">
   <p>
@@ -218,8 +218,8 @@ instance. Example: Mime::XML
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000167_source')" id="l_M000167_source">show source</a> ]</p>
-  <div id="M000167_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000169_source')" id="l_M000169_source">show source</a> ]</p>
+  <div id="M000169_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 125</span>
 125:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type</span>
@@ -237,7 +237,7 @@ instance. Example: Mime::XML
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000169"></a><b>mime_type_or_class_name</b>()
+    <a name="M000171"></a><b>mime_type_or_class_name</b>()
   </div>
   <div class="description">
   <p>
@@ -258,8 +258,8 @@ else, return the underscored class name:
 </pre>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000169_source')" id="l_M000169_source">show source</a> ]</p>
-  <div id="M000169_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000171_source')" id="l_M000171_source">show source</a> ]</p>
+  <div id="M000171_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 146</span>
 146:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type_or_class_name</span>
@@ -271,17 +271,17 @@ else, return the underscored class name:
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000170"></a><b>to_param</b>()
+    <a name="M000172"></a><b>to_param</b>()
   </div>
   <div class="description">
   <p>
-Define <a href="InstanceMethods.html#M000170">to_param</a> method with
+Define <a href="InstanceMethods.html#M000172">to_param</a> method with
 acts_as_resource param option
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000170_source')" id="l_M000170_source">show source</a> ]</p>
-  <div id="M000170_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000172_source')" id="l_M000172_source">show source</a> ]</p>
+  <div id="M000172_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 151</span>
 151:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_param</span>

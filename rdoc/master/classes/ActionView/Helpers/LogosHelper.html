@@ -74,14 +74,14 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000239">link_author</a></li>
-  <li><a href="#M000237">link_logo</a></li>
-  <li><a href="#M000238">link_logotype</a></li>
-  <li><a href="#M000235">logo</a></li>
-  <li><a href="#M000233">logo_image_path</a></li>
-  <li><a href="#M000234">logo_image_url</a></li>
-  <li><a href="#M000236">logotype</a></li>
-  <li><a href="#M000240">preview</a></li>
+  <li><a href="#M000240">link_author</a></li>
+  <li><a href="#M000238">link_logo</a></li>
+  <li><a href="#M000239">link_logotype</a></li>
+  <li><a href="#M000236">logo</a></li>
+  <li><a href="#M000234">logo_image_path</a></li>
+  <li><a href="#M000235">logo_image_url</a></li>
+  <li><a href="#M000237">logotype</a></li>
+  <li><a href="#M000241">preview</a></li>
   </ul>
 
 
@@ -92,18 +92,18 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000239"></a><b>link_author</b>(resource, options = {})
+    <a name="M000240"></a><b>link_author</b>(resource, options = {})
   </div>
   <div class="description">
   <p>
-Prints <a href="LogosHelper.html#M000238">link_logotype</a> of the
+Prints <a href="LogosHelper.html#M000239">link_logotype</a> of the
 resource&#8216;s author. If the resource hasn&#8216;t author, uses <a
 href="../../Anonymous.html">Anonymous</a> user.
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000239_source')" id="l_M000239_source">show source</a> ]</p>
-  <div id="M000239_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000240_source')" id="l_M000240_source">show source</a> ]</p>
+  <div id="M000240_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 117</span>
 117:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_author</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
@@ -118,42 +118,11 @@ href="../../Anonymous.html">Anonymous</a> user.
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000237"></a><b>link_logo</b>(resource, options = {})
+    <a name="M000238"></a><b>link_logo</b>(resource, options = {})
   </div>
   <div class="description">
   <p>
-Prints and links the resource <a href="LogosHelper.html#M000235">logo</a>.
-</p>
-<p>
-Options:
-</p>
-<table>
-<tr><td valign="top">url:</td><td>The URL that will be used in the link. Defaults to the resource.
-
-</td></tr>
-</table>
-  </div>
-<div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000237_source')" id="l_M000237_source">show source</a> ]</p>
-  <div id="M000237_source" class="dyn-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 102</span>
-102:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_logo</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
-103:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">try_url</span>(<span class="ruby-identifier">resource</span>)
-104:         <span class="ruby-identifier">logo</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span>)
-105:       <span class="ruby-keyword kw">end</span>
-</pre>
-  </div>
-</div>
-</div>
-<div class="method">
-  <div class="title">
-    <a name="M000238"></a><b>link_logotype</b>(resource, options = {})
-  </div>
-  <div class="description">
-  <p>
-Prints and links the resource <a
-href="LogosHelper.html#M000236">logotype</a>.
+Prints and links the resource <a href="LogosHelper.html#M000236">logo</a>.
 </p>
 <p>
 Options:
@@ -168,6 +137,37 @@ Options:
   <p class="source-link">[ <a href="javascript:toggleSource('M000238_source')" id="l_M000238_source">show source</a> ]</p>
   <div id="M000238_source" class="dyn-source">
 <pre>
+     <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 102</span>
+102:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_logo</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
+103:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">try_url</span>(<span class="ruby-identifier">resource</span>)
+104:         <span class="ruby-identifier">logo</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span>)
+105:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000239"></a><b>link_logotype</b>(resource, options = {})
+  </div>
+  <div class="description">
+  <p>
+Prints and links the resource <a
+href="LogosHelper.html#M000237">logotype</a>.
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">url:</td><td>The URL that will be used in the link. Defaults to the resource.
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000239_source')" id="l_M000239_source">show source</a> ]</p>
+  <div id="M000239_source" class="dyn-source">
+<pre>
      <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 111</span>
 111:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_logotype</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
 112:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">try_url</span>(<span class="ruby-identifier">resource</span>)
@@ -179,12 +179,12 @@ Options:
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000235"></a><b>logo</b>(resource, options = {})
+    <a name="M000236"></a><b>logo</b>(resource, options = {})
   </div>
   <div class="description">
   <p>
 Prints an image_tag with the <a
-href="LogosHelper.html#M000233">logo_image_path</a> for the resource inside
+href="LogosHelper.html#M000234">logo_image_path</a> for the resource inside
 a div Options:
 </p>
 <table>
@@ -197,8 +197,8 @@ a div Options:
 </table>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000235_source')" id="l_M000235_source">show source</a> ]</p>
-  <div id="M000235_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000236_source')" id="l_M000236_source">show source</a> ]</p>
+  <div id="M000236_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 46</span>
 46:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logo</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
@@ -226,11 +226,11 @@ a div Options:
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000233"></a><b>logo_image_path</b>(resource, options = {})
+    <a name="M000234"></a><b>logo_image_path</b>(resource, options = {})
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000233_source')" id="l_M000233_source">show source</a> ]</p>
-  <div id="M000233_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000234_source')" id="l_M000234_source">show source</a> ]</p>
+  <div id="M000234_source" class="dyn-source">
 <pre>
    <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 4</span>
 4:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logo_image_path</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
@@ -243,16 +243,16 @@ a div Options:
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000234"></a><b>logo_image_url</b>(resource, options = {})
+    <a name="M000235"></a><b>logo_image_url</b>(resource, options = {})
   </div>
   <div class="description">
   <p>
-The url to the <a href="LogosHelper.html#M000235">logo</a> image for the
+The url to the <a href="LogosHelper.html#M000236">logo</a> image for the
 resource.
 </p>
 <p>
 If the resource responds to <a
-href="LogosHelper.html#M000233">logo_image_path</a> method, take the
+href="LogosHelper.html#M000234">logo_image_path</a> method, take the
 arguments from it.
 </p>
 <p>
@@ -271,15 +271,15 @@ Options:
 path. When :url, the absolute url with host and protocol
 
 </td></tr>
-<tr><td valign="top">size:</td><td>Size of the <a href="LogosHelper.html#M000235">logo</a>. Defaults to 16
+<tr><td valign="top">size:</td><td>Size of the <a href="LogosHelper.html#M000236">logo</a>. Defaults to 16
 pixels.
 
 </td></tr>
 </table>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000234_source')" id="l_M000234_source">show source</a> ]</p>
-  <div id="M000234_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000235_source')" id="l_M000235_source">show source</a> ]</p>
+  <div id="M000235_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 22</span>
 22:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logo_image_url</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
@@ -307,12 +307,12 @@ pixels.
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000236"></a><b>logotype</b>(resource, options = {})
+    <a name="M000237"></a><b>logotype</b>(resource, options = {})
   </div>
   <div class="description">
   <p>
-The <a href="LogosHelper.html#M000236">logotype</a> is composed by the <a
-href="LogosHelper.html#M000235">logo</a> plus the name of the resource
+The <a href="LogosHelper.html#M000237">logotype</a> is composed by the <a
+href="LogosHelper.html#M000236">logo</a> plus the name of the resource
 </p>
 <p>
 Uses the template in <tt>app/views/logoable/_logotype.html.erb</tt>
@@ -321,18 +321,18 @@ Uses the template in <tt>app/views/logoable/_logotype.html.erb</tt>
 Options:
 </p>
 <table>
-<tr><td valign="top">spacer:</td><td>Separates <a href="LogosHelper.html#M000235">logo</a> and text
+<tr><td valign="top">spacer:</td><td>Separates <a href="LogosHelper.html#M000236">logo</a> and text
 
 </td></tr>
-<tr><td valign="top">text:</td><td>Text besides the <a href="LogosHelper.html#M000235">logo</a>. Defaults to
+<tr><td valign="top">text:</td><td>Text besides the <a href="LogosHelper.html#M000236">logo</a>. Defaults to
 resource.name || resource.title || resource.class
 
 </td></tr>
 </table>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000236_source')" id="l_M000236_source">show source</a> ]</p>
-  <div id="M000236_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000237_source')" id="l_M000237_source">show source</a> ]</p>
+  <div id="M000237_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 73</span>
 73:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logotype</span>(<span class="ruby-identifier">resource</span>, <span class="ruby-identifier">options</span> = {})
@@ -359,18 +359,18 @@ resource.name || resource.title || resource.class
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000240"></a><b>preview</b>(content, options = {})
+    <a name="M000241"></a><b>preview</b>(content, options = {})
   </div>
   <div class="description">
   <p>
-Show a <a href="LogosHelper.html#M000240">preview</a> of content if
+Show a <a href="LogosHelper.html#M000241">preview</a> of content if
 it&#8216;s not null and it isn&#8216;t a new record. Preview consists of <a
-href="LogosHelper.html#M000237">link_logo</a> to the content
+href="LogosHelper.html#M000238">link_logo</a> to the content
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000240_source')" id="l_M000240_source">show source</a> ]</p>
-  <div id="M000240_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000241_source')" id="l_M000241_source">show source</a> ]</p>
+  <div id="M000241_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/action_view/helpers/logos_helper.rb, line 126</span>
 126:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preview</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">options</span> = {})

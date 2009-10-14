@@ -74,9 +74,9 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000147">acts_as_sortable</a></li>
-  <li><a href="#M000149">sanitize_order_and_direction</a></li>
-  <li><a href="#M000148">sortable_columns</a></li>
+  <li><a href="#M000148">acts_as_sortable</a></li>
+  <li><a href="#M000150">sanitize_order_and_direction</a></li>
+  <li><a href="#M000149">sortable_columns</a></li>
   </ul>
 
 
@@ -87,7 +87,7 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000147"></a><b>acts_as_sortable</b>(options = {})
+    <a name="M000148"></a><b>acts_as_sortable</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -130,7 +130,7 @@ Columns can be defined in two ways:
 
 </li>
 <li>content: The content that will be displayed for each object of the list.
-See <a href="Column.html#M000151">ActiveRecord::Sortable::Column#data</a>
+See <a href="Column.html#M000152">ActiveRecord::Sortable::Column#data</a>
 
 </li>
 <li>order: The <tt>ORDER</tt> fragment in the SQL code
@@ -147,8 +147,8 @@ See <a href="Column.html#M000151">ActiveRecord::Sortable::Column#data</a>
 </table>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000147_source')" id="l_M000147_source">show source</a> ]</p>
-  <div id="M000147_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000148_source')" id="l_M000148_source">show source</a> ]</p>
+  <div id="M000148_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/sortable.rb, line 31</span>
 31:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_sortable</span>(<span class="ruby-identifier">options</span> = {})
@@ -171,7 +171,7 @@ See <a href="Column.html#M000151">ActiveRecord::Sortable::Column#data</a>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000149"></a><b>sanitize_order_and_direction</b>(order, direction)
+    <a name="M000150"></a><b>sanitize_order_and_direction</b>(order, direction)
   </div>
   <div class="description">
   <p>
@@ -179,8 +179,8 @@ Sanitize user send params
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000149_source')" id="l_M000149_source">show source</a> ]</p>
-  <div id="M000149_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000150_source')" id="l_M000150_source">show source</a> ]</p>
+  <div id="M000150_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/sortable.rb, line 52</span>
 52:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sanitize_order_and_direction</span>(<span class="ruby-identifier">order</span>, <span class="ruby-identifier">direction</span>)
@@ -207,7 +207,7 @@ Sanitize user send params
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000148"></a><b>sortable_columns</b>()
+    <a name="M000149"></a><b>sortable_columns</b>()
   </div>
   <div class="description">
   <p>
@@ -216,8 +216,8 @@ this Model
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000148_source')" id="l_M000148_source">show source</a> ]</p>
-  <div id="M000148_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000149_source')" id="l_M000149_source">show source</a> ]</p>
+  <div id="M000149_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/sortable.rb, line 47</span>
 47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sortable_columns</span>

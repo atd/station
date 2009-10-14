@@ -74,8 +74,8 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000157">container_conditions</a></li>
-  <li><a href="#M000156">container_reflection</a></li>
+  <li><a href="#M000159">container_conditions</a></li>
+  <li><a href="#M000158">container_reflection</a></li>
   </ul>
 
 
@@ -86,38 +86,38 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000157"></a><b>container_conditions</b>(container)
+    <a name="M000159"></a><b>container_conditions</b>(container)
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000157_source')" id="l_M000157_source">show source</a> ]</p>
-  <div id="M000157_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000159_source')" id="l_M000159_source">show source</a> ]</p>
+  <div id="M000159_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 82</span>
-82:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">container</span>)
-83:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">container</span>
-84:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">NilClass</span>
-85:           <span class="ruby-value str">&quot;&quot;</span>
-86:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
-87:           <span class="ruby-identifier">container</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">c</span>) }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; OR &quot;</span>)
-88:         <span class="ruby-keyword kw">else</span>
-89:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">acts_as?</span>(<span class="ruby-identifier">:container</span>)
-90:             <span class="ruby-identifier">c</span> = <span class="ruby-node">&quot;#{ table_name }.#{ container_reflection.primary_key_name } = '#{ container.id }'&quot;</span>
-91:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container_reflection</span>.<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:polymorphic</span>]
-92:               <span class="ruby-identifier">c</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; AND #{ table_name }.#{ container_reflection.options[:foreign_type] } = '#{ container.class.base_class }'&quot;</span>
-93:             <span class="ruby-keyword kw">end</span>
-94:             <span class="ruby-node">&quot;(#{ c })&quot;</span>
-95:           <span class="ruby-keyword kw">else</span>
-96:             <span class="ruby-value str">&quot;&quot;</span>
-97:           <span class="ruby-keyword kw">end</span>
-98:         <span class="ruby-keyword kw">end</span>
-99:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 83</span>
+ 83:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">container</span>)
+ 84:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">container</span>
+ 85:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">NilClass</span>
+ 86:           <span class="ruby-value str">&quot;&quot;</span>
+ 87:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+ 88:           <span class="ruby-identifier">container</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">c</span>) }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; OR &quot;</span>)
+ 89:         <span class="ruby-keyword kw">else</span>
+ 90:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">acts_as?</span>(<span class="ruby-identifier">:container</span>)
+ 91:             <span class="ruby-identifier">c</span> = <span class="ruby-node">&quot;#{ table_name }.#{ container_reflection.primary_key_name } = '#{ container.id }'&quot;</span>
+ 92:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container_reflection</span>.<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:polymorphic</span>]
+ 93:               <span class="ruby-identifier">c</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; AND #{ table_name }.#{ container_reflection.options[:foreign_type] } = '#{ container.class.base_class }'&quot;</span>
+ 94:             <span class="ruby-keyword kw">end</span>
+ 95:             <span class="ruby-node">&quot;(#{ c })&quot;</span>
+ 96:           <span class="ruby-keyword kw">else</span>
+ 97:             <span class="ruby-value str">&quot;&quot;</span>
+ 98:           <span class="ruby-keyword kw">end</span>
+ 99:         <span class="ruby-keyword kw">end</span>
+100:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000156"></a><b>container_reflection</b>()
+    <a name="M000158"></a><b>container_reflection</b>()
   </div>
   <div class="description">
   <p>
@@ -126,13 +126,13 @@ href="../Container.html">Container</a> for this model
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000156_source')" id="l_M000156_source">show source</a> ]</p>
-  <div id="M000156_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000158_source')" id="l_M000158_source">show source</a> ]</p>
+  <div id="M000158_source" class="dyn-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 78</span>
-78:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">container_reflection</span>
-79:         <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">content_options</span>[<span class="ruby-identifier">:reflection</span>]]
-80:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 79</span>
+79:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">container_reflection</span>
+80:         <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">content_options</span>[<span class="ruby-identifier">:reflection</span>]]
+81:       <span class="ruby-keyword kw">end</span>
 </pre>
   </div>
 </div>

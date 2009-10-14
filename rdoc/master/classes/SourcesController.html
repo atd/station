@@ -80,14 +80,14 @@ ApplicationController
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000016">create</a></li>
-  <li><a href="#M000018">destroy</a></li>
-  <li><a href="#M000015">edit</a></li>
-  <li><a href="#M000013">import</a></li>
-  <li><a href="#M000011">index</a></li>
-  <li><a href="#M000014">new</a></li>
-  <li><a href="#M000012">show</a></li>
-  <li><a href="#M000017">update</a></li>
+  <li><a href="#M000018">create</a></li>
+  <li><a href="#M000020">destroy</a></li>
+  <li><a href="#M000017">edit</a></li>
+  <li><a href="#M000015">import</a></li>
+  <li><a href="#M000013">index</a></li>
+  <li><a href="#M000016">new</a></li>
+  <li><a href="#M000014">show</a></li>
+  <li><a href="#M000019">update</a></li>
   </ul>
 
 
@@ -98,7 +98,7 @@ ApplicationController
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000016"></a><b>create</b>()
+    <a name="M000018"></a><b>create</b>()
   </div>
   <div class="description">
   <p>
@@ -106,18 +106,18 @@ POST /sources POST /sources.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show source</a> ]</p>
-  <div id="M000016_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show source</a> ]</p>
+  <div id="M000018_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 49</span>
 49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
 50:     <span class="ruby-ivar">@source</span> = <span class="ruby-constant">Source</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:source</span>])
-51:     <span class="ruby-ivar">@source</span>.<span class="ruby-identifier">container</span> = <span class="ruby-identifier">container</span>
+51:     <span class="ruby-ivar">@source</span>.<span class="ruby-identifier">container</span> = <span class="ruby-identifier">current_container</span>
 52: 
 53:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
 54:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@source</span>.<span class="ruby-identifier">save</span>
 55:         <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:notice</span>] = <span class="ruby-value str">'Source was successfully created.'</span>
-56:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>([ <span class="ruby-ivar">@source</span>.<span class="ruby-identifier">container</span>, <span class="ruby-ivar">@source</span> ]) }
+56:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>( <span class="ruby-ivar">@source</span>) }
 57:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@source</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:created</span>, <span class="ruby-identifier">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@source</span> }
 58:       <span class="ruby-keyword kw">else</span>
 59:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span> }
@@ -131,7 +131,7 @@ POST /sources POST /sources.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000018"></a><b>destroy</b>()
+    <a name="M000020"></a><b>destroy</b>()
   </div>
   <div class="description">
   <p>
@@ -139,8 +139,8 @@ DELETE /sources/1 DELETE /sources/1.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show source</a> ]</p>
-  <div id="M000018_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000020_source')" id="l_M000020_source">show source</a> ]</p>
+  <div id="M000020_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 84</span>
 84:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
@@ -158,7 +158,7 @@ DELETE /sources/1 DELETE /sources/1.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000015"></a><b>edit</b>()
+    <a name="M000017"></a><b>edit</b>()
   </div>
   <div class="description">
   <p>
@@ -166,8 +166,8 @@ GET /sources/1/edit
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show source</a> ]</p>
-  <div id="M000015_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show source</a> ]</p>
+  <div id="M000017_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 43</span>
 43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
@@ -179,11 +179,11 @@ GET /sources/1/edit
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000013"></a><b>import</b>()
+    <a name="M000015"></a><b>import</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000013_source')" id="l_M000013_source">show source</a> ]</p>
-  <div id="M000013_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show source</a> ]</p>
+  <div id="M000015_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 24</span>
 24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import</span>
@@ -198,7 +198,7 @@ GET /sources/1/edit
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000011"></a><b>index</b>()
+    <a name="M000013"></a><b>index</b>()
   </div>
   <div class="description">
   <p>
@@ -206,8 +206,8 @@ GET /sources GET /sources.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000011_source')" id="l_M000011_source">show source</a> ]</p>
-  <div id="M000011_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000013_source')" id="l_M000013_source">show source</a> ]</p>
+  <div id="M000013_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 4</span>
  4:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
@@ -224,7 +224,7 @@ GET /sources GET /sources.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000014"></a><b>new</b>()
+    <a name="M000016"></a><b>new</b>()
   </div>
   <div class="description">
   <p>
@@ -232,8 +232,8 @@ GET /sources/new GET /sources/new.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000014_source')" id="l_M000014_source">show source</a> ]</p>
-  <div id="M000014_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show source</a> ]</p>
+  <div id="M000016_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 33</span>
 33:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
@@ -250,7 +250,7 @@ GET /sources/new GET /sources/new.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000012"></a><b>show</b>()
+    <a name="M000014"></a><b>show</b>()
   </div>
   <div class="description">
   <p>
@@ -258,8 +258,8 @@ GET /sources/1 GET /sources/1.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000012_source')" id="l_M000012_source">show source</a> ]</p>
-  <div id="M000012_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000014_source')" id="l_M000014_source">show source</a> ]</p>
+  <div id="M000014_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 15</span>
 15:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
@@ -276,7 +276,7 @@ GET /sources/1 GET /sources/1.xml
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000017"></a><b>update</b>()
+    <a name="M000019"></a><b>update</b>()
   </div>
   <div class="description">
   <p>
@@ -284,8 +284,8 @@ PUT /sources/1 PUT /sources/1.xml
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show source</a> ]</p>
-  <div id="M000017_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show source</a> ]</p>
+  <div id="M000019_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File app/controllers/sources_controller.rb, line 67</span>
 67:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
@@ -294,7 +294,7 @@ PUT /sources/1 PUT /sources/1.xml
 70:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
 71:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@source</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:source</span>])
 72:         <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:notice</span>] = <span class="ruby-value str">'Source was successfully updated.'</span>
-73:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>([ <span class="ruby-ivar">@source</span>.<span class="ruby-identifier">container</span>, <span class="ruby-ivar">@source</span> ]) }
+73:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span>(<span class="ruby-ivar">@source</span>) }
 74:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">head</span> <span class="ruby-identifier">:ok</span> }
 75:       <span class="ruby-keyword kw">else</span>
 76:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;edit&quot;</span> }

@@ -74,11 +74,10 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000203">authorization_cache</a></li>
-  <li><a href="#M000201">fellows</a></li>
-  <li><a href="#M000199">needs_password?</a></li>
-  <li><a href="#M000202">service_documents</a></li>
-  <li><a href="#M000200">stages</a></li>
+  <li><a href="#M000203">fellows</a></li>
+  <li><a href="#M000201">needs_password?</a></li>
+  <li><a href="#M000204">service_documents</a></li>
+  <li><a href="#M000202">stages</a></li>
   </ul>
 
 
@@ -89,39 +88,17 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000203"></a><b>authorization_cache</b>()
+    <a name="M000203"></a><b>fellows</b>()
   </div>
   <div class="description">
   <p>
-<a href="../Agent.html">Agent</a> <a
-href="../Authorization.html">Authorization</a> Cache
+Agents that have at least one <a href="../../Role.html">Role</a> in <a
+href="InstanceMethods.html#M000202">stages</a>
 </p>
   </div>
 <div class="sourcecode">
   <p class="source-link">[ <a href="javascript:toggleSource('M000203_source')" id="l_M000203_source">show source</a> ]</p>
   <div id="M000203_source" class="dyn-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 150</span>
-150:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorization_cache</span>
-151:         <span class="ruby-ivar">@authorization_cache</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
-152:       <span class="ruby-keyword kw">end</span>
-</pre>
-  </div>
-</div>
-</div>
-<div class="method">
-  <div class="title">
-    <a name="M000201"></a><b>fellows</b>()
-  </div>
-  <div class="description">
-  <p>
-Agents that have at least one <a href="../../Role.html">Role</a> in <a
-href="InstanceMethods.html#M000200">stages</a>
-</p>
-  </div>
-<div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000201_source')" id="l_M000201_source">show source</a> ]</p>
-  <div id="M000201_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 137</span>
 137:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fellows</span>
@@ -133,7 +110,7 @@ href="InstanceMethods.html#M000200">stages</a>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000199"></a><b>needs_password?</b>()
+    <a name="M000201"></a><b>needs_password?</b>()
   </div>
   <div class="description">
   <p>
@@ -143,8 +120,8 @@ it hasn&#8216;t any OpenID Owning
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000199_source')" id="l_M000199_source">show source</a> ]</p>
-  <div id="M000199_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000201_source')" id="l_M000201_source">show source</a> ]</p>
+  <div id="M000201_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 119</span>
 119:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">needs_password?</span>
@@ -159,11 +136,11 @@ it hasn&#8216;t any OpenID Owning
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000202"></a><b>service_documents</b>()
+    <a name="M000204"></a><b>service_documents</b>()
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000202_source')" id="l_M000202_source">show source</a> ]</p>
-  <div id="M000202_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000204_source')" id="l_M000204_source">show source</a> ]</p>
+  <div id="M000204_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 141</span>
 141:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">service_documents</span>
@@ -179,7 +156,7 @@ it hasn&#8216;t any OpenID Owning
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000200"></a><b>stages</b>(options = {})
+    <a name="M000202"></a><b>stages</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -201,8 +178,8 @@ default_scopes
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000200_source')" id="l_M000200_source">show source</a> ]</p>
-  <div id="M000200_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000202_source')" id="l_M000202_source">show source</a> ]</p>
+  <div id="M000202_source" class="dyn-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 132</span>
 132:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stages</span>(<span class="ruby-identifier">options</span> = {})

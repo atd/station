@@ -74,9 +74,32 @@
 models with authorization features.
 </p>
 <p>
-Include <a href="Authorization.html">Authorization</a> functionality in
-your models using ActsAsMethods#
+Every ActiveRecord::Base descendant has an authorize? method.
 </p>
+<p>
+authorization_methods are defined using authorizing
+</p>
+<p>
+When asking for some permission, all the authorization_methods are
+evaluated in sequence. Evaluation continues while the methods are returning
+nil. When one of them returns true or false, this is the authorization
+result.
+</p>
+<p>
+By default, if there are no more methods, false is returned for the
+permission
+</p>
+<h2><a href="Authorization.html">Authorization</a> Cache</h2>
+<p>
+Permissions are cached for each ActiveRecord instance during the request.
+</p>
+<p>
+The cache consist on a Hash of Hashes, like:
+</p>
+<pre>
+  post.authorization_cache #=&gt; { User.first =&gt; { :read =&gt; true, :update =&gt; false },
+                          Anonymous.current =&gt; { :read =&gt; false } }
+</pre>
 </div>
 
 

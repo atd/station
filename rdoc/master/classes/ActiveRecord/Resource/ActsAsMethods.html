@@ -74,8 +74,8 @@
 
   <div class="sectiontitle">Methods</div>
   <ul>
-  <li><a href="#M000174">acts_as_resource</a></li>
-  <li><a href="#M000175">find_with_param</a></li>
+  <li><a href="#M000176">acts_as_resource</a></li>
+  <li><a href="#M000177">find_with_param</a></li>
   </ul>
 
 <div class="sectiontitle">Included Modules</div>
@@ -90,7 +90,7 @@
 <div class="sectiontitle">Public Instance methods</div>
 <div class="method">
   <div class="title">
-    <a name="M000174"></a><b>acts_as_resource</b>(options = {})
+    <a name="M000176"></a><b>acts_as_resource</b>(options = {})
   </div>
   <div class="description">
   <p>
@@ -122,7 +122,7 @@ will_pagination plugin. Defaults to 9
 
 </li>
 <li><tt>:delegate_content_types</tt> - allow using <a
-href="../Resource.html#M000162">ActiveRecord::Resource.class_supporting</a>
+href="../Resource.html#M000164">ActiveRecord::Resource.class_supporting</a>
 for finding the class most suitable for some media. This is useful if you
 have a generic model for Attachments, but specific files like images or
 audios should be managed by other classes. Defaults to <tt>false</tt>
@@ -131,8 +131,8 @@ audios should be managed by other classes. Defaults to <tt>false</tt>
 </ul>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000174_source')" id="l_M000174_source">show source</a> ]</p>
-  <div id="M000174_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000176_source')" id="l_M000176_source">show source</a> ]</p>
+  <div id="M000176_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 43</span>
 43:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_resource</span>(<span class="ruby-identifier">options</span> = {})
@@ -143,7 +143,7 @@ audios should be managed by other classes. Defaults to <tt>false</tt>
 48:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:per_page</span>]    <span class="ruby-operator">||=</span> <span class="ruby-value">9</span>
 49:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:delegate_content_types</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>
 50: 
-51:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:parent_scoped</span>, <span class="ruby-identifier">lambda</span> {
+51:         <span class="ruby-identifier">named_scope</span> <span class="ruby-identifier">:roots</span>, <span class="ruby-identifier">lambda</span> {
 52:           <span class="ruby-identifier">column_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'parent_id'</span>) <span class="ruby-operator">?</span>
 53:           { <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:parent_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span> } } <span class="ruby-operator">:</span>
 54:           {}
@@ -176,7 +176,7 @@ audios should be managed by other classes. Defaults to <tt>false</tt>
 </div>
 <div class="method">
   <div class="title">
-    <a name="M000175"></a><b>find_with_param</b>(*args)
+    <a name="M000177"></a><b>find_with_param</b>(*args)
   </div>
   <div class="description">
   <p>
@@ -184,8 +184,8 @@ Find with params
 </p>
   </div>
 <div class="sourcecode">
-  <p class="source-link">[ <a href="javascript:toggleSource('M000175_source')" id="l_M000175_source">show source</a> ]</p>
-  <div id="M000175_source" class="dyn-source">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000177_source')" id="l_M000177_source">show source</a> ]</p>
+  <div id="M000177_source" class="dyn-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/active_record/resource.rb, line 80</span>
 80:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_with_param</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
