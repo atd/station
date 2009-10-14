@@ -49,20 +49,6 @@ class StationMigration < ActiveRecord::Migration
       t.binary :data
     end
 
-    create_table :invitations do |t|
-      t.column :code, :string
-      t.column :email, :string
-      t.column :agent_id, :integer
-      t.column :agent_type, :string
-      t.column :stage_id, :integer
-      t.column :stage_type, :string
-      t.column :role_id, :integer
-      t.column :acceptation_code, :string
-      t.column :accepted_at, :datetime
-
-      t.timestamps
-    end
-
     create_table :logos do |t|
       t.integer  :logoable_id
       t.string   :logoable_type
@@ -176,7 +162,6 @@ class StationMigration < ActiveRecord::Migration
     drop_table :categories
     drop_table :categorizations
     drop_table :db_files
-    drop_table :invitations
     drop_table :logos
     drop_table :open_id_associations
     drop_table :open_id_nonces
