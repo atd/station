@@ -173,6 +173,11 @@ module ActiveRecord #:nodoc:
         if respond_to?(:updated_at)
           self.updated_at = entry.updated
         end
+
+        if respond_to?(:author)
+          # TODO: find by OpenID or other attributes
+          self.author = Anonymous.current
+        end
       end
 
       # Update attributes using params_from_atom and save the Resource

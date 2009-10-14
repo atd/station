@@ -22,4 +22,4 @@
 
 <br />
 
-<%= link_to 'New source', new_source_path %>
+<%= link_to 'New source', polymorphic_path([ current_container, Source.new ], :action => :new) %>
