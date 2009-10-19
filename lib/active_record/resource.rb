@@ -68,6 +68,10 @@ module ActiveRecord #:nodoc:
         cattr_reader :per_page
         class_variable_set "@@per_page", options[:per_page]
 
+        if SourceImportation.table_exists?
+          has_one :source_importation, :as => :importation, :dependent => :destroy
+        end
+
         acts_as_sortable
 
         extend  ClassMethods
@@ -162,10 +166,6 @@ module ActiveRecord #:nodoc:
 
         self.attributes = self.class.params_from_atom(entry)
 
-        if respond_to?(:guid)
-          self.guid = entry.id
-        end
-
         if respond_to?(:created_at)
           self.created_at = entry.published
         end
@@ -178,17 +178,20 @@ module ActiveRecord #:nodoc:
           # TODO: find by OpenID or other attributes
           self.author = Anonymous.current
         end
+
+        self
       end
 
       # Update attributes using params_from_atom and save the Resource
       #
       # Saves the record without timestamps, so created_at and updated_at are the original from the feed entry
       def from_atom!(entry)
-        class_timestamps_cache = self.class.record_timestamps
-        self.class.record_timestamps = false
-        from_atom(entry)
-        save!
-        self.class.record_timestamps = class_timestamps_cache
+        freezing_timestamps do
+          from_atom(entry)
+          save!
+        end
+
+        self
       end
 
       # The arguments to polymorphic_path to build the path for this resource Logo
@@ -209,6 +212,13 @@ module ActiveRecord #:nodoc:
           respond_to?(:attachment_options) &&
           attachment_options[:thumbnails].keys.map(&:to_s).include?(options[:size].to_s) &&
           thumbnails.find_by_thumbnail(options[:size].to_s).present?
+      end
+
+      def freezing_timestamps
+        class_timestamps_cache = self.class.record_timestamps
+        self.class.record_timestamps = false
+        yield
+        self.class.record_timestamps = class_timestamps_cache
       end
     end
   end

@@ -10,6 +10,8 @@ class Source < ActiveRecord::Base
   accepts_nested_attributes_for :uri
   belongs_to :container, :polymorphic => true
 
+  has_many :source_importations, :dependent => :destroy
+
   validates_presence_of :uri, :target
   validates_presence_of :content_type, :on => :update
 
@@ -31,17 +33,22 @@ class Source < ActiveRecord::Base
   end
 
   def import
-    target_class = target.to_s.constantize
-
     feed.entries.each do |entry|
+      # Import feed entries until reach an already imported one
       break if imported_at && entry.updated < imported_at
 
-      target_entry = target_class.new.respond_to?(:guid) &&
-        entry.id.present? &&
-        import_class.find_by_guid(entry.id) ||
-        import_class.new
-
-      target_entry.from_atom!(entry)
+      # Find previous Importation with this guid
+      if entry.id.present? && old_source_importation = source_importations.find_by_guid(entry.id)
+        # Importation may have been deleted previously
+        if old_source_importation.importation.present?
+          old_source_importation.importation.from_atom!(entry)
+        end
+        old_source_importation.touch
+      else
+        # Create new Importation
+        source_importations.create :importation => importation_class.new.from_atom!(entry),
+                                   :guid => entry.id
+      end
     end
 
     update_attribute :imported_at, Time.now
@@ -107,7 +114,8 @@ class Source < ActiveRecord::Base
     end
   end
 
-  def import_class
+  # The target class to be instanciated when importing from from this source
+  def importation_class
     self.container && self.container.send(target.tableize) ||
       target.constantize
   end
