@@ -67,8 +67,11 @@ module ActiveRecord #:nodoc:
         agent = options[:to] || Anyone.current
 
         if authorization_cache[agent][permission].nil?
-          authorization_cache[agent][permission] =
-            authorization_methods_eval(agent, permission)
+          authorization_eval = authorization_methods_eval(agent, permission)
+          # Deny by default
+          authorization_eval = false if authorization_eval.nil?
+          # Cache the evalutation for better performance
+          authorization_cache[agent][permission] = authorization_eval
         else
           authorization_cache[agent][permission]
         end
@@ -83,12 +86,12 @@ module ActiveRecord #:nodoc:
         authorize?(permission, options)
       end
 
+      private
+
       # Authorization Cache
-      def authorization_cache
+      def authorization_cache #:nodoc:
         @authorization_cache ||= Hash.new{ |agent, permission| agent[permission] = Hash.new }
       end
-
-      private
 
       def authorization_methods_eval(agent, permission) #:nodoc:
         self.class.authorization_methods.each do |m|
@@ -105,7 +108,7 @@ module ActiveRecord #:nodoc:
           return auth_method_eval unless auth_method_eval.nil?
         end
 
-        false
+        nil
       end
     end
   end
