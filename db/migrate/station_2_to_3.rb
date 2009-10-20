@@ -14,9 +14,27 @@ class Station2To3 < ActiveRecord::Migration
       t.timestamps
       t.datetime   :processed_at
     end
+
+    create_table :source_importations do |t|
+      t.references :source
+      t.references :importation, :polymorphic => true
+      t.string     :guid
+      t.timestamps
+    end
+
+    create_table :sources do |t|
+      t.references :uri
+      t.string     :content_type
+      t.string     :target
+      t.references :container, :polymorphic => true
+      t.datetime   :imported_at
+      t.timestamps
+    end
    end
  
   def self.down
     drop_table :admissions
+    drop_table :source_importations
+    drop_table :sources
   end
 end

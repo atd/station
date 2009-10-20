@@ -137,6 +137,22 @@ class StationMigration < ActiveRecord::Migration
       t.timestamps
     end
 
+    create_table :source_importations do |t|
+      t.references :source
+      t.references :importation, :polymorphic => true
+      t.string     :guid
+      t.timestamps
+    end
+
+    create_table :sources do |t|
+      t.references :uri
+      t.string     :content_type
+      t.string     :target
+      t.references :container, :polymorphic => true
+      t.datetime   :imported_at
+      t.timestamps
+    end
+
     create_table :taggings do |t|
       t.integer :tag_id
       t.integer :taggable_id
@@ -174,6 +190,8 @@ class StationMigration < ActiveRecord::Migration
     drop_table :roles
     drop_table :singular_agents
     drop_table :sites
+    drop_table :sources
+    drop_table :source_importations
     drop_table :taggings
     drop_table :tags
     drop_table :uris
