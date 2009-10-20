@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionController::Sessions</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionController::Sessions</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/action_controller/sessions_rb.html">lib/action_controller/sessions.rb</a>
+<a href="../../files/lib/action_controller/sessions/login_and_password_rb.html">lib/action_controller/sessions/login_and_password.rb</a>
+<a href="../../files/lib/action_controller/sessions/cookie_token_rb.html">lib/action_controller/sessions/cookie_token.rb</a>
+<a href="../../files/lib/action_controller/sessions/cas_rb.html">lib/action_controller/sessions/cas.rb</a>
+<a href="../../files/lib/action_controller/sessions/openid_rb.html">lib/action_controller/sessions/openid.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+<a href="Sessions.html">Sessions</a> module provides with Controller and
+Helper methods for sessions management
+</p>
+<p>
+This methods will be tipically used by <a
+href="../SessionsController.html">SessionsController</a>
+</p>
+<p>
+For identification issues in your Controllers, see <a
+href="Authorization.html">ActionController::Authorization</a> For
+permissions issues in your Controllers, see <a
+href="Authorization.html">ActionController::Authorization</a>
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000130">authentication_methods_chain</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Sessions/CAS.html" class="link">ActionController::Sessions::CAS</a><br />
+Module <a href="Sessions/CookieToken.html" class="link">ActionController::Sessions::CookieToken</a><br />
+Module <a href="Sessions/LoginAndPassword.html" class="link">ActionController::Sessions::LoginAndPassword</a><br />
+Module <a href="Sessions/OpenID.html" class="link">ActionController::Sessions::OpenID</a><br />
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">Cas</td>
+    <td>=</td>
+    <td class="attr-value">CAS</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">Openid</td>
+    <td>=</td>
+    <td class="attr-value">OpenID</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000130"></a><b>authentication_methods_chain</b>(controller_method_name)
+  </div>
+  <div class="description">
+  <p>
+Go through all authentication methods definded for this action Return is
+one of them is performed
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000130_source')" id="l_M000130_source">show source</a> ]</p>
+  <div id="M000130_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/sessions.rb, line 24</span>
+24:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authentication_methods_chain</span>(<span class="ruby-identifier">controller_method_name</span>)
+25:       <span class="ruby-identifier">authentication_methods</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">authentication_method</span><span class="ruby-operator">|</span>
+26:         <span class="ruby-identifier">chain_method</span> = <span class="ruby-node">&quot;#{ controller_method_name }_with_#{ authentication_method }&quot;</span>
+27:         <span class="ruby-identifier">send</span>(<span class="ruby-identifier">chain_method</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">chain_method</span>)
+28:         <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">performed?</span>
+29:       <span class="ruby-keyword kw">end</span>
+30:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

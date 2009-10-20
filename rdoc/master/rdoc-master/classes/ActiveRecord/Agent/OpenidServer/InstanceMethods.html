@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Agent::OpenidServer::InstanceMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Agent::OpenidServer::InstanceMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../../files/lib/active_record/agent/openid_server_rb.html">lib/active_record/agent/openid_server.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000201">create_openid_server_ownings</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000201"></a><b>create_openid_server_ownings</b>()
+  </div>
+  <div class="description">
+  <p>
+Create OpenID Ownings for the URIs hosted in this server
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000201_source')" id="l_M000201_source">show source</a> ]</p>
+  <div id="M000201_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent/openid_server.rb, line 36</span>
+36:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_openid_server_ownings</span>
+37:           <span class="ruby-identifier">uris_path</span> = <span class="ruby-node">&quot;#{ Site.current.domain }/#{ self.class.to_s.tableize }/#{ to_param }&quot;</span>
+38:           <span class="ruby-identifier">uris</span> = [ <span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_or_create_by_uri</span>(<span class="ruby-node">&quot;http://#{ uris_path }&quot;</span>, <span class="ruby-identifier">:local</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) ]
+39:           <span class="ruby-identifier">uris</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_or_create_by_uri</span>(<span class="ruby-node">&quot;https://#{ uris_path }&quot;</span>, <span class="ruby-identifier">:local</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Site</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">ssl?</span>
+40: 
+41:           <span class="ruby-identifier">uris</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">u</span><span class="ruby-operator">|</span>
+42:             <span class="ruby-identifier">openid_uris</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">u</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">openid_uris</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">u</span>)
+43:           <span class="ruby-keyword kw">end</span>
+44:         <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

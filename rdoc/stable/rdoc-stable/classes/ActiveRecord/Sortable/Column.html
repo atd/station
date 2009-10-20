@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: ActiveRecord::Sortable::Column</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />ActiveRecord::Sortable::Column</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/sortable_rb.html">lib/active_record/sortable.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+This class models columns that are shown in sortable_list
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000153">data</a></li>
+  <li><a href="#M000152">name</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>content</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>name</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>order</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>render</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>sortable</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000153"></a><b>data</b>(helper, object)
+  </div>
+  <div class="description">
+  <p>
+Get <a href="Column.html#M000153">data</a> for this object based in
+<tt>:content</tt> parameter. There are two types of <tt>:content</tt>
+parameter:
+</p>
+<table>
+<tr><td valign="top">Symbol:</td><td>represents a method of the object, like <tt>object.name</tt>
+
+</td></tr>
+<tr><td valign="top">Proc:</td><td>more complicate <a href="Column.html#M000153">data</a>. Example:
+
+</td></tr>
+</table>
+<pre>
+  :content =&gt; proc{ |helper, object|
+    helper.link_to(object.container.name, helper.polymorhic_path(object.container))
+  }
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000153_source')" id="l_M000153_source">show source</a> ]</p>
+  <div id="M000153_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/sortable.rb, line 110</span>
+110:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data</span>(<span class="ruby-identifier">helper</span>, <span class="ruby-identifier">object</span>)
+111:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">render</span>
+112:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">helper</span>.<span class="ruby-identifier">render</span>(<span class="ruby-identifier">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">render</span>, <span class="ruby-identifier">:object</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">object</span>)
+113:         <span class="ruby-keyword kw">end</span>
+114: 
+115:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">content</span>
+116:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Symbol</span>
+117:           <span class="ruby-identifier">o</span> = <span class="ruby-identifier">object</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">content</span>
+118:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>)
+119:             <span class="ruby-keyword kw">begin</span>
+120:               <span class="ruby-identifier">helper</span>.<span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">helper</span>.<span class="ruby-identifier">sanitize</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">name</span>), <span class="ruby-identifier">helper</span>.<span class="ruby-identifier">polymorphic_path</span>(<span class="ruby-identifier">o</span>))
+121:             <span class="ruby-keyword kw">rescue</span> 
+122:               <span class="ruby-identifier">helper</span>.<span class="ruby-identifier">sanitize</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">name</span>)
+123:             <span class="ruby-keyword kw">end</span>
+124:           <span class="ruby-keyword kw">else</span>
+125:             <span class="ruby-identifier">helper</span>.<span class="ruby-identifier">sanitize</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">to_s</span>)
+126:           <span class="ruby-keyword kw">end</span>
+127:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Proc</span>
+128:           <span class="ruby-identifier">content</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">helper</span>, <span class="ruby-identifier">object</span>)
+129:         <span class="ruby-keyword kw">end</span>
+130:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000152"></a><b>name</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000152_source')" id="l_M000152_source">show source</a> ]</p>
+  <div id="M000152_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/sortable.rb, line 93</span>
+ 93:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">name</span>
+ 94:         <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@name</span>
+ 95:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Symbol</span>
+ 96:           <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-node">&quot;#{ @name }.one&quot;</span>)
+ 97:         <span class="ruby-keyword kw">else</span>
+ 98:           <span class="ruby-ivar">@name</span>
+ 99:         <span class="ruby-keyword kw">end</span>
+100:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

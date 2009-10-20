@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionController::Sessions::OpenID</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionController::Sessions::OpenID</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/action_controller/sessions/openid_rb.html">lib/action_controller/sessions/openid.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+<a href="OpenID.html">OpenID</a> sessions management
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000125">create_session_with_openid</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000125"></a><b>create_session_with_openid</b>(params = self.params, options = {})
+  </div>
+  <div class="description">
+  <p>
+Create new Session using <a href="OpenID.html">OpenID</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000125_source')" id="l_M000125_source">show source</a> ]</p>
+  <div id="M000125_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/sessions/openid.rb, line 13</span>
+ 13:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_session_with_openid</span>(<span class="ruby-identifier">params</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">params</span>, <span class="ruby-identifier">options</span> = {})
+ 14:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:return_to</span>]   <span class="ruby-operator">||=</span> <span class="ruby-identifier">open_id_complete_url</span>
+ 15:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:realm</span>]       <span class="ruby-operator">||=</span> <span class="ruby-node">&quot;http://#{ request.host_with_port }/&quot;</span>
+ 16:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sreg_fields</span>] <span class="ruby-operator">||=</span> [<span class="ruby-value str">'nickname'</span>, <span class="ruby-value str">'email'</span>]
+ 17: 
+ 18:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:openid_identifier</span>].<span class="ruby-identifier">present?</span>
+ 19:           <span class="ruby-keyword kw">begin</span>
+ 20:             <span class="ruby-identifier">openid_request</span> = <span class="ruby-identifier">openid_consumer</span>.<span class="ruby-identifier">begin</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:openid_identifier</span>]
+ 21:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">OpenIDError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+ 22:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.discovery_failed'</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:openid_identifier</span>], <span class="ruby-identifier">:error</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>)
+ 23:             <span class="ruby-keyword kw">return</span>
+ 24:           <span class="ruby-keyword kw">end</span>
+ 25: 
+ 26:           <span class="ruby-identifier">sreg_request</span> = <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">SReg</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span>
+ 27:           <span class="ruby-comment cmt"># required fields</span>
+ 28:           <span class="ruby-identifier">sreg_request</span>.<span class="ruby-identifier">request_fields</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sreg_fields</span>], <span class="ruby-keyword kw">true</span>)
+ 29:           <span class="ruby-comment cmt"># optional fields</span>
+ 30:           <span class="ruby-comment cmt"># sreg_request.request_fields(['fullname'], false)</span>
+ 31: 
+ 32:           <span class="ruby-comment cmt">#TODO: PAPE, OpenID Provider Authentication Policy</span>
+ 33:           <span class="ruby-comment cmt"># see: http://openid.net/specs/</span>
+ 34:           <span class="ruby-comment cmt"># papereq = ::OpenID::PAPE::Request.new</span>
+ 35:           <span class="ruby-comment cmt"># ...</span>
+ 36: 
+ 37:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">send_redirect?</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:realm</span>], <span class="ruby-identifier">open_id_complete_url</span>)
+ 38:             <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">redirect_url</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:realm</span>], <span class="ruby-identifier">open_id_complete_url</span>)
+ 39:           <span class="ruby-keyword kw">else</span>
+ 40:             <span class="ruby-comment cmt">#FIXME: create </span>
+ 41:             <span class="ruby-ivar">@form_text</span> = <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">form_markup</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:realm</span>], <span class="ruby-identifier">open_id_complete_url</span>, <span class="ruby-keyword kw">true</span>, { <span class="ruby-value str">'id'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'openid_form'</span> })
+ 42:             <span class="ruby-identifier">render</span> <span class="ruby-identifier">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'sessions/openid_form'</span>, <span class="ruby-identifier">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span>
+ 43:           <span class="ruby-keyword kw">end</span>
+ 44:         <span class="ruby-comment cmt"># OpenID login completion</span>
+ 45:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:open_id_complete</span>]
+ 46:           <span class="ruby-comment cmt"># Filter path parameters</span>
+ 47:           <span class="ruby-identifier">parameters</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">reject</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">path_parameters</span>[<span class="ruby-identifier">k</span>] }
+ 48:           <span class="ruby-comment cmt"># Complete the OpenID verification process</span>
+ 49:           <span class="ruby-identifier">openid_response</span> = <span class="ruby-identifier">openid_consumer</span>.<span class="ruby-identifier">complete</span>(<span class="ruby-identifier">parameters</span>, <span class="ruby-identifier">open_id_complete_url</span>)
+ 50: 
+ 51:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">status</span>
+ 52:           <span class="ruby-keyword kw">when</span> <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">Consumer</span><span class="ruby-operator">::</span><span class="ruby-constant">SUCCESS</span>
+ 53:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.verification_succeeded_with_id'</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">display_identifier</span>)
+ 54:             <span class="ruby-identifier">uri</span> = <span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_or_create_by_uri</span>(<span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">display_identifier</span>)
+ 55: 
+ 56:             <span class="ruby-comment cmt"># If already authenticated, add URI to Agent.openid_ownings</span>
+ 57:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authenticated?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span> <span class="ruby-identifier">current_agent</span>.<span class="ruby-identifier">openid_uris</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">uri</span>)
+ 58:               <span class="ruby-identifier">current_agent</span>.<span class="ruby-identifier">openid_uris</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">uri</span>
+ 59:               <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.id_attached_to_account'</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri</span>)
+ 60:               
+ 61:               <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:openid_return_to</span>].<span class="ruby-identifier">present?</span>
+ 62:                 <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:openid_return_to</span>)
+ 63:                 <span class="ruby-keyword kw">return</span>
+ 64:               <span class="ruby-keyword kw">else</span>
+ 65:                 <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">current_agent</span>
+ 66:               <span class="ruby-keyword kw">end</span>
+ 67:             <span class="ruby-keyword kw">end</span>
+ 68: 
+ 69:             <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">:openid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+ 70:               <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">current_agent</span> = 
+ 71:                 <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">authenticate_with_openid</span>(<span class="ruby-identifier">uri</span>)
+ 72:               <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authenticated?</span>
+ 73:             <span class="ruby-keyword kw">end</span>
+ 74: 
+ 75:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authenticated?</span>
+ 76:               <span class="ruby-comment cmt"># redirect_back_or_default after_create_path</span>
+ 77:               <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:logged_in_successfully</span>)
+ 78:               <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">current_agent</span>
+ 79:             <span class="ruby-keyword kw">else</span>
+ 80:               <span class="ruby-comment cmt"># We create new local Agent with OpenID data</span>
+ 81:               <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:openid_identifier</span>] = <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">display_identifier</span>
+ 82:               <span class="ruby-identifier">sreg_response</span> = <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">SReg</span><span class="ruby-operator">::</span><span class="ruby-constant">Response</span>.<span class="ruby-identifier">from_success_response</span>(<span class="ruby-identifier">openid_response</span>)
+ 83:               <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">:openid</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">tableize</span>,
+ 84:                           <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span>,
+ 85:                           <span class="ruby-identifier">:params</span> =<span class="ruby-operator">&gt;</span> {
+ 86:                             <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span>.<span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">:openid</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">tableize</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sreg_response</span>.<span class="ruby-identifier">data</span>
+ 87:                           }
+ 88:             <span class="ruby-keyword kw">end</span>
+ 89:           <span class="ruby-keyword kw">when</span> <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">Consumer</span><span class="ruby-operator">::</span><span class="ruby-constant">FAILURE</span>
+ 90:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">display_identifier</span> <span class="ruby-value">?
+ 91: </span>              <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.verification_failed_with_id'</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">display_identifier</span>, <span class="ruby-identifier">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">message</span>) <span class="ruby-operator">:</span>
+ 92:               <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.verification_failed'</span>, <span class="ruby-identifier">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">message</span>)
+ 93:             <span class="ruby-keyword kw">return</span>
+ 94:           <span class="ruby-keyword kw">when</span> <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">Consumer</span><span class="ruby-operator">::</span><span class="ruby-constant">SETUP_NEEDED</span>
+ 95:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.immediate_request_failed'</span>)
+ 96:             <span class="ruby-keyword kw">return</span>
+ 97:           <span class="ruby-keyword kw">when</span> <span class="ruby-operator">::</span><span class="ruby-constant">OpenID</span><span class="ruby-operator">::</span><span class="ruby-constant">Consumer</span><span class="ruby-operator">::</span><span class="ruby-constant">CANCEL</span>
+ 98:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.client.transaction_cancelled'</span>)
+ 99:             <span class="ruby-keyword kw">return</span>
+100:           <span class="ruby-keyword kw">end</span>
+101:         <span class="ruby-keyword kw">end</span>
+102:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

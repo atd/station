@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Source</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Source</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/app/models/source_rb.html">app/models/source.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+ActiveRecord::Base
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000050">entries</a></li>
+  <li><a href="#M000049">feed</a></li>
+  <li><a href="#M000051">import</a></li>
+  <li><a href="#M000052">reset</a></li>
+  <li><a href="#M000048">title</a></li>
+  <li><a href="#M000053">validate</a></li>
+  <li><a href="#M000054">validate_on_create</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[RW]
+    </td>
+    <td class='attr-name'>title</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000050"></a><b>entries</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000050_source')" id="l_M000050_source">show source</a> ]</p>
+  <div id="M000050_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/source.rb, line 35</span>
+35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">entries</span>
+36:     <span class="ruby-identifier">feed</span> <span class="ruby-value">?
+37: </span>      <span class="ruby-identifier">feed</span>.<span class="ruby-identifier">entries</span> <span class="ruby-operator">:</span>
+38:       <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+39:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000049"></a><b>feed</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000049_source')" id="l_M000049_source">show source</a> ]</p>
+  <div id="M000049_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/source.rb, line 24</span>
+24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">feed</span>
+25:     <span class="ruby-ivar">@feed</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">content_type</span>
+26:               <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'application/atom+xml'</span>
+27:                 <span class="ruby-identifier">atom_feed</span>
+28:               <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'application/rss+xml'</span>
+29:                 <span class="ruby-identifier">rss_feed</span>
+30:               <span class="ruby-keyword kw">else</span>
+31:                 <span class="ruby-keyword kw">nil</span>
+32:               <span class="ruby-keyword kw">end</span>
+33:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000051"></a><b>import</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000051_source')" id="l_M000051_source">show source</a> ]</p>
+  <div id="M000051_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/source.rb, line 41</span>
+41:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import</span>
+42:     <span class="ruby-identifier">feed</span>.<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">entry</span><span class="ruby-operator">|</span>
+43:       <span class="ruby-comment cmt"># Import feed entries until reach an already imported one</span>
+44:       <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">imported_at</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">updated</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">imported_at</span>
+45: 
+46:       <span class="ruby-comment cmt"># Find previous Importation with this guid</span>
+47:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">old_source_importation</span> = <span class="ruby-identifier">source_importations</span>.<span class="ruby-identifier">find_by_guid</span>(<span class="ruby-identifier">entry</span>.<span class="ruby-identifier">id</span>)
+48:         <span class="ruby-comment cmt"># Importation may have been deleted previously</span>
+49:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">old_source_importation</span>.<span class="ruby-identifier">importation</span>.<span class="ruby-identifier">present?</span>
+50:           <span class="ruby-identifier">old_source_importation</span>.<span class="ruby-identifier">importation</span>.<span class="ruby-identifier">from_atom!</span>(<span class="ruby-identifier">entry</span>)
+51:         <span class="ruby-keyword kw">end</span>
+52:         <span class="ruby-identifier">old_source_importation</span>.<span class="ruby-identifier">touch</span>
+53:       <span class="ruby-keyword kw">else</span>
+54:         <span class="ruby-identifier">link</span> = <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>[<span class="ruby-value str">'rel'</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'alternate'</span> }.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:href</span>)
+55:         <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">link</span>.<span class="ruby-identifier">present?</span> <span class="ruby-value">? </span><span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_or_create_by_uri</span>(<span class="ruby-identifier">link</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+56: 
+57:         <span class="ruby-comment cmt"># Create new Importation</span>
+58:         <span class="ruby-identifier">source_importations</span>.<span class="ruby-identifier">create</span> <span class="ruby-identifier">:importation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">importation_class</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">from_atom!</span>(<span class="ruby-identifier">entry</span>),
+59:                                    <span class="ruby-identifier">:guid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">id</span>,
+60:                                    <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri</span>
+61:       <span class="ruby-keyword kw">end</span>
+62:     <span class="ruby-keyword kw">end</span>
+63: 
+64:     <span class="ruby-identifier">update_attribute</span> <span class="ruby-identifier">:imported_at</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+65:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000052"></a><b>reset</b>()
+  </div>
+  <div class="description">
+  <p>
+Destroy all importations and <a href="Source.html#M000052">reset</a>
+imported_at
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000052_source')" id="l_M000052_source">show source</a> ]</p>
+  <div id="M000052_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/source.rb, line 68</span>
+68:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
+69:     <span class="ruby-identifier">source_importations</span>.<span class="ruby-identifier">destroy_all</span>
+70:     <span class="ruby-identifier">update_attribute</span> <span class="ruby-identifier">:imported_at</span>, <span class="ruby-keyword kw">nil</span>
+71:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000048"></a><b>title</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000048_source')" id="l_M000048_source">show source</a> ]</p>
+  <div id="M000048_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/source.rb, line 20</span>
+20:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">title</span>
+21:     <span class="ruby-ivar">@title</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">feed</span>.<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:title</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">nil</span>
+22:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Protected Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000053"></a><b>validate</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000053_source')" id="l_M000053_source">show source</a> ]</p>
+  <div id="M000053_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/source.rb, line 76</span>
+76:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">validate</span>
+77:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target</span>.<span class="ruby-identifier">blank?</span>
+78: 
+79:     <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Target model #{ self.target } must implement 'params_from_atom' class method&quot;</span> <span class="ruby-keyword kw">unless</span>
+80:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:params_from_atom</span>)
+81:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000054"></a><b>validate_on_create</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000054_source')" id="l_M000054_source">show source</a> ]</p>
+  <div id="M000054_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/source.rb, line 83</span>
+ 83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">validate_on_create</span>
+ 84:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">content_type</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">blank?</span>
+ 85: 
+ 86:     <span class="ruby-keyword kw">begin</span>
+ 87:       <span class="ruby-identifier">res</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">dereference</span>
+ 88:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>
+ 89:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add_to_base</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.dereference'</span>, <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>)
+ 90:       <span class="ruby-keyword kw">return</span>
+ 91:     <span class="ruby-keyword kw">end</span>
+ 92: 
+ 93:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">res</span>
+ 94:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add_to_base</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.dereference'</span>, <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>)
+ 95:       <span class="ruby-keyword kw">return</span>
+ 96:     <span class="ruby-keyword kw">end</span>
+ 97: 
+ 98:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">content_type</span>
+ 99:     <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'text/html'</span>
+100:       <span class="ruby-identifier">html</span> = <span class="ruby-constant">Station</span><span class="ruby-operator">::</span><span class="ruby-constant">Html</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>)
+101:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">html</span>.<span class="ruby-identifier">feeds</span>.<span class="ruby-identifier">size</span>
+102:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>
+103:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add_to_base</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.no_feed'</span>)
+104:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>
+105:         <span class="ruby-identifier">f</span> = <span class="ruby-identifier">html</span>.<span class="ruby-identifier">feeds</span>.<span class="ruby-identifier">first</span>
+106:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">uri</span> = <span class="ruby-identifier">f</span>[<span class="ruby-value str">'href'</span>]
+107:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">content_type</span> = <span class="ruby-identifier">f</span>[<span class="ruby-value str">'type'</span>]
+108:       <span class="ruby-keyword kw">else</span>
+109:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add_to_base</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.multiple_feeds'</span>)
+110:       <span class="ruby-keyword kw">end</span>
+111:     <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'application/xml'</span>, <span class="ruby-value str">'text/xml'</span>
+112:       <span class="ruby-comment cmt"># Well try to guess what type of feed we have</span>
+113:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">try_parse_with_rss</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">try_parse_with_atom</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>)
+114:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-identifier">:content_type</span>, <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.content_type.invalid'</span>, <span class="ruby-identifier">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">content_type</span>)
+115:       <span class="ruby-keyword kw">end</span>
+116:     <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'application/rss+xml'</span>
+117:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">try_parse_with_rss</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>)
+118:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add_to_base</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.parse'</span>)
+119:       <span class="ruby-keyword kw">end</span>
+120:     <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'application/atom+xml'</span>
+121:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">try_parse_with_atom</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>)
+122:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add_to_base</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.parse'</span>)
+123:       <span class="ruby-keyword kw">end</span>
+124:     <span class="ruby-keyword kw">else</span>
+125:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-identifier">:content_type</span>, <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value str">'source.errors.content_type.invalid'</span>, <span class="ruby-identifier">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">content_type</span>)
+126:     <span class="ruby-keyword kw">end</span>
+127:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

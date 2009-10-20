@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Uri</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Uri</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/app/models/uri_rb.html">app/models/uri.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+ActiveRecord::Base
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+URI storage in the database
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000025">atompub_service_document</a></li>
+  <li><a href="#M000024">dereference</a></li>
+  <li><a href="#M000023">html</a></li>
+  <li><a href="#M000021">to_s</a></li>
+  <li><a href="#M000022">to_uri</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000025"></a><b>atompub_service_document</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the AtomPub Service Document associated with this URI.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000025_source')" id="l_M000025_source">show source</a> ]</p>
+  <div id="M000025_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 60</span>
+60:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atompub_service_document</span>
+61:     <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Service</span>.<span class="ruby-identifier">discover</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>
+62:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000024"></a><b>dereference</b>(options = {})
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000024_source')" id="l_M000024_source">show source</a> ]</p>
+  <div id="M000024_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 32</span>
+32:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dereference</span>(<span class="ruby-identifier">options</span> = {})
+33:     <span class="ruby-comment cmt"># TODO?: non http(s) URIs</span>
+34:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^(http|https)$/</span>
+35: 
+36:     <span class="ruby-comment cmt"># Limit too many redirects</span>
+37:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:redirect</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">0</span>
+38:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:redirect</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>
+39: 
+40:     <span class="ruby-identifier">http</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">port</span>)
+41:     <span class="ruby-identifier">http</span>.<span class="ruby-identifier">use_ssl</span> = <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;https&quot;</span>
+42:     <span class="ruby-identifier">path</span> = <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">path</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">path</span> <span class="ruby-operator">||</span> <span class="ruby-value str">'/'</span>
+43:     <span class="ruby-identifier">path</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;?#{ to_uri.query }&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">to_uri</span>.<span class="ruby-identifier">query</span>.<span class="ruby-identifier">present?</span>
+44:     <span class="ruby-identifier">headers</span> = {}
+45:     <span class="ruby-identifier">headers</span>[<span class="ruby-value str">'Accept'</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:accept</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:accept</span>].<span class="ruby-identifier">present?</span>
+46:     <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">headers</span>)
+47: 
+48:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">response</span>
+49:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+50:       <span class="ruby-identifier">response</span>
+51:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPRedirection</span>
+52:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:redirect</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+53:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value str">'location'</span>]).<span class="ruby-identifier">dereference</span>(<span class="ruby-identifier">options</span>)
+54:     <span class="ruby-keyword kw">else</span>
+55:       <span class="ruby-keyword kw">nil</span>
+56:     <span class="ruby-keyword kw">end</span>
+57:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000023"></a><b>html</b>()
+  </div>
+  <div class="description">
+  <p>
+Dereference URI and return HTML document
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000023_source')" id="l_M000023_source">show source</a> ]</p>
+  <div id="M000023_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 28</span>
+28:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">html</span>
+29:     <span class="ruby-ivar">@html</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Station</span><span class="ruby-operator">::</span><span class="ruby-constant">Html</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">dereference</span>(<span class="ruby-identifier">:accept</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/html'</span>).<span class="ruby-identifier">body</span>)
+30:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000021"></a><b>to_s</b>()
+  </div>
+  <div class="description">
+  <p>
+Return this URI string
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show source</a> ]</p>
+  <div id="M000021_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 19</span>
+19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+20:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>
+21:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000022"></a><b>to_uri</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000022_source')" id="l_M000022_source">show source</a> ]</p>
+  <div id="M000022_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/uri.rb, line 23</span>
+23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_uri</span>
+24:     <span class="ruby-ivar">@to_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>)
+25:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

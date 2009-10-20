@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: OpenidServerController</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />OpenidServerController</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/app/controllers/openid_server_controller_rb.html">app/controllers/openid_server_controller.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+ApplicationController
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000088">create</a></li>
+  <li><a href="#M000087">index</a></li>
+  <li><a href="#M000089">openid_server</a></li>
+  <li><a href="#M000090">render_response</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li>OpenID::Server</li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000088"></a><b>create</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000088_source')" id="l_M000088_source">show source</a> ]</p>
+  <div id="M000088_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/openid_server_controller.rb, line 82</span>
+ 82:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+ 83:     <span class="ruby-comment cmt"># There is not previous OpenID request</span>
+ 84:     <span class="ruby-identifier">openid_request</span> = <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:openid_request</span>]
+ 85:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">openid_request</span>
+ 86:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:bad_request</span>), <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:bad_request</span>
+ 87:       <span class="ruby-keyword kw">return</span>
+ 88:     <span class="ruby-keyword kw">end</span>
+ 89: 
+ 90:     <span class="ruby-comment cmt"># Decision is blank or invalid</span>
+ 91:     <span class="ruby-keyword kw">unless</span> <span class="ruby-node">%w( once trust cancel )</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:decision</span>])
+ 92:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:info</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.server.decision'</span>)
+ 93:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span>, <span class="ruby-identifier">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;application&quot;</span>
+ 94:       <span class="ruby-keyword kw">return</span>
+ 95:     <span class="ruby-keyword kw">end</span>
+ 96: 
+ 97:     <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:openid_request</span>] = <span class="ruby-keyword kw">nil</span>
+ 98: 
+ 99:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:decision</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;cancel&quot;</span>
+100:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">cancel_url</span>
+101:       <span class="ruby-keyword kw">return</span>
+102:     <span class="ruby-keyword kw">end</span>
+103: 
+104:     <span class="ruby-identifier">openid_response</span> = <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">answer</span>(<span class="ruby-keyword kw">true</span>)
+105: 
+106:     <span class="ruby-comment cmt"># OpenID SReg Extension</span>
+107:     <span class="ruby-comment cmt">#sreg_request = ::OpenID::SReg::Request.from_openid_request(openid_request)</span>
+108:     <span class="ruby-comment cmt">#sreg_response = ::OpenID::SReg::Response.extract_response(sreg_request, params[:sreg]) if sreg_request &amp;&amp; params[:sreg]</span>
+109:     <span class="ruby-comment cmt">#openid_response.add_extension(sreg_response) if sreg_response</span>
+110: 
+111:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:decision</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;trust&quot;</span>
+112:       <span class="ruby-identifier">uri</span> = <span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_or_create_by_uri</span>(<span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">trust_root</span>)
+113:       <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">openid_trust_uris</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">uri</span>
+114: 
+115:       <span class="ruby-comment cmt">#TODO: save SReg data</span>
+116:     <span class="ruby-keyword kw">end</span>
+117: 
+118:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">render_response</span>(<span class="ruby-identifier">openid_response</span>)
+119:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000087"></a><b>index</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000087_source')" id="l_M000087_source">show source</a> ]</p>
+  <div id="M000087_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/openid_server_controller.rb, line 19</span>
+19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
+20:     <span class="ruby-keyword kw">begin</span>
+21:       <span class="ruby-identifier">openid_request</span> = <span class="ruby-identifier">openid_server</span>.<span class="ruby-identifier">decode_request</span>(<span class="ruby-identifier">params</span>)
+22:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">ProtocolError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+23:       <span class="ruby-comment cmt"># invalid OpenID request</span>
+24:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:bad_request</span>
+25:       <span class="ruby-keyword kw">return</span>
+26:     <span class="ruby-keyword kw">end</span>
+27: 
+28:     <span class="ruby-comment cmt"># no openid.mode was given</span>
+29:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">openid_request</span>
+30:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.server.endpoint'</span>), <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:bad_request</span>
+31:       <span class="ruby-keyword kw">return</span> 
+32:     <span class="ruby-keyword kw">end</span>
+33: 
+34:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">CheckIDRequest</span>)
+35:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">authenticated?</span>
+36:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;anti_phishing&quot;</span>
+37:         <span class="ruby-keyword kw">return</span>
+38:       <span class="ruby-keyword kw">end</span>
+39: 
+40:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">id_select</span>
+41:         <span class="ruby-ivar">@identity</span> = <span class="ruby-identifier">current_agent</span>.<span class="ruby-identifier">openid_uris</span>.<span class="ruby-identifier">first</span>
+42:       <span class="ruby-keyword kw">else</span>
+43:         <span class="ruby-comment cmt"># TODO: claimed_id</span>
+44:         <span class="ruby-ivar">@identity</span> = <span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_by_uri</span>(<span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">identity</span>)
+45:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@identity</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_agent</span>.<span class="ruby-identifier">openid_uris</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@identity</span>)
+46:           <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t</span>(<span class="ruby-value str">'openid.server.invalid_uri'</span>, <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">identity</span>), <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:forbidden</span>
+47:           <span class="ruby-keyword kw">return</span>
+48:         <span class="ruby-keyword kw">end</span>
+49:       <span class="ruby-keyword kw">end</span>
+50: 
+51:       <span class="ruby-ivar">@trust_root</span> = <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">trust_root</span>
+52: 
+53:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">immediate</span>
+54:         <span class="ruby-identifier">openid_response</span> = <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">answer</span>(<span class="ruby-keyword kw">false</span>)
+55: 
+56:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">current_agent</span>.<span class="ruby-identifier">openid_trust_uris</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-constant">Uri</span>.<span class="ruby-identifier">find_or_create_by_uri</span>(<span class="ruby-ivar">@trust_root</span>))
+57:          <span class="ruby-identifier">openid_response</span> = <span class="ruby-identifier">openid_request</span>.<span class="ruby-identifier">answer</span>(<span class="ruby-keyword kw">true</span>)
+58:         
+59:         <span class="ruby-comment cmt"># TODO add the sreg response if requested</span>
+60:         <span class="ruby-comment cmt">#self.add_sreg(openid_request, openid_response)</span>
+61:        
+62:       <span class="ruby-keyword kw">else</span>
+63:         <span class="ruby-comment cmt"># OpenID Simple Registration Extension fields</span>
+64:         <span class="ruby-comment cmt">#if sreg_request = OpenID::SReg::Request.from_openid_request(openid_request)</span>
+65:         <span class="ruby-comment cmt">#  @required = sreg_request.required</span>
+66:         <span class="ruby-comment cmt">#  @optional = sreg_request.optional</span>
+67:         <span class="ruby-comment cmt">#  #TODO policy_url</span>
+68:         <span class="ruby-comment cmt">#end</span>
+69: 
+70:         <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:openid_request</span>] = <span class="ruby-identifier">openid_request</span>
+71:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'new'</span>, <span class="ruby-identifier">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'application'</span>
+72:         <span class="ruby-keyword kw">return</span>
+73:       <span class="ruby-keyword kw">end</span>
+74: 
+75:     <span class="ruby-keyword kw">else</span>
+76:       <span class="ruby-identifier">openid_response</span> = <span class="ruby-identifier">openid_server</span>.<span class="ruby-identifier">handle_request</span>(<span class="ruby-identifier">openid_request</span>)
+77:     <span class="ruby-keyword kw">end</span>
+78:   
+79:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">render_response</span>(<span class="ruby-identifier">openid_response</span>)
+80:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Protected Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000089"></a><b>openid_server</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000089_source')" id="l_M000089_source">show source</a> ]</p>
+  <div id="M000089_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/openid_server_controller.rb, line 123</span>
+123:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">openid_server</span>
+124:     <span class="ruby-ivar">@openid_server</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Server</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">OpenIdActiveRecordStore</span>.<span class="ruby-identifier">new</span>, 
+125:                                   <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'index'</span>, <span class="ruby-identifier">:only_path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>))
+126:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000090"></a><b>render_response</b>(openid_response)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000090_source')" id="l_M000090_source">show source</a> ]</p>
+  <div id="M000090_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/openid_server_controller.rb, line 128</span>
+128:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_response</span>(<span class="ruby-identifier">openid_response</span>)    
+129:     <span class="ruby-comment cmt">#XXX: this is form ruby-openid/examples/rails_server</span>
+130:     <span class="ruby-comment cmt"># What do we need if for??? It isn't used!</span>
+131:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">openid_response</span>.<span class="ruby-identifier">needs_signing</span>
+132:       <span class="ruby-identifier">signed_response</span> = <span class="ruby-identifier">openid_server</span>.<span class="ruby-identifier">signatory</span>.<span class="ruby-identifier">sign</span>(<span class="ruby-identifier">openid_response</span>)
+133:     <span class="ruby-keyword kw">end</span>
+134: 
+135:     <span class="ruby-identifier">web_response</span> = <span class="ruby-identifier">openid_server</span>.<span class="ruby-identifier">encode_response</span>(<span class="ruby-identifier">openid_response</span>)
+136: 
+137:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">web_response</span>.<span class="ruby-identifier">code</span>
+138:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">HTTP_OK</span>
+139:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">web_response</span>.<span class="ruby-identifier">body</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:ok</span>
+140:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">HTTP_REDIRECT</span>
+141:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">web_response</span>.<span class="ruby-identifier">headers</span>[<span class="ruby-value str">'location'</span>]
+142:     <span class="ruby-keyword kw">else</span>
+143:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">web_response</span>.<span class="ruby-identifier">body</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:bad_request</span>
+144:     <span class="ruby-keyword kw">end</span>   
+145:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>
