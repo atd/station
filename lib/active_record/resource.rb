@@ -167,11 +167,11 @@ module ActiveRecord #:nodoc:
         self.attributes = self.class.params_from_atom(entry)
 
         if respond_to?(:created_at)
-          self.created_at = entry.published
+          self.created_at = Time.parse(entry.published.to_s)
         end
 
         if respond_to?(:updated_at)
-          self.updated_at = entry.updated
+          self.updated_at = Time.parse(entry.updated.to_s)
         end
 
         if respond_to?(:author)
