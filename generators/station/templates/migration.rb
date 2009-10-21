@@ -140,6 +140,7 @@ class StationMigration < ActiveRecord::Migration
     create_table :source_importations do |t|
       t.references :source
       t.references :importation, :polymorphic => true
+      t.references :uri
       t.string     :guid
       t.timestamps
     end
