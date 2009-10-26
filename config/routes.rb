@@ -29,6 +29,10 @@ ActionController::Routing::Routes.draw do |map|
                    :reset_password_code => nil
   end
 
+  if ActiveRecord::Agent::authentication_classes(:openid).any?
+    map.resources :open_id_ownings
+  end
+
   map.resources :categories
   map.resources :tags
 

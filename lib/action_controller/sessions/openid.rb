@@ -34,19 +34,19 @@ module ActionController #:nodoc:
           # papereq = ::OpenID::PAPE::Request.new
           # ...
 
-          if openid_request.send_redirect?(options[:realm], options[:return_to])
-            redirect_to openid_request.redirect_url(options[:realm], options[:return_to])
+          if openid_request.send_redirect?(options[:realm], open_id_complete_url)
+            redirect_to openid_request.redirect_url(options[:realm], open_id_complete_url)
           else
             #FIXME: create 
-            @form_text = openid_request.form_markup(realm, return_to, true, { 'id' => 'openid_form' })
-            render :layout => nil
+            @form_text = openid_request.form_markup(options[:realm], open_id_complete_url, true, { 'id' => 'openid_form' })
+            render :partial => 'sessions/openid_form', :layout => nil
           end
         # OpenID login completion
         elsif params[:open_id_complete]
           # Filter path parameters
           parameters = params.reject{ |k,v| request.path_parameters[k] }
           # Complete the OpenID verification process
-          openid_response = openid_consumer.complete(parameters, options[:return_to])
+          openid_response = openid_consumer.complete(parameters, open_id_complete_url)
 
           case openid_response.status
           when ::OpenID::Consumer::SUCCESS
@@ -56,8 +56,14 @@ module ActionController #:nodoc:
             # If already authenticated, add URI to Agent.openid_ownings
             if authenticated? && ! current_agent.openid_uris.include?(uri)
               current_agent.openid_uris << uri
-              flash[:notice] = t(:id_attached_to_account, :id => uri)
-              return current_agent
+              flash[:success] = t('openid.client.id_attached_to_account', :id => uri)
+              
+              if session[:openid_return_to].present?
+                redirect_to session.delete(:openid_return_to)
+                return
+              else
+                return current_agent
+              end
             end
 
             ActiveRecord::Agent.authentication_classes(:openid).each do |klass|
