@@ -10,19 +10,22 @@ module ActionController #:nodoc:
     # OpenID sessions management
     module OpenID
       # Create new Session using OpenID
-      def create_with_openid
-        if !params[:openid_identifier].blank?
+      def create_session_with_openid(params = self.params, options = {})
+        options[:return_to]   ||= open_id_complete_url
+        options[:realm]       ||= "http://#{ request.host_with_port }/"
+        options[:sreg_fields] ||= ['nickname', 'email']
+
+        if params[:openid_identifier].present?
           begin
             openid_request = openid_consumer.begin params[:openid_identifier]
           rescue ::OpenID::OpenIDError => e
             flash[:error] = t('openid.client.discovery_failed', :id => params[:openid_identifier], :error => e)
-            render :action => "new"
             return
           end
 
           sreg_request = ::OpenID::SReg::Request.new
           # required fields
-          sreg_request.request_fields(['nickname', 'email'], true)
+          sreg_request.request_fields(options[:sreg_fields], true)
           # optional fields
           # sreg_request.request_fields(['fullname'], false)
 
@@ -31,12 +34,10 @@ module ActionController #:nodoc:
           # papereq = ::OpenID::PAPE::Request.new
           # ...
 
-          return_to = open_id_complete_url
-          realm = "http://#{ request.host_with_port }/"
-
-          if openid_request.send_redirect?(realm, return_to)
-            redirect_to openid_request.redirect_url(realm, return_to)
+          if openid_request.send_redirect?(options[:realm], options[:return_to])
+            redirect_to openid_request.redirect_url(options[:realm], options[:return_to])
           else
+            #FIXME: create 
             @form_text = openid_request.form_markup(realm, return_to, true, { 'id' => 'openid_form' })
             render :layout => nil
           end
@@ -45,7 +46,7 @@ module ActionController #:nodoc:
           # Filter path parameters
           parameters = params.reject{ |k,v| request.path_parameters[k] }
           # Complete the OpenID verification process
-          openid_response = openid_consumer.complete(parameters, return_to)
+          openid_response = openid_consumer.complete(parameters, options[:return_to])
 
           case openid_response.status
           when ::OpenID::Consumer::SUCCESS
@@ -56,7 +57,7 @@ module ActionController #:nodoc:
             if authenticated? && ! current_agent.openid_uris.include?(uri)
               current_agent.openid_uris << uri
               flash[:notice] = t(:id_attached_to_account, :id => uri)
-              return
+              return current_agent
             end
 
             ActiveRecord::Agent.authentication_classes(:openid).each do |klass|
@@ -66,8 +67,9 @@ module ActionController #:nodoc:
             end
 
             if authenticated?
-              redirect_back_or_default after_create_path
+              # redirect_back_or_default after_create_path
               flash[:success] = t(:logged_in_successfully)
+              return current_agent
             else
               # We create new local Agent with OpenID data
               session[:openid_identifier] = openid_response.display_identifier
@@ -82,13 +84,13 @@ module ActionController #:nodoc:
             flash[:error] = openid_response.display_identifier ?
               t('openid.client.verification_failed_with_id', :id => openid_response.display_identifier, :message => openid_response.message) :
               t('openid.client.verification_failed', :message => openid_response.message)
-            render :action => 'new'
+            return
           when ::OpenID::Consumer::SETUP_NEEDED
-            flash[:error] = t(:immediate_request_failed)
-            render :action => 'new'
+            flash[:error] = t('openid.client.immediate_request_failed')
+            return
           when ::OpenID::Consumer::CANCEL
-            flash[:notice] = t(:transaction_cancelled)
-            render :action => 'new'
+            flash[:error] = t('openid.client.transaction_cancelled')
+            return
           end
         end
       end

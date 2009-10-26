@@ -10,7 +10,7 @@ module ActionController #:nodoc:
     # Central Authentication Service (CAS) session support
     module CAS
       # Initialize CAS session
-      def new_with_cas
+      def new_session_with_cas
         initialize_cas_filter
 
         cas_filter_result = ::CASClient::Frameworks::Rails::Filter.filter(self)
@@ -23,8 +23,8 @@ module ActionController #:nodoc:
       end
 
       # Create session using CAS
-      def create_with_cas
-        return unless params[:ticket]
+      def create_session_with_cas
+        return nil unless params[:ticket]
         initialize_cas_filter
 
         if ::CASClient::Frameworks::Rails::Filter.filter(self)
@@ -37,7 +37,7 @@ module ActionController #:nodoc:
 
           if authenticated?
             flash[:success] = t(:logged_in_successfully)
-            redirect_back_or_default(after_create_path)
+            return self.current_agent
           else
             redirect_to :controller => ActiveRecord::Agent.authentication_classes(:cas).first.to_s.tableize,
                         :action => "new",
@@ -51,7 +51,7 @@ module ActionController #:nodoc:
       end
 
       # Logout on CAS Server
-      def destroy_with_cas
+      def destroy_session_with_cas
         initialize_cas_filter
 
         redirect_to ::CASClient::Frameworks::Rails::Filter.client.logout_url(nil, request.referer)

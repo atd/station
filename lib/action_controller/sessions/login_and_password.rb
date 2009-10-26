@@ -3,7 +3,7 @@ module ActionController #:nodoc:
     # Methods for Sessions based on LoginAndPassword Authentication 
     module LoginAndPassword
       # Init Session using LoginAndPassword Authentication
-      def create_with_login_and_password
+      def create_session_with_login_and_password(params = self.params)
         return if params[:login].blank? || params[:password].blank?
 
         agent = nil
@@ -19,15 +19,13 @@ module ActionController #:nodoc:
           elsif agent.respond_to?(:disabled) && agent.disabled
             flash[:error] = t(:disabled, :scope => agent.class.to_s.tableize)
           else
-            self.current_agent = agent
             flash[:success] = t(:logged_in_successfully)
-            redirect_back_or_default(after_create_path)
-            return
+            return self.current_agent = agent
           end
         else
           flash[:error] ||= t(:invalid_credentials)
         end
-        render :action => 'new'
+        return
       end
     end
   end

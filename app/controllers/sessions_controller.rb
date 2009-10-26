@@ -12,16 +12,19 @@ class SessionsController < ApplicationController
   end
 
   def create
-    authentication_methods_chain(:create)
-
-    unless performed?
-      flash[:error] = t(:invalid_credentials)
-      render(:action => "new")
+    if authentication_methods_chain(:create)
+      redirect_back_or_default(after_create_path) if ! performed?
+    else
+      unless performed?
+        flash[:error] ||= t(:invalid_credentials)
+        render(:action => "new")
+      end
     end
   end
 
   def destroy
     authentication_methods_chain(:destroy)
+
     reset_session
 
     return if performed?
