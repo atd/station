@@ -147,7 +147,7 @@ module ActionController #:nodoc:
         case request.format 
         when Mime::HTML
           store_location
-          redirect_to(site.ssl? ? new_session_url(:protocol => 'https') : new_session_path)
+          redirect_to(current_site.ssl? ? new_session_url(:protocol => 'https') : new_session_path)
         else
           request_http_basic_authentication 'Web Password'
         end
