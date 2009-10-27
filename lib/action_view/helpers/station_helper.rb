@@ -17,8 +17,8 @@ module ActionView #:nodoc:
                 elsif @title
                   @title
                 elsif @contents
-                  container ?
-                    t(:other_in_container, :scope => controller.controller_name.singularize, :container => container.name) :
+                  current_container ?
+                    t(:other_in_container, :scope => controller.controller_name.singularize, :container => current_container.name) :
                     t(:other, :scope => controller.controller_name.singularize)
                 elsif @resources
                     t(:other, :scope => controller.controller_name.singularize)
@@ -56,7 +56,7 @@ module ActionView #:nodoc:
       # will link to current request_uri + .atom
       #
       # You can pass url arguments
-      #   atom_link(container, Content.new)
+      #   atom_link(current_container, Content.new)
       #
       # You must have <tt>yield(:headers)</tt> in your layout for using this helper method
       def atom_link_header(*args)
