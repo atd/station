@@ -210,7 +210,12 @@ module ActionController #:nodoc:
         if resource.destroy
           format.html {
             flash[:success] = t(:deleted, :scope => @resource.class.to_s.underscore)
-            redirect_to(request.referer || [ current_container, model_class.new ])
+            redirection = (
+              request.referer.present? &&
+              ! request.referer =~ /#{ polymorphic_path(resource) }/ ?
+                request.referer :
+                [ current_container, model_class.new ] )
+            redirect_to redirection
           }
           format.xml  { head :ok }
           format.atom { head :ok }
