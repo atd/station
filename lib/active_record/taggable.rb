@@ -13,8 +13,13 @@ module ActiveRecord #:nodoc:
       #
       # Example:
       #   acts_as_taggable
-      def acts_as_taggable
+      def acts_as_taggable(options = {})
         ActiveRecord::Taggable.register_class(self)
+
+        options[:container] = true if options[:container].nil?
+
+        cattr_reader :taggable_options
+        class_variable_set "@@taggable_options", options
 
         has_many :taggings, :as => :taggable,
                             :dependent => :destroy
@@ -38,7 +43,11 @@ module ActiveRecord #:nodoc:
       def _add_tags incoming
         tag_cast_to_string(incoming).each do |tag_name|
           begin
-            tag = Tag.find_or_create_by_name(tag_name)
+            tag = ( self.class.taggable_options[:container] ? 
+                   Tag.find_or_create_by_name_and_container_id_and_container_type(tag_name,
+                                                                                  self.container.id,
+                                                                                  self.container.class.base_class.to_s) :
+                   Tag.find_or_create_by_name(tag_name) )
             raise "tag could not be saved: #{tag_name}" if tag.new_record?
             self.tags  << tag
           rescue ActiveRecord::StatementInvalid => e
@@ -90,7 +99,6 @@ module ActiveRecord #:nodoc:
           when Array
             obj.map! do |item|
               case item
-                when Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
                 when Tag then item.name
                 when String then item
                 else

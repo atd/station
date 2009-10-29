@@ -33,13 +33,12 @@ ActionController::Routing::Routes.draw do |map|
     map.resources :open_id_ownings
   end
 
-  map.resources :categories
   map.resources :tags
 
   map.resource :site do |site|
     if Site.table_exists?
       site.with_options :requirements => { :site_id => Site.current.id } do |local_site|
-        local_site.resources :categories, :performances
+        local_site.resources :performances
         local_site.resources *ActiveRecord::Resource.symbols
       end
     end
@@ -55,7 +54,6 @@ ActionController::Routing::Routes.draw do |map|
     next if container_sym == :sites
     map.resources(container_sym) do |container|
       container.resources(*container_sym.to_class.contents)
-      container.resources :categories
       container.resources :sources, :member => { :import => :get }
     end
   end

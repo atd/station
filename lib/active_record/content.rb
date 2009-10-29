@@ -57,7 +57,6 @@ module ActiveRecord #:nodoc:
         }
 
         acts_as_sortable
-        acts_as_categorizable
 
         authorizing do |agent, permission|
           return nil unless container.present?

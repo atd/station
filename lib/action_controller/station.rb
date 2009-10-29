@@ -20,8 +20,6 @@ module ActionController
         base.helper_method :site
         base.helper_method :current_container
         base.helper_method :container
-        base.helper_method :categories_domain
-        base.helper_method :current_categories_domain
 
         class << base
           def model_class
@@ -123,12 +121,6 @@ module ActionController
 
     deprecated_method :container!, :current_container!
     deprecated_method :needs_container, :current_container!
-
-    def current_categories_domain
-      record_from_path(:acts_as => :categories_domain) || site
-    end
-
-    deprecated_method :categories_domain, :current_categories_domain
 
     protected
 

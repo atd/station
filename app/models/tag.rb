@@ -1,9 +1,11 @@
 class Tag < ActiveRecord::Base
   DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
 
+  belongs_to :container, :polymorphic => true
+
   # If database speed becomes an issue, you could remove these validations and rescue the ActiveRecord database constraint errors instead.
   validates_presence_of :name
-  validates_uniqueness_of :name, :case_sensitive => false
+  validates_uniqueness_of :name, :scope => [ :container_id, :container_type ]
   
   # Change this validation if you need more complex tag names.
   validates_format_of :name, :with => /^[\w\_\ \-]+$/, :message => "can not contain special characters"

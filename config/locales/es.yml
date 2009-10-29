@@ -122,22 +122,6 @@ es:
       content_type:
         invalid: "es inválido: {{content_type}}"
 
-  category:
-    one: "Categoría"
-    other: "Categorías"
-    other_in_domain: "Categorías - {{domain}}"
-    new: "Nueva Categoría"
-    created: "Categoría creada"
-    editing: "Editando Categoría"
-    updated: "Categoría actualizada"
-    name: "Nombre de la Categoría"
-    description: "Descripción"
-    confirm_delete: "¿Borrar la Categoría?"
-    domain:
-      one: "Dominio"
-      other: "Dominios"
-      without_categories: "{{domain}} no tiene categorías"
-  
   tag:
     one: "Etiqueta"
     other: "Etiquetas"

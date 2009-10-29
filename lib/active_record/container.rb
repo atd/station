@@ -26,8 +26,6 @@ module ActiveRecord #:nodoc:
                              :dependent => :destroy
         end
 
-        acts_as_categories_domain
-
         extend  ClassMethods
         include InstanceMethods
       end
