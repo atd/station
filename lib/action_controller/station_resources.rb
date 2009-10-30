@@ -242,7 +242,7 @@ module ActionController #:nodoc:
                         model_class.in_container(current_container).find_with_param(params[:id]) ||
                         raise(ActiveRecord::RecordNotFound, "Resource not found"))
                     else
-                      r = model_class.new
+                      r = model_class.new(params[model_class.to_s.underscore.to_sym])
                       r.container = current_container if r.respond_to?(:container=) && current_container.present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
