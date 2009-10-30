@@ -35,6 +35,12 @@ class Performance < ActiveRecord::Base
   validate_on_update :avoid_downgrading_only_one_with_highest_role
   before_destroy :avoid_destroying_only_one_with_highest_role
 
+  authorizing do |agent, permission|
+    if stage.present? && ( permission.is_a?(Symbol) || permission.is_a?(String) )
+      stage.authorize?([ permission, :performance ], :to => agent )
+    end
+  end
+
   private
 
   # Avoids the only Admin to change his role to a lower one
