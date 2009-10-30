@@ -13,12 +13,18 @@ class PerformancesController < ApplicationController
 
     if @performance.save
       respond_to do |format|
+        format.html {
+          redirect_to(request.referer || [ @stage, Performance.new ])
+        }
         format.js {
           index_data
         }
       end
     else
       respond_to do |format|
+        format.html {
+          redirect_to(request.referer || { :action => 'new' })
+        }
         format.js
       end
     end
