@@ -130,9 +130,9 @@ module ActionController #:nodoc:
 
       respond_to do |format|
         if @resource.save
-          flash[:success] = t(:created, :scope => @resource.class.to_s.underscore)
           format.html { 
-            redirect_to @resource
+            flash[:success] = t(:created, :scope => @resource.class.to_s.underscore)
+            after_create_with_success
           }
           format.xml  { 
             render :xml      => @resource, 
@@ -146,7 +146,7 @@ module ActionController #:nodoc:
           }
         else
           format.html { 
-            render :action => "new"
+            after_create_with_errors
           }
           format.xml  { render :xml => @resource.errors, :status => :unprocessable_entity }
           format.atom { render :xml => @resource.errors.to_xml, :status => :bad_request }
@@ -241,6 +241,17 @@ module ActionController #:nodoc:
                       r.container = current_container if r.respond_to?(:container=) && current_container.present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
+    end
+
+    private
+
+    # Redirect here after create
+    def after_create_with_success
+      redirect_to @resource
+    end
+
+    def after_create_with_errors
+      render :action => "new"
     end
   end
 end
