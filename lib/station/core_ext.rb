@@ -28,9 +28,8 @@ unless ActionController::PolymorphicRoutes.respond_to?(:polymorphic_url_with_con
     alias_method_chain :polymorphic_url, :container
 
     def unshift_container(array)
-      if array.first.respond_to?(:container)
+      if array.size == 1 && array.first.respond_to?(:container)
         array.unshift(array.first.container)
-        unshift_container(array)
       else
         array
       end
