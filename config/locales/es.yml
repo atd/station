@@ -23,7 +23,7 @@ es:
   join_to_site: "Unirse a {{site}}"
   im_new: "Soy nuevo"
   help: "Ayuda"
-  invalid_credentials: "Credenciales inválidas"
+  invalid_credentials: "Credenciales no válidas"
 
   account_created: "Su cuenta se ha creado"
 
@@ -42,7 +42,7 @@ es:
   password_reset_link_sent_to_email_address: "Se ha enviado a la dirección de correo un enlace para cambiar la contraseña"
   password_has_been_reset: "La contraseña se ha cambiado"
   password_has_been_reset_with_agent: "{{agent}}, su contraseña se ha cambiado"
-  invalid_password_reset_code: "Código de cambio inválido. Por favor, compruebe en enlace e inténtelo otra vez. (Consejo: ¿Quizá su cliente de correo rompió el enlace?)"
+  invalid_password_reset_code: "El código de cambio no es válido. Por favor, compruebe en enlace e inténtelo otra vez. (Consejo: ¿Quizá su cliente de correo rompió el enlace?)"
 
   user:
     activation_email_sent: "Se ha enviado un correo de activación al usuario"
@@ -120,7 +120,7 @@ es:
     errors:
       multiple_feeds: "La dirección tiene varias fuentes"
       content_type:
-        invalid: "es inválido: {{content_type}}"
+        invalid: "no es válido: {{content_type}}"
 
   category:
     one: "Categoría"
