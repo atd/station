@@ -144,12 +144,14 @@ module ActionController #:nodoc:
                    :status => :created,
                    :location => polymorphic_url(@resource, :format => :atom)
           }
+          format.js
         else
           format.html { 
             after_create_with_errors
           }
           format.xml  { render :xml => @resource.errors, :status => :unprocessable_entity }
           format.atom { render :xml => @resource.errors.to_xml, :status => :bad_request }
+          format.js
         end
       end
     end
@@ -199,7 +201,8 @@ module ActionController #:nodoc:
             render :xml => @resource.errors.to_xml, :status => :not_acceptable
           end
         } if resource.format
-
+        
+        format.js
       end
     end
 
@@ -214,6 +217,7 @@ module ActionController #:nodoc:
           }
           format.xml  { head :ok }
           format.atom { head :ok }
+          format.js
         else
           format.html {
             flash[:error] = t(:not_deleted, :scope => resource.class.to_s.underscore)
@@ -222,6 +226,7 @@ module ActionController #:nodoc:
           }
           format.xml  { render :xml => @resource.errors.to_xml }
           format.atom { render :xml => @resource.errors.to_xml }
+          format.js
         end
       end
     end
