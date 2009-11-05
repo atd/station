@@ -180,9 +180,9 @@ module ActionController #:nodoc:
         format.html {
           if resource.save
             flash[:success] = t(:updated, :scope => @resource.class.to_s.underscore)
-            redirect_to @resource
+            after_update_with_success
           else
-            render :action => 'edit'
+            after_update_with_errors
           end
         }
 
@@ -250,13 +250,24 @@ module ActionController #:nodoc:
 
     private
 
-    # Redirect here after create
+    # Redirect here after create if everythig went well
     def after_create_with_success
       redirect_to @resource
     end
 
+    # Redirect here after create if there were errors
     def after_create_with_errors
       render :action => "new"
+    end
+
+    # Redirect here after update if everythig went well
+    def after_update_with_success
+      redirect_to @resource
+    end
+
+    # Redirect here after update if there were errors
+    def after_update_with_errors
+      render :action => "edit"
     end
   end
 end
