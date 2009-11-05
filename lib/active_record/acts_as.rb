@@ -49,7 +49,14 @@ module ActiveRecord #:nodoc:
         end
 
         def classes
-          @symbols.map(&:to_class)
+          @symbols.map { |s|
+            begin
+              s.to_class
+            rescue
+              puts "Station Warning: Couldn't load class #{ s.to_s.classify }"
+              nil
+            end
+          }.compact
         end
       end
     end
