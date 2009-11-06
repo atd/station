@@ -121,6 +121,8 @@ es:
       multiple_feeds: "La dirección tiene varias fuentes"
       content_type:
         invalid: "es inválido: {{content_type}}"
+      dereference: "No se pudo conectar a la fuente {{uri}}"
+      parse: "No se pudo analizar la fuente {{uri}}"
 
   tag:
     one: "Etiqueta"

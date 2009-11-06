@@ -24,12 +24,18 @@ class Source < ActiveRecord::Base
   def feed
     @feed ||= case self.content_type
               when 'application/atom+xml'
-                Atom::Feed.new(self.uri).update!
+                atom_feed
               when 'application/rss+xml'
-                RSS::Parser.parse(self.uri.dereference.body)
+                rss_feed
               else
                 nil
               end
+  end
+
+  def entries
+    feed ?
+      feed.entries :
+      Array.new
   end
 
   def import
@@ -77,10 +83,15 @@ class Source < ActiveRecord::Base
   def validate_on_create
     return if content_type.present? || uri.blank?
 
-    res = self.uri.dereference
+    begin
+      res = self.uri.dereference
+    rescue Timeout::Error
+      errors.add_to_base I18n.t('source.errors.dereference', :uri => uri.to_s)
+      return
+    end
 
     unless res
-      errors.add_to_base I18n.t('source.errors.can_not_dereference')
+      errors.add_to_base I18n.t('source.errors.dereference', :uri => uri.to_s)
       return
     end
 
@@ -99,17 +110,16 @@ class Source < ActiveRecord::Base
       end
     when 'application/xml', 'text/xml'
       # Well try to guess what type of feed we have
-      if RSS::Parser.parse(res.body)
-        # RSS Feed
-        self.content_type = 'application/rss+xml'
-      else
-        begin
-          Atom::Feed.parse(res.body)
-        rescue
-          errors.add :content_type, I18n.t('source.errors.content_type.invalid', :content_type => res.content_type)
-        else
-          self.content_type = 'application/atom+xml'
-        end
+      unless try_parse_with_rss(res.body) || try_parse_with_atom(res.body)
+        errors.add :content_type, I18n.t('source.errors.content_type.invalid', :content_type => res.content_type)
+      end
+    when 'application/rss+xml'
+      unless try_parse_with_rss(res.body)
+        errors.add_to_base I18n.t('source.errors.parse')
+      end
+    when 'application/atom+xml'
+      unless try_parse_with_atom(res.body)
+        errors.add_to_base I18n.t('source.errors.parse')
       end
     else
       errors.add :content_type, I18n.t('source.errors.content_type.invalid', :content_type => res.content_type)
@@ -131,4 +141,38 @@ class Source < ActiveRecord::Base
       target.constantize
   end
 
+  # Try to parse the feed with RSS parser
+  def try_parse_with_rss(content)
+    if result = RSS::Parser.parse(content)
+      self.content_type = 'application/rss+xml'
+      result
+    end
+  end
+
+  # Try to parse the feed with Atom parser
+  def try_parse_with_atom(content)
+    begin
+      returning Atom::Feed.parse(content) do
+        self.content_type = 'application/atom+xml'
+      end
+    rescue
+      nil
+    end
+  end
+
+  def atom_feed
+    begin
+      Atom::Feed.new(self.uri).update!
+    rescue
+      nil
+    end
+  end
+
+  def rss_feed
+    begin
+      RSS::Parser.parse(self.uri.dereference.body)
+    rescue
+      nil
+    end
+  end
 end

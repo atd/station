@@ -123,6 +123,8 @@ en:
       multiple_feeds: "Source has multiple feeds"
       content_type:
         invalid: "is invalid: {{content_type}}"
+      dereference: "Could not connect to source {{uri}}"
+      parse: "Could not parse feed {{uri}}"
 
   tag:
     one: "Tag"

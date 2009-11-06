@@ -40,6 +40,7 @@ class Uri < ActiveRecord::Base
     http = Net::HTTP.new(to_uri.host, to_uri.port)
     http.use_ssl = to_uri.scheme == "https"
     path = to_uri.path.present? && to_uri.path || '/'
+    path << "?#{ to_uri.query }" if to_uri.query.present?
     headers = {}
     headers['Accept'] = options[:accept] if options[:accept].present?
     response = http.get(path, headers)
