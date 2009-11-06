@@ -149,6 +149,7 @@ class StationMigration < ActiveRecord::Migration
     create_table :tags do |t|
       t.string :name
       t.references :container, :polymorphic => true
+      t.integer :taggings_count, :default => 0
     end
     add_index :tags, [ :name, :container_id, :container_type ]
 
