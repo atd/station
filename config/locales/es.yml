@@ -89,6 +89,8 @@ es:
       name: "Cualquiera"
     authenticated:
       name: "Registrado"
+    cron_agent:
+      name: "Cron"
   container:
     one: "Contenedor"
     other: "Contenedores"

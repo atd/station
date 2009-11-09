@@ -15,12 +15,13 @@ ActiveRecord::Base.send :include, ActiveRecord::Authorization
 require_dependency 'active_record/acts_as'
 ActiveRecord::Base.extend ActiveRecord::ActsAs
 
-# Singular Agents
+# Initialize all Singular Agents
 if SingularAgent.table_exists?
   SingularAgent
   Anonymous.current
   Anyone.current
   Authenticated.current
+  CronAgent.current
 end
 
 # Mime Types

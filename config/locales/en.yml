@@ -91,6 +91,8 @@ en:
       name: "Anyone"
     authenticated:
       name: "Authenticated"
+    cron_agent:
+      name: "Cron"
   container:
     one: "Container"
     other: "Containers"
