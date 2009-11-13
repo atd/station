@@ -38,12 +38,12 @@ end
 
 # ActionView
 # Helpers
-%w( categories logos sortable sources station tags ).each do |item|
+%w( logos sortable sources station tags ).each do |item|
   require_dependency "action_view/helpers/#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::#{ item.camelcase }Helper".constantize
 end
 # FormHelpers
-%w( categories logo tags ).each do |item|
+%w( logo tags ).each do |item|
   require_dependency "action_view/helpers/form_#{ item }_helper"
   ActionView::Base.send :include, "ActionView::Helpers::Form#{ item.camelcase }Helper".constantize
 end
@@ -75,7 +75,7 @@ file_patterns.reject{ |f| f =~ /#{file_exclusions.join("|")}/ }
 
 preloaded_files = []
 # # Lazy files need other files to be loaded first
-lazy_files = [ "category.rb" ]
+lazy_files = [ ]
 
 # # Find all source files that need preloading
 file_patterns.each do |file_pattern|

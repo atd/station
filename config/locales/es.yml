@@ -123,23 +123,9 @@ es:
       multiple_feeds: "La dirección tiene varias fuentes"
       content_type:
         invalid: "no es válido: {{content_type}}"
+      dereference: "No se pudo conectar a la fuente {{uri}}"
+      parse: "No se pudo analizar la fuente {{uri}}"
 
-  category:
-    one: "Categoría"
-    other: "Categorías"
-    other_in_domain: "Categorías - {{domain}}"
-    new: "Nueva Categoría"
-    created: "Categoría creada"
-    editing: "Editando Categoría"
-    updated: "Categoría actualizada"
-    name: "Nombre de la Categoría"
-    description: "Descripción"
-    confirm_delete: "¿Borrar la Categoría?"
-    domain:
-      one: "Dominio"
-      other: "Dominios"
-      without_categories: "{{domain}} no tiene categorías"
-  
   tag:
     one: "Etiqueta"
     other: "Etiquetas"

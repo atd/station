@@ -29,22 +29,6 @@ class StationMigration < ActiveRecord::Migration
       t.datetime :updated_at
     end
 
-    create_table :categories, :force => true do |t|
-      t.string   :name
-      t.text     :description
-      t.integer  :domain_id
-      t.string   :domain_type
-      t.integer  :parent_id
-      t.datetime :created_at
-      t.datetime :updated_at
-    end
-
-    create_table :categorizations, :force => true do |t|
-      t.integer :category_id
-      t.integer :categorizable_id
-      t.string  :categorizable_type
-    end
-
     create_table :db_files, :force => true do |t|
       t.binary :data
     end
@@ -164,8 +148,10 @@ class StationMigration < ActiveRecord::Migration
 
     create_table :tags do |t|
       t.string :name
+      t.references :container, :polymorphic => true
+      t.integer :taggings_count, :default => 0
     end
-    add_index :tags, :name
+    add_index :tags, [ :name, :container_id, :container_type ]
 
     create_table :uris do |t|
       t.string :uri
@@ -176,8 +162,6 @@ class StationMigration < ActiveRecord::Migration
   def self.down
     drop_table :admissions
     drop_table :attachments
-    drop_table :categories
-    drop_table :categorizations
     drop_table :db_files
     drop_table :logos
     drop_table :open_id_associations

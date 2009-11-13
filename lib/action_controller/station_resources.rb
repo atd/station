@@ -74,6 +74,7 @@ module ActionController #:nodoc:
         } if resource.class.resource_options[:has_media]
 
         format.html # show.html.erb
+        format.js
         format.xml  { render :xml => @resource }
         format.atom
   
@@ -130,10 +131,11 @@ module ActionController #:nodoc:
 
       respond_to do |format|
         if @resource.save
-          flash[:success] = t(:created, :scope => @resource.class.to_s.underscore)
           format.html { 
-            redirect_to @resource
+            flash[:success] = t(:created, :scope => @resource.class.to_s.underscore)
+            after_create_with_success
           }
+          format.js
           format.xml  { 
             render :xml      => @resource, 
                    :status   => :created, 
@@ -146,8 +148,9 @@ module ActionController #:nodoc:
           }
         else
           format.html { 
-            render :action => "new"
+            after_create_with_errors
           }
+          format.js
           format.xml  { render :xml => @resource.errors, :status => :unprocessable_entity }
           format.atom { render :xml => @resource.errors.to_xml, :status => :bad_request }
         end
@@ -178,12 +181,12 @@ module ActionController #:nodoc:
         format.html {
           if resource.save
             flash[:success] = t(:updated, :scope => @resource.class.to_s.underscore)
-            redirect_to @resource
+            after_update_with_success
           else
-            render :action => 'edit'
+            after_update_with_errors
           end
         }
-
+        format.js
         format.atom {
           if resource.save
             head :ok
@@ -199,7 +202,6 @@ module ActionController #:nodoc:
             render :xml => @resource.errors.to_xml, :status => :not_acceptable
           end
         } if resource.format
-
       end
     end
 
@@ -217,6 +219,7 @@ module ActionController #:nodoc:
                 [ current_container, model_class.new ] )
             redirect_to redirection
           }
+          format.js
           format.xml  { head :ok }
           format.atom { head :ok }
         else
@@ -225,6 +228,7 @@ module ActionController #:nodoc:
             flash[:error] << resource.errors.to_xml
             redirect_to(request.referer || [ current_container, model_class.new ])
           }
+          format.js
           format.xml  { render :xml => @resource.errors.to_xml }
           format.atom { render :xml => @resource.errors.to_xml }
         end
@@ -246,6 +250,28 @@ module ActionController #:nodoc:
                       r.container = current_container if r.respond_to?(:container=) && current_container.present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
+    end
+
+    private
+
+    # Redirect here after create if everythig went well
+    def after_create_with_success
+      redirect_to @resource
+    end
+
+    # Redirect here after create if there were errors
+    def after_create_with_errors
+      render :action => "new"
+    end
+
+    # Redirect here after update if everythig went well
+    def after_update_with_success
+      redirect_to @resource
+    end
+
+    # Redirect here after update if there were errors
+    def after_update_with_errors
+      render :action => "edit"
     end
   end
 end

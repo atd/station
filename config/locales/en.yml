@@ -125,22 +125,9 @@ en:
       multiple_feeds: "Source has multiple feeds"
       content_type:
         invalid: "is invalid: {{content_type}}"
+      dereference: "Could not connect to source {{uri}}"
+      parse: "Could not parse feed {{uri}}"
 
-  category:
-    one: "Category"
-    other: "Categories"
-    other_in_domain: "Categories - {{domain}}"
-    new: "New Category"
-    created: "Category created"
-    editing: "Editing Category"
-    updated: "Category updated"
-    name: "Category name"
-    description: "Description"
-    confirm_delete: "Delete Category?"
-    domain:
-      one: "Domain"
-      other: "Domains"
-      without_categories: "{{domain}} hasn't any categories"
   tag:
     one: "Tag"
     other: "Tags"

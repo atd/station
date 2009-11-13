@@ -10,9 +10,7 @@ module ActiveRecord #:nodoc:
                  :stage,
                  :taggable,
                  :logoable,
-                 :sortable,
-                 :categories_domain,
-                 :categorizable ]
+                 :sortable ]
 
     class << self
       def extended(base)
