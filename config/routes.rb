@@ -55,6 +55,7 @@ ActionController::Routing::Routes.draw do |map|
     map.resources(container_sym) do |container|
       container.resources(*container_sym.to_class.contents)
       container.resources :sources, :member => { :import => :get }
+      container.resources :tags
     end
   end
   map.resources :sources, :member => { :import => :get }

@@ -111,7 +111,7 @@ module ActiveRecord #:nodoc:
             end
           else
             raise "Invalid object of class #{obj.class} as tagging method parameter"
-        end.flatten.compact.map(&:downcase).uniq
+        end.flatten.compact.uniq
       end 
     end
   end
