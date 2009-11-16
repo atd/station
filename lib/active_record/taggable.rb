@@ -60,9 +60,7 @@ module ActiveRecord #:nodoc:
       def _remove_tags outgoing
         outgoing = tag_cast_to_string(outgoing)
        
-        tags.delete(*(tags.select do |tag|
-          outgoing.include? tag.name    
-        end))
+        taggings.select{ |t| outgoing.include?(t.tag.name) }.map(&:destroy)
       end
 
       # Returns the tags on <tt>self</tt> as a string.
