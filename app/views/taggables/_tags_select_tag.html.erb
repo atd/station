@@ -2,8 +2,8 @@
 <%= label taggable_name, :_tags, t('tag.other') %><br />
 <select id="<%= taggable_name %>__tags" name="<%= taggable_name %>[_tags]" multiple="multiple">
   <% selected_tags = taggable._tags || taggable.tags.map(&:name) -%>
-  <% taggable.container.tags.popular.map(&:name).each do |t| -%>
-  <option value="<%= t %>"<%= ' selected="selected" class="selected"' if selected_tags.include?(t) %>><%= t %></option>
+  <% taggable.container.tags.sort{ |x, y| x.name <=> y.name }.each do |t| -%>
+  <option value="<%= t.name %>"<%= ' selected="selected" class="selected"' if selected_tags.include?(t.name) %> weight="<%= t.em %>"><%= t.name %></option>
   <% end -%>
 </select>
 </p>
