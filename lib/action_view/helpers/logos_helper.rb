@@ -86,7 +86,13 @@ module ActionView #:nodoc:
           text = link_to(text, options[:url])
         end
 
-        logo(resource, options) + options[:spacer] + text
+        returning "" do |html|
+          html << "<span id=\"#{ dom_id(resource) }-logotype\" class=\"logotype\">"
+          html << logo(resource, options)
+          html << options[:spacer]
+          html << text
+          html << '</span>'
+        end
       end
 
       def try_url(resource) #:nodoc:
