@@ -98,6 +98,7 @@ module ActionController #:nodoc:
 
       respond_to do |format|
         format.html # new.html.erb
+        format.js
         format.xml  { render :xml => @resource }
       end
     end
@@ -186,7 +187,9 @@ module ActionController #:nodoc:
             after_update_with_errors
           end
         }
-        format.js
+        format.js {
+          resource.save
+        }
         format.atom {
           if resource.save
             head :ok
