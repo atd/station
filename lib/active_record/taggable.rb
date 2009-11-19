@@ -88,7 +88,12 @@ module ActiveRecord #:nodoc:
 
       def _save_tags!
         return unless @_tags
+
+        # Remove empty tag
+        @_tags = @_tags - [""]
+
         tag_with @_tags
+
         @_tags = nil
       end
       
