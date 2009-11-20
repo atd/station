@@ -131,6 +131,7 @@ en:
   tag:
     one: "Tag"
     other: "Tags"
+    other_in: "Tags in {{container}}"
     show_title: "Tagged with {{tag}}"
 
   performance:

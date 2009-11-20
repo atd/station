@@ -14,13 +14,28 @@ module ActionView #:nodoc:
         end
       end
 
-      # Draw the tag cloud of container
+      # Draw the tag cloud of container.
+      #
+      # Only <a> links and ordered alphabetically
+      #
+      # Options:
+      # count:: number of tags
       def tag_cloud(container, options = {})
-        options[:count] ||= 20
-
-        tags = container.tags.popular.all(:limit => options[:count]).sort{ |x, y| x.name <=> y.name }
+        tags = container.tags.popular.all(options).sort{ |x, y| x.name <=> y.name }
 
         tags.any? ? render(:partial => 'tags/cloud', :object => tags) : ""
+      end
+
+      # Tag list for container.
+      #
+      # <li> ordered by popularity
+      #
+      # Options:
+      # count:: number of tags
+      def tag_list(container, options = {})
+        tags = container.tags.popular.all(options)
+
+        render(:partial => 'tags/list', :object => tags)
       end
     end
   end

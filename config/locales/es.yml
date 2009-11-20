@@ -129,6 +129,7 @@ es:
   tag:
     one: "Etiqueta"
     other: "Etiquetas"
+    other_in: "Etiquetas de {{container}}"
     show_title: "Etiqueta '{{tag}}'"
 
   performance:
