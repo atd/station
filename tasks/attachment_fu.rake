@@ -1,5 +1,27 @@
 namespace :station do
   namespace :attachment_fu do
+    desc "Copy database files to filesystem"
+    task :db2file => :environment do
+      raise Exception.new("Error: You must provide a MODEL") unless ENV["MODEL"]
+
+      klass = ENV["MODEL"].constantize
+
+      klass.record_timestamps = false
+
+      klass.class_eval do
+        belongs_to :db_file
+
+        def db2file
+          return if db_file.blank?
+
+          set_temp_data db_file.data
+          save_to_storage
+        end
+      end
+
+      klass.all.map(&:db2file)
+    end
+
     desc "Regenerate thumbnails"
     task :regenerate_thumbs => :environment do
       raise Exception.new("Error: You must provide a MODEL") unless ENV["MODEL"]
