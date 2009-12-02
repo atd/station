@@ -16,9 +16,17 @@ module ActionController #:nodoc:
       @logo = 
         @logo.thumbnails.find_by_thumbnail(params[:thumbnail]) if params[:thumbnail]
 
-      send_data @logo.current_data, :filename => @logo.filename,
-                                    :type => @logo.content_type,
-                                    :disposition => 'inline'
+      case @logo.attachment_options[:storage]
+      when :file_system
+        send_file @logo.full_filename, :type => @logo.content_type,
+                                       :disposition => 'inline'
+      when :db_file
+        send_data @logo.current_data, :filename => @logo.filename,
+                                      :type => @logo.content_type,
+                                      :disposition => 'inline'
+      else
+        raise "Storage type not supported. Patches are wellcome!"
+      end
 
     end
 
