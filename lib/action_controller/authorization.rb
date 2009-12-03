@@ -68,7 +68,7 @@ module ActionController #:nodoc:
     #
     # permission defaults to controller's action_name
     def authorize?(permission = nil)
-      permission ||= action_name
+      permission ||= action_name.to_sym
 
       default_authorization_instance.authorize?(permission, :to => current_agent)
     end
