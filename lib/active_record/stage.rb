@@ -1,5 +1,5 @@
 module ActiveRecord #:nodoc:
-  # Each Stage defines an Authorization framework in your application.
+  # Each Stage defines a RBAC framework in your application.
   #
   # Stages have many Performances. A Performance defines the Role an Agent plays in the Stage
   #
@@ -13,8 +13,13 @@ module ActiveRecord #:nodoc:
 
     module ActsAsMethods
       # Provide a model with Stage functionality
+      #
+      # Options:
+      # admissions:: Support for inviting and requesting having a Role on this Stage. Defaults to true
       def acts_as_stage(options = {})
         ActiveRecord::Stage.register_class(self)
+
+        options[:admissions] = true if options[:admissions].nil?
 
         cattr_reader :stage_options
         class_variable_set "@@stage_options", options
@@ -25,15 +30,17 @@ module ActiveRecord #:nodoc:
                  :dependent => :delete_all,
                  :as => :stage
 
-        has_many :admissions,
-                 :dependent => :destroy,
-                 :as => :group
-        has_many :invitations,
-                 :dependent => :destroy,
-                 :as => :group
-        has_many :join_requests,
-                 :dependent => :destroy,
-                 :as => :group
+        if options[:admissions]
+          has_many :admissions,
+                   :dependent => :destroy,
+                   :as => :group
+          has_many :invitations,
+                   :dependent => :destroy,
+                   :as => :group
+          has_many :join_requests,
+                   :dependent => :destroy,
+                   :as => :group
+        end
 
         extend  ClassMethods
         include InstanceMethods
