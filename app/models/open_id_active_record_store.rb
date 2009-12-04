@@ -1,4 +1,5 @@
 require 'openid/store/interface'
+require 'openid/store/nonce'
 
 class OpenIdActiveRecordStore < ::OpenID::Store::Interface
   class << self
