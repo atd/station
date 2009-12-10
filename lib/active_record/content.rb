@@ -8,7 +8,18 @@ module ActiveRecord #:nodoc:
   #   Content.in_container(some_container) #=> Array of contents in the container
   #
   # == Authorization
-  # A Content will incorporate an authorization_method asking to its Container single permissions. 
+  # The Content will incorporate an authorization_block.
+  # 
+  # This authorization block ask single permissions to its Container.
+  #
+  #   class Task
+  #     belongs_to :project
+  #     acts_as_content :reflection => :project
+  #   end
+  #
+  #   task.authorize?(:update) #=> will ask task.project.authorize?([ :update, :content ]) ||
+  #                            #            task.project.authorize?([ :update, :task ])
+  #   
   #
   module Content
     class << self
@@ -64,7 +75,7 @@ module ActiveRecord #:nodoc:
           return nil unless permission.is_a?(String) || permission.is_a?(Symbol)
 
           container.authorize?([permission, :content], :to => agent) ||
-            container.authorize?([permission, self.class.to_s.tableize], :to => agent) ||
+            container.authorize?([permission, self.class.to_s.underscore.to_sym], :to => agent) ||
             nil
         end
 
