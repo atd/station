@@ -37,6 +37,6 @@ class Tag < ActiveRecord::Base
 
   # Em attribute for building the tag_cloud
   def em
-    1 + ( taggings.count - 1 ) * 0.05
+    1 + ( taggings_count - 1 ) * 0.05
   end
 end
