@@ -26,12 +26,11 @@ module ActionView #:nodoc:
         tags.any? ? render(:partial => 'tags/cloud', :object => tags) : ""
       end
 
-      # Tag list for container.
+      # Tag list for container <ul> ordered by popularity
       #
-      # <li> ordered by popularity
+      # Options are passed like any ActiveRecord query
       #
-      # Options:
-      # count:: number of tags
+      # Overwrite partial by placing your own in 'app/views/tags/list'
       def tag_list(container, options = {})
         tags = container.tags.popular.all(options)
 
