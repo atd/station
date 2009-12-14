@@ -217,7 +217,7 @@ module ActionController #:nodoc:
             flash[:success] = t(:deleted, :scope => @resource.class.to_s.underscore)
             redirection = (
               request.referer.present? &&
-              ! request.referer =~ /#{ polymorphic_path(resource) }/ ?
+              !(request.referer =~ /#{ polymorphic_path(resource) }/) ?
                 request.referer :
                 [ current_container, model_class.new ] )
             redirect_to redirection
