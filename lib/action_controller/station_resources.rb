@@ -68,9 +68,10 @@ module ActionController #:nodoc:
 
       respond_to do |format|
         format.all {
-          send_data resource.current_data, :filename => resource.filename,
-                                           :type => resource.content_type,
-                                           :disposition => resource.class.resource_options[:disposition].to_s
+          send_data resource.__send__(:current_data),
+                    :filename => resource.filename,
+                    :type => resource.content_type,
+                    :disposition => resource.class.resource_options[:disposition].to_s
         } if resource.class.resource_options[:has_media]
 
         format.html # show.html.erb
@@ -80,9 +81,10 @@ module ActionController #:nodoc:
   
         # Add Resource format Mime Type for resource with Attachments
         format.send(resource.mime_type.to_sym.to_s) {
-          send_data resource.current_data, :filename => resource.filename,
-                                           :type => resource.content_type,
-                                           :disposition => resource.class.resource_options[:disposition].to_s
+          send_data resource.__send__(:current_data),
+                    :filename => resource.filename,
+                    :type => resource.content_type,
+                    :disposition => resource.class.resource_options[:disposition].to_s
         } if resource.mime_type
 
       end
