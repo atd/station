@@ -125,7 +125,7 @@ module ActiveRecord #:nodoc:
 
       # All Stages in which this Agent has a Performance
       #
-      # Can pass options to the list:
+      # Options:
       # type:: the class of the Stage requested (Doesn't work with STI!)
       #
       # Uses +compact+ to remove nil instances, which may appear because of default_scopes
