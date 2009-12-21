@@ -32,7 +32,10 @@ class OpenidServerController < ApplicationController
     end
 
     if openid_request.kind_of?(CheckIDRequest)
-      render :partial => "anti_phishing" and return unless authenticated?
+      unless authenticated?
+        render :partial => "anti_phishing"
+        return
+      end
 
       if openid_request.id_select
         @identity = current_agent.openid_uris.first
