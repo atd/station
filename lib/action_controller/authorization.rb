@@ -1,17 +1,17 @@
 module ActionController #:nodoc:
   # Authorization module provides your Controllers and Views with methods and filters
-  # to control the actions of Agents
+  # to control which actions Agents can perform
   #
   # This module uses Agent identification support from ActionController::Authentication
   #
   # == Authorization Filters
   # You can define authorization filters in the following way:
-  #   authorization_filter permission, object, filter_options
+  #   authorization_filter permission, auth_object, filter_options
   #
-  # permission:: Argument defining the Permission, ex. :read, [ :update, :task ]
-  # object:: a Symbol representing a controller's instance variable name or method. This variable or method gives the object which will be called <tt>authorize?(permission, :to => current_agent)</tt>
-  # options:: Available options are:
-  #   if:: A Proc proc{ |controller| ... } or Symbol to be executed as condition of the filter
+  # permission:: Argument defining the Permission, examples: :read, :destroy, [ :update, :task ]
+  # auth_object:: a Symbol representing a controller's instance variable name or method. This variable or method gives the authorization object, an instance that will be queried for checking authorization. This is actually achived calling <tt>auth_object.authorize?(permission, :to => current_agent)</tt>. See ActiveRecord::Authorization to define authorization security policies.
+  # fiter_options:: Available options are:
+  #  if:: A Proc proc{ |controller| ... } or Symbol to be executed as condition of the filter
   #   
   #  The rest of options are passed to before_filter. See Rails before_filter documentation
   #   

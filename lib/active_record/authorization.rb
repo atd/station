@@ -1,18 +1,55 @@
 module ActiveRecord #:nodoc:
-  # Authorization module provide ActiveRecord models with authorization features.
+  # Authorization module provides ActiveRecord models with an authorization framework.
   #
-  # Every ActiveRecord::Base descendant has an authorize? method.
+  # Every ActiveRecord::Base descendant can authorize actions to Agents.
   #
-  # authorization_methods are defined using authorizing
+  # == Authorization Chain
+  # Each ActiveRecord model have an Authorization Chain (AC) associated. The AC is a sequence of 
+  # Authorization Blocks (AB). Each AB should enclose only one security policy.
   #
-  # When asking for some permission, all the authorization_methods are
-  # evaluated in sequence. Evaluation continues while the methods are returning nil.
-  # When one of them returns true or false, this is the authorization result.
+  # When asking some model if some Agent is allowed to perform an action, the Authorization Chain is
+  # evaluated. Each AB is executed in order. When one AB gives a result (true or false), the AC is
+  # halted and action is allowed or denied.
   #
-  # By default, if there are no more methods, false is returned for the permission
+  # If the AB result is nil, the next AB is evaluated. When no AB remain, auhorization is denied.
+  #
+  # Authorization Blocks are defined using ActiveRecord::Authorization::ClassMethods#authorizing method.
+  #
+  # Consider the following example of Authorization Chain
+  #
+  #   class Example
+  #     authorizing do |user, permission|
+  #       if user.is_superadmin?
+  #         true
+  #       end
+  #     end
+  #
+  #     authorizing do |user, permission|
+  #       if user == self.author
+  #         true
+  #       end
+  #     end
+  #
+  #     authorizing do |user, permission|
+  #       if user.is_banned?
+  #         false
+  #       end
+  #     end
+  #   end
+  #
+  # The class Example has 3 Authorization Blocks, that will be evaluated in order until a response is obtained.
+  #
+  # Authorization is queried using ActiveRecord::Authorization::InstanceMethods#authorize? method. For the example above:
+  #   example.authorize?(:read, :to => superadmin) #=> true
+  #   example.authorize?(:update, :to => example.author) #=> true
+  #   example.authorize?(:destroy, :to => banned_user) #=> false
+  #
+  # === Station default Authorization Blocks
+  # Station provides 2 default Authorization Blocks for Contents and Stages. See ActiveRecord::Content and ActiveRecord::Stage
   #
   # == Authorization Cache
-  # Permissions are cached for each ActiveRecord instance during the request.
+  # Permissions are cached for each ActiveRecord instance during the request. This improves performance
+  # significantly.
   #
   # The cache consist on a Hash of Hashes, like:
   #   post.authorization_cache #=> { User.first => { :read => true, :update => false },
@@ -35,7 +72,10 @@ module ActiveRecord #:nodoc:
 
       protected
 
-      # Define a new authorization method.
+      # Define a new Authorization Block.
+      #
+      # A sequence of Authorization Blocks compose the Authorization Chain. Each model AC is evaluated
+      # when requesting authorization permissions to each instance. See ActiveRecord::Authorization
       #
       #   class User
       #     # Grants all permissions to self
@@ -50,11 +90,12 @@ module ActiveRecord #:nodoc:
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods
-      # There is authorization if there is any authorization_method that validates 
-      # the pair agent, permission
+      # Does this instance allows or denies permission?
+      #
+      # Is the response is cached, it is responded immediately. Else, the Authorization Chain 
+      # is evaluated. See ActiveRecord::Authorization for information on how it works
       #
       # Permission can be:
-      # ActiveRecord::Authorization::Agent instance
       # Symbol:: describes the action name. Objective will be nil
       #   resource.authorize?(:update, :to => user)
       # Array:: pair of :action, :objective
