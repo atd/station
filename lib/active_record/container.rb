@@ -41,6 +41,15 @@ module ActiveRecord #:nodoc:
 
     # Instance methods can be redefined in each Model for custom features
     module InstanceMethods #:nodoc:
+      # Array of contents of this container instance.
+      #
+      # Uses ActiveRecord::Content::Inquirer for building the query in 
+      # several tables.
+      def contents(options = {})
+        options[:containers] = Array(self)
+
+        ActiveRecord::Content::Inquirer.all(options)
+      end
     end
   end
 end

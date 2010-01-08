@@ -32,11 +32,11 @@ module ActiveRecord #:nodoc:
       # List of Contents from many models
       #
       # Options::
-      # container:: The Container for the Contents
+      # containers:: The Container for the Contents
       # page:: Number of page.
       # per_page:: Number of Contents per page
       def all(options = {})
-        Inquirer.all(options)
+        ActiveRecord::Content::Inquirer.all(options)
       end
     end
 
@@ -115,60 +115,6 @@ module ActiveRecord #:nodoc:
       # Obsolete?  
       def posted_in?(container)
         container == self.container
-      end
-    end
-
-    class Inquirer < ActiveRecord::Base #:nodoc:
-      @colums = Array.new
-      @columns_hash = { "type" => :fake }
-
-      class << self
-        def query(options = {})
-          options[:select]   ||= "id, title, created_at, updated_at"
-          containers = options.delete(:container)
-
-          containers.blank? ?
-          container_query(nil, options) :
-          Array(containers).map{ |c| container_query(c, options) }.join(" UNION ")
-        end
-
-        def container_query(container, options = {})
-          content_classes = ( container ?  
-            container.class.contents.map{ |c|
-              c.to_class }.flatten.uniq :
-            ActiveRecord::Content.symbols.map(&:to_class) )
-
-
-          content_classes.map { |content|
-            params = Hash.new.replace options
-            params[:select] += ", ( SELECT \"#{ content }\" ) AS type"
-            params[:select] += if content.acts_as?(:resource) &&
-                                 content.resource_options[:has_media]
-                                 ", content_type"
-                               else
-                                 ", ( SELECT NULL ) AS content_type"
-                               end
-            content.roots.in_container(container).construct_finder_sql(params)
-          }.join(" UNION ")
-        end
-
-        def all(options = {})
-          order     = options.delete(:order)    || "updated_at DESC"
-          per_page  = options.delete(:per_page) || 30
-          page      = options.delete(:page)     || 1
-          offset = ( page.to_i - 1 ) * per_page
-
-          WillPaginate::Collection.create(page, per_page) do |pager|
-            contents = find_by_sql "SELECT * FROM (#{ query(options.dup) }) AS contents ORDER BY contents.#{ order } LIMIT #{ per_page } OFFSET #{ offset }"
-            pager.replace(contents)
-
-            pager.total_entries = count(options)
-          end
-        end
-
-        def count(options = {})
-          count_by_sql "SELECT COUNT(*) FROM (#{ query(options) }) AS all_contents"
-        end
       end
     end
   end
