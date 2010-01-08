@@ -1,9 +1,9 @@
 class <%= class_name %> < ActiveRecord::Base
   acts_as_resource 
 
-  # Implement atom_entry_filter for AtomPub support
+  # Implement params_from_atom for AtomPub support
   # Return hash with content attributes
-  def self.atom_entry_filter(entry)
+  def self.params_from_atom(entry)
     # Example:
     # { :body => entry.content.xml.to_s }
     {}
