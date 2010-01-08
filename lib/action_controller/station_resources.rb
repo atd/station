@@ -27,7 +27,7 @@ module ActionController #:nodoc:
     #   GET /:container_type/:container_id/contents
     #   GET /:container_type/:container_id/contents.xml
     #   GET /:container_type/:container_id/contents.atom
-    def index(&block)
+    def index
       # AtomPub feeds are ordered by updated_at
       # TODO: move this to ActionController::Base#params_parser
       if request.format == Mime::ATOM
@@ -39,7 +39,7 @@ module ActionController #:nodoc:
       @resources = model_class.roots.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
 
-      if block
+      if block_given?
         yield
       else
         respond_to do |format|
