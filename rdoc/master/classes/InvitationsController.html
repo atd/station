@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: InvitationsController</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />InvitationsController</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/app/controllers/invitations_controller_rb.html">app/controllers/invitations_controller.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+ApplicationController
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000007">create</a></li>
+  <li><a href="#M000008">update</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="ActionController/StationResources.html">ActionController::StationResources</a></li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000007"></a><b>create</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000007_source')" id="l_M000007_source">show source</a> ]</p>
+  <div id="M000007_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/invitations_controller.rb, line 9</span>
+ 9:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+10:     <span class="ruby-ivar">@invitation</span> = ( <span class="ruby-identifier">group</span>.<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:invitations</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Invitation</span> ).<span class="ruby-identifier">new</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:invitation</span>]
+11:     <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">introducer</span> = <span class="ruby-identifier">current_agent</span>
+12: 
+13:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">save</span>
+14:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'invitation.created'</span>)
+15:     <span class="ruby-keyword kw">else</span>
+16:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-ivar">@invitation</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span>
+17:     <span class="ruby-keyword kw">end</span>
+18: 
+19:     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span> <span class="ruby-operator">||</span> [ <span class="ruby-identifier">group</span>, <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">new</span> ])
+20:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000008"></a><b>update</b>()
+  </div>
+  <div class="description">
+  <p>
+PUT /invitations/1 PUT /invitations/1.xml
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000008_source')" id="l_M000008_source">show source</a> ]</p>
+  <div id="M000008_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/invitations_controller.rb, line 24</span>
+24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
+25:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">authenticated?</span>
+26:       <span class="ruby-comment cmt"># To update an Invitation, we require always Authentication.</span>
+27:       <span class="ruby-comment cmt">#</span>
+28:       <span class="ruby-comment cmt"># The agent may register or signup with her account, due to other email.</span>
+29:       <span class="ruby-identifier">klass</span> = <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Agent</span><span class="ruby-operator">::</span><span class="ruby-constant">Invite</span>.<span class="ruby-identifier">classes</span>.<span class="ruby-identifier">first</span>
+30: 
+31:       <span class="ruby-comment cmt"># We first try to authenticate the credentials</span>
+32:       <span class="ruby-comment cmt"># TODO: other authentication methods like OpenID</span>
+33:       <span class="ruby-ivar">@candidate</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>].<span class="ruby-identifier">present?</span> <span class="ruby-value">?
+34: </span>        <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">authenticate_with_login_and_password</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>][<span class="ruby-identifier">:login</span>],
+35:                                                    <span class="ruby-identifier">params</span>[<span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>][<span class="ruby-identifier">:password</span>]) <span class="ruby-operator">:</span>
+36:         <span class="ruby-keyword kw">nil</span>
+37: 
+38:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@candidate</span>.<span class="ruby-identifier">blank?</span>
+39:         <span class="ruby-comment cmt"># If agent is not authenticated, try to register</span>
+40:         <span class="ruby-ivar">@candidate</span> = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>])
+41:         <span class="ruby-ivar">@candidate</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">email</span>
+42:         <span class="ruby-comment cmt"># Agent has read the invitation email, so it's already activated</span>
+43:         <span class="ruby-ivar">@candidate</span>.<span class="ruby-identifier">activated_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@candidate</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:activation</span>]
+44:         
+45:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@candidate</span>.<span class="ruby-identifier">save</span>
+46:           <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:show</span>
+47:           <span class="ruby-keyword kw">return</span>
+48:         <span class="ruby-keyword kw">end</span>
+49:       <span class="ruby-keyword kw">end</span>
+50: 
+51:       <span class="ruby-comment cmt"># Authenticate Agent</span>
+52:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">current_agent</span> = <span class="ruby-ivar">@candidate</span>
+53: 
+54:       <span class="ruby-comment cmt"># invitation.candidate should have changed, explicity or due to current_agent callback</span>
+55:       <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">reload</span>
+56:     <span class="ruby-keyword kw">end</span>
+57: 
+58: 
+59:     <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:invitation</span>]
+60:     <span class="ruby-comment cmt"># Invitation may be accepted by an already registered user when sent to a different</span>
+61:     <span class="ruby-comment cmt"># email address</span>
+62:     <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">candidate</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">current_agent</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:invitation</span>][<span class="ruby-identifier">:processed</span>]
+63: 
+64:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+65:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">save</span>
+66:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+67:           <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">state_message</span>
+68:           <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">group</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>)
+69:         }
+70:       <span class="ruby-keyword kw">else</span>
+71:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:show</span> }
+72:       <span class="ruby-keyword kw">end</span>
+73:     <span class="ruby-keyword kw">end</span>
+74:   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

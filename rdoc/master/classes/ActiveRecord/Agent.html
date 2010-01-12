@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Agent</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Agent</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/active_record/agent_rb.html">lib/active_record/agent.rb</a>
+<a href="../../files/lib/active_record/agent/authentication/openid_rb.html">lib/active_record/agent/authentication/openid.rb</a>
+<a href="../../files/lib/active_record/agent/authentication/cookie_token_rb.html">lib/active_record/agent/authentication/cookie_token.rb</a>
+<a href="../../files/lib/active_record/agent/authentication/cas_rb.html">lib/active_record/agent/authentication/cas.rb</a>
+<a href="../../files/lib/active_record/agent/authentication/login_and_password_rb.html">lib/active_record/agent/authentication/login_and_password.rb</a>
+<a href="../../files/lib/active_record/agent/activation_rb.html">lib/active_record/agent/activation.rb</a>
+<a href="../../files/lib/active_record/agent/password_reset_rb.html">lib/active_record/agent/password_reset.rb</a>
+<a href="../../files/lib/active_record/agent/invite_rb.html">lib/active_record/agent/invite.rb</a>
+<a href="../../files/lib/active_record/agent/openid_server_rb.html">lib/active_record/agent/openid_server.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h2>acts_as_agent</h2>
+<p>
+Agents are models that can perform actions in the application. The paradigm
+of Agents are Users.
+</p>
+<p>
+Using Station, any of the models of your application can have <a
+href="Agent.html">Agent</a> features. Nevertheless, having only one model
+called User is the most common configuration.
+</p>
+<p>
+<a href="Agent.html">Agent</a> functionality is declared with <a
+href="Agent/ActsAsMethods.html#M000221">ActsAsMethods#acts_as_agent</a>
+</p>
+<pre>
+  class User
+    acts_as_agent :authentication =&gt; [ :login_and_password, :openid ],
+                  :openid_server =&gt; true
+  end
+</pre>
+<h2><a href="Agent/Authentication.html">Authentication</a></h2>
+<p>
+Agents must provide some credentials to the web application in order to
+identify themselves.
+</p>
+<p>
+Station provides several methods to do so, from classic login and password
+to modern <a href="http://openid.net/">OpenID</a>. You can configure which
+methods will be used as an option in acts_as_agent
+</p>
+<p>
+See <a href="Agent/Authentication.html">Authentication</a> module for
+methods supported.
+</p>
+<h2><a href="Authorization.html">Authorization</a></h2>
+<p>
+Station uses an avanced access control model called the <a
+href="Authorization.html">Authorization</a> Chain. This provides you
+flexibility to enforce miscelaneus authorization policies. See <a
+href="Authorization.html">Authorization</a> for more insight.
+</p>
+<h3>RBAC</h3>
+<p>
+Station provides <a href="../Role.html">Role</a>-Based Access Control
+(RBAC) functionality within the <a
+href="Authorization.html">Authorization</a> framework.
+</p>
+<p>
+One of the <a href="Authorization.html">Authorization</a> Blocks defined by
+Station has to do with Stages. Agents perform a <a
+href="../Role.html">Role</a> in each <a href="Stage.html">Stage</a> they
+participate. This <a href="../Role.html">Role</a> defines the permissions
+the <a href="Agent.html">Agent</a> can perform in the scope of this <a
+href="Stage.html">Stage</a>.
+</p>
+<h2>Singular Agents</h2>
+<p>
+Singular Agents are special models with <a href="Agent.html">Agent</a>
+features. Each one represents a paradigm:
+</p>
+<ul>
+<li><a href="../Anonymous.html">Anonymous</a>: the <a
+href="Agent.html">Agent</a> behind a request without authentication
+credentials.
+
+</li>
+<li><a href="../Anyone.html">Anyone</a>: represents any <a
+href="Agent.html">Agent</a> instance.
+
+</li>
+<li><a href="../CronAgent.html">CronAgent</a>: the time-based job scheduler in
+Unix-like computer operating systems.
+
+</li>
+</ul>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000189">activation_class</a></li>
+  <li><a href="#M000192">all</a></li>
+  <li><a href="#M000190">authentication_classes</a></li>
+  <li><a href="#M000191">authentication_methods</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Agent/Activation.html" class="link">ActiveRecord::Agent::Activation</a><br />
+Module <a href="Agent/ActsAsMethods.html" class="link">ActiveRecord::Agent::ActsAsMethods</a><br />
+Module <a href="Agent/Authentication.html" class="link">ActiveRecord::Agent::Authentication</a><br />
+Module <a href="Agent/ClassMethods.html" class="link">ActiveRecord::Agent::ClassMethods</a><br />
+Module <a href="Agent/InstanceMethods.html" class="link">ActiveRecord::Agent::InstanceMethods</a><br />
+Module <a href="Agent/Invite.html" class="link">ActiveRecord::Agent::Invite</a><br />
+Module <a href="Agent/OpenidServer.html" class="link">ActiveRecord::Agent::OpenidServer</a><br />
+Module <a href="Agent/PasswordReset.html" class="link">ActiveRecord::Agent::PasswordReset</a><br />
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000189"></a><b>activation_class</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the first model that acts as <a href="Agent.html">Agent</a>, has
+activation enabled and login and password
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000189_source')" id="l_M000189_source">show source</a> ]</p>
+  <div id="M000189_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 47</span>
+47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">activation_class</span>
+48:         <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:activation</span>] <span class="ruby-operator">&amp;&amp;</span> 
+49:           <span class="ruby-identifier">a</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:login_and_password</span>) }.<span class="ruby-identifier">first</span>
+50:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000192"></a><b>all</b>()
+  </div>
+  <div class="description">
+  <p>
+All <a href="Agent.html">Agent</a> instances, sort by name
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000192_source')" id="l_M000192_source">show source</a> ]</p>
+  <div id="M000192_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 69</span>
+69:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all</span>
+70:         <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:all</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">name</span> }
+71:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000190"></a><b>authentication_classes</b>(method = nil)
+  </div>
+  <div class="description">
+  <p>
+An Array with <a href="Agent.html">Agent</a> classes supporting
+authentication @method@
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000190_source')" id="l_M000190_source">show source</a> ]</p>
+  <div id="M000190_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 53</span>
+53:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authentication_classes</span>(<span class="ruby-identifier">method</span> = <span class="ruby-keyword kw">nil</span>)
+54:         <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+55:           <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>] 
+56:         }.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+57:           <span class="ruby-identifier">method</span> <span class="ruby-value">?
+58: </span>            <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">method</span>) <span class="ruby-operator">:</span>
+59:             <span class="ruby-operator">!</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>].<span class="ruby-identifier">blank?</span> 
+60:         }
+61:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000191"></a><b>authentication_methods</b>()
+  </div>
+  <div class="description">
+  <p>
+An Array with <a href="Agent.html#M000192">all</a> authentication methods
+supported by the application
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000191_source')" id="l_M000191_source">show source</a> ]</p>
+  <div id="M000191_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/agent.rb, line 64</span>
+64:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authentication_methods</span>
+65:         <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">agent_options</span>[<span class="ruby-identifier">:authentication</span>] }.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>
+66:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

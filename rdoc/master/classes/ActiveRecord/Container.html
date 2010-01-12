@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Container</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Container</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/active_record/container_rb.html">lib/active_record/container.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h2>acts_as_container</h2>
+<p>
+A <a href="Container.html">Container</a> is a model that has many other
+models that depend on it. Example of containers are a project with tasks, a
+forum with posts or an album with photos. The formal relationship of a
+container with its contents is called <a
+href="http://en.wikipedia.org/wiki/Class_diagram#Composition">Composition</a>.
+</p>
+<p>
+You recognize that <b>foo is a container</b> when it has a <tt>has_many
+:bar</tt> declaration, <b>bar</b> needs <b>foo</b> to be created and you
+manage routes like <tt>/foos/1/bars</tt>
+</p>
+<p>
+Using <a
+href="Container/ActsAsMethods.html#M000148">ActsAsMethods#acts_as_container</a>
+in your model provides you with some features.
+</p>
+<pre>
+  class Foo
+    acts_as_container :contents =&gt; :bar
+  end
+</pre>
+<h2>Facilities in your Controller</h2>
+<p>
+Station supported Controllers provide some facilities when you declare some
+models as containers.
+</p>
+<p>
+There are some methods available for finding containers in paths. See
+ActionController::Station#path_container and
+ActionController::Station#current_container
+</p>
+<h2><a href="Content/Inquirer.html">Content::Inquirer</a></h2>
+<p>
+A typical usage of a <a href="Container.html">Container</a> is obtaining a
+list of all its contents, whatever their classes are, and manage
+pagination, conditions and other ActiveRecord goodies.
+</p>
+<p>
+Station provides you with the <a
+href="Content/Inquirer.html">Content::Inquirer</a>, a fake ActiveRecord
+class that supports multiple quering and instanciating multiple type of
+contents at the same time.
+</p>
+<h2>Sources</h2>
+<p>
+You can import feeds into your container, mapping each feed entry to a <a
+href="Content.html">Content</a> instance. See <a
+href="../Source.html">Source</a>.
+</p>
+</div>
+
+
+
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Container/ActsAsMethods.html" class="link">ActiveRecord::Container::ActsAsMethods</a><br />
+Module <a href="Container/ClassMethods.html" class="link">ActiveRecord::Container::ClassMethods</a><br />
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

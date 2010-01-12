@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Content::ClassMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Content::ClassMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/content_rb.html">lib/active_record/content.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000161">container_conditions</a></li>
+  <li><a href="#M000160">container_reflection</a></li>
+  <li><a href="#M000163">content_inquirer_query</a></li>
+  <li><a href="#M000162">content_inquirer_scope</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000161"></a><b>container_conditions</b>(container)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000161_source')" id="l_M000161_source">show source</a> ]</p>
+  <div id="M000161_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 110</span>
+110:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">container</span>)
+111:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">container</span>
+112:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">NilClass</span>
+113:           <span class="ruby-value str">&quot;&quot;</span>
+114:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+115:           <span class="ruby-identifier">c</span> = <span class="ruby-identifier">container</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">container_conditions</span>(<span class="ruby-identifier">c</span>) }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; OR &quot;</span>)
+116:           <span class="ruby-node">&quot;(#{ c })&quot;</span>
+117:         <span class="ruby-keyword kw">else</span>
+118:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">acts_as?</span>(<span class="ruby-identifier">:container</span>)
+119:             <span class="ruby-identifier">c</span> = <span class="ruby-node">&quot;#{ table_name }.#{ container_reflection.primary_key_name } = '#{ container.id }'&quot;</span>
+120:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">container_reflection</span>.<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:polymorphic</span>]
+121:               <span class="ruby-identifier">c</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; AND #{ table_name }.#{ container_reflection.options[:foreign_type] } = '#{ container.class.base_class }'&quot;</span>
+122:             <span class="ruby-keyword kw">end</span>
+123:             <span class="ruby-node">&quot;(#{ c })&quot;</span>
+124:           <span class="ruby-keyword kw">else</span>
+125:             <span class="ruby-value str">&quot;&quot;</span>
+126:           <span class="ruby-keyword kw">end</span>
+127:         <span class="ruby-keyword kw">end</span>
+128:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000160"></a><b>container_reflection</b>()
+  </div>
+  <div class="description">
+  <p>
+The ActiveRecord reflection that represents the <a
+href="../Container.html">Container</a> for this model
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000160_source')" id="l_M000160_source">show source</a> ]</p>
+  <div id="M000160_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 106</span>
+106:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">container_reflection</span>
+107:         <span class="ruby-identifier">reflections</span>[<span class="ruby-identifier">content_options</span>[<span class="ruby-identifier">:reflection</span>]]
+108:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000163"></a><b>content_inquirer_query</b>(params = {}, scope_options = {})
+  </div>
+  <div class="description">
+  <p>
+Construct SQL query used by <a
+href="Inquirer.html">ActiveRecord::Content::Inquirer</a>
+</p>
+<p>
+params is a hash of parameters passed to ActiveRecord, like in a regular
+query
+</p>
+<p>
+scope_options will be passed to <a
+href="ClassMethods.html#M000162">content_inquirer_scope</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000163_source')" id="l_M000163_source">show source</a> ]</p>
+  <div id="M000163_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 146</span>
+146:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content_inquirer_query</span>(<span class="ruby-identifier">params</span> = {}, <span class="ruby-identifier">scope_options</span> = {})
+147:         <span class="ruby-identifier">inquirer_scope</span> = <span class="ruby-identifier">content_inquirer_scope</span>(<span class="ruby-identifier">scope_options</span>)
+148: 
+149:         <span class="ruby-comment cmt"># Clean scope parameters like :order</span>
+150:         <span class="ruby-identifier">inquirer_scope</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:order</span>)
+151: 
+152:         <span class="ruby-identifier">with_exclusive_scope</span>(<span class="ruby-identifier">:find</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">inquirer_scope</span>) <span class="ruby-keyword kw">do</span>
+153:           <span class="ruby-identifier">construct_finder_sql</span>(<span class="ruby-identifier">params</span>)
+154:         <span class="ruby-keyword kw">end</span>
+155:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000162"></a><b>content_inquirer_scope</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+ActiveRecord Scope used by <a
+href="Inquirer.html">ActiveRecord::Content::Inquirer</a>
+</p>
+<p>
+By default uses roots.in(container) find scope
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">container:</td><td>The container passed to in(container) named_scope
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000162_source')" id="l_M000162_source">show source</a> ]</p>
+  <div id="M000162_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/content.rb, line 136</span>
+136:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content_inquirer_scope</span>(<span class="ruby-identifier">options</span> = {})
+137:         <span class="ruby-identifier">inquirer_scope</span> = <span class="ruby-identifier">roots</span>.<span class="ruby-identifier">in</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:container</span>]).<span class="ruby-identifier">scope</span>(<span class="ruby-identifier">:find</span>)
+138:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

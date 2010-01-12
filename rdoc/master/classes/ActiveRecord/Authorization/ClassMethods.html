@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Authorization::ClassMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Authorization::ClassMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/authorization_rb.html">lib/active_record/authorization.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000156">authorization_chain</a></li>
+  <li><a href="#M000158">authorization_delegate</a></li>
+  <li><a href="#M000157">authorizing</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000156"></a><b>authorization_chain</b>()
+  </div>
+  <div class="description">
+  <p>
+The <a href="../Authorization.html">Authorization</a> Chain of this model
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000156_source')" id="l_M000156_source">show source</a> ]</p>
+  <div id="M000156_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 87</span>
+87:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorization_chain</span>
+88:         <span class="ruby-ivar">@authorization_chain</span> <span class="ruby-operator">||=</span> []
+89:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Protected Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000158"></a><b>authorization_delegate</b>(relation, options = {})
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000158_source')" id="l_M000158_source">show source</a> ]</p>
+  <div id="M000158_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 108</span>
+108:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorization_delegate</span>(<span class="ruby-identifier">relation</span>, <span class="ruby-identifier">options</span> = {})
+109:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:as</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">underscore</span>
+110: 
+111:         <span class="ruby-identifier">class_eval</span> <span class="ruby-value str">&quot;authorizing do |agent, permission|\nreturn nil unless \#{ relation }.present?\n\nreturn nil unless permission.is_a?(String) || permission.is_a?(Symbol)\n\n\#{ relation }.authorize?([permission, :\#{ options[:as] }], :to =&gt; agent,\n:default =&gt; nil)\nend\n&quot;</span>
+112:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000157"></a><b>authorizing</b>(method = nil, &amp;block)
+  </div>
+  <div class="description">
+  <p>
+Define a new <a href="../Authorization.html">Authorization</a> Block.
+</p>
+<p>
+A sequence of <a href="../Authorization.html">Authorization</a> Blocks
+compose the <a href="../Authorization.html">Authorization</a> Chain. Each
+model AC is evaluated when requesting authorization permissions to each
+instance. See <a
+href="../Authorization.html">ActiveRecord::Authorization</a>
+</p>
+<pre>
+  class User
+    # Grants all permissions to self
+    authorizing do |agent, permission|
+      agent == self
+    end
+  end
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000157_source')" id="l_M000157_source">show source</a> ]</p>
+  <div id="M000157_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/authorization.rb, line 104</span>
+104:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">authorizing</span>(<span class="ruby-identifier">method</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+105:         <span class="ruby-ivar">@authorization_chain</span> = <span class="ruby-identifier">authorization_chain</span> <span class="ruby-operator">|</span> <span class="ruby-constant">Array</span>(<span class="ruby-identifier">method</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">block</span>)
+106:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

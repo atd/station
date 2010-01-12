@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Stage::InstanceMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Stage::InstanceMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/stage_rb.html">lib/active_record/stage.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Instance methods can be redefined in each Model for custom features
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000237">actors</a></li>
+  <li><a href="#M000236">role_for</a></li>
+  <li><a href="#M000235">role_for?</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000237"></a><b>actors</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Return all agents that play one role at least in this stage
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">role:</td><td>The <a href="../../Role.html">Role</a> <a
+href="InstanceMethods.html#M000237">actors</a> are performing in this <a
+href="../Stage.html">Stage</a>
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000237_source')" id="l_M000237_source">show source</a> ]</p>
+  <div id="M000237_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/active_record/stage.rb, line 105</span>
+105:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">actors</span>(<span class="ruby-identifier">options</span> = {})
+106:         <span class="ruby-identifier">conditions</span> = {}
+107: 
+108:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:role</span>].<span class="ruby-identifier">present?</span>
+109:           <span class="ruby-identifier">conditions</span>[<span class="ruby-identifier">:role_id</span>] =
+110:             <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:role</span>]
+111:             <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Role</span>
+112:               <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:role</span>].<span class="ruby-identifier">id</span>
+113:             <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+114:               <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">role</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:role</span>]).<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:id</span>)
+115:             <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Fixnum</span>
+116:               <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:role</span>]
+117:             <span class="ruby-keyword kw">end</span>
+118:         <span class="ruby-keyword kw">end</span>
+119: 
+120:         <span class="ruby-comment cmt"># Uses eager loading.</span>
+121:         <span class="ruby-comment cmt"># Compact the array, the agent may not be found because of default scopes.</span>
+122:         <span class="ruby-identifier">stage_performances</span>.<span class="ruby-identifier">all</span>(<span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>, <span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:agent</span>).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:agent</span>).<span class="ruby-identifier">compact</span>
+123:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000236"></a><b>role_for</b>(agent)
+  </div>
+  <div class="description">
+  <p>
+<a href="../../Role.html">Role</a> performed by this <a
+href="../Agent.html">Agent</a> in the <a href="../Stage.html">Stage</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000236_source')" id="l_M000236_source">show source</a> ]</p>
+  <div id="M000236_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/stage.rb, line 90</span>
+90:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">role_for</span>(<span class="ruby-identifier">agent</span>)
+91:         <span class="ruby-comment cmt">#FIXME: Role named scope</span>
+92:         <span class="ruby-constant">Role</span>.<span class="ruby-identifier">find</span> <span class="ruby-identifier">:first</span>,
+93:                   <span class="ruby-identifier">:joins</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:performances</span>,
+94:                   <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value str">'performances.agent_id'</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">agent</span>.<span class="ruby-identifier">id</span>,
+95:                                    <span class="ruby-value str">'performances.agent_type'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">agent</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">base_class</span>.<span class="ruby-identifier">to_s</span>,
+96:                                    <span class="ruby-value str">'performances.stage_id'</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>,
+97:                                    <span class="ruby-value str">'performances.stage_type'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">base_class</span>.<span class="ruby-identifier">to_s</span> },
+98:                   <span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:permissions</span>
+99:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000235"></a><b>role_for?</b>(agent, options = {})
+  </div>
+  <div class="description">
+  <p>
+True if agent has a <a href="../../Performance.html">Performance</a> in
+this <a href="../Stage.html">Stage</a>.
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">name:</td><td>Name of the <a href="../../Role.html">Role</a>
+
+</td></tr>
+</table>
+<pre>
+  space.role_for?(user, :name =&gt; 'Admin')
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000235_source')" id="l_M000235_source">show source</a> ]</p>
+  <div id="M000235_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/stage.rb, line 80</span>
+80:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">role_for?</span>(<span class="ruby-identifier">agent</span>, <span class="ruby-identifier">options</span> = {})
+81:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">role_for</span>(<span class="ruby-identifier">agent</span>)
+82: 
+83:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] <span class="ruby-operator">?</span>
+84:           <span class="ruby-identifier">role_for</span>(<span class="ruby-identifier">agent</span>).<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] <span class="ruby-operator">:</span>
+85:           <span class="ruby-keyword kw">true</span>
+86:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

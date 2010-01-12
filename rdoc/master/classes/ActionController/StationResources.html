@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionController::StationResources</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionController::StationResources</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/action_controller/station_resources_rb.html">lib/action_controller/station_resources.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Controller methods for Resources
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000140">create</a></li>
+  <li><a href="#M000145">current_container</a></li>
+  <li><a href="#M000142">destroy</a></li>
+  <li><a href="#M000139">edit</a></li>
+  <li><a href="#M000136">index</a></li>
+  <li><a href="#M000138">new</a></li>
+  <li><a href="#M000143">resource</a></li>
+  <li><a href="#M000144">resources</a></li>
+  <li><a href="#M000137">show</a></li>
+  <li><a href="#M000141">update</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000140"></a><b>create</b>()
+  </div>
+  <div class="description">
+  <p>
+Create <a href="StationResources.html#M000138">new</a> Resource
+</p>
+<pre>
+  POST /resources
+  POST /resources.xml
+  POST /:container_type/:container_id/contents
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000140_source')" id="l_M000140_source">show source</a> ]</p>
+  <div id="M000140_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 125</span>
+125:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+126:       <span class="ruby-comment cmt"># Fill params when POSTing raw data</span>
+127:       <span class="ruby-identifier">set_params_from_raw_post</span>
+128: 
+129:       <span class="ruby-identifier">resource_params</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">to_sym</span>]
+130:       <span class="ruby-identifier">resource_class</span> =
+131:         <span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:delegate_content_types</span>] <span class="ruby-operator">&amp;&amp;</span>
+132:         <span class="ruby-identifier">resource_params</span>[<span class="ruby-identifier">:media</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">resource_params</span>[<span class="ruby-identifier">:media</span>].<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span>
+133:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>.<span class="ruby-identifier">class_supporting</span>(<span class="ruby-identifier">resource_params</span>[<span class="ruby-identifier">:media</span>].<span class="ruby-identifier">content_type</span>) <span class="ruby-operator">||</span>
+134:         <span class="ruby-identifier">model_class</span>
+135: 
+136:       <span class="ruby-ivar">@resource</span> = <span class="ruby-identifier">resource_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">resource_params</span>)
+137:       <span class="ruby-identifier">instance_variable_set</span> <span class="ruby-node">&quot;@#{ model_class.to_s.underscore }&quot;</span>, <span class="ruby-ivar">@resource</span>
+138: 
+139:       <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">author</span> = <span class="ruby-identifier">current_agent</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:author=</span>)
+140:       <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">container</span> = <span class="ruby-identifier">path_container</span>  <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:container=</span>)
+141: 
+142:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+143:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">save</span>
+144:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { 
+145:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:created</span>, <span class="ruby-identifier">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>)
+146:             <span class="ruby-identifier">after_create_with_success</span>
+147:           }
+148:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+149:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { 
+150:             <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>, 
+151:                    <span class="ruby-identifier">:status</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:created</span>, 
+152:                    <span class="ruby-identifier">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span> 
+153:           }
+154:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span> {
+155:             <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'show'</span>,
+156:                    <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:created</span>,
+157:                    <span class="ruby-identifier">:location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">polymorphic_url</span>(<span class="ruby-ivar">@resource</span>, <span class="ruby-identifier">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:atom</span>)
+158:           }
+159:         <span class="ruby-keyword kw">else</span>
+160:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { 
+161:             <span class="ruby-identifier">after_create_with_errors</span>
+162:           }
+163:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+164:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:unprocessable_entity</span> }
+165:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:bad_request</span> }
+166:         <span class="ruby-keyword kw">end</span>
+167:       <span class="ruby-keyword kw">end</span>
+168:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000142"></a><b>destroy</b>()
+  </div>
+  <div class="description">
+  <p>
+DELETE /resources/1 DELETE /resources/1.xml
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000142_source')" id="l_M000142_source">show source</a> ]</p>
+  <div id="M000142_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 222</span>
+222:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
+223:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+224:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">destroy</span>
+225:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+226:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:deleted</span>, <span class="ruby-identifier">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>)
+227:             <span class="ruby-identifier">after_destroy_with_success</span>
+228:           }
+229:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+230:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">head</span> <span class="ruby-identifier">:ok</span> }
+231:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span> { <span class="ruby-identifier">head</span> <span class="ruby-identifier">:ok</span> }
+232:         <span class="ruby-keyword kw">else</span>
+233:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+234:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:not_deleted</span>, <span class="ruby-identifier">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>)
+235:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span>
+236:             <span class="ruby-identifier">after_destroy_with_errors</span>
+237:           }
+238:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+239:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span> }
+240:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span> }
+241:         <span class="ruby-keyword kw">end</span>
+242:       <span class="ruby-keyword kw">end</span>
+243:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000139"></a><b>edit</b>()
+  </div>
+  <div class="description">
+  <p>
+GET /resources/1/edit
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000139_source')" id="l_M000139_source">show source</a> ]</p>
+  <div id="M000139_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 116</span>
+116:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
+117:       <span class="ruby-identifier">resource</span>
+118:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000136"></a><b>index</b>() {|| ...}
+  </div>
+  <div class="description">
+  <p>
+List Resources
+</p>
+<p>
+When the Resource is a Content, uses in(container) named_scope When
+it&#8216;s a Sortable, uses column_sort named_scope
+</p>
+<p>
+It also paginates using great Mislav will_paginate plugin
+</p>
+<pre>
+  GET /resources
+  GET /resources.xml
+  GET /resources.atom
+
+  GET /:container_type/:container_id/contents
+  GET /:container_type/:container_id/contents.xml
+  GET /:container_type/:container_id/contents.atom
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000136_source')" id="l_M000136_source">show source</a> ]</p>
+  <div id="M000136_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 38</span>
+38:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
+39:       <span class="ruby-comment cmt"># AtomPub feeds are ordered by updated_at</span>
+40:       <span class="ruby-comment cmt"># TODO: move this to ActionController::Base#params_parser</span>
+41:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">format</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">ATOM</span>
+42:         <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:order</span>], <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:direction</span>] = <span class="ruby-value str">&quot;updated_at&quot;</span>, <span class="ruby-value str">&quot;DESC&quot;</span>
+43:       <span class="ruby-keyword kw">end</span>
+44: 
+45:       <span class="ruby-ivar">@conditions</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">nil</span>
+46: 
+47:       <span class="ruby-identifier">resources</span>
+48: 
+49:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+50:         <span class="ruby-keyword kw">yield</span>
+51:       <span class="ruby-keyword kw">else</span>
+52:         <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+53:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># index.html.erb</span>
+54:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+55:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resources</span> }
+56:           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span>
+57:         <span class="ruby-keyword kw">end</span>
+58:       <span class="ruby-keyword kw">end</span>
+59:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000138"></a><b>new</b>()
+  </div>
+  <div class="description">
+  <p>
+Render form for posting <a href="StationResources.html#M000138">new</a>
+Resource
+</p>
+<pre>
+  GET /resources/new
+  GET /resources/new.xml
+  GET /:container_type/:container_id/contents/new
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000138_source')" id="l_M000138_source">show source</a> ]</p>
+  <div id="M000138_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 105</span>
+105:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
+106:       <span class="ruby-identifier">resource</span>
+107: 
+108:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+109:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># new.html.erb</span>
+110:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+111:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span> }
+112:       <span class="ruby-keyword kw">end</span>
+113:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000137"></a><b>show</b>()
+  </div>
+  <div class="description">
+  <p>
+Show this Content
+</p>
+<pre>
+  GET /resources/1
+  GET /resources/1.xml
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000137_source')" id="l_M000137_source">show source</a> ]</p>
+  <div id="M000137_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 65</span>
+65:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
+66:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:versions</span>)
+67:         <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">revert_to</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:version</span>].<span class="ruby-identifier">to_i</span>)
+68:       <span class="ruby-keyword kw">end</span>
+69: 
+70:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:thumbnail</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:thumbnails</span>)
+71:         <span class="ruby-ivar">@resource</span> = <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">thumbnails</span>.<span class="ruby-identifier">find_by_thumbnail</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:thumbnail</span>]) 
+72:       <span class="ruby-keyword kw">end</span>
+73: 
+74:       <span class="ruby-identifier">instance_variable_set</span> <span class="ruby-node">&quot;@#{ model_class.to_s.underscore }&quot;</span>, <span class="ruby-identifier">resource</span>
+75: 
+76:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+77:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">all</span> {
+78:           <span class="ruby-identifier">send_data</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">__send__</span>(<span class="ruby-identifier">:current_data</span>),
+79:                     <span class="ruby-identifier">:filename</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">filename</span>,
+80:                     <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">content_type</span>,
+81:                     <span class="ruby-identifier">:disposition</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:disposition</span>].<span class="ruby-identifier">to_s</span>
+82:         } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:has_media</span>]
+83: 
+84:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment cmt"># show.html.erb</span>
+85:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+86:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">xml</span>  { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span> }
+87:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span>
+88:   
+89:         <span class="ruby-comment cmt"># Add Resource format Mime Type for resource with Attachments</span>
+90:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">resource</span>.<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">to_s</span>) {
+91:           <span class="ruby-identifier">send_data</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">__send__</span>(<span class="ruby-identifier">:current_data</span>),
+92:                     <span class="ruby-identifier">:filename</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">filename</span>,
+93:                     <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">content_type</span>,
+94:                     <span class="ruby-identifier">:disposition</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">resource_options</span>[<span class="ruby-identifier">:disposition</span>].<span class="ruby-identifier">to_s</span>
+95:         } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">mime_type</span>
+96: 
+97:       <span class="ruby-keyword kw">end</span>
+98:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000141"></a><b>update</b>()
+  </div>
+  <div class="description">
+  <p>
+Update Resource
+</p>
+<p>
+PUT /resources/1 PUT /resources/1.xml
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000141_source')" id="l_M000141_source">show source</a> ]</p>
+  <div id="M000141_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 174</span>
+174:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
+175:       <span class="ruby-comment cmt"># Fill params when POSTing raw data</span>
+176:       <span class="ruby-identifier">set_params_from_raw_post</span>
+177: 
+178:       <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">to_sym</span>]
+179:       <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">author</span> = <span class="ruby-identifier">current_agent</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:author=</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">changed?</span>
+180: 
+181:       <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span> 
+182:         <span class="ruby-comment cmt">#FIXME: DRY</span>
+183:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">all</span> {
+184:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
+185:             <span class="ruby-identifier">head</span> <span class="ruby-identifier">:ok</span>
+186:           <span class="ruby-keyword kw">else</span>
+187:             <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:not_acceptable</span>
+188:           <span class="ruby-keyword kw">end</span>
+189:         }
+190: 
+191:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+192:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
+193:             <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:success</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-identifier">:updated</span>, <span class="ruby-identifier">:scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>)
+194:             <span class="ruby-identifier">after_update_with_success</span>
+195:           <span class="ruby-keyword kw">else</span>
+196:             <span class="ruby-identifier">after_update_with_errors</span>
+197:           <span class="ruby-keyword kw">end</span>
+198:         }
+199:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> {
+200:           <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
+201:         }
+202:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">atom</span> {
+203:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
+204:             <span class="ruby-identifier">head</span> <span class="ruby-identifier">:ok</span>
+205:           <span class="ruby-keyword kw">else</span>
+206:             <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:not_acceptable</span>
+207:           <span class="ruby-keyword kw">end</span>
+208:         }
+209: 
+210:         <span class="ruby-identifier">format</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">resource</span>.<span class="ruby-identifier">format</span>) {
+211:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">save</span>
+212:             <span class="ruby-identifier">head</span> <span class="ruby-identifier">:ok</span>
+213:           <span class="ruby-keyword kw">else</span>
+214:             <span class="ruby-identifier">render</span> <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@resource</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_xml</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:not_acceptable</span>
+215:           <span class="ruby-keyword kw">end</span>
+216:         } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resource</span>.<span class="ruby-identifier">format</span>
+217:       <span class="ruby-keyword kw">end</span>
+218:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Protected Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000145"></a><b>current_container</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Search in the <a href="StationResources.html#M000143">resource</a>&#8216;s
+containers and in the path for current Container.
+</p>
+<p>
+We start with the following assumptions:
+</p>
+<ul>
+<li>A Container have a unique branch of nested containers in the containers
+tree
+
+</li>
+<li>If we find containers of the same type in both branches (<a
+href="StationResources.html#M000143">resource</a> containers
+
+</li>
+</ul>
+<p>
+and path), they must be the same. If they aren&#8216;t we assume a routing
+error (409 Conflict).
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">type:</td><td>the class of the container
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000145_source')" id="l_M000145_source">show source</a> ]</p>
+  <div id="M000145_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 276</span>
+276:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_container</span>(<span class="ruby-identifier">options</span> = {})
+277:       <span class="ruby-identifier">find_current_container</span>(<span class="ruby-identifier">options</span>)
+278:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000143"></a><b>resource</b>()
+  </div>
+  <div class="description">
+  <p>
+Finds the current Resource using model_class
+</p>
+<p>
+If params[:id] isn&#8216;t present, build a <a
+href="StationResources.html#M000138">new</a> Resource
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000143_source')" id="l_M000143_source">show source</a> ]</p>
+  <div id="M000143_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 250</span>
+250:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resource</span>
+251:       <span class="ruby-ivar">@resource</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>].<span class="ruby-identifier">present?</span>
+252:                       <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-node">&quot;@#{ model_class.to_s.underscore }&quot;</span>, 
+253:                         <span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">in</span>(<span class="ruby-identifier">path_container</span>).<span class="ruby-identifier">find_with_param</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>]) <span class="ruby-operator">||</span>
+254:                         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>, <span class="ruby-value str">&quot;Resource not found&quot;</span>))
+255:                     <span class="ruby-keyword kw">else</span>
+256:                       <span class="ruby-identifier">r</span> = <span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">to_sym</span>])
+257:                       <span class="ruby-identifier">r</span>.<span class="ruby-identifier">container</span> = <span class="ruby-identifier">path_container</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:container=</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">path_container</span>.<span class="ruby-identifier">present?</span>
+258:                       <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-node">&quot;@#{ model_class.to_s.underscore }&quot;</span>, <span class="ruby-identifier">r</span>)
+259:                     <span class="ruby-keyword kw">end</span>
+260:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000144"></a><b>resources</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000144_source')" id="l_M000144_source">show source</a> ]</p>
+  <div id="M000144_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station_resources.rb, line 262</span>
+262:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resources</span>
+263:       <span class="ruby-ivar">@resources</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">instance_variable_set</span> <span class="ruby-node">&quot;@#{ model_class.to_s.tableize }&quot;</span>,
+264:                        <span class="ruby-identifier">model_class</span>.<span class="ruby-identifier">roots</span>.<span class="ruby-identifier">in</span>(<span class="ruby-identifier">path_container</span>).<span class="ruby-identifier">column_sort</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:order</span>], <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:direction</span>]).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:page</span>], <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@conditions</span>)
+265:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

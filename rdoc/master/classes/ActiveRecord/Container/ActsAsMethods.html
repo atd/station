@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Container::ActsAsMethods</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Container::ActsAsMethods</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/active_record/container_rb.html">lib/active_record/container.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000148">acts_as_container</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li>InstanceMethods</li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000148"></a><b>acts_as_container</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Provides an ActiveRecord model with <a
+href="../Container.html">Container</a> capabilities
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top"><tt>contents</tt>:</td><td>an Array of Contents that can be posted to this <a
+href="../Container.html">Container</a>. Ex: [ :articles, :images ].
+Defaults to all available <a href="../Content.html">Content</a> models.
+
+</td></tr>
+<tr><td valign="top"><tt>sources</tt>:</td><td>The container has remote sources. It will import Atom/<a
+href="../../RSS.html">RSS</a> feeds as contents. See <a
+href="../../Source.html">Source</a>. Defaults to false
+
+</td></tr>
+<tr><td valign="top"><tt>scope</tt>:</td><td>Default :order, :conditions, :limit, :group, :having values that are
+included in contents query if they are not specified.
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000148_source')" id="l_M000148_source">show source</a> ]</p>
+  <div id="M000148_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/active_record/container.rb, line 52</span>
+52:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">acts_as_container</span>(<span class="ruby-identifier">options</span> = {})
+53:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Container</span>.<span class="ruby-identifier">register_class</span>(<span class="ruby-keyword kw">self</span>)
+54:         
+55:         <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:scope</span>] <span class="ruby-operator">||=</span> {}
+56:         
+57:         <span class="ruby-identifier">cattr_reader</span> <span class="ruby-identifier">:container_options</span>
+58:         <span class="ruby-identifier">class_variable_set</span> <span class="ruby-value str">&quot;@@container_options&quot;</span>, <span class="ruby-identifier">options</span>
+59: 
+60:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:sources</span>]
+61:           <span class="ruby-identifier">has_many</span> <span class="ruby-identifier">:sources</span>, <span class="ruby-identifier">:as</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:container</span>,
+62:                              <span class="ruby-identifier">:dependent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:destroy</span>
+63:         <span class="ruby-keyword kw">end</span>
+64: 
+65:         <span class="ruby-identifier">extend</span>  <span class="ruby-constant">ClassMethods</span>
+66:         <span class="ruby-identifier">include</span> <span class="ruby-constant">InstanceMethods</span>
+67:       <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

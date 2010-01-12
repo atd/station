@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Content</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/active_record/content_rb.html">lib/active_record/content.rb</a>
+<a href="../../files/lib/active_record/content/inquirer_rb.html">lib/active_record/content/inquirer.rb</a>
+<a href="../../files/lib/active_record/content/inquirer_proxy_rb.html">lib/active_record/content/inquirer_proxy.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+A <a href="Content.html">Content</a> is a <a
+href="Resource.html">Resource</a> that needs a <a
+href="Container.html">Container</a> to exist. Examples of contents are
+project&#8216;s tasks or album&#8216;s images.
+</p>
+<p>
+Include this functionality in your models using <a
+href="Content/ActsAsMethods.html#M000165">ActsAsMethods#acts_as_content</a>
+</p>
+<h2>Named Scope</h2>
+<p>
+You can use the named_scope +in(container)+ to get all contents in some <a
+href="Container.html">Container</a>.
+</p>
+<pre>
+  Content.in(some_container) #=&gt; Array of contents in the container
+</pre>
+<p>
+This named scope is used in StationResources controller, in index and show
+methods.
+</p>
+<h2><a href="Resource.html">Resource</a> Controllers</h2>
+<p>
+StationResources provides with some facilities when managing resources that
+are contents also.
+</p>
+<h3>index</h3>
+<p>
+<a href="Content.html">Content</a> resource lists are filtered if a <a
+href="Container.html">Container</a> is provided in the path
+</p>
+<pre>
+ /projects/1/tasks #=&gt; each task in @tasks is in project-1
+</pre>
+<h3>show</h3>
+<p>
+<a href="Content.html">Content</a> resource is searched within the
+container named scope if a <a href="Container.html">Container</a> is
+provided in the path
+</p>
+<pre>
+ /projects/1/tasks/1 #=&gt; task-1 must belong to project-1
+</pre>
+<h3>create</h3>
+<p>
+Automatically set up container relation
+</p>
+<pre>
+ /projects/1/tasks #=&gt; when posting to this path, the new task is created inside projects-1
+</pre>
+<h2><a href="Authorization.html">Authorization</a></h2>
+<p>
+The <a href="Content.html">Content</a> incorporates an authorization block
+that delegates permissions to its <a href="Container.html">Container</a>.
+</p>
+<p>
+This authorization block ask only single permissions, i.e. a <a
+href="../Permission.html">Permission</a> which objective is nil.
+</p>
+<pre>
+  class Task
+    belongs_to :project
+    acts_as_content :reflection =&gt; :project
+  end
+
+  task.authorize?(:update) #=&gt; will ask task.project.authorize?([ :update, :content ]) ||
+                           #            task.project.authorize?([ :update, :task ])
+</pre>
+</div>
+
+
+
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Content/ActsAsMethods.html" class="link">ActiveRecord::Content::ActsAsMethods</a><br />
+Module <a href="Content/ClassMethods.html" class="link">ActiveRecord::Content::ClassMethods</a><br />
+Module <a href="Content/InstanceMethods.html" class="link">ActiveRecord::Content::InstanceMethods</a><br />
+Class <a href="Content/Inquirer.html" class="link">ActiveRecord::Content::Inquirer</a><br />
+Class <a href="Content/InquirerProxy.html" class="link">ActiveRecord::Content::InquirerProxy</a><br />
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

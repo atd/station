@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Station::Html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Station::Html</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/station/html_rb.html">lib/station/html.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Manage HTML documents
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000243">atom_links</a></li>
+  <li><a href="#M000247">atom_service_links</a></li>
+  <li><a href="#M000240">doc</a></li>
+  <li><a href="#M000242">feeds</a></li>
+  <li><a href="#M000249">foaf?</a></li>
+  <li><a href="#M000246">foaf_links</a></li>
+  <li><a href="#M000251">hcard</a></li>
+  <li><a href="#M000252">hcard?</a></li>
+  <li><a href="#M000241">head_links</a></li>
+  <li><a href="#M000250">microformats</a></li>
+  <li><a href="#M000239">new</a></li>
+  <li><a href="#M000245">rdf_links</a></li>
+  <li><a href="#M000248">rsd_links</a></li>
+  <li><a href="#M000244">rss_links</a></li>
+  <li><a href="#M000253">to_s</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>text</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000239"></a><b>new</b>(text)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000239_source')" id="l_M000239_source">show source</a> ]</p>
+  <div id="M000239_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 15</span>
+15:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">text</span>)
+16:       <span class="ruby-ivar">@text</span> = <span class="ruby-identifier">text</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;&quot;</span>
+17:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000243"></a><b>atom_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000243_source')" id="l_M000243_source">show source</a> ]</p>
+  <div id="M000243_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 33</span>
+33:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atom_links</span>
+34:       <span class="ruby-identifier">head_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+35:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'type'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/application\/atom\+xml/i</span>)
+36:       }
+37:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000247"></a><b>atom_service_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000247_source')" id="l_M000247_source">show source</a> ]</p>
+  <div id="M000247_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 57</span>
+57:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">atom_service_links</span>
+58:       <span class="ruby-identifier">head_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+59:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'rel'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/^service$/i</span>)
+60:       }
+61:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000240"></a><b>doc</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000240_source')" id="l_M000240_source">show source</a> ]</p>
+  <div id="M000240_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 19</span>
+19:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">doc</span>
+20:       <span class="ruby-ivar">@doc</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">HTML</span>(<span class="ruby-ivar">@text</span>)
+21:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000242"></a><b>feeds</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000242_source')" id="l_M000242_source">show source</a> ]</p>
+  <div id="M000242_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 27</span>
+27:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">feeds</span>
+28:       <span class="ruby-identifier">head_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+29:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'rel'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/alternate/i</span>)
+30:       }
+31:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000249"></a><b>foaf?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000249_source')" id="l_M000249_source">show source</a> ]</p>
+  <div id="M000249_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 69</span>
+69:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">foaf?</span>
+70:       <span class="ruby-identifier">foaf_links</span>.<span class="ruby-identifier">any?</span>
+71:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000246"></a><b>foaf_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000246_source')" id="l_M000246_source">show source</a> ]</p>
+  <div id="M000246_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 51</span>
+51:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">foaf_links</span>
+52:       <span class="ruby-identifier">rdf_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+53:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'title'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/^foaf$/i</span>)
+54:       }
+55:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000251"></a><b>hcard</b>()
+  </div>
+  <div class="description">
+  <p>
+Find hCard in this HTML
+</p>
+<p>
+Needs the <a href="http://github.com/mwunsch/prism">prism</a> gem
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000251_source')" id="l_M000251_source">show source</a> ]</p>
+  <div id="M000251_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 85</span>
+85:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hcard</span>
+86:       <span class="ruby-identifier">microformats</span>(<span class="ruby-identifier">:hcard</span>)
+87:     <span class="ruby-keyword kw">rescue</span>
+88:       <span class="ruby-keyword kw">nil</span>
+89:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000252"></a><b>hcard?</b>()
+  </div>
+  <div class="description">
+  <p>
+Does this URI has a hCard attached?
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000252_source')" id="l_M000252_source">show source</a> ]</p>
+  <div id="M000252_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 92</span>
+92:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hcard?</span>
+93:       <span class="ruby-identifier">hcard</span>.<span class="ruby-identifier">present?</span>
+94:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000241"></a><b>head_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000241_source')" id="l_M000241_source">show source</a> ]</p>
+  <div id="M000241_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 23</span>
+23:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">head_links</span>
+24:       <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">xpath</span>(<span class="ruby-value str">'//head/link'</span>)
+25:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000250"></a><b>microformats</b>(format = nil)
+  </div>
+  <div class="description">
+  <p>
+Find available Microformats for this HTML
+</p>
+<p>
+Needs the <a href="http://github.com/mwunsch/prism">prism</a> gem
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000250_source')" id="l_M000250_source">show source</a> ]</p>
+  <div id="M000250_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 76</span>
+76:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">microformats</span>(<span class="ruby-identifier">format</span> = <span class="ruby-keyword kw">nil</span>)
+77:       <span class="ruby-constant">Prism</span>.<span class="ruby-identifier">find</span> <span class="ruby-identifier">text</span>, <span class="ruby-identifier">format</span>
+78:     <span class="ruby-keyword kw">rescue</span>
+79:       <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+80:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000245"></a><b>rdf_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000245_source')" id="l_M000245_source">show source</a> ]</p>
+  <div id="M000245_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 45</span>
+45:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rdf_links</span>
+46:       <span class="ruby-identifier">head_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+47:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'rel'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/meta/i</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">l</span>[<span class="ruby-value str">'type'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/application\/rdf\+xml/i</span>)
+48:       }
+49:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000248"></a><b>rsd_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000248_source')" id="l_M000248_source">show source</a> ]</p>
+  <div id="M000248_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 63</span>
+63:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rsd_links</span>
+64:       <span class="ruby-identifier">head_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+65:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'rel'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/^EditURI$/i</span>)
+66:       }
+67:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000244"></a><b>rss_links</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000244_source')" id="l_M000244_source">show source</a> ]</p>
+  <div id="M000244_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 39</span>
+39:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rss_links</span>
+40:       <span class="ruby-identifier">head_links</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+41:         <span class="ruby-identifier">l</span>[<span class="ruby-value str">'type'</span>].<span class="ruby-identifier">try</span>(<span class="ruby-identifier">:match</span>, <span class="ruby-regexp re">/application\/rss\+xml/i</span>)
+42:       }
+43:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000253"></a><b>to_s</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000253_source')" id="l_M000253_source">show source</a> ]</p>
+  <div id="M000253_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/station/html.rb, line 96</span>
+96:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+97:       <span class="ruby-ivar">@text</span>
+98:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

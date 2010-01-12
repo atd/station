@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActionController::Station</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActionController::Station</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/action_controller/station_rb.html">lib/action_controller/station.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Base methods for ActionController
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000113">current_container</a></li>
+  <li><a href="#M000114">current_container!</a></li>
+  <li><a href="#M000109">current_site</a></li>
+  <li><a href="#M000106">model_class</a></li>
+  <li><a href="#M000111">path_container</a></li>
+  <li><a href="#M000112">path_container!</a></li>
+  <li><a href="#M000110">path_containers</a></li>
+  <li><a href="#M000107">record_from_path</a></li>
+  <li><a href="#M000108">records_from_path</a></li>
+  <li><a href="#M000115">set_params_from_raw_post</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000113"></a><b>current_container</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Find current Container using path from the request
+</p>
+<p>
+Note that in StationResouces this method is redefined looking also at the
+resource
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">type:</td><td>the class the container should be
+
+</td></tr>
+<tr><td valign="top">path_ancestors:</td><td>include the ancestors of the resources in the path
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000113_source')" id="l_M000113_source">show source</a> ]</p>
+  <div id="M000113_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 139</span>
+139:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_container</span>(<span class="ruby-identifier">options</span> = {})
+140:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:ancestors</span>] = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:path_ancestors</span>)
+141: 
+142:       <span class="ruby-identifier">path_container</span>(<span class="ruby-identifier">options</span>)
+143:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000114"></a><b>current_container!</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Must find a Container
+</p>
+<p>
+Calls <a href="Station.html#M000113">current_container</a> to figure out
+from params. If unsuccesful, raises ActiveRecord::RecordNotFound
+</p>
+<p>
+Takes the same options as <a
+href="Station.html#M000113">current_container</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000114_source')" id="l_M000114_source">show source</a> ]</p>
+  <div id="M000114_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 152</span>
+152:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_container!</span>(<span class="ruby-identifier">options</span> = {})
+153:       <span class="ruby-identifier">current_container</span>(<span class="ruby-identifier">options</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>)
+154:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000109"></a><b>current_site</b>()
+  </div>
+  <div class="description">
+  <p>
+An instance modeling site configuration and stage
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000109_source')" id="l_M000109_source">show source</a> ]</p>
+  <div id="M000109_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 97</span>
+97:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_site</span>
+98:       <span class="ruby-ivar">@current_site</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Site</span>.<span class="ruby-identifier">current</span>
+99:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000106"></a><b>model_class</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the Model Class related to this Controller
+</p>
+<p>
+e.g. <a href="../Attachment.html">Attachment</a> for AttachmentsController
+</p>
+<p>
+Useful for Controller inheritance
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000106_source')" id="l_M000106_source">show source</a> ]</p>
+  <div id="M000106_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 46</span>
+46:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">model_class</span>
+47:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">model_class</span>
+48:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000111"></a><b>path_container</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Find current Container using path from the request
+</p>
+<p>
+Uses <a href="Station.html#M000110">path_containers</a>. Same options.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000111_source')" id="l_M000111_source">show source</a> ]</p>
+  <div id="M000111_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 119</span>
+119:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path_container</span>(<span class="ruby-identifier">options</span> = {})
+120:       <span class="ruby-identifier">path_containers</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">first</span>
+121:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000112"></a><b>path_container!</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Must find a Container
+</p>
+<p>
+Calls <a href="Station.html#M000111">path_container</a> to figure out from
+params. If unsuccesful, raises ActiveRecord::RecordNotFound
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000112_source')" id="l_M000112_source">show source</a> ]</p>
+  <div id="M000112_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 128</span>
+128:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path_container!</span>(<span class="ruby-identifier">options</span> = {})
+129:       <span class="ruby-identifier">path_container</span>(<span class="ruby-identifier">options</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>)
+130:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000110"></a><b>path_containers</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Find all Containers in the path, using <a
+href="Station.html#M000108">records_from_path</a>
+</p>
+<p>
+Options:
+</p>
+<table>
+<tr><td valign="top">ancestors:</td><td>include containers&#8216;s containers
+
+</td></tr>
+<tr><td valign="top">type:</td><td>the class of the searched containers
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000110_source')" id="l_M000110_source">show source</a> ]</p>
+  <div id="M000110_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 106</span>
+106:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path_containers</span>(<span class="ruby-identifier">options</span> = {})
+107:        <span class="ruby-ivar">@path_containers</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">records_from_path</span>(<span class="ruby-identifier">:acts_as</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:container</span>)
+108: 
+109:        <span class="ruby-identifier">candidates</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:ancestors</span>] <span class="ruby-operator">?</span>
+110:          <span class="ruby-ivar">@path_containers</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">container_and_ancestors</span> }.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">:</span>
+111:          <span class="ruby-ivar">@path_containers</span>.<span class="ruby-identifier">dup</span>
+112: 
+113:        <span class="ruby-identifier">filter_type</span>(<span class="ruby-identifier">candidates</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:type</span>])
+114:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000107"></a><b>record_from_path</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Obtains a given ActiveRecord instance from parameters.
+</p>
+<p>
+Returns the first of <a href="Station.html#M000108">records_from_path</a>.
+Same options.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000107_source')" id="l_M000107_source">show source</a> ]</p>
+  <div id="M000107_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 53</span>
+53:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">record_from_path</span>(<span class="ruby-identifier">options</span> = {})
+54:       <span class="ruby-identifier">records_from_path</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">first</span>
+55:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000108"></a><b>records_from_path</b>(options = {})
+  </div>
+  <div class="description">
+  <p>
+Obtains all ActiveRecord record in parameters.
+</p>
+<p>
+Given this URI:
+</p>
+<pre>
+  /projects/1/tasks/2/posts/3
+
+  records_from_path #=&gt; [ Project-1, Task-2 ]
+</pre>
+<p>
+Options:
+</p>
+<ul>
+<li>acts_as: the ActiveRecord model must acts_as the given symbol. acts_as
+=&gt; :container
+
+</li>
+</ul>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000108_source')" id="l_M000108_source">show source</a> ]</p>
+  <div id="M000108_source" class="dyn-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 67</span>
+67:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">records_from_path</span>(<span class="ruby-identifier">options</span> = {})
+68:       <span class="ruby-identifier">acts_as_module</span> = <span class="ruby-node">&quot;ActiveRecord::#{ options[:acts_as].to_s.classify }&quot;</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:acts_as</span>]
+69: 
+70:       <span class="ruby-identifier">candidates</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">select</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span>[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'_id'</span> }
+71: 
+72:       <span class="ruby-identifier">candidates</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">candidate_key</span><span class="ruby-operator">|</span>
+73:         <span class="ruby-comment cmt"># Filter keys that correspond to classes</span>
+74:         <span class="ruby-keyword kw">begin</span>
+75:           <span class="ruby-identifier">candidate_class</span> = <span class="ruby-identifier">candidate_key</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-4</span>].<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">to_class</span>
+76:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NameError</span>
+77:           <span class="ruby-keyword kw">next</span>
+78:         <span class="ruby-keyword kw">end</span>
+79: 
+80:         <span class="ruby-comment cmt"># acts_as filter</span>
+81:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:acts_as</span>]
+82:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">acts_as_module</span>.<span class="ruby-identifier">classes</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">candidate_class</span>)
+83:         <span class="ruby-keyword kw">end</span>
+84: 
+85:         <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">candidate_class</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:find</span>)
+86: 
+87:         <span class="ruby-comment cmt"># Find record</span>
+88:         <span class="ruby-keyword kw">begin</span>
+89:           <span class="ruby-identifier">candidate_class</span>.<span class="ruby-identifier">find_with_param</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">candidate_key</span>])
+90:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>
+91:           <span class="ruby-keyword kw">next</span>
+92:         <span class="ruby-keyword kw">end</span>
+93:       }.<span class="ruby-identifier">compact</span>
+94:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Protected Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000115"></a><b>set_params_from_raw_post</b>(content = controller_name.singularize.to_sym)
+  </div>
+  <div class="description">
+  <p>
+Extract request parameters when posting raw data
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000115_source')" id="l_M000115_source">show source</a> ]</p>
+  <div id="M000115_source" class="dyn-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/action_controller/station.rb, line 159</span>
+159:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_params_from_raw_post</span>(<span class="ruby-identifier">content</span> = <span class="ruby-identifier">controller_name</span>.<span class="ruby-identifier">singularize</span>.<span class="ruby-identifier">to_sym</span>)
+160:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">raw_post</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">content</span>]
+161: 
+162:       <span class="ruby-identifier">filename</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">env</span>[<span class="ruby-value str">&quot;HTTP_SLUG&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">controller_name</span>.<span class="ruby-identifier">singularize</span>
+163:       <span class="ruby-identifier">content_type</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">content_type</span>
+164:       
+165:       <span class="ruby-identifier">file</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;media&quot;</span>)
+166:       <span class="ruby-identifier">file</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">raw_post</span>
+167:       (<span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">file</span>; <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">end</span>).<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>
+168:         <span class="ruby-keyword kw">alias</span> <span class="ruby-identifier">local_path</span> <span class="ruby-identifier">path</span>
+169:         <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">:content_type</span>) { <span class="ruby-identifier">content_type</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">taint</span> }
+170:         <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">:original_filename</span>) { <span class="ruby-identifier">filename</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">taint</span> }
+171:       <span class="ruby-keyword kw">end</span>
+172: 
+173:       <span class="ruby-identifier">params</span>[<span class="ruby-identifier">content</span>]                  <span class="ruby-operator">||=</span> {}
+174:       <span class="ruby-identifier">params</span>[<span class="ruby-identifier">content</span>][<span class="ruby-identifier">:title</span>]          <span class="ruby-operator">||=</span> <span class="ruby-identifier">filename</span>
+175:       <span class="ruby-identifier">params</span>[<span class="ruby-identifier">content</span>][<span class="ruby-identifier">:media</span>]          <span class="ruby-operator">||=</span> <span class="ruby-identifier">file</span>
+176:       <span class="ruby-identifier">params</span>[<span class="ruby-identifier">content</span>][<span class="ruby-identifier">:public_read</span>]    <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">true</span>
+177:     <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

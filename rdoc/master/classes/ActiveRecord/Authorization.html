@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: ActiveRecord::Authorization</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />ActiveRecord::Authorization</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/active_record/authorization_rb.html">lib/active_record/authorization.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+<a href="Authorization.html">Authorization</a> module provides ActiveRecord
+descendants with an advanced authorization framework.
+</p>
+<pre>
+ # Check if alice can update foo
+ foo.authorize?(:update, :to =&gt; alice)
+
+ # Check if bob can delete bar
+ bar.authorize?(:delete, :to =&gt; bob)
+</pre>
+<p>
+Every ActiveRecord::Base descendant can authorize actions to Agents.
+</p>
+<h2>The <a href="Authorization.html">Authorization</a> Chain</h2>
+<p>
+Access Control policies are defining by the <a
+href="Authorization.html">Authorization</a> Chain.
+</p>
+<p>
+Each ActiveRecord model have an <a
+href="Authorization.html">Authorization</a> Chain (AC) associated. The AC
+is a sequence of <a href="Authorization.html">Authorization</a> Blocks
+(AB). Each AB should enclose only one security policy.
+</p>
+<p>
+When asking some model if some <a href="Agent.html">Agent</a> is allowed to
+perform an action, the <a href="Authorization.html">Authorization</a> Chain
+is evaluated. Each AB is executed in order. When one AB gives a result
+(true or false), the AC is halted and action is allowed or denied.
+</p>
+<p>
+If the AB result is nil, the next AB is evaluated. When no AB remain,
+auhorization is denied.
+</p>
+<p>
+<a href="Authorization.html">Authorization</a> Blocks are defined using <a
+href="Authorization/ClassMethods.html#M000157">ActiveRecord::Authorization::ClassMethods#authorizing</a>
+method.
+</p>
+<p>
+Consider the following example of <a
+href="Authorization.html">Authorization</a> Chain
+</p>
+<pre>
+ # Foo's Authorization Chain:
+ #   ---------------   -----------   -----------   --------------------
+ # --| superadmin? |---| banned? |---| author? |---| [default policy] |
+ #   ---------------   -----------   -----------   --------------------
+
+  class Foo
+    authorizing do |agent, permission|
+      if agent.is_superadmin?
+        true
+      end
+    end
+
+    authorizing do |agent, permission|
+      if agent.is_banned?
+        false
+      end
+    end
+
+    authorizing do |agent, permission|
+      if agent == self.author
+        true
+      end
+    end
+  end
+</pre>
+<p>
+The class Foo has 3 <a href="Authorization.html">Authorization</a> Blocks,
+that will be evaluated in order until a response is obtained.
+</p>
+<p>
+<a href="Authorization.html">Authorization</a> is queried using
+ActiveRecord::Authorization::InstanceMethods#authorize? method. For the
+example above:
+</p>
+<pre>
+  foo.authorize?(:read, :to =&gt; superadmin) #=&gt; true
+  foo.authorize?(:destroy, :to =&gt; banned_agent) #=&gt; false
+  foo.authorize?(:update, :to =&gt; example.author) #=&gt; true
+</pre>
+<p>
+Note that <a href="Authorization.html">Authorization</a> Blocks are
+evaluated in order. This configuration will allow the operation to a banned
+superadmin because the first block grants the access:
+</p>
+<pre>
+  foo.authorize?(:read, :to =&gt; banned_superadmin) #=&gt; true
+</pre>
+<h3>Station default <a href="Authorization.html">Authorization</a> Blocks</h3>
+<p>
+Station provides 2 default <a href="Authorization.html">Authorization</a>
+Blocks for Contents and Stages. See <a
+href="Content.html">ActiveRecord::Content</a> and <a
+href="Stage.html">ActiveRecord::Stage</a>
+</p>
+<h2><a href="Authorization.html">Authorization</a> Cache</h2>
+<p>
+Permissions are cached for each ActiveRecord instance during the request.
+This improves performance significantly.
+</p>
+<p>
+The cache consist on a Hash of Hashes, like:
+</p>
+<pre>
+  post.authorization_cache #=&gt; { User.first =&gt; { :read =&gt; true, :update =&gt; false },
+                          Anonymous.current =&gt; { :read =&gt; false } }
+</pre>
+</div>
+
+
+
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Authorization/ClassMethods.html" class="link">ActiveRecord::Authorization::ClassMethods</a><br />
+Module <a href="Authorization/InstanceMethods.html" class="link">ActiveRecord::Authorization::InstanceMethods</a><br />
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>
