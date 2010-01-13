@@ -13,7 +13,7 @@ module ActionView #:nodoc:
       #
       def title(new_title = "", options = {})
         title = if new_title.present?
-                  new_title.dup
+                  new_title
                 elsif @title
                   @title
                 elsif @contents
@@ -32,7 +32,8 @@ module ActionView #:nodoc:
                   end
                 else
                   controller.controller_name.titleize
-                end
+                end.dup
+
         title << " - #{ current_site.name }" if options[:append_site_name]
                 
         sanitize(title)
