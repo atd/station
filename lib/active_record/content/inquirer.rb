@@ -51,7 +51,7 @@ module ActiveRecord #:nodoc:
                     ", content_type" :
                     ", ( SELECT NULL ) AS content_type" )
 
-            content.roots.in_container(container).construct_finder_sql(params)
+            content.content_inquirer_query(params, :container => container)
           }.join(" UNION ")
         end
 

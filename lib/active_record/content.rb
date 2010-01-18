@@ -108,6 +108,33 @@ module ActiveRecord #:nodoc:
           end
         end
       end
+
+      # ActiveRecord Scope used by ActiveRecord::Content::Inquirer
+      #
+      # By default uses roots.in_container find scope
+      #
+      # Options:
+      # container:: The container passed to in_container named_scope
+      def content_inquirer_scope(options = {})
+        inquirer_scope = roots.in_container(options[:container]).scope(:find)
+      end
+
+      # Construct SQL query used by ActiveRecord::Content::Inquirer
+      #
+      # params is a hash of parameters passed to ActiveRecord, like in a regular query
+      #
+      # scope_options will be passed to content_inquirer_scope
+      #
+      def content_inquirer_query(params = {}, scope_options = {})
+        inquirer_scope = content_inquirer_scope(scope_options)
+
+        # Clean scope parameters like :order
+        inquirer_scope.delete(:order)
+
+        with_scope(:find => inquirer_scope) do
+          construct_finder_sql(params)
+        end
+      end
     end
 
     module InstanceMethods
