@@ -29,15 +29,7 @@ module ActiveRecord #:nodoc:
         base.extend ActsAsMethods
       end
 
-      # List of Contents from many models
-      #
-      # Options::
-      # containers:: The Container for the Contents
-      # page:: Number of page.
-      # per_page:: Number of Contents per page
-      def all(options = {})
-        ActiveRecord::Content::Inquirer.all(options)
-      end
+      delegate :all, :paginate, :to => ActiveRecord::Content::Inquirer
     end
 
     module ActsAsMethods
