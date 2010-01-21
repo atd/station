@@ -1,5 +1,5 @@
 module ActiveRecord #:nodoc:
-  module Content #:nodoc:
+  module Content
     # Fake ActiveRecord::Base subclass for building queries in Containers
     class Inquirer < ActiveRecord::Base
       @colums = Array.new
