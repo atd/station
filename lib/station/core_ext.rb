@@ -1,12 +1,14 @@
-def Object.__station_deprecate_method__(old_method, new_method)
-  module_eval <<-END_METHOD
-    def #{ old_method } *args
-      logger.debug "Station: DEPRECATION WARNING \\"#{ old_method }\\". Please use \\"#{ new_method }\\" instead."
-      line = caller.select{ |l| l =~ /^\#{ RAILS_ROOT }/ }.first
-      logger.debug "           in: \#{ line }"
-      send :#{ new_method }, *args
-    end
-    END_METHOD
+Object.class_eval do
+  def __station_deprecate_method__(old_method, new_method)
+    module_eval <<-END_METHOD
+      def #{ old_method } *args
+        logger.debug "Station: DEPRECATION WARNING \\"#{ old_method }\\". Please use \\"#{ new_method }\\" instead."
+        line = caller.select{ |l| l =~ /^\#{ RAILS_ROOT }/ }.first
+        logger.debug "           in: \#{ line }"
+        send :#{ new_method }, *args
+      end
+      END_METHOD
+  end
 end
 
 unless Symbol.instance_methods.include? 'to_class'
