@@ -6,7 +6,7 @@ class TagsController < ApplicationController
   private
 
   def tag
-    @tag ||= (current_container.try(:tags) || Tag).find_by_name(params[:id])
+    @tag ||= (path_container.try(:tags) || Tag).find_by_name(params[:id])
     raise ActiveRecord::RecordNotFound, "Tag not found" unless @tag
 
     @tag

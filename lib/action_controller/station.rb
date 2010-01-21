@@ -17,9 +17,8 @@ module ActionController
 
       def included(base) #:nodoc:
         base.helper_method :current_site
-        base.helper_method :site
+        base.helper_method :path_container
         base.helper_method :current_container
-        base.helper_method :container
 
         class << base
           def model_class
@@ -97,30 +96,39 @@ module ActionController
     end
 
     def current_site
-      @site ||= Site.current
+      @current_site ||= Site.current
     end
 
-    deprecated_method :site, :current_site
-  
     # Find current Container using path from the request
-    def current_container
-      @container ||= record_from_path(:acts_as => :container)
+    def path_container
+      @current_container ||= record_from_path(:acts_as => :container)
     end
 
-    deprecated_method :container, :current_container
-    deprecated_method :get_container, :current_container
+    # Find current Container using path from the request
+    #
+    # Note that in StationResouces this method is redefined priorizing the resource
+    def current_container
+      path_container
+    end
+
+    # Must find a Container
+    #
+    # Calls path_container to figure out from params. If unsuccesful,
+    # raises ActiveRecord::RecordNotFound
+    #
+    def path_container!
+      path_container || raise(ActiveRecord::RecordNotFound)
+    end
+
 
     # Must find a Container
     # 
-    # Calls container to figure out from params. If unsuccesful, 
+    # Calls current_container to figure out from params. If unsuccesful,
     # raises ActiveRecord::RecordNotFound
     # 
     def current_container!
       current_container || raise(ActiveRecord::RecordNotFound)
     end
-
-    deprecated_method :container!, :current_container!
-    deprecated_method :needs_container, :current_container!
 
     protected
 

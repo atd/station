@@ -2,7 +2,7 @@ class SourcesController < ApplicationController
   # GET /sources
   # GET /sources.xml
   def index
-    @sources = (current_container && current_container.sources || Source).all
+    @sources = (path_container && path_container.sources || Source).all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -48,7 +48,7 @@ class SourcesController < ApplicationController
   # POST /sources.xml
   def create
     @source = Source.new(params[:source])
-    @source.container = current_container
+    @source.container = path_container
 
     respond_to do |format|
       if @source.save

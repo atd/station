@@ -16,11 +16,9 @@ module ActionView #:nodoc:
                   new_title
                 elsif @title
                   @title
-                elsif @contents
-                  current_container ?
-                    t(:other_in_container, :scope => controller.controller_name.singularize, :container => current_container.name) :
-                    t(:other, :scope => controller.controller_name.singularize)
                 elsif @resources
+                  path_container ?
+                    t(:other_in_container, :scope => controller.controller_name.singularize, :container => path_container.name) :
                     t(:other, :scope => controller.controller_name.singularize)
                 elsif @resource
                   if @resource.new_record?

@@ -1,11 +1,11 @@
 atom_feed('xmlns:app' => 'http://www.w3.org/2007/app',
-          :root_url => polymorphic_url([ current_container, <%= class_name %>.new ])) do |feed|
+          :root_url => polymorphic_url([ path_container, <%= class_name %>.new ])) do |feed|
 
   feed.title(:type => "xhtml") do 
     feed.div(sanitize(title),:xmlns => "http://www.w3.org/1999/xhtml")
   end
 
-  description = current_container && current_container.respond_to?(:description) && current_container.description
+  description = path_container && path_container.respond_to?(:description) && path_container.description
   description ||= current_site.description
   feed.subtitle(:type => "xhtml") do
     feed.div(sanitize(description), :xmlns => "http://www.w3.org/1999/xhtml")

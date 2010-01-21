@@ -36,7 +36,7 @@ module ActionController #:nodoc:
 
       @conditions ||= nil
 
-      @resources = model_class.roots.in_container(current_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
+      @resources = model_class.roots.in_container(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
 
       if block_given?
@@ -130,7 +130,7 @@ module ActionController #:nodoc:
       instance_variable_set "@#{ model_class.to_s.underscore }", @resource
 
       @resource.author = current_agent if @resource.respond_to?(:author=)
-      @resource.container = current_container  if @resource.respond_to?(:container=)
+      @resource.container = path_container  if @resource.respond_to?(:container=)
 
       respond_to do |format|
         if @resource.save
@@ -221,7 +221,7 @@ module ActionController #:nodoc:
               request.referer.present? &&
               !(request.referer =~ /#{ polymorphic_path(resource) }/) ?
                 request.referer :
-                [ current_container, model_class.new ] )
+                [ path_container, model_class.new ] )
             redirect_to redirection
           }
           format.js
@@ -231,7 +231,7 @@ module ActionController #:nodoc:
           format.html {
             flash[:error] = t(:not_deleted, :scope => resource.class.to_s.underscore)
             flash[:error] << resource.errors.to_xml
-            redirect_to(request.referer || [ current_container, model_class.new ])
+            redirect_to(request.referer || [ path_container, model_class.new ])
           }
           format.js
           format.xml  { render :xml => @resource.errors.to_xml }
@@ -248,13 +248,20 @@ module ActionController #:nodoc:
     def resource
       @resource ||= if params[:id].present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", 
-                        model_class.in_container(current_container).find_with_param(params[:id]) ||
+                        model_class.in_container(path_container).find_with_param(params[:id]) ||
                         raise(ActiveRecord::RecordNotFound, "Resource not found"))
                     else
                       r = model_class.new(params[model_class.to_s.underscore.to_sym])
-                      r.container = current_container if r.respond_to?(:container=) && current_container.present?
+                      r.container = path_container if r.respond_to?(:container=) && path_container.present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
+    end
+
+    def current_container
+      @current_container =
+        ( resource && resource.class.acts_as?(:container) ?
+          resource :
+          path_container )
     end
 
     private
