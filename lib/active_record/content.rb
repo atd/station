@@ -87,7 +87,8 @@ module ActiveRecord #:nodoc:
         when NilClass
           ""
         when Array
-          container.map{ |c| container_conditions(c) }.join(" OR ")
+          c = container.map{ |c| container_conditions(c) }.join(" OR ")
+          "(#{ c })"
         else
           if container.class.acts_as?(:container)
             c = "#{ table_name }.#{ container_reflection.primary_key_name } = '#{ container.id }'"
