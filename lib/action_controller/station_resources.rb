@@ -5,7 +5,7 @@ module ActionController #:nodoc:
     class << self
       def included(base) #:nodoc:
         base.send :include, ActionController::Station unless base.ancestors.include?(ActionController::Station)
-        base.class_eval do                                     # class Article
+        base.class_eval do                                     # class ArticlesController
           alias_method controller_name.singularize, :resource  #   alias_method :article, :resource
           helper_method controller_name.singularize            #   helper_method :article
         end                                                    # end
