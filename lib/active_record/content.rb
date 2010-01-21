@@ -4,8 +4,8 @@ module ActiveRecord #:nodoc:
   # Include this functionality in your models using ActsAsMethods#acts_as_content
   #
   # == Named Scope
-  # You can use the named_scope +in_container+ to get all Contents in some Container.
-  #   Content.in_container(some_container) #=> Array of contents in the container
+  # You can use the named_scope +in(container)+ to get all Contents in some Container.
+  #   Content.in(some_container) #=> Array of contents in the container
   #
   # == Authorization
   # The Content will incorporate an authorization_block.
@@ -25,7 +25,12 @@ module ActiveRecord #:nodoc:
     class << self
       def included(base) # :nodoc:
         # Fake named_scope to ActiveRecord instances that aren't Contents
-        base.named_scope :in_container, lambda { |container| {} }
+        base.named_scope :in, lambda { |container| {} }
+        base.class_eval do
+          class << self
+            __station_deprecate_method__(:in_container, :in)
+          end
+        end
         base.extend ActsAsMethods
       end
 
@@ -55,7 +60,7 @@ module ActiveRecord #:nodoc:
         end
         attr_protected :container, :container_id, :container_type
 
-        named_scope :in_container, lambda { |container|
+        named_scope :in, lambda { |container|
           { :conditions => container_conditions(container) }
         }
 
@@ -104,12 +109,12 @@ module ActiveRecord #:nodoc:
 
       # ActiveRecord Scope used by ActiveRecord::Content::Inquirer
       #
-      # By default uses roots.in_container find scope
+      # By default uses roots.in(container) find scope
       #
       # Options:
-      # container:: The container passed to in_container named_scope
+      # container:: The container passed to in(container) named_scope
       def content_inquirer_scope(options = {})
-        inquirer_scope = roots.in_container(options[:container]).scope(:find)
+        inquirer_scope = roots.in(options[:container]).scope(:find)
       end
 
       # Construct SQL query used by ActiveRecord::Content::Inquirer

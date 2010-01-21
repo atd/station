@@ -15,7 +15,7 @@ module ActionController #:nodoc:
 
     # List Resources
     #
-    # When the Resource is a Content, uses in_container named_scope
+    # When the Resource is a Content, uses in(container) named_scope
     # When it's a Sortable, uses column_sort named_scope
     #
     # It also paginates using great Mislav will_paginate plugin
@@ -36,7 +36,7 @@ module ActionController #:nodoc:
 
       @conditions ||= nil
 
-      @resources = model_class.roots.in_container(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
+      @resources = model_class.roots.in(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
       instance_variable_set "@#{ model_class.to_s.tableize }", @resources
 
       if block_given?
@@ -248,7 +248,7 @@ module ActionController #:nodoc:
     def resource
       @resource ||= if params[:id].present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", 
-                        model_class.in_container(path_container).find_with_param(params[:id]) ||
+                        model_class.in(path_container).find_with_param(params[:id]) ||
                         raise(ActiveRecord::RecordNotFound, "Resource not found"))
                     else
                       r = model_class.new(params[model_class.to_s.underscore.to_sym])

@@ -4,17 +4,6 @@ module ActionController
     # Inclusion hook to make container_content methods
     # available as ActionView helper methods.
     class << self
-      def deprecated_method(old_method, new_method)
-        module_eval <<-END_METHOD
-          def #{ old_method } *args
-            logger.debug "Station: DEPRECATION WARNING \\"#{ old_method }\\". Please use \\"#{ new_method }\\" instead."
-            line = caller.select{ |l| l =~ /^\#{ RAILS_ROOT }/ }.first
-            logger.debug "           in: \#{ line }"
-            send :#{ new_method }, *args
-          end
-          END_METHOD
-      end
-
       def included(base) #:nodoc:
         base.helper_method :current_site
         base.helper_method :path_container
