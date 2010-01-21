@@ -13,7 +13,7 @@ module ActiveRecord #:nodoc:
       # Provides an ActiveRecord model with Container capabilities
       #
       # Options:
-      # <tt>contents</tt>:: an Array of Contents that can be posted to this Container. Ex: [ :article, :image ]. Defaults to all available Content models.
+      # <tt>contents</tt>:: an Array of Contents that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content models.
       # <tt>sources</tt>:: The container has remote sources. It will import Atom/RSS feeds as contents. See Source. Defaults to false
       def acts_as_container(options = {})
         ActiveRecord::Container.register_class(self)
