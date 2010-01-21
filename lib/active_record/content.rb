@@ -136,9 +136,8 @@ module ActiveRecord #:nodoc:
     end
 
     module InstanceMethods
-      # Has this Content been posted in this Container? Is there any Entry linking both?
-      # Obsolete?  
-      def posted_in?(container)
+      # Has this Content been posted in this Container?
+      def in?(container)
         container == self.container
       end
     end
