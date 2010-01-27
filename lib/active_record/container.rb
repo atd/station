@@ -46,9 +46,9 @@ module ActiveRecord #:nodoc:
       # Uses ActiveRecord::Content::Inquirer for building the query in 
       # several tables.
       def contents(options = {})
-        options[:containers] = Array(self)
+        container_options[:containers] = Array(self)
 
-        ActiveRecord::Content::Inquirer.all(options)
+        ActiveRecord::Content::Inquirer.all(options, container_options)
       end
     end
   end
