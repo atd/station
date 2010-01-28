@@ -42,10 +42,12 @@ module ActiveRecord #:nodoc:
       #
       # == Options
       # <tt>reflection</tt>:: Name of the (usually <tt>belongs_to</tt>) association that relates this model with its Container. Defaults to <tt>:container</tt>
+      # <tt>authorization</tt>:: Add Authorization block to delegate authorization request to reflection
       def acts_as_content(options = {})
         ActiveRecord::Content.register_class(self)
 
-        options[:reflection] ||= :container
+        options[:reflection]  ||= :container
+        options[:authorization] = true if options[:authorization].nil?
 
         cattr_reader :content_options
         class_variable_set "@@content_options", options
@@ -66,14 +68,9 @@ module ActiveRecord #:nodoc:
 
         acts_as_sortable
 
-        authorizing do |agent, permission|
-          return nil unless container.present?
-
-          return nil unless permission.is_a?(String) || permission.is_a?(Symbol)
-
-          container.authorize?([permission, :content], :to => agent) ||
-            container.authorize?([permission, self.class.to_s.underscore.to_sym], :to => agent) ||
-            nil
+        if options[:authorization]
+          authorization_delegate :container, :as => :content
+          authorization_delegate :container
         end
 
         extend  ClassMethods

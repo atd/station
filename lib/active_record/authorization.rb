@@ -86,6 +86,20 @@ module ActiveRecord #:nodoc:
       def authorizing(method = nil, &block)
         @authorization_methods = authorization_methods | Array(method || block)
       end
+
+      def authorization_delegate(relation, options = {})
+        options[:as] ||= name.underscore
+
+        class_eval <<-AUTH
+        authorizing do |agent, permission|
+          return nil unless #{ relation }.present?
+
+          return nil unless permission.is_a?(String) || permission.is_a?(Symbol)
+
+          #{ relation }.authorize?([permission, :#{ options[:as] }], :to => agent) || nil
+        end
+        AUTH
+      end
     end
 
     # Instance methods can be redefined in each Model for custom features
