@@ -6,6 +6,8 @@ module ActionController #:nodoc:
       def included(base) #:nodoc:
         base.send :include, ActionController::Station unless base.ancestors.include?(ActionController::Station)
         base.class_eval do                                     # class ArticlesController
+          alias_method controller_name, :resources             #   alias_method :articles, :resources
+          helper_method controller_name                        #   helper_method :articles
           alias_method controller_name.singularize, :resource  #   alias_method :article, :resource
           helper_method controller_name.singularize            #   helper_method :article
         end                                                    # end
@@ -36,8 +38,7 @@ module ActionController #:nodoc:
 
       @conditions ||= nil
 
-      @resources = model_class.roots.in(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
-      instance_variable_set "@#{ model_class.to_s.tableize }", @resources
+      resources
 
       if block_given?
         yield
@@ -255,6 +256,11 @@ module ActionController #:nodoc:
                       r.container = path_container if r.respond_to?(:container=) && path_container.present?
                       instance_variable_set("@#{ model_class.to_s.underscore }", r)
                     end
+    end
+
+    def resources
+      @resources ||= instance_variable_set "@#{ model_class.to_s.tableize }",
+                       model_class.roots.in(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
     end
 
     def current_container
