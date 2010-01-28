@@ -26,7 +26,12 @@ class InvitationsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @candidate = ActiveRecord::Agent::Invite.classes.first.new
+        if @invitation.processed?
+          flash[:notice] = t(@invitation.state, :scope => 'invitation.was_processed')
+          redirect_to @invitation.group
+        else
+          @candidate = ActiveRecord::Agent::Invite.classes.first.new
+        end
       }
       format.xml  { render :xml => @invitation }
     end
@@ -81,8 +86,14 @@ class InvitationsController < ApplicationController
       invitation.reload
     end
 
+
+    invitation.attributes = params[:invitation]
+    # Invitation may be accepted by an already registered user when sent to a different
+    # email address
+    invitation.candidate ||= current_agent if params[:invitation][:processed]
+
     respond_to do |format|
-      if invitation.update_attributes(params[:invitation])
+      if invitation.save
         format.html {
           flash[:success] = invitation.state_message
           redirect_to(invitation.group || root_path)

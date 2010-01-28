@@ -195,6 +195,9 @@ es:
     discard: "Descartar invitación"
     created: "Invitación enviada"
     not_processed: "Invitación sin responder"
+    was_processed:
+      accepted: "La invitación ya fue aceptada"
+      discarted: "La invitación ya fue descartada"
     accepted: "Invitación aceptada"
     accepted_by: "{{candidate}} aceptó la invitación"
     discarded: "Invitación descartada"
