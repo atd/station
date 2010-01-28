@@ -5,6 +5,7 @@ module ActionController
     # available as ActionView helper methods.
     class << self
       def included(base) #:nodoc:
+        base.helper_method :model_class
         base.helper_method :current_site
         base.helper_method :path_container
         base.helper_method :current_container
