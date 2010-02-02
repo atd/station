@@ -264,7 +264,7 @@ module ActionController #:nodoc:
     end
 
     def current_container
-      @current_container =
+      @current_container ||=
         ( resource && resource.class.acts_as?(:container) ?
           resource :
           path_container )

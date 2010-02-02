@@ -91,7 +91,7 @@ module ActionController
 
     # Find current Container using path from the request
     def path_container
-      @current_container ||= record_from_path(:acts_as => :container)
+      @path_container ||= record_from_path(:acts_as => :container)
     end
 
     # Find current Container using path from the request
