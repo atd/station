@@ -5,7 +5,7 @@
   <%= f.hidden_field :accepted, :value => true %>
 
   <% unless authenticated? %>
-    <% fields_for @candidate do |cf| %>
+    <% fields_for @candidate || Invitation.candidate_class.new do |cf| %>
       <%= cf.error_messages %>
 
       <p>

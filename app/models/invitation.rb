@@ -1,4 +1,13 @@
 class Invitation < Admission
+  class << self
+    def candidate_class
+      ActiveRecord::Agent::Invite.classes.first
+    end
+  end
+
+  acts_as_resource :param => :code
+  acts_as_content :reflection => :group
+
   validates_presence_of :email
   validate :valid_role
 

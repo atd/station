@@ -1,41 +1,9 @@
 class InvitationsController < ApplicationController
-  before_filter :invitation, :only => [ :show, :update, :delete ]
+  include ActionController::StationResources
+
   before_filter :candidate_authenticated, :only => [ :show, :update ]
 
-  # GET /invitations
-  # GET /invitations.xml
-  def index
-    @invitations = group ?
-      group.invitations.column_sort(params[:order], params[:direction]) :
-      Invitation.column_sort(params[:order], params[:direction])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @invitations }
-    end
-  end
-
-  # GET /invitations/1
-  # GET /invitations/1.xml
-  def show
-    unless @invitation
-      flash[:error] = t('invitation.not_found')
-      redirect_to root_path
-      return
-    end
-
-    respond_to do |format|
-      format.html {
-        if @invitation.processed?
-          flash[:notice] = t(@invitation.state, :scope => 'invitation.was_processed')
-          redirect_to @invitation.group
-        else
-          @candidate = ActiveRecord::Agent::Invite.classes.first.new
-        end
-      }
-      format.xml  { render :xml => @invitation }
-    end
-  end
+  before_filter :processed_invitation, :only => [ :show ]
 
   def create
     @invitation = ( group.try(:invitations) || Invitation ).new params[:invitation]
@@ -104,28 +72,22 @@ class InvitationsController < ApplicationController
     end
   end
 
-  # DELETE /invitations/1
-  # DELETE /invitations/1.xml
-  def destroy
-    invitation.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(request.referer || [ invitation.group, Invitation.new ]) }
-      format.xml  { head :ok }
-    end
-  end
-
   private
 
   def group
     @group ||= record_from_path(:acts_as => :stage)
   end
 
-  def invitation
-    @invitation ||= Invitation.find_by_code(params[:id]) || raise(ActiveRecord::RecordNotFound, "Invitation not found")
-  end
+  alias_method :path_container, :group
 
   def candidate_authenticated
     not_authenticated if invitation.candidate && ! authenticated?
+  end
+
+  def processed_invitation
+    if invitation.processed?
+      flash[:notice] = t(invitation.state, :scope => 'invitation.was_processed')
+      redirect_to invitation.group
+    end
   end
 end

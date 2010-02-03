@@ -218,12 +218,7 @@ module ActionController #:nodoc:
         if resource.destroy
           format.html {
             flash[:success] = t(:deleted, :scope => @resource.class.to_s.underscore)
-            redirection = (
-              request.referer.present? &&
-              !(request.referer =~ /#{ polymorphic_path(resource) }/) ?
-                request.referer :
-                [ path_container, model_class.new ] )
-            redirect_to redirection
+            after_destroy_with_success
           }
           format.js
           format.xml  { head :ok }
@@ -232,7 +227,7 @@ module ActionController #:nodoc:
           format.html {
             flash[:error] = t(:not_deleted, :scope => resource.class.to_s.underscore)
             flash[:error] << resource.errors.to_xml
-            redirect_to(request.referer || [ path_container, model_class.new ])
+            after_destroy_with_errors
           }
           format.js
           format.xml  { render :xml => @resource.errors.to_xml }
@@ -290,6 +285,21 @@ module ActionController #:nodoc:
     # Redirect here after update if there were errors
     def after_update_with_errors
       render :action => "edit"
+    end
+
+    # Redirect here after destroy if everythig went well
+    def after_destroy_with_success
+      redirection = (
+        request.referer.present? &&
+        !(request.referer =~ /#{ polymorphic_path(resource) }/) ?
+          request.referer :
+          [ path_container, model_class.new ] )
+      redirect_to redirection
+    end
+
+    # Redirect here after destroy if there were errors
+    def after_destroy_with_errors
+      redirect_to(request.referer || [ path_container, model_class.new ])
     end
   end
 end
