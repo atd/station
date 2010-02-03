@@ -80,6 +80,7 @@ es:
       change_password: "Cambiar la contraseña"
       confirm_password: "Confirme la Contraseña"
       lost_password: "¡Olvidé la contraseña!"
+    email: "Correo electrónico"
     select:
       one: "Seleccionar Agente"
   singular_agent:

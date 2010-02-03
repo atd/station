@@ -82,6 +82,7 @@ en:
       change_password: "Change Password"
       confirm_password: "Confirm Password"
       lost_password: "I lost my password!"
+    email: "Email"
     select:
       one: "Select Agent"
   singular_agent:
