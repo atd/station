@@ -5,7 +5,7 @@
 #
 # You must have the plugin installed
 class Site < ActiveRecord::Base
-  has_logo
+  acts_as_logoable
 
   def self.current
     first || create

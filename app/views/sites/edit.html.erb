@@ -2,7 +2,7 @@
 
 <%= error_messages_for :site %>
 
-<% form_for(:site, :url => site_path, :html => { :method => :put, :multipart => true }) do |f| %>
+<% form_for(:current_site, :url => site_path, :html => { :method => :put, :multipart => true }) do |f| %>
   <p>
     <%= f.label :name, t('site.name') %><br />
     <%= f.text_field :name %>
@@ -15,7 +15,7 @@
 
   <p>
     <%= f.label :logo, t('site.logo') %><br />
-    <%= file_field_tag "site[_logo][media]" %>
+    <%= file_field_tag "current_site[_logo][media]" %>
     <%= preview current_site.logo %>
   </p>
 
