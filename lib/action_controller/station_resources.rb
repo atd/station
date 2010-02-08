@@ -258,11 +258,14 @@ module ActionController #:nodoc:
                        model_class.roots.in(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
     end
 
+    # Find current Container prioritizing the resource (if it exists), or its container.
+    #
+    # Defaults to path_container
     def current_container
       @current_container ||=
-        ( resource && resource.class.acts_as?(:container) ?
-          resource :
-          path_container )
+        resource && ( resource.class.acts_as?(:container) && resource ||
+                      resource.respond_to?(:container) && resource.container ) ||
+          path_container
     end
 
     private
