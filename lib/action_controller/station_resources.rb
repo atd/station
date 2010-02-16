@@ -2,6 +2,9 @@ module ActionController #:nodoc:
   # Controller methods for Resources
   #
   module StationResources
+    class ContainerError < ::StandardError  #:nodoc:
+    end
+
     class << self
       def included(base) #:nodoc:
         base.send :include, ActionController::Station unless base.ancestors.include?(ActionController::Station)
@@ -11,6 +14,9 @@ module ActionController #:nodoc:
           alias_method controller_name.singularize, :resource  #   alias_method :article, :resource
           helper_method controller_name.singularize            #   helper_method :article
         end                                                    # end
+
+        base.send :rescue_from, ContainerError, :with => :container_error
+
         base.send :include, ActionController::Authorization unless base.ancestors.include?(ActionController::Authorization)
       end
     end
@@ -258,17 +264,51 @@ module ActionController #:nodoc:
                        model_class.roots.in(path_container).column_sort(params[:order], params[:direction]).paginate(:page => params[:page], :conditions => @conditions)
     end
 
-    # Find current Container prioritizing the resource (if it exists), or its container.
+    # Search in the resource's containers and in the path for current Container.
     #
-    # Defaults to path_container
-    def current_container
-      @current_container ||=
-        resource && ( resource.class.acts_as?(:container) && resource ||
-                      resource.respond_to?(:container) && resource.container ) ||
-          path_container
+    # We start with the following assumptions:
+    # * Resources have a unique branch of nested containers in the containers tree
+    # * If we find containers of the same type in both branches (resource containers
+    # and path), they must be the same. If they aren't we assume a routing error (409 Conflict).
+    #
+    # Options:
+    # type:: the class of the container
+    def current_container(options = {})
+      find_current_container(options)
     end
 
     private
+
+    def find_current_container(options) #:nodoc:
+      rc = resource_container(options)
+
+      path_options = options.dup
+      path_options[:ancestors] = path_options.delete(:path_ancestors)
+      pc = path_container(path_options)
+
+      if rc.present? && pc.present? &&
+           rc != pc 
+        raise ContainerError
+      end
+
+      rc || pc
+    end
+
+    # Gets a container from the resource containers
+    def resource_container(options = {}) #:nodoc:
+      return nil unless resource.present?
+
+      @resource_container_candidates ||=
+        Array( resource.class.acts_as?(:container) ?
+                 resource.container_and_ancestors :
+                 resource.class.acts_as?(:content) ?
+                   resource.container.try(:container_and_ancestors) :
+                   nil ).compact
+
+      candidates = filter_type(@resource_container_candidates, options[:type])
+
+      candidates.first
+    end
 
     # Redirect here after create if everythig went well
     def after_create_with_success
@@ -303,6 +343,11 @@ module ActionController #:nodoc:
     # Redirect here after destroy if there were errors
     def after_destroy_with_errors
       redirect_to(request.referer || [ path_container, model_class.new ])
+    end
+
+    def container_error(e) #:nodoc:
+      render :text => 'Container route conflicts with resource container',
+             :status => 409
     end
   end
 end

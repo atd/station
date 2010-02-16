@@ -50,6 +50,14 @@ module ActiveRecord #:nodoc:
 
         ActiveRecord::Content::Inquirer.all(options, container_options)
       end
+
+      # A list of all the nested containers of this Container, including self,
+      # sorted by closeness
+      def container_and_ancestors
+        ca = respond_to?(:container) && container.try(:container_and_ancestors) || nil
+
+        (Array(self) + Array(ca)).compact
+      end
     end
   end
 end
