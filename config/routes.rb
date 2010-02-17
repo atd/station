@@ -1,11 +1,11 @@
 ActionController::Routing::Routes.draw do |map|
   map.openid_server 'openid_server', :controller => 'openid_server'
 
-  map.open_id_complete 'session', 
-    { :controller => 'sessions', 
-      :action     => 'create',
-      :conditions => { :method => :get },
-      :open_id_complete => true }
+  map.open_id_complete 'session/open_id_complete', 
+                       { :controller => 'sessions', 
+                         :action     => 'create',
+                         :conditions => { :method => :get },
+                         :open_id_complete => true }
 
   map.resource :session
 
