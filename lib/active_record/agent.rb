@@ -1,16 +1,44 @@
 require 'digest/sha1'
 
 module ActiveRecord #:nodoc:
+  # == acts_as_agent
   # Agents are models that can perform actions in the application. The paradigm of Agents are Users.
   #
+  # Using Station, any of the models of your application can have Agent features. Nevertheless, having
+  # only one model called User is the most common configuration.
+  #
+  # Agent functionality is declared with ActsAsMethods#acts_as_agent
+  #
+  #   class User
+  #     acts_as_agent :authentication => [ :login_and_password, :openid ],
+  #                   :openid_server => true
+  #   end
+  #
+  #
   # == Authentication
-  # Agents are authenticated in the application. See Authentication module for methods supported.
+  # Agents must provide some credentials to the web application in order to identify themselves.
+  #
+  # Station provides several methods to do so, from classic login and password to modern {OpenID}[http://openid.net/]. You can configure which methods will be used as an option in acts_as_agent
+  #
+  # See Authentication module for methods supported.
   #
   # == Authorization
-  # Agents perform a Role in each Stage they participate. This Role defines the permissions the Agent can 
-  # perform in the Stage. See ActionController::Authorization to define filters in your application.
+  # Station uses an avanced access control model called the Authorization Chain. This provides you 
+  # flexibility to enforce miscelaneus authorization policies. See Authorization for more insight.
+  # 
+  # === RBAC
+  # Station provides Role-Based Access Control (RBAC) functionality within the Authorization framework.
   #
-  # Include Agent functionality in your models using ActsAsMethods#acts_as_agent
+  # One of the Authorization Blocks defined by Station has to do with Stages. Agents perform a Role
+  # in each Stage they participate. This Role defines the permissions the Agent can perform in the
+  # scope of this Stage.
+  #
+  # == Singular Agents
+  # Singular Agents are special models with Agent features. Each one represents a paradigm:
+  # * Anonymous: the Agent behind a request without authentication credentials.
+  # * Anyone: represents any Agent instance.
+  # * CronAgent: the time-based job scheduler in Unix-like computer operating systems.
+  #
   module Agent
     class << self
       

@@ -267,7 +267,7 @@ module ActionController #:nodoc:
     # Search in the resource's containers and in the path for current Container.
     #
     # We start with the following assumptions:
-    # * Resources have a unique branch of nested containers in the containers tree
+    # * A Container have a unique branch of nested containers in the containers tree
     # * If we find containers of the same type in both branches (resource containers
     # and path), they must be the same. If they aren't we assume a routing error (409 Conflict).
     #

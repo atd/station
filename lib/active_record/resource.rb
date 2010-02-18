@@ -1,4 +1,7 @@
 module ActiveRecord #:nodoc:
+  # == acts_as_resource
+  # Station goes one step further the Rails scaffold.
+  #
   # A Resource is a model that supports, at least, CRUD operations. 
   # As consecuence, it can be imported/exported in several Content Types, which include:
   #

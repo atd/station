@@ -1,9 +1,17 @@
 module ActiveRecord #:nodoc:
-  # Authorization module provides ActiveRecord models with an authorization framework.
+  # Authorization module provides ActiveRecord descendants with an advanced authorization framework.
+  #
+  #  # Check if alice can update foo
+  #  foo.authorize?(:update, :to => alice)
+  #
+  #  # Check if bob can delete bar
+  #  bar.authorize?(:delete, :to => bob)
   #
   # Every ActiveRecord::Base descendant can authorize actions to Agents.
   #
-  # == Authorization Chain
+  # == The Authorization Chain
+  # Access Control policies are defining by the Authorization Chain.
+  #
   # Each ActiveRecord model have an Authorization Chain (AC) associated. The AC is a sequence of 
   # Authorization Blocks (AB). Each AB should enclose only one security policy.
   #
@@ -17,32 +25,42 @@ module ActiveRecord #:nodoc:
   #
   # Consider the following example of Authorization Chain
   #
-  #   class Example
-  #     authorizing do |user, permission|
-  #       if user.is_superadmin?
+  #  # Foo's Authorization Chain:
+  #  #   ---------------   -----------   -----------   --------------------
+  #  # --| superadmin? |---| banned? |---| author? |---| [default policy] |
+  #  #   ---------------   -----------   -----------   --------------------
+  #
+  #   class Foo
+  #     authorizing do |agent, permission|
+  #       if agent.is_superadmin?
   #         true
   #       end
   #     end
   #
-  #     authorizing do |user, permission|
-  #       if user == self.author
-  #         true
-  #       end
-  #     end
-  #
-  #     authorizing do |user, permission|
-  #       if user.is_banned?
+  #     authorizing do |agent, permission|
+  #       if agent.is_banned?
   #         false
+  #       end
+  #     end
+  #
+  #     authorizing do |agent, permission|
+  #       if agent == self.author
+  #         true
   #       end
   #     end
   #   end
   #
-  # The class Example has 3 Authorization Blocks, that will be evaluated in order until a response is obtained.
+  # The class Foo has 3 Authorization Blocks, that will be evaluated in order until a response is obtained.
   #
-  # Authorization is queried using ActiveRecord::Authorization::InstanceMethods#authorize? method. For the example above:
-  #   example.authorize?(:read, :to => superadmin) #=> true
-  #   example.authorize?(:update, :to => example.author) #=> true
-  #   example.authorize?(:destroy, :to => banned_user) #=> false
+  # Authorization is queried using ActiveRecord::Authorization::InstanceMethods#authorize? method.
+  # For the example above:
+  #   foo.authorize?(:read, :to => superadmin) #=> true
+  #   foo.authorize?(:destroy, :to => banned_agent) #=> false
+  #   foo.authorize?(:update, :to => example.author) #=> true
+  #
+  # Note that Authorization Blocks are evaluated in order. This configuration will allow the operation
+  # to a banned superadmin because the first block grants the access:
+  #   foo.authorize?(:read, :to => banned_superadmin) #=> true
   #
   # === Station default Authorization Blocks
   # Station provides 2 default Authorization Blocks for Contents and Stages. See ActiveRecord::Content and ActiveRecord::Stage
@@ -111,9 +129,9 @@ module ActiveRecord #:nodoc:
       #
       # Permission can be:
       # Symbol:: describes the action name. Objective will be nil
-      #   resource.authorize?(:update, :to => user)
+      #   resource.authorize?(:update, :to => agent)
       # Array:: pair of :action, :objective
-      #   resource.authorize?([ :create, :attachment ], :to => user)
+      #   resource.authorize?([ :create, :attachment ], :to => agent)
       #
       # Options:
       # to:: Agent that performs the operation. Defaults to Anyone

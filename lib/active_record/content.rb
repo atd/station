@@ -1,16 +1,39 @@
 module ActiveRecord #:nodoc:
-  # A Content is a Resource that belongs to a Container.
-  # 
+  # A Content is a Resource that needs a Container to exist. Examples of contents
+  # are project's tasks or album's images.
+  #
   # Include this functionality in your models using ActsAsMethods#acts_as_content
   #
   # == Named Scope
-  # You can use the named_scope +in(container)+ to get all Contents in some Container.
+  # You can use the named_scope +in(container)+ to get all contents in some Container.
   #   Content.in(some_container) #=> Array of contents in the container
   #
-  # == Authorization
-  # The Content will incorporate an authorization_block.
+  # This named scope is used in StationResources controller, in index and show methods.
   # 
-  # This authorization block ask single permissions to its Container.
+  # == Resource Controllers
+  # StationResources provides with some facilities when managing resources that
+  # are contents also.
+  #
+  # === index
+  # Content resource lists are filtered if a Container is provided in the path
+  #
+  #  /projects/1/tasks #=> each task in @tasks is in project-1
+  #
+  # === show
+  # Content resource is searched within the container named scope if a Container 
+  # is provided in the path
+  #
+  #  /projects/1/tasks/1 #=> task-1 must belong to project-1
+  #
+  # === create
+  # Automatically set up container relation
+  #  
+  #  /projects/1/tasks #=> when posting to this path, the new task is created inside projects-1
+  #
+  # == Authorization
+  # The Content incorporates an authorization block that delegates permissions to its Container.
+  # 
+  # This authorization block ask only single permissions, i.e. a Permission which objective is nil.
   #
   #   class Task
   #     belongs_to :project
