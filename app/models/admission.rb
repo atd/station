@@ -11,7 +11,7 @@ class Admission < ActiveRecord::Base
   attr_protected :group_id, :group_type, :group
 
 
-  before_validation :sync_candidate_email
+  before_validation :extract_email, :sync_candidate_email
 
   validates_uniqueness_of :candidate_id,
                           :scope => [ :candidate_type, :group_id, :group_type ],
@@ -21,6 +21,7 @@ class Admission < ActiveRecord::Base
                           :allow_nil => true
   validates_uniqueness_of :email,
                           :scope => [ :group_id, :group_type ]
+  validates_format_of :email, :with => /^[\w\d._%+-]+@[\w\d.-]+\.[\w]{2,}$/
 
   validate_on_create :candidate_without_role
   validate :candidate_is_not_introducer
@@ -67,6 +68,13 @@ class Admission < ActiveRecord::Base
 
   def processed
     @processed && self.processed_at = Time.now.utc
+  end
+
+  # Get the email address from "User <user@example.org>" to "user@example.org"
+  def extract_email
+    if email =~ /<(.*)>/
+      self.email = $1
+    end
   end
 
   def sync_candidate_email
