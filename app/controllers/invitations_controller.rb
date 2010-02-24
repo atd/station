@@ -1,6 +1,7 @@
 class InvitationsController < ApplicationController
   include ActionController::StationResources
 
+  before_filter :introducer_authenticated, :only => [ :show ]
   before_filter :candidate_authenticated, :only => [ :show, :update ]
 
   before_filter :processed_invitation, :only => [ :show ]
@@ -82,6 +83,11 @@ class InvitationsController < ApplicationController
 
   def candidate_authenticated
     not_authenticated if invitation.candidate && ! authenticated?
+  end
+
+  def introducer_authenticated
+    #TODO logout and redirect to invitation again
+    redirect_to logout_path if invitation.introducer == current_agent
   end
 
   def processed_invitation

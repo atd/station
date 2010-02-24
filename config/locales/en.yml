@@ -184,6 +184,7 @@ en:
   admission:
     errors:
       candidate_has_role: "already has a role"
+      candidate_equals_introducer: "Candidate and introducer can't be the same person. (You should probably log out)"
   invitation:
     one: "Invitation"
     other: "Invitations"

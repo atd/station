@@ -182,6 +182,7 @@ es:
   admission:
     errors:
       candidate_has_role: "ya tiene un rol"
+      candidate_equals_introducer: "Candidato e introductor no pueden ser la misma persona. (Seguramente tengas que salir de la sessión)"
 
   invitation:
     one: "Invitación"

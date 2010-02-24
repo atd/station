@@ -23,6 +23,7 @@ class Admission < ActiveRecord::Base
                           :scope => [ :group_id, :group_type ]
 
   validate_on_create :candidate_without_role
+  validate :candidate_is_not_introducer
 
   after_save :to_performance!
 
@@ -83,6 +84,12 @@ class Admission < ActiveRecord::Base
 
     if group.role_for? candidate
       errors.add :candidate, I18n.t('admission.errors.candidate_has_role')
+    end
+  end
+
+  def candidate_is_not_introducer
+    if candidate == introducer
+      errors.add_to_base I18n.t('admission.errors.candidate_equals_introducer')
     end
   end
 
