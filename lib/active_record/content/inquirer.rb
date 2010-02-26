@@ -9,6 +9,9 @@ module ActiveRecord #:nodoc:
 
       class << self
         def all(options = {}, container_options = {})
+          return Array.new if container_options.key?(:containers) &&
+                              container_options[:containers].blank?
+
           all_query = "SELECT * FROM (#{ query(options.dup, container_options) }) AS all_contents  "
 
           add_conditions!(all_query, options[:conditions], nil)
@@ -56,6 +59,12 @@ module ActiveRecord #:nodoc:
         # contents:: the type of contents that will be included
         # columns:: the columns that will be included in each container_query. Defaults to the intersection of all contents columns.
         def query(options = {}, container_options = {})
+          if container_options.key?(:containers) &&
+             container_options[:containers].blank?
+            # Return empty set. Sure, there is a better way to do this
+            return "SELECT * FROM ( SELECT NULL AS id) AS empty WHERE id IS NOT NULL"
+          end
+
           containers = Array(container_options.delete(:containers))
 
           contents = container_options[:contents] ||
