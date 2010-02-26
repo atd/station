@@ -8,6 +8,12 @@ rescue MissingSourceFile
   Rails.logger.info "Station Info: You need 'atom-tools' gem for AtomPub service document support"
 end
 
+begin
+  require 'mofo'
+rescue MissingSourceFile
+  Rails.logger.info "Station Info: You need 'mofo' gem for Microformats support"
+end
+
 # URI storage in the database
 class Uri < ActiveRecord::Base
   has_many :openid_ownings, 
@@ -59,6 +65,20 @@ class Uri < ActiveRecord::Base
   # Returns the AtomPub Service Document associated with this URI.
   def atompub_service_document
     Atom::Service.discover self.uri
+  end
+
+  # Find hCard in this URI
+  #
+  # Needs the {mofo}[http://mofo.rubyforge.org/] gem
+  def hcard
+    hCard.find self.uri
+  rescue
+    nil
+  end
+
+  # Does this URI has a hCard attached?
+  def hcard?
+    hcard.present?
   end
 
   private
