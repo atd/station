@@ -181,9 +181,11 @@ module ActionController
     def filter_type(candidates, type) #:nodoc:
       return candidates.dup unless type
 
-      type = type.to_sym.to_class
+      types = Array(type).map(&:to_sym).map(&:to_class)
 
-      candidates.select{ |c| c.is_a?(type) }
+      types.inject([]) do |selected, type|
+        selected | candidates.select{ |c| c.is_a?(type) }
+      end
     end
   end
 end
