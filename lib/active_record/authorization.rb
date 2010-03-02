@@ -82,10 +82,10 @@ module ActiveRecord #:nodoc:
     end
 
     module ClassMethods
-      # Available authorization methods for this class
+      # The Authorization Chain of this model
       #
-      def authorization_methods
-        @authorization_methods ||= []
+      def authorization_chain
+        @authorization_chain ||= []
       end
 
       protected
@@ -102,7 +102,7 @@ module ActiveRecord #:nodoc:
       #     end
       #   end
       def authorizing(method = nil, &block)
-        @authorization_methods = authorization_methods | Array(method || block)
+        @authorization_chain = authorization_chain | Array(method || block)
       end
 
       def authorization_delegate(relation, options = {})
@@ -124,8 +124,13 @@ module ActiveRecord #:nodoc:
     module InstanceMethods
       # Does this instance allows or denies permission?
       #
-      # Is the response is cached, it is responded immediately. Else, the Authorization Chain 
-      # is evaluated. See ActiveRecord::Authorization for information on how it works
+      # Is the response is cached, it is responded immediately.
+      #
+      # Else, the Authorization Chain is evaluated. 
+      # See ActiveRecord::Authorization for information on how it works
+      #
+      # If the agent is not a SingularAgent, the Authorization Chain is also
+      # evaluated for Authenticated and Anyone
       #
       # Permission can be:
       # Symbol:: describes the action name. Objective will be nil
@@ -139,15 +144,7 @@ module ActiveRecord #:nodoc:
       def authorize?(permission, options = {})
         agent = options[:to] || Anyone.current
 
-        if authorization_cache[agent][permission].nil?
-          authorization_eval = authorization_methods_eval(agent, permission)
-          # Deny by default
-          authorization_eval = false if authorization_eval.nil?
-          # Cache the evalutation for better performance
-          authorization_cache[agent][permission] = authorization_eval
-        else
-          authorization_cache[agent][permission]
-        end
+        authorization_eval(agent, permission)
       end
 
       #FIXME: DRY:
@@ -161,27 +158,91 @@ module ActiveRecord #:nodoc:
 
       private
 
-      # Authorization Cache
-      def authorization_cache #:nodoc:
-        @authorization_cache ||= Hash.new{ |agent, permission| agent[permission] = Hash.new }
+      # Main entry for authorization evaluation
+      def authorization_eval(agent, permission) #:nodoc:
+        authorization_cache_eval(agent, permission)
       end
 
-      def authorization_methods_eval(agent, permission) #:nodoc:
-        self.class.authorization_methods.each do |m|
-          auth_method_eval = 
-            case m
-            when Symbol
-              send(m, agent, permission)
-            when Proc
-              m.bind(self).call(agent, permission)
-            else
-              raise "Invalid Authorization method #{ m }"
-            end
+      # Evaluate authorization with cache support
+      def authorization_cache_eval(agent, permission) #:nodoc:
+        if authorization_cache[agent][permission].nil?
+          auth_eval = authorization_agents_eval(agent, permission)
+          # Deny by default
+          auth_eval = false if auth_eval.nil?
+          # Cache the evalutation for better performance
+          authorization_cache[agent][permission] = auth_eval
+        else
+          authorization_cache[agent][permission]
+        end
+      end
 
-          return auth_method_eval unless auth_method_eval.nil?
+      # Evaluate authentication including SingularAgents
+      #
+      # When regular Agent, like a user, the authorization also includes Authenticated
+      # and Anyone
+      #
+      # When Authenticated.current, also include Anyone
+      #
+      # Note that this method supports denying access to certain agents in the
+      # Authorization Chain, despite authorization is granted to SingularAgents
+      # Example:
+      #
+      #   class SecretResource
+      #     authorizing do |agent, permission|
+      #       false if agent.is_banned?
+      #     end
+      #
+      #     authorizing do |agent, permission|
+      #       true if agent.is_a?(Authenticated)
+      #     end
+      #   end
+      #
+      #   secret_resource.authorize?(:read, :to => user) #=> true
+      #   secret_resource.authorize?(:read, :to => banned_user) #=> false
+      #
+      def authorization_agents_eval(agent, permission) #:nodoc:
+        auth_eval = authorization_chain_eval(agent, permission)
+
+        return auth_eval unless auth_eval.nil?
+
+        unless agent.is_a?(SingularAgent)
+          auth_eval = authorization_cache_eval(Authenticated.current, permission)
+
+          return auth_eval unless auth_eval.nil?
+        end
+
+        unless agent.is_a?(Anyone)
+          auth_eval = authorization_cache_eval(Anyone.current, permission)
+
+          return auth_eval unless auth_eval.nil?
         end
 
         nil
+      end
+
+      # Evaluate Authorization Chain
+      def authorization_chain_eval(agent, permission) #:nodoc:
+        self.class.authorization_chain.each do |block|
+          auth_block_eval = 
+            case block
+            when Symbol
+              send(block, agent, permission)
+            when Proc
+              block.bind(self).call(agent, permission)
+            else
+              raise "Invalid Authorization Block #{ m }"
+            end
+
+          return auth_block_eval unless auth_block_eval.nil?
+        end
+
+        nil
+      end
+
+      # Authorization Cache
+      def authorization_cache #:nodoc:
+        @authorization_cache ||=
+          Hash.new { |agent, permission| agent[permission] = Hash.new }
       end
     end
   end
