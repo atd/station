@@ -148,7 +148,8 @@ module ActiveRecord #:nodoc:
         # False is Login/Password is not supported by this Agent
         return false unless agent_options[:authentication].include?(:login_and_password)
         # False if OpenID is suported and there is already an OpenID Owning associated
-        ! (agent_options[:authentication].include?(:openid) && !openid_identifier.blank?)
+        ! (agent_options[:authentication].include?(:openid) &&
+             openid_identifier.present? || openid_ownings.remote.any?)
       end
 
       # All Stages in which this Agent has a Performance

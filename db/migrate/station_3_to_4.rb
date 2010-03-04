@@ -14,6 +14,10 @@ class Station3To4 < ActiveRecord::Migration
 
     drop_table :categories
     drop_table :categorizations
+
+    # local column should be in OpenID ownings, not in OpenID trusts
+    remove_column :open_id_trusts, :local
+    add_column :open_id_ownings, :local, :boolean, :default => false
   end
 
   def self.down
@@ -39,5 +43,9 @@ class Station3To4 < ActiveRecord::Migration
       t.integer :categorizable_id
       t.string  :categorizable_type
     end
+
+    # local column should be in OpenID ownings, not in OpenID trusts
+    add_column :open_id_trusts, :local, :boolean, :default => false
+    remove_column :open_id_ownings, :local
   end
 end

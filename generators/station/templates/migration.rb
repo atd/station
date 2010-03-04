@@ -67,13 +67,13 @@ class StationMigration < ActiveRecord::Migration
       t.integer :agent_id
       t.string  :agent_type
       t.integer :uri_id
+      t.boolean :local, :default => false
     end
 
     create_table :open_id_trusts do |t|
       t.integer :agent_id
       t.string  :agent_type
       t.integer :uri_id
-      t.boolean :local, :default => false
     end
 
 

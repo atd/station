@@ -35,11 +35,13 @@ module ActiveRecord #:nodoc:
         # Create OpenID Ownings for the URIs hosted in this server
         def create_openid_server_ownings
           uris_path = "#{ Site.current.domain }/#{ self.class.to_s.tableize }/#{ to_param }"
-          uris = [ Uri.find_or_create_by_uri("http://#{ uris_path }", :local => true) ]
-          uris << Uri.find_or_create_by_uri("https://#{ uris_path }", :local => true) if Site.current.ssl?
+          uris = [ Uri.find_or_create_by_uri("http://#{ uris_path }") ]
+          uris << Uri.find_or_create_by_uri("https://#{ uris_path }") if Site.current.ssl?
 
           uris.each do |u|
-            openid_uris << u unless openid_uris.include?(u)
+            unless openid_ownings.local.map(&:uri).include?(u)
+              openid_ownings.local.create :uri => u
+            end
           end
         end
       end

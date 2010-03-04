@@ -1,4 +1,6 @@
-# Agents with OpenID Server have OpenID trusts when approve sign in a Remote Server
+# Agents with OpenID Server have OpenID trusts when approve signing in a Remote Server
+#
+# The URI of the Remove Server is the trusted URI
 #
 class OpenIdTrust < ActiveRecord::Base
   belongs_to :agent, :polymorphic => true

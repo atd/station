@@ -23,9 +23,13 @@ module ActiveRecord #:nodoc:
 
         module ClassMethods
           # Find first Agent of this class owning this OpenID URI
+          #
+          # OpenIdOwning must be remote, since authenticated using local
+          # OpenID is a chicken and egg action.
           def authenticate_with_openid(uri)
-            owning = uri.openid_ownings.find :first,
-                                             :conditions => [ "agent_type = ?", self.to_s ]
+            owning =
+              uri.openid_ownings.remote.find :first,
+                                               :conditions => { :agent_type => self.name }
             owning ? owning.agent : nil
           end
         end
