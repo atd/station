@@ -114,7 +114,8 @@ module ActiveRecord #:nodoc:
 
           return nil unless permission.is_a?(String) || permission.is_a?(Symbol)
 
-          #{ relation }.authorize?([permission, :#{ options[:as] }], :to => agent) || nil
+          #{ relation }.authorize?([permission, :#{ options[:as] }], :to => agent,
+                                                                     :default => nil)
         end
         AUTH
       end
@@ -140,11 +141,12 @@ module ActiveRecord #:nodoc:
       #
       # Options:
       # to:: Agent that performs the operation. Defaults to Anyone
+      # default:: Change the default policy. Defaults to denying permissions (false)
       #
       def authorize?(permission, options = {})
-        agent = options[:to] || Anyone.current
+        agent = options.delete(:to) || Anyone.current
 
-        authorization_eval(agent, permission)
+        authorization_eval(agent, permission, options)
       end
 
       #FIXME: DRY:
@@ -159,20 +161,22 @@ module ActiveRecord #:nodoc:
       private
 
       # Main entry for authorization evaluation
-      def authorization_eval(agent, permission) #:nodoc:
-        authorization_cache_eval(agent, permission)
+      def authorization_eval(agent, permission, options) #:nodoc:
+        # Deny as default policy
+        default = options.key?(:default) ? options[:default] : false
+
+        auth_eval = authorization_cache_eval(agent, permission)
+
+        auth_eval.nil? ? default : auth_eval
       end
 
-      # Evaluate authorization with cache support
-      def authorization_cache_eval(agent, permission) #:nodoc:
-        if authorization_cache[agent][permission].nil?
-          auth_eval = authorization_agents_eval(agent, permission)
-          # Deny by default
-          auth_eval = false if auth_eval.nil?
-          # Cache the evalutation for better performance
-          authorization_cache[agent][permission] = auth_eval
-        else
+      # Evaluate authorization with cache support. Improves performance
+      def authorization_cache_eval(agent, permission, options = {}) #:nodoc:
+        if authorization_cache[agent].key?(permission)
           authorization_cache[agent][permission]
+        else
+          authorization_cache[agent][permission] =
+            authorization_agents_eval(agent, permission)
         end
       end
 
