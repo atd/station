@@ -42,7 +42,6 @@ module ActionController #:nodoc:
         format.html {
           if agent.agent_options[:openid_server]
             headers['X-XRDS-Location'] = polymorphic_url(agent, :format => :xrds)
-            @openid_server_agent = agent
           end
         }
         format.atomsvc
