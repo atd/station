@@ -79,8 +79,6 @@ class InvitationsController < ApplicationController
     @group ||= record_from_path(:acts_as => :stage)
   end
 
-  alias_method :path_container, :group
-
   def candidate_authenticated
     not_authenticated if invitation.candidate && ! authenticated?
   end
