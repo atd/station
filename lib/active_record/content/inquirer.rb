@@ -77,7 +77,10 @@ module ActiveRecord #:nodoc:
             contents.inject(contents.first.columns.map(&:name)){ |columns, content|
               columns & content.columns.map(&:name)
             }
-
+            
+          #Temporal fix for contents with type column
+          container_options[:columns].delete('type')
+          
           containers.any? ?
             containers.map{ |c| container_query(c, container_options.dup) }.join(" UNION ") :
             container_query(nil, container_options)
@@ -97,14 +100,16 @@ module ActiveRecord #:nodoc:
           options[:contents].map(&:to_class).map { |content|
             # Need to build query per content
             params = options.dup
-            params[:select] ||= params.delete(:columns).join(", ")
+            params[:select] ||= params.delete(:columns).map{|c| "`#{c}`"}.join(", ")
             params[:select]  += ", ( SELECT \"#{ content }\" ) AS type"
-            params[:select]  += 
-              ( content.acts_as?(:resource) &&
-                  content.resource_options[:has_media] ?
-                    ", content_type" :
-                    ", ( SELECT NULL ) AS content_type" )
-
+            unless options[:columns].include?('content_type')
+              params[:select]  += 
+                ( content.acts_as?(:resource) &&
+                    content.resource_options[:has_media] ?
+                      ", content_type" :
+                      ", ( SELECT NULL ) AS content_type" )
+            end
+            
             content.content_inquirer_query(params, :container => container)
           }.join(" UNION ")
         end
