@@ -2,16 +2,13 @@
 # same source file name
 URI
 
-begin
-  require 'atom/service'
-rescue MissingSourceFile
-  Rails.logger.info "Station Info: You need 'atom-tools' gem for AtomPub service document support"
-end
-
-begin
-  require 'mofo'
-rescue MissingSourceFile
-  Rails.logger.info "Station Info: You need 'mofo' gem for Microformats support"
+{ 'openid' => 'OpenID',
+  'atom/service' => 'AtomPub service document' }.each_pair do |gem, support|
+  begin
+    require gem
+  rescue MissingSourceFile
+    Rails.logger.info "Station Info: You need '#{ gem }' gem for #{ support } support"
+  end
 end
 
 # URI storage in the database
@@ -32,54 +29,52 @@ class Uri < ActiveRecord::Base
 
   # Dereference URI and return HTML document
   def html
-    @html ||= Station::Html.new(dereference(:accept => 'text/html').body)
+    # NOTE: Must read StringIO or Tmpfile
+    @html ||= Station::Html.new(dereference(:accept => 'text/html').try(:read))
   end
 
   def dereference(options = {})
-    # TODO?: non http(s) URIs
-    return nil unless to_uri.scheme =~ /^(http|https)$/
-
-    # Limit too many redirects
-    options[:redirect] ||= 0
-    return nil if options[:redirect] > 10
-
-    http = Net::HTTP.new(to_uri.host, to_uri.port)
-    http.use_ssl = to_uri.scheme == "https"
-    path = to_uri.path.present? && to_uri.path || '/'
-    path << "?#{ to_uri.query }" if to_uri.query.present?
     headers = {}
-    headers['Accept'] = options[:accept] if options[:accept].present?
-    response = http.get(path, headers)
+    headers['Accept'] = options[:accept] if options.key?(:accept)
 
-    case response
-    when Net::HTTPSuccess
-      response
-    when Net::HTTPRedirection
-      options[:redirect] += 1
-      self.class.new(:uri => response['location']).dereference(options)
-    else
-      nil
-    end
-  end
-
-  # Returns the AtomPub Service Document associated with this URI.
-  def atompub_service_document
-    Atom::Service.discover self.uri
-  end
-
-  # Find hCard in this URI
-  #
-  # Needs the {mofo}[http://mofo.rubyforge.org/] gem
-  def hcard
-    hCard.find self.uri
+    to_uri.open(headers)
   rescue
     nil
   end
 
-  # Does this URI has a hCard attached?
-  def hcard?
-    hcard.present?
+  # Perform OpenID discover
+  #
+  # OpenID.discover returns [ claimed_id, openid_services ]
+  def openid_discover
+    @openid_discover ||= ::OpenID.discover self.uri
   end
+
+  # Is this URI an OpenID
+  def openid?
+    openid_discover.last.any?
+  rescue
+    nil
+  end
+
+  # Update self.uri with OpenID claimed ID
+  def to_openid
+    self.uri = openid_discover.first
+  end
+
+  # Update self.uri with OpenID claimed ID and save the record
+  def to_openid!
+    update_attribute :uri, openid_discover.first
+  end
+
+  # Returns the AtomPub Service Document associated with this URI.
+  def atompub_service_document
+    #FIXME: use html?
+    Atom::Service.discover self.uri
+  end
+
+  delegate :hcard, :hcard?,
+           :foaf, :foaf?,
+           :to => :html
 
   private
 
