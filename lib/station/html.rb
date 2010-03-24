@@ -26,31 +26,31 @@ module Station #:nodoc:
 
     def feeds
       head_links.select{ |l|
-        l['rel'].match(/alternate/i)
+        l['rel'].try(:match, /alternate/i)
       }
     end
 
     def rdf_links
       head_links.select{ |l|
-        l['rel'].match(/meta/i) && l['type'].match(/application\/rdf\+xml/)
+        l['rel'].try(:match, /meta/i) && l['type'].try(:match, /application\/rdf\+xml/)
       }
     end
 
     def foaf_links
       rdf_links.select{ |l|
-        l['title'].match(/^foaf$/i)
+        l['title'].try(:match, /^foaf$/i)
       }
     end
 
     def atom_service_links
       head_links.select{ |l|
-        l['rel'].match(/^service$/i)
+        l['rel'].try(:match, /^service$/i)
       }
     end
 
     def rsd_links
       head_links.select{ |l|
-        l['rel'].match(/^EditURI$/i)
+        l['rel'].try(:match, /^EditURI$/i)
       }
     end
 
