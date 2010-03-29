@@ -66,6 +66,13 @@ class Uri < ActiveRecord::Base
     update_attribute :uri, openid_discover.first
   end
 
+  # Returns all the XRDS Service Endpoint Types 
+  def xrds_service_types
+    openid_discover.last.map{ |s| s.type_uris }.flatten.uniq
+  rescue
+    Array.new
+  end
+
   # Returns the AtomPub Service Document associated with this URI.
   def atompub_service_document
     #FIXME: use html?
