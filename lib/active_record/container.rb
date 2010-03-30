@@ -48,9 +48,12 @@ module ActiveRecord #:nodoc:
       # Options:
       # <tt>contents</tt>:: an Array of Contents that can be posted to this Container. Ex: [ :articles, :images ]. Defaults to all available Content models.
       # <tt>sources</tt>:: The container has remote sources. It will import Atom/RSS feeds as contents. See Source. Defaults to false
+      # <tt>scope</tt>:: Default :order, :conditions, :limit, :group, :having values that are included in contents query if they are not specified.
       def acts_as_container(options = {})
         ActiveRecord::Container.register_class(self)
-
+        
+        options[:scope] ||= {}
+        
         cattr_reader :container_options
         class_variable_set "@@container_options", options
 
@@ -78,10 +81,8 @@ module ActiveRecord #:nodoc:
       #
       # Uses ActiveRecord::Content::Inquirer for building the query in 
       # several tables.
-      def contents(options = {})
-        container_options[:containers] = Array(self)
-
-        ActiveRecord::Content::Inquirer.all(options, container_options)
+      def contents
+        @contents ||= ActiveRecord::Content::InquirerProxy.new(self, self.class.container_options[:scope])
       end
 
       # A list of all the nested containers of this Container, including self,
