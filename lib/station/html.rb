@@ -1,5 +1,5 @@
-{ 'hpricot' => 'HTML introspection',
-  'mofo'    => 'Microformats' }.each_pair do |gem, support|
+{ 'nokogiri' => 'HTML introspection',
+  'prism'    => 'Microformats' }.each_pair do |gem, support|
   begin
     require gem
   rescue MissingSourceFile
@@ -17,11 +17,11 @@ module Station #:nodoc:
     end
 
     def doc
-      @doc ||= Hpricot(@text)
+      @doc ||= Nokogiri::HTML(@text)
     end
 
     def head_links
-      doc.search('//link')
+      doc.xpath('//head/link')
     end
 
     def feeds
@@ -70,17 +70,20 @@ module Station #:nodoc:
       foaf_links.any?
     end
 
-    def microformats
-      Microformat.find :text => text
+    # Find available Microformats for this HTML
+    #
+    # Needs the {prism}[http://github.com/mwunsch/prism] gem
+    def microformats(format = nil)
+      Prism.find text, format
     rescue
       Array.new
     end
 
     # Find hCard in this HTML 
     #
-    # Needs the {mofo}[http://mofo.rubyforge.org/] gem
+    # Needs the {prism}[http://github.com/mwunsch/prism] gem
     def hcard
-      hCard.find :text => text
+      microformats(:hcard)
     rescue
       nil
     end

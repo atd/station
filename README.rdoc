@@ -76,7 +76,7 @@ You can add AtomPub support for Articles creation. You must implement params_fro
   * mislav-will_paginate
   * ruby-openid (optional)
   * atom-tools (optional)
-  * hpricot (optional)
+  * nokogiri, prism (optional)
 * Rails Plugins:
   * attachment_fu
   * exception_notification (optional)
@@ -102,7 +102,7 @@ You can install this aditional gems:
 
 * ruby-openid, for OpenID authentication support
 * atom-tools, for AtomPub support
-* hpricot, for HTML discovery
+* nokogiri, prism, for HTML management, Microformats discovery
 
 
 == TODO
