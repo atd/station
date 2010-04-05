@@ -149,7 +149,7 @@ module ActiveRecord #:nodoc:
         # Clean scope parameters like :order
         inquirer_scope.delete(:order)
 
-        with_scope(:find => inquirer_scope) do
+        with_exclusive_scope(:find => inquirer_scope) do
           construct_finder_sql(params)
         end
       end

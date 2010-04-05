@@ -9,9 +9,6 @@ module ActiveRecord #:nodoc:
 
       class << self
         def all(options = {}, container_options = {})
-          return Array.new if container_options.key?(:containers) &&
-                              container_options[:containers].blank?
-
           all_query = "SELECT * FROM (#{ query(options.dup, container_options) }) AS all_contents  "
 
           add_conditions!(all_query, options[:conditions], nil)
@@ -59,13 +56,7 @@ module ActiveRecord #:nodoc:
         # contents:: the type of contents that will be included
         # columns:: the columns that will be included in each container_query. Defaults to the intersection of all contents columns.
         def query(options = {}, container_options = {})
-          if container_options.key?(:containers) &&
-             container_options[:containers].blank?
-            # Return empty set. Sure, there is a better way to do this
-            return "SELECT * FROM ( SELECT NULL AS id) AS empty WHERE id IS NOT NULL"
-          end
-
-          containers = Array(container_options.delete(:containers))
+          containers = Array(container_options[:containers])
 
           contents = container_options[:contents] ||
                      ( containers.any? ?
@@ -74,10 +65,31 @@ module ActiveRecord #:nodoc:
           contents = contents.map(&:to_class)
 
           container_options[:columns] ||=
-            contents.inject(contents.first.columns.map(&:name)){ |columns, content|
-              columns & content.columns.map(&:name)
+            contents.inject([]){ |columns, content|
+              columns | content.column_names
             }
 
+          # If asking for the contents of 0 containers, or 0 contents, return empty set
+          if container_options.key?(:containers) &&
+             container_options[:containers].blank? ||
+             container_options.key?(:contents) &&
+             container_options[:contents].blank?
+
+            # Return empty set. Sure, there is a better way to do this
+            columns = container_options[:columns]
+            columns = [ "id" ] if columns.blank?
+
+            columns_sql =
+              columns.map{ |c|
+                "( SELECT NULL ) AS `#{ c }`"
+              }.join(", ")
+
+            return "SELECT * FROM ( SELECT #{ columns_sql }) AS empty WHERE `#{ columns.first }` IS NOT NULL"
+          end
+           
+          #Temporal fix for contents with type column
+          container_options[:columns].delete('type')
+          
           containers.any? ?
             containers.map{ |c| container_query(c, container_options.dup) }.join(" UNION ") :
             container_query(nil, container_options)
@@ -97,14 +109,16 @@ module ActiveRecord #:nodoc:
           options[:contents].map(&:to_class).map { |content|
             # Need to build query per content
             params = options.dup
-            params[:select] ||= params.delete(:columns).join(", ")
-            params[:select]  += ", ( SELECT \"#{ content }\" ) AS type"
-            params[:select]  += 
-              ( content.acts_as?(:resource) &&
-                  content.resource_options[:has_media] ?
-                    ", content_type" :
-                    ", ( SELECT NULL ) AS content_type" )
 
+            params[:select] ||=
+              params.delete(:columns).map{ |c|
+                content.column_names.include?(c) ?
+                "`#{c}`" :
+                "( SELECT NULL ) AS `#{ c }`"
+              }.join(", ")
+            # Should fix this to support AR STI
+            params[:select] += ", ( SELECT \"#{ content }\" ) AS type"
+           
             content.content_inquirer_query(params, :container => container)
           }.join(" UNION ")
         end

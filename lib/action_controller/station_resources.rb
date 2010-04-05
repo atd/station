@@ -308,6 +308,10 @@ module ActionController #:nodoc:
       candidates = filter_type(@resource_container_candidates, options[:type])
 
       candidates.first
+    rescue
+      # resource can raise ActiveRecord::RecordNotFound, but current_container
+      # should not raise the error
+      nil
     end
 
     # Redirect here after create if everythig went well
