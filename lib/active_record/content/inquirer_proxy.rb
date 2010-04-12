@@ -2,6 +2,8 @@ module ActiveRecord #:nodoc:
   module Content
     class InquirerProxy
 
+      delegate :blank?, :present?, :to => :load_target
+
       def initialize(owner, scope = {})
         @owner, @scope = owner, scope
       end
@@ -9,7 +11,7 @@ module ActiveRecord #:nodoc:
       def all(options = {})
         ActiveRecord::Content::Inquirer.all(@scope.merge(options), container_options)
       end
-
+      
       def paginate(options = {})
         ActiveRecord::Content::Inquirer.paginate(@scope.merge(options), container_options)
       end
