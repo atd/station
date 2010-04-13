@@ -14,7 +14,7 @@ module ActionController #:nodoc:
         end
 
         if agent
-          if agent.agent_options[:activation] && ! agent.activated_at
+          if agent.class.agent_options[:activation] && ! agent.activated_at
             flash[:notice] = t(:please_activate_account)
           elsif agent.respond_to?(:disabled) && agent.disabled
             flash[:error] = t(:disabled, :scope => agent.class.to_s.tableize)

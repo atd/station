@@ -33,7 +33,7 @@ module ActiveRecord #:nodoc:
 
       # Update Invitations with this candidate
       def assign_pending_invitations #:nodoc:
-        key = send(agent_options[:invite])
+        key = send(self.class.agent_options[:invite])
 
         Invitation.find_all_by_email(key).map{ |i| i.update_attribute(:candidate, self) }
       end

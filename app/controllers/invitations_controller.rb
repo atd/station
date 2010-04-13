@@ -40,7 +40,7 @@ class InvitationsController < ApplicationController
         @candidate = klass.new(params[klass.to_s.underscore])
         @candidate.email = invitation.email
         # Agent has read the invitation email, so it's already activated
-        @candidate.activated_at = Time.now if @candidate.agent_options[:activation]
+        @candidate.activated_at = Time.now if @candidate.class.agent_options[:activation]
         
         unless @candidate.save
           render :action => :show

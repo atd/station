@@ -90,11 +90,13 @@ module ActiveRecord #:nodoc:
         options[:openid_server]  ||= false
         options[:activation]     ||= false
         options[:invite] = :email if options[:invite].nil?
-        
+
         # Set agent options
         #
-        cattr_reader :agent_options
-        class_variable_set "@@agent_options", options
+        class << self
+          attr_reader :agent_options
+        end
+        instance_variable_set "@agent_options", options
 
         # Load Authentication Methods
         #
@@ -138,6 +140,13 @@ module ActiveRecord #:nodoc:
       def password_recovery?
         agent_options[:authentication].include?(:login_and_password) && agent_options[:activation]
       end
+
+      protected
+
+      def inherited(subclass) #:nodoc:
+        super
+        subclass.instance_variable_set "@agent_options", agent_options.dup
+      end
     end
 
     module InstanceMethods
@@ -146,10 +155,10 @@ module ActiveRecord #:nodoc:
       # and it hasn't any OpenID Owning
       def needs_password?
         # False is Login/Password is not supported by this Agent
-        return false unless agent_options[:authentication].include?(:login_and_password)
+        return false unless self.class.agent_options[:authentication].include?(:login_and_password)
         # False if OpenID is suported and there is already an OpenID Owning associated
-        ! (agent_options[:authentication].include?(:openid) &&
-             openid_identifier.present? || openid_ownings.remote.any?)
+        ! (self.class.agent_options[:authentication].include?(:openid) &&
+             ( openid_identifier.present? || openid_ownings.remote.any? ))
       end
 
       # All Stages in which this Agent has a Performance
@@ -168,7 +177,7 @@ module ActiveRecord #:nodoc:
       end
 
       def service_documents
-        if self.agent_options[:authentication].include?(:openid)
+        if self.class.agent_options[:authentication].include?(:openid)
           openid_uris.map(&:atompub_service_document)
         else
           Array.new
