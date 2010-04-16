@@ -102,10 +102,12 @@ class Admission < ActiveRecord::Base
   end
 
   def to_performance!
-    return unless recently_processed? && accepted? && group && role
+    return unless recently_processed? && accepted? && group && role && candidate
 
-    Performance.create! :agent => candidate,
-                        :stage => group,
-                        :role  => role
+    unless (group.role_for? candidate)
+      Performance.create! :agent => candidate,
+                          :stage => group,
+                          :role  => role
+    end
   end
 end
