@@ -68,7 +68,7 @@ class Uri < ActiveRecord::Base
 
   # Returns all the XRDS Service Endpoint Types 
   def xrds_service_types
-    openid_discover.last.map{ |s| s.type_uris }.flatten.uniq
+    openid_discover.last.select{ |s| s.used_yadis }.map{ |s| s.type_uris }.flatten.uniq
   rescue
     Array.new
   end
