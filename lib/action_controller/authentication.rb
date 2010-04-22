@@ -6,7 +6,7 @@ module ActionController #:nodoc:
   #
   # == Authentication Filters
   # You can define authentication filters in the following way:
-  #   authentication_filter, :except => [ :index ]
+  #   authentication_filter :except => [ :index ]
   #
   # == Current Agent
   # There are some methods available to access the Agent
