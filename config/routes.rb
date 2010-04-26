@@ -17,14 +17,12 @@ ActionController::Routing::Routes.draw do |map|
              :controller => ActiveRecord::Agent.activation_class.to_s.tableize, 
              :action => 'activate', 
              :activation_code => nil
-  end
 
-  if ActiveRecord::Agent::authentication_classes(:login_and_password).any?
     map.lost_password 'lost_password', 
-                    :controller => ActiveRecord::Agent.authentication_classes(:login_and_password).first.to_s.tableize,
+                    :controller => ActiveRecord::Agent.activation_class.to_s.tableize,
                     :action => 'lost_password'
     map.reset_password 'reset_password/:reset_password_code', 
-                   :controller => ActiveRecord::Agent.authentication_classes(:login_and_password).first.to_s.tableize,
+                   :controller => ActiveRecord::Agent.activation_class.to_s.tableize,
                    :action => 'reset_password',
                    :reset_password_code => nil
   end
