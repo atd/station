@@ -39,6 +39,8 @@ class Source < ActiveRecord::Base
   end
 
   def import
+    return if feed.try(:entries).blank?
+
     feed.entries.each do |entry|
       # Import feed entries until reach an already imported one
       break if imported_at && entry.updated < imported_at
@@ -170,7 +172,7 @@ class Source < ActiveRecord::Base
 
   def rss_feed
     begin
-      RSS::Parser.parse(self.uri.dereference.body)
+      RSS::Parser.parse(self.uri.dereference(:accept => 'application/rss+xml').try(:read))
     rescue
       nil
     end
