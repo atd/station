@@ -13,7 +13,12 @@ class SessionsController < ApplicationController
 
   def create
     if authentication_methods_chain(:create)
-      redirect_back_or_default(after_create_path) if ! performed?
+      respond_to do |format|
+        format.html {
+          redirect_back_or_default(after_create_path) if ! performed?
+        }
+        format.js
+      end
     else
       unless performed?
         flash[:error] ||= t(:invalid_credentials)
