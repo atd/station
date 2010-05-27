@@ -15,15 +15,18 @@ class SessionsController < ApplicationController
     if authentication_methods_chain(:create)
       respond_to do |format|
         format.html {
-          redirect_back_or_default(after_create_path) if ! performed?
+          redirect_back_or_default(after_create_path)
         }
         format.js
-      end
+      end unless performed?
     else
-      unless performed?
-        flash[:error] ||= t(:invalid_credentials)
-        render(:action => "new")
-      end
+      respond_to do |format|
+        format.html {
+          flash[:error] ||= t(:invalid_credentials)
+          render(:action => "new")
+        }
+        format.js
+      end unless performed?
     end
   end
 
