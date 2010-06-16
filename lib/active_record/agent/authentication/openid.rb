@@ -38,7 +38,9 @@ module ActiveRecord #:nodoc:
           private
           
           def add_openid_identifier_to_openid_uris
-            openid_uris << Uri.find_or_create_by_uri(openid_identifier) if openid_identifier
+            if openid_identifier.present?
+              openid_ownings.create! :uri => Uri.find_or_create_by_uri(openid_identifier)
+            end
           end
         end
       end

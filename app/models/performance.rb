@@ -14,6 +14,7 @@ class Performance < ActiveRecord::Base
   belongs_to :stage, :polymorphic => true
   belongs_to :role
 
+  acts_as_resource
   acts_as_sortable :columns => [ { :content => :agent,
                                    :sortable => false },
                                  { :name => :role,

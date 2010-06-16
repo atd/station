@@ -23,7 +23,7 @@ class JoinRequestsController < ApplicationController
     respond_to do |format|
       if join_request.save
         format.html {
-          flash[:notice] = ( join_request.recently_processed? ?
+          flash[:success] = ( join_request.recently_processed? ?
                             ( join_request.accepted? ? t('join_request.accepted') : t('join_request.discarded') ) :
                             t('join_request.updated'))
           redirect_to request.referer

@@ -19,7 +19,7 @@ namespace :station do
       desc "Create OpenID identity URIs"
       task :create => :environment do
         ActiveRecord::Agent::OpenidServer.classes.each do |k|
-          k.all.map(&:create_openid_server_ownings)
+          k.all.map(&:update_openid_server_ownings)
         end
       end
     end

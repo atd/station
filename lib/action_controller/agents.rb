@@ -40,7 +40,7 @@ module ActionController #:nodoc:
     def show
       respond_to do |format|
         format.html {
-          if agent.agent_options[:openid_server]
+          if agent.class.agent_options[:openid_server]
             headers['X-XRDS-Location'] = polymorphic_url(agent, :format => :xrds)
           end
         }

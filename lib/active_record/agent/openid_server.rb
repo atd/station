@@ -22,7 +22,7 @@ module ActiveRecord #:nodoc:
                      :through => :openid_trusts,
                      :source => :uri
 
-            after_create :create_openid_server_ownings
+            after_save :update_openid_server_ownings
           end
         end
 
@@ -32,12 +32,18 @@ module ActiveRecord #:nodoc:
       end
 
       module InstanceMethods
-        # Create OpenID Ownings for the URIs hosted in this server
-        def create_openid_server_ownings
+        # Set OpenID Ownings for the URIs hosted in this server
+        def update_openid_server_ownings
           uris_path = "#{ Site.current.domain }/#{ self.class.to_s.tableize }/#{ to_param }"
           uris = [ Uri.find_or_create_by_uri("http://#{ uris_path }") ]
           uris << Uri.find_or_create_by_uri("https://#{ uris_path }") if Site.current.ssl?
 
+          # Destroy old OpenID local URIs
+          openid_ownings.local.each do |ow|
+            ow.destroy unless uris.include?(ow.uri)
+          end
+
+          # Add new OpenID URIs
           uris.each do |u|
             unless openid_ownings.local.map(&:uri).include?(u)
               openid_ownings.local.create :uri => u

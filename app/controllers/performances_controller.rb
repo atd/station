@@ -1,10 +1,12 @@
 class PerformancesController < ApplicationController
+  include ActionController::StationResources
+
   before_filter :stage, :only => [ :index, :new, :create ]
   before_filter :performance, :only => [ :edit, :update, :destroy ]
   before_filter :parse_polymorphic_agent, :only => [ :create, :update ]
 
   def index
-    index_data
+    performances
   end
 
   def create
@@ -17,7 +19,7 @@ class PerformancesController < ApplicationController
           redirect_to(request.referer || [ @stage, Performance.new ])
         }
         format.js {
-          index_data
+          performances
         }
       end
     else
@@ -41,7 +43,7 @@ class PerformancesController < ApplicationController
           redirect_to [ stage, Performance.new ]
         }
         format.js {
-          index_data
+          performances
         }
       end
     else
@@ -61,7 +63,7 @@ class PerformancesController < ApplicationController
       }
 
       format.js {
-        index_data
+        performances
       }
     end
   end
@@ -73,11 +75,11 @@ class PerformancesController < ApplicationController
   end
 
   def performance
-    @performance = Performance.find(params[:id])
-    @stage = @performance.stage
+    @stage = resource.stage
+    resource
   end
 
-  def index_data
+  def performances
     @performances = @stage.stage_performances.find(:all,
                                                    :include => :role).sort{ |x, y| y.role <=> x.role }
     @roles = @stage.class.roles.sort{ |x, y| y <=> x }
