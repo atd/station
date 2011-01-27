@@ -1,5 +1,6 @@
 { 'nokogiri' => 'HTML introspection',
-  'prism'    => 'Microformats' }.each_pair do |gem, support|
+  'prism'    => 'Microformats',
+  'rdf/rdfa' => 'RDFa' }.each_pair do |gem, support|
   begin
     require gem
   rescue MissingSourceFile
@@ -91,6 +92,10 @@ module Station #:nodoc:
     # Does this URI has a hCard attached?
     def hcard?
       hcard.present?
+    end
+
+    def rdfa?
+      RDF::RDFa::Reader.new(@text).statements.count > 0
     end
 
     def to_s
