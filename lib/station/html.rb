@@ -96,6 +96,8 @@ module Station #:nodoc:
 
     def rdfa?
       RDF::RDFa::Reader.new(@text).statements.count > 0
+    rescue NoMethodError
+      false
     end
 
     def to_s
