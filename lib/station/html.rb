@@ -94,10 +94,26 @@ module Station #:nodoc:
       hcard.present?
     end
 
-    def rdfa?
-      RDF::RDFa::Reader.new(@text).statements.count > 0
+    def rdfa
+      @rdfa ||=
+        RDF::RDFa::Reader.new(@text, :version => :rdfa_1_0).dump(:ntriples)
     rescue NoMethodError
-      false
+      ""
+    end
+
+    def rdfa?
+      rdfa.present?
+    end
+
+    def rdfa_without_xhtml
+      @rdfa_without_xhtml ||=
+        rdfa.
+          split("\n").
+          delete_if{ |t| t =~ /#{ 'www.w3.org/1999/xhtml/vocab' }/ }
+    end
+
+    def rdfa_without_xhtml?
+      rdfa_without_xhtml.present?
     end
 
     def to_s
